@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Filter from 'bad-words';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
@@ -13,6 +14,7 @@ class Messages extends Component {
       newMessageText: ''
     }
     this.messagesRef = this.props.firebase.database().ref('messages')
+    this.filter = new Filter();
   }
 
   componentDidMount() {
@@ -36,7 +38,12 @@ class Messages extends Component {
   }
 
   handleChange(event) {
-    this.setState({newMessageText: event.target.value });
+    if (event.target.value.length > 200) {
+      alert("You have reached the character limit");
+      return;
+    } else {
+      this.setState({newMessageText: this.filter.clean(event.target.value) });
+    }
   }
 
   removeMessage(room) {
@@ -53,11 +60,10 @@ class Messages extends Component {
   }
 
   watchFirebaseForMessages() {
-    this.messagesRef.on('child_added', snapshot  => {
-      console.log('sup', snapshot.val(), {key: snapshot.key});
+    this.messagesRef.on('child_added', snapshot => {
       let message = Object.assign(snapshot.val(), {key: snapshot.key})
-      this.setState({ allMessages: this.state.allMessages.concat( message ) }, () => {
-        this.updateDisplayedMessages( this.props.activeRoom )
+      this.setState({ allMessages: this.state.allMessages.concat(message) }, () => {
+        this.updateDisplayedMessages(this.props.activeRoom);
         this.scrollToBottom();
       });
     });

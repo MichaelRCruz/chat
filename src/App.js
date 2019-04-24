@@ -6,7 +6,7 @@ import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import User from './User/User';
 
-var config = {
+const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
   authDomain: "chat-asdf.firebaseapp.com",
   databaseURL: "https://chat-asdf.firebaseio.com",
@@ -25,12 +25,16 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(this.state.user);
+  }
+
   setUser(user) {
-    this.setState({user});
+    this.setState({ user });
   }
 
   setRoom(room) {
-    this.setState({activeRoom: room});
+    this.setState({ activeRoom: room });
   }
 
   render() {
@@ -41,8 +45,6 @@ class App extends Component {
         </nav>
 
         <aside id="sidebar">
-          <div id="logo"></div>
-          <h1 id="wordmark">Tomato</h1>
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />
         </aside>
 

@@ -4,13 +4,25 @@ import './User.css';
 import defaultUserImage from './../assets/images/tomatoes-default-user-image.png';
 
 class User extends Component {
+  constructor (props) {
+    super(props);
+    this.usersRef = this.props.firebase.database().ref('users');
+  }
 
   componentDidMount() {
     this.props.firebase.auth().onAuthStateChanged( user => {
       this.props.setUser(user);
-      this.setState({user});
+      // this.usersRef.push(user.providerData[0]);
+      this.usersRef.orderByChild("uid").equalTo(user.providerData[0].uid).on("child_added", function(snapshot) {
+        if (!snapshot.val().uid) {
+          this.usersRef.push(user);
+        } else {
+          
+        }
+      });
     });
   }
+
 
   signIn() {
     this.props.firebase.auth().signInWithPopup( new this.props.firebase.auth.GoogleAuthProvider() );

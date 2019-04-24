@@ -24,8 +24,14 @@ class RoomList extends Component {
   }
 
   createRoom(newRoomName) {
-    newRoomName = newRoomName.substring(0, 15);
+    if (newRoomName.length >= 30) {
+      newRoomName = newRoomName.substring(0, 30);
+    }
     if (!this.props.user || !newRoomName) { return }
+    if (this.state.rooms.length >= 10) {
+      alert('Ricky, no more rooms!');
+      return;
+    }
     this.roomsRef.push({
       name: newRoomName,
       createdAt: Date.now(),

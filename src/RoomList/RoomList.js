@@ -28,15 +28,16 @@ class RoomList extends Component {
       newRoomName = newRoomName.substring(0, 30);
     }
     if (!this.props.user || !newRoomName) { return }
-    if (this.state.rooms.length >= 10) {
+    if (this.state.rooms.length >= 5) {
       alert('Ricky, no more rooms!');
       return;
+    } else {
+      this.roomsRef.push({
+        name: newRoomName,
+        createdAt: Date.now(),
+        creator: {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL}
+      });
     }
-    this.roomsRef.push({
-      name: newRoomName,
-      createdAt: Date.now(),
-      creator: {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL}
-    });
     this.setState({ newRoomName: '' });
   }
 

@@ -10,7 +10,7 @@ class RoomList extends Component {
     }
     this.roomsRef = this.props.firebase.database().ref('rooms')
   }
-  
+
   componentDidMount() {
     this.roomsRef.on('child_added', snapshot  => {
       const room = snapshot.val();
@@ -22,8 +22,9 @@ class RoomList extends Component {
       this.setState({ rooms: this.state.rooms.filter( room => room.key !== snapshot.key )  })
     });
   }
-  
+
   createRoom(newRoomName) {
+    newRoomName = newRoomName.substring(0, 15);
     if (!this.props.user || !newRoomName) { return }
     this.roomsRef.push({
       name: newRoomName,
@@ -32,20 +33,20 @@ class RoomList extends Component {
     });
     this.setState({ newRoomName: '' });
   }
-  
+
   handleChange(event) {
     this.setState({newRoomName: event.target.value });
   }
-  
+
   removeRoom(room) {
     this.roomsRef.child(room.key).remove();
   }
-  
+
   render() {
     return (
         <section id="room-component">
           <ul id="room-list">
-            {this.state.rooms.map( room => 
+            {this.state.rooms.map( room =>
                 <li key={room.key} className={ this.props.activeRoom && this.props.activeRoom.key === room.key ? 'active' : '' }>
                   <button onClick={ () => this.props.setRoom(room) } className="room-name">{ room.name }</button>
                   { room.creator && this.props.user && room.creator.email === this.props.user.email &&
@@ -61,7 +62,7 @@ class RoomList extends Component {
             <input type="submit" value="+" />
           </form>
         }
-        
+
       </section>
     );
   }

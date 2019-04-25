@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import User from './User/User';
+import SubmitMessage from './SubmitMessage/SubmitMessage';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -39,16 +40,25 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <nav class="header">
+      <div>
+        <header class="header">
           <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} />
-        </nav>
+        </header>
         <aside id="sidebar">
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />
           <div id="logo"></div>
           <h1 id="wordmark">Potato</h1>
         </aside>
-        <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
+        <main>
+          <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
+        </main>
+        <footer>
+          <SubmitMessage
+            activeRoom={this.state.activeRoom}
+            user={this.state.user}
+            firebase={firebase}
+          />
+        </footer>
       </div>
     );
   }

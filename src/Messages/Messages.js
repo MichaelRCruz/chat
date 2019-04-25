@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Filter from 'bad-words';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
@@ -13,8 +12,7 @@ class Messages extends Component {
       displayedMessages: [],
       newMessageText: ''
     }
-    this.messagesRef = this.props.firebase.database().ref('messages')
-    this.filter = new Filter();
+    this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
   componentDidMount() {
@@ -42,7 +40,7 @@ class Messages extends Component {
       alert("You have reached the character limit");
       return;
     } else {
-      this.setState({newMessageText: this.filter.clean(event.target.value) });
+      this.setState({newMessageText: event.target.value });
     }
   }
 

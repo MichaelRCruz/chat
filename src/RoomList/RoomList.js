@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './RoomList.css';
-import Filter from 'bad-words';
 
 class RoomList extends Component {
   constructor (props) {
@@ -10,7 +9,6 @@ class RoomList extends Component {
       newRoomName: ''
     }
     this.roomsRef = this.props.firebase.database().ref('rooms');
-    this.swearFilter = new Filter();
   }
 
   componentDidMount() {
@@ -27,7 +25,7 @@ class RoomList extends Component {
 
   createRoom(newRoomName) {
     if (newRoomName.length >= 30) {
-      newRoomName = this.swearFilter.clean(newRoomName.substring(0, 30));
+      newRoomName = newRoomName.substring(0, 30);
     }
     if (!this.props.user || !newRoomName) { return }
     if (this.state.rooms.length >= 5) {

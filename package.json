@@ -5,6 +5,7 @@
   "dependencies": {
     "bad-words": "^3.0.2",
     "firebase": "^5.9.3",
+    "firebase-tools": "^6.7.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },

@@ -12,14 +12,24 @@ class User extends Component {
   componentDidMount() {
     this.props.firebase.auth().onAuthStateChanged( user => {
       this.props.setUser(user);
+      // var onComplete = function(error) {
+      //   if (error) {
+      //     console.log('Operation failed');
+      //   } else {
+      //     console.log(' Operation completed');
+      //   }
+      // };
       // this.usersRef.push(user.providerData[0]);
-      this.usersRef.orderByChild("uid").equalTo(user.providerData[0].uid).on("child_added", function(snapshot) {
-        if (!snapshot.val().uid) {
-          this.usersRef.push(user);
-        } else {
-          
-        }
-      });
+      // console.log(+user.providerData[0].uid, user.providerData[0]);
+      // this.usersRef.child(user.providerData[0].uid).setValue(user.providerData[0], onComplete);
+      // this.usersRef.orderByChild("uid").equalTo(user.providerData[0].uid).on("add_child", function(snapshot) {
+      //   console.log('snapshot.val()', snapshot.val());
+      //   if (!snapshot.val()) {
+      //     this.usersRef.push(user.providerData[0]);
+      //   } else {
+      //
+      //   }
+      // });
     });
   }
 

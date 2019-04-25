@@ -46,8 +46,9 @@ class App extends Component {
 
         <aside id="sidebar">
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />
+          <div id="logo"></div>
+          <h1 id="wordmark">Tomato</h1>
         </aside>
-
         <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
       </div>
     );

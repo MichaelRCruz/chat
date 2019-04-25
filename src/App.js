@@ -26,10 +26,6 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log(this.state.user);
-  }
-
   setUser(user) {
     this.setState({ user });
   }

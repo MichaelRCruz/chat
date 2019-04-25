@@ -48,7 +48,7 @@ class User extends Component {
         <div id="avatar">
           <img src={ this.props.user ? this.props.user.photoURL : defaultUserImage } alt="user" />
         </div>
-        <div id="user-display-name">{ this.props.user ? this.props.user.displayName.split(' ')[0] : 'Timid Tomato' }</div>
+        <div id="user-display-name">{ this.props.user ? this.props.user.displayName.split(' ')[0] : 'Timid Potato' }</div>
         <button className="sign-in-out"
                 onClick={ this.props.user ? () => this.signOut() : this.signIn.bind(this) }>
           <i className="material-icons">power_settings_new</i>

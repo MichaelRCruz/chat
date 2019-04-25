@@ -1,5 +1,5 @@
 #user-display {
-  background: hsl(0, 60%, 63%);
+  background: #FF6F00;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   clear: both;
   color: white;
@@ -27,15 +27,15 @@
   margin-left: 0.75rem;
 }
 .sign-in-out {
-  background: hsl(0, 75%, 78%);
+  background: #E65100;
   border-radius: 5px;
   float: right;
   height: 30px;
   padding: 0 0.5rem;
-  
+
 }
 .sign-in-out:hover {
-  background: hsl(0, 82%, 84%);
+  background: #E67200;
 }
 .sign-in-out .material-icons {
   color: hsl(0,50%,50%);
@@ -45,7 +45,7 @@
   margin-right: 0.3rem;
 }
 .sign-in-out span {
-  color: hsl(0, 28%, 50%);
+  color: white;
   font-size: 0.9rem;
   font-weight: bold;
   line-height: 30px;

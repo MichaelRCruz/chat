@@ -91,7 +91,7 @@ ul#message-list {
   width: 85%;
 }
 #create-message input[type="submit"] {
-  background: hsl(0, 50%, 63%);
+  background: #FF6F00;
   border: none;
   border-radius: 5px;
   color: white;
@@ -101,7 +101,7 @@ ul#message-list {
   width: 12%;
 }
 #create-message input[type="submit"]:hover {
-  background: hsl(0, 55%, 70%);
+  background: #EF6C00;
   cursor: pointer;
 }
 

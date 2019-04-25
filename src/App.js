@@ -40,14 +40,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <nav id="main">
+        <nav class="header">
           <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} />
         </nav>
-
         <aside id="sidebar">
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />
           <div id="logo"></div>
-          <h1 id="wordmark">Tomato</h1>
+          <h1 id="wordmark">Potato</h1>
         </aside>
         <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
       </div>

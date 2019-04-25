@@ -9,7 +9,7 @@
 
 #room-list li {
   list-style-type: none;
-  background: hsl(0, 55%, 63%);
+  background: #FB8C00;
   margin-bottom: 0.33rem;
   color: white;
   border-radius: 2px;
@@ -62,7 +62,7 @@
 
 
 form#create-room {
-  background: hsl(0, 50%, 63%);
+  background: #795548;
   bottom: 0;
   margin: 0;
   left: 0;
@@ -98,8 +98,8 @@ form#create-room {
 
 #create-room input[type="submit"] {
   border: none;
-  background: hsl(0, 67%, 70%);
-  color: hsl(0, 55%, 50%);
+  background: #5D4037;
+  color: white;
   padding: 0.3rem;
   width: 10%;
   float: left;
@@ -112,5 +112,5 @@ form#create-room {
 
 #create-room input[type="submit"]:hover {
   cursor: pointer;
-  background: hsl(0, 72%, 75%);
+  background: #5D4037;
 }

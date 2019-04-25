@@ -85,7 +85,7 @@ class Messages extends Component {
                 <img src={ (message.creator && message.creator.photoURL) ? message.creator.photoURL : defaultUserImage } alt="user" />
               </div>
               <div className="info">
-                <div className="display-name">{ message.creator ? message.creator.displayName : 'Timid Tomato' }</div>
+                <div className="display-name">{ message.creator ? message.creator.displayName : 'Timid Potato' }</div>
                 <Timeago timestamp={ message.sentAt || 'sometime' } />
               </div>
               <div className="content">

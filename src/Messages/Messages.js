@@ -36,7 +36,7 @@ class Messages extends Component {
   }
 
   handleChange(event) {
-    if (event.target.value.length > 200) {
+    if (event.target.value.length > 500) {
       alert("You have reached the character limit");
       return;
     } else {

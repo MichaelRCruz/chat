@@ -1,0 +1,10 @@
+.footerContainer {
+  height: 60px;
+  display: flex;
+  align-items: flex-start;
+  border-top: 1px solid gray;
+}
+
+.submitMessage {
+  cursor: pointer;
+}

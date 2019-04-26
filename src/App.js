@@ -4,8 +4,9 @@ import * as firebase from 'firebase';
 
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
-import User from './User/User';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
+
+import defaultUserImage from './assets/images/tomatoes-default-user-image.png';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -26,6 +27,30 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged( user => {
+      this.setUser(user);
+      // var onComplete = function(error) {
+      //   if (error) {
+      //     console.log('Operation failed');
+      //   } else {
+      //     console.log(' Operation completed');
+      //   }
+      // };
+      // this.usersRef.push(user.providerData[0]);
+      // console.log(+user.providerData[0].uid, user.providerData[0]);
+      // this.usersRef.child(user.providerData[0].uid).setValue(user.providerData[0], onComplete);
+      // this.usersRef.orderByChild("uid").equalTo(user.providerData[0].uid).on("add_child", function(snapshot) {
+      //   console.log('snapshot.val()', snapshot.val());
+      //   if (!snapshot.val()) {
+      //     this.usersRef.push(user.providerData[0]);
+      //   } else {
+      //
+      //   }
+      // });
+    });
+  }
+
   setUser(user) {
     this.setState({ user });
   }
@@ -34,21 +59,35 @@ class App extends Component {
     this.setState({ activeRoom: room });
   }
 
+  signIn() {
+    firebase.auth().signInWithPopup( new firebase.auth.GoogleAuthProvider() );
+  }
+
+  signOut() {
+    firebase.auth().signOut();
+  }
+
   render() {
     return (
       <div>
-        <header class="header">
-          <User firebase={firebase} setUser={this.setUser.bind(this)} user={this.state.user} />
+        <header className="header">
+          <img src={ this.state.user ? this.state.user.photoURL : defaultUserImage } alt="user" />
+          <div class="user-display-name">{ this.state.user ? this.state.user.displayName.split(' ')[0] : 'Timid Potato' }</div>
+          <button className="sign-in-out"
+                  onClick={ this.state.user ? () => this.signOut() : this.signIn.bind(this) }>
+            <i className="material-icons">power_settings_new</i>
+            <span>Sign { this.state.user ? 'out' : 'in' }</span>
+          </button>
         </header>
-        <aside id="sidebar">
+        <aside className="sidebar">
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />
-          <div id="logo"></div>
-          <h1 id="wordmark">Potato</h1>
+          <div className="logo"></div>
+          <h1 className="wordmark">Potato</h1>
         </aside>
         <main>
           <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
         </main>
-        <footer>
+        <footer className="footer">
           <SubmitMessage
             activeRoom={this.state.activeRoom}
             user={this.state.user}

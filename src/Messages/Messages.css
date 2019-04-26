@@ -1,13 +1,7 @@
-.photo-url {
-  float: left;
+img {
   width: 40px;
-  height: 40px;
-  overflow: hidden;
-  margin-right: 0.5rem;
 }
-#message-list li .photo-url img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 5px;
+
+.message-list:last-child {
+  margin-bottom: 75px;
 }

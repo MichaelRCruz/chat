@@ -1,1 +1,22 @@
+.header {
+  position: fixed;
+  top: 0vh;
+  width: 100vw;
+  background-color: #6D4C41;
+  display: flex;
+}
 
+.sidebar {
+  display: none;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0vh;
+  width: 100vw;
+}
+
+img {
+  width: 40px;
+  height: 40px;
+}

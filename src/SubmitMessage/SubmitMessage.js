@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './SubmitMessage.css';
+
 class Messages extends Component {
   constructor (props) {
     super(props)
@@ -29,22 +31,28 @@ class Messages extends Component {
     this.setState({ newMessageText: '' });
   }
 
+  handleAddRoom(e) {
+    e.preventDefault();
+  }
+
   render() {
     return (
-      <form id="create-message" onSubmit={(e) => {
-          e.preventDefault();
-          this.createMessage(this.state.newMessageText)
-        }
-      }>
-        <input
-          type="text"
-          value={ this.state.newMessageText }
-          onChange={ this.handleChange.bind(this) }
-          name="newMessageText"
-          placeholder="Say something"
-        />
-        <input type="submit" />
-      </form>
+      <div className="footerContainer">
+        <form className="create-message" onSubmit={(e) => {
+            e.preventDefault();
+            this.createMessage(this.state.newMessageText)
+          }
+        }>
+          <input
+            type="text"
+            value={ this.state.newMessageText }
+            onChange={ this.handleChange.bind(this) }
+            name="newMessageText"
+            placeholder="Say something"
+          />
+          <input className="submitMessage" type="submit" />
+        </form>
+      </div>
     );
   }
 }

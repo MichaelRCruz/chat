@@ -53,14 +53,10 @@ class Messages extends Component {
 
   render() {
     const messages = this.state.displayedMessages.map( message =>
-      <li key={message.key}>
-        <div className="photo-url">
-          <img src={ (message.creator && message.creator.photoURL) ? message.creator.photoURL : defaultUserImage } alt="user" />
-        </div>
-        <div className="info">
-          <div className="display-name">{ message.creator ? message.creator.displayName : 'Timid Potato' }</div>
-          <Timeago timestamp={ message.sentAt || 'sometime' } />
-        </div>
+      <li key={message.key} className="message">
+        <img src={ (message.creator && message.creator.photoURL) ? message.creator.photoURL : defaultUserImage } alt="user" />
+        <div className="display-name">{ message.creator ? message.creator.displayName : 'Peaceful Potato' }</div>
+        <Timeago timestamp={ message.sentAt || 'sometime' } />
         <div className="content">
           { message.content }
           { message.creator && this.props.user && message.creator.email === this.props.user.email &&
@@ -73,13 +69,13 @@ class Messages extends Component {
       </li>
     )
     return (
-      <main id="messages-component">
+      <div className="messages-component">
         <h2 className="room-name">{ this.props.activeRoom ? this.props.activeRoom.name : '' }</h2>
-        <ul id="message-list">
+        <ul className="message-list">
           {messages}
           <div ref={(thisDiv) => this.bottomOfMessages = thisDiv}></div>
         </ul>
-      </main>
+      </div>
     );
   }
 }

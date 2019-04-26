@@ -1,6 +1,7 @@
-img {
+/* img {
   width: 40px;
-}
+  margin-right: 5px;
+} */
 
 ul {
   padding-left: 0;
@@ -16,10 +17,26 @@ li {
   margin-bottom: 10px;
 }
 
+.messageImage {
+  width: 40px;
+  margin-right: 5px;
+  margin-left: 10px;
+}
+
+.content {
+  margin: 0;
+  width: 85%;
+  padding: 0;
+}
+
 .display-name {
   font-size: 12px;
 }
 
 .message-list:last-child {
   margin-bottom: 75px;
+}
+
+.imageMessageContainer {
+  display: flex;
 }

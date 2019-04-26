@@ -54,20 +54,27 @@ class Messages extends Component {
   render() {
     const messages = this.state.displayedMessages.map( message =>
       <li key={message.key} className="message">
-      <div className="nameAndImage">
-        <img src={ (message.creator && message.creator.photoURL) ? message.creator.photoURL : defaultUserImage } alt="user" />
-        <div className="display-name">{ message.creator ? message.creator.displayName : 'Peaceful Potato' }</div>
-      </div>
-        <p className="content">
-          { message.content }
-          { message.creator && this.props.user && message.creator.email === this.props.user.email &&
-            <button onClick={ () => this.removeMessage(message) }
-                    className="remove remove-message-button">
-              &times;
-            </button>
-           }
-        </p>
-        <Timeago timestamp={ message.sentAt || 'sometime' } />
+        <div className="imageMessageContainer">
+          <img
+            className="messageImage"
+            alt="user"
+            src={message.creator && message.creator.photoURL
+            ? message.creator.photoURL : defaultUserImage }
+           />
+          <div>
+            <div className="display-name">
+              {message.creator ? message.creator.displayName  : 'Peaceful Potato'}
+              {message.creator && this.props.user && message.creator.email === this.props.user.email &&
+                <button onClick={ () => this.removeMessage(message) }
+                        className="remove-message-button">
+                  &times;
+                </button>
+              }
+            </div>
+            <div className="content">{message.content}</div>
+          </div>
+        </div>
+        <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
       </li>
     )
     return (

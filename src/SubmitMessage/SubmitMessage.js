@@ -6,10 +6,20 @@ class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      newMessageText: ''
+      newMessageText: '',
+      // activeRoom: {}
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
+    // this.roomsRef = this.props.firebase.database().ref('rooms');
   }
+
+  // componentDidMount() {
+  //   this.roomsRef.on('child_added', snapshot => {
+  //     const room = snapshot.val();
+  //     room.key = snapshot.key;
+  //     this.setState({ activeRoom: room.key });
+  //   });
+  // }
 
   handleChange(event) {
     if (event.target.value.length > 200) {
@@ -21,22 +31,30 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    const loggedInUser = {
-      email: this.props.user.email,
-      displayName: this.props.user.displayName,
-      photoURL: this.props.user.photoURL
-    }
-    const loggedOutUser = {
-      email: null,
-      displayName: 'Peaceful Potato',
-      photoURL: null
-    }
+    // const loggedInUser = {
+    //   email: this.state.user.email,
+    //   displayName: this.state.user.displayName,
+    //   photoURL: this.state.user.photoURL
+    // }
+    // const loggedOutUser = {
+    //   email: null,
+    //   displayName: 'Peaceful Potato',
+    //   photoURL: null
+    // }
     if (!this.props.activeRoom || !newMessageText) { return }
     this.messagesRef.push({
       content: newMessageText,
       sentAt: Date.now(),
-      roomId: this.props.activeRoom.key,
-      creator: this.props.user ? loggedInUser : loggedOutUser
+      roomId: this.state.activeRoom.key,
+      creator: this.state.user ? {
+        email: this.state.user.email,
+        displayName: this.state.user.displayName,
+        photoURL: this.state.user.photoURL
+      } : {
+        email: null,
+        displayName: 'Peaceful Potato',
+        photoURL: null
+      }
     });
     this.setState({ newMessageText: '' });
   }
@@ -58,7 +76,7 @@ class Messages extends Component {
         />
         <div className="submitMessage" type="submit" onClick={(e) => {
             e.preventDefault();
-            this.createMessage(this.state.newMessageText)
+            this.createMessage(this.state.newMessageText);
           }
         }>
           <i className="material-icons">add</i>

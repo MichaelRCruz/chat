@@ -1,19 +1,24 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
+body {
+  max-width: 900px;
+  margin: 0;
+}
+
 .header {
   position: fixed;
   top: 0vh;
   height: 50px;
-  width: 100vw;
+  width: 100%;
   background-color: #6D4C41;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.sidebar {
+/* .sidebar {
   display: none;
-}
+} */
 
 .user-display-name {
   display: flex;
@@ -23,7 +28,7 @@
 .footer {
   position: fixed;
   bottom: 0vh;
-  width: 100vw;
+  width: 100%;
 }
 
 img {
@@ -48,4 +53,15 @@ img {
   color: #cfecd8;
   font-size: 30px;
   margin-left: 2%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.add-room {
+  color: #cfecd8;
+  margin-left: 10px;
 }

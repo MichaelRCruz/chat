@@ -10,6 +10,16 @@ li {
   list-style-type: none;
 }
 
+.message {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.display-name {
+  font-size: 12px;
+}
+
 .message-list:last-child {
   margin-bottom: 75px;
 }

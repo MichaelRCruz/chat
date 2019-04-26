@@ -6,20 +6,10 @@ class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      newMessageText: '',
-      // activeRoom: {}
+      newMessageText: ''
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
-    // this.roomsRef = this.props.firebase.database().ref('rooms');
   }
-
-  // componentDidMount() {
-  //   this.roomsRef.on('child_added', snapshot => {
-  //     const room = snapshot.val();
-  //     room.key = snapshot.key;
-  //     this.setState({ activeRoom: room.key });
-  //   });
-  // }
 
   handleChange(event) {
     if (event.target.value.length > 200) {

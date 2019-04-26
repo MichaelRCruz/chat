@@ -53,10 +53,17 @@ class RoomList extends Component {
   render() {
     const rooms = this.state.rooms.map(room => {
       return (
-        <li key={room.key} className={ this.props.activeRoom && this.props.activeRoom.key === room.key ? 'active' : '' }>
-          <button onClick={ () => this.props.setRoom(room) } className="room-name">{ room.name }</button>
-          { room.creator && this.props.user && room.creator.email === this.props.user.email &&
-            <button onClick={ () => this.removeRoom(room) } className="remove remove-room-button">&times;</button>
+        <li key={room.key}
+            className={this.props.activeRoom && this.props.activeRoom.key
+                        === room.key ? 'active' : ''}>
+          <button onClick={() => this.props.setRoom(room) } className="room-name">
+            { room.name }
+          </button>
+          {room.creator && this.props.user
+            && room.creator.email === this.props.user.email &&
+            <button onClick={ () => this.removeRoom(room) } className="remove remove-room-button">
+              &times;
+            </button>
           }
         </li>
       );
@@ -64,10 +71,9 @@ class RoomList extends Component {
     return (
         <section id="room-component">
           <ul id="room-list">
-            {rooms}
+            { rooms }
           </ul>
-
-        { this.props.user !== null &&
+        {this.props.user !== null &&
           <form id="create-room" onSubmit={ (e) => { e.preventDefault(); this.createRoom(this.state.newRoomName) } }>
             <input type="text" value={ this.state.newRoomName } onChange={ this.handleChange.bind(this) } name="newRoomName" placeholder="Create a new room" />
             <input type="submit" value="+" />

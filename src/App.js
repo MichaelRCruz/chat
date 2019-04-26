@@ -71,13 +71,12 @@ class App extends Component {
     return (
       <div>
         <header className="header">
-          <img src={ this.state.user ? this.state.user.photoURL : defaultUserImage } alt="user" />
-          <div class="user-display-name">{ this.state.user ? this.state.user.displayName.split(' ')[0] : 'Timid Potato' }</div>
-          <button className="sign-in-out"
-                  onClick={ this.state.user ? () => this.signOut() : this.signIn.bind(this) }>
+          <p className="app-name">Potato</p>
+          <div className="on-off-button"
+               onClick={ this.state.user ? () => this.signOut() : this.signIn.bind(this) }>
             <i className="material-icons">power_settings_new</i>
-            <span>Sign { this.state.user ? 'out' : 'in' }</span>
-          </button>
+            <p>Sign { this.state.user ? 'out' : 'in' }</p>
+          </div>
         </header>
         <aside className="sidebar">
           <RoomList firebase={firebase} activeRoom={this.state.activeRoom} setRoom={this.setRoom.bind(this)} user={this.state.user} />

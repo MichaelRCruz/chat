@@ -21,12 +21,22 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
+    const loggedInUser = {
+      email: this.props.user.email,
+      displayName: this.props.user.displayName,
+      photoURL: this.props.user.photoURL
+    }
+    const loggedOutUser = {
+      email: null,
+      displayName: 'Peaceful Potato',
+      photoURL: null
+    }
     if (!this.props.activeRoom || !newMessageText) { return }
     this.messagesRef.push({
       content: newMessageText,
       sentAt: Date.now(),
       roomId: this.props.activeRoom.key,
-      creator: this.props.user ? {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL} : {email: null, displayName: 'Timid Tomato', photoURL: null }
+      creator: this.props.user ? loggedInUser : loggedOutUser
     });
     this.setState({ newMessageText: '' });
   }
@@ -38,20 +48,21 @@ class Messages extends Component {
   render() {
     return (
       <div className="footerContainer">
-        <form className="create-message" onSubmit={(e) => {
+        <input
+          className="input-text"
+          type="text"
+          value={ this.state.newMessageText }
+          onChange={ this.handleChange.bind(this) }
+          name="newMessageText"
+          placeholder="Say something"
+        />
+        <div className="submitMessage" type="submit" onClick={(e) => {
             e.preventDefault();
             this.createMessage(this.state.newMessageText)
           }
         }>
-          <input
-            type="text"
-            value={ this.state.newMessageText }
-            onChange={ this.handleChange.bind(this) }
-            name="newMessageText"
-            placeholder="Say something"
-          />
-          <input className="submitMessage" type="submit" />
-        </form>
+          <i className="material-icons">add</i>
+        </div>
       </div>
     );
   }

@@ -1,13 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
 .header {
   position: fixed;
   top: 0vh;
+  height: 50px;
   width: 100vw;
   background-color: #6D4C41;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .sidebar {
   display: none;
+}
+
+.user-display-name {
+  display: flex;
+  align-items: center;
 }
 
 .footer {
@@ -19,4 +29,23 @@
 img {
   width: 40px;
   height: 40px;
+  border-radius: 5px;
+}
+
+.on-off-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 2%;
+}
+
+.on-off-button:hover {
+  color: #cfecd8;
+}
+
+.app-name {
+  font-family: 'Pacifico', cursive;
+  color: #cfecd8;
+  font-size: 30px;
+  margin-left: 2%;
 }

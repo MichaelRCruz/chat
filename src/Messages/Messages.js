@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
-import defaultUserImage from './../assets/images/tomatoes-default-user-image.png';
+import defaultUserImage from './../assets/images/tempAvatar.png';
 
 class Messages extends Component {
   constructor (props) {

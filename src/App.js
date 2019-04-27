@@ -71,11 +71,8 @@ class App extends Component {
     return (
       <div>
         <header className="header">
-          <div className="logo">
-            <img className="logo" src={require("./assets/images/potato2.svg")} />
-            <p className="app-name">Potato</p>
-            <i className="material-icons add-room">add</i>
-          </div>
+          <img className="logo" src={require("./assets/images/potato2.svg")} />
+          <p className="app-name">Potato</p>
           <div className="on-off-button"
                onClick={ this.state.user ? () => this.signOut() : this.signIn.bind(this) }>
             <i className="material-icons">power_settings_new</i>

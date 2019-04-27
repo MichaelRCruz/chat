@@ -75,7 +75,7 @@ class App extends Component {
           <p className="app-name">Potato</p>
           <div className="on-off-button"
                onClick={ this.state.user ?
-               () => this.signOut() : this.signIn.bind(this) }>
+                 () => this.signOut() : this.signIn.bind(this) }>
             <i className="material-icons">power_settings_new</i>
             <p>Sign { this.state.user ? 'out' : 'in' }</p>
           </div>

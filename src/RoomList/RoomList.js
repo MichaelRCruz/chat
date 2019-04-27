@@ -54,10 +54,8 @@ class RoomList extends Component {
   render() {
     const rooms = this.state.rooms.map(room => {
       return (
-        <li key={room.key}
-            className={this.props.activeRoom && this.props.activeRoom.key
-                        === room.key ? 'active' : ''}>
-          <button onClick={() => this.props.setRoom(room) } className="room-name">
+        <li className="roomNameContainer" key={room.key}>
+          <button onClick={() => this.props.setRoom(room) } className="roomName">
             { room.name }
           </button>
           {room.creator && this.props.user
@@ -87,17 +85,6 @@ class RoomList extends Component {
         <div className="listContainer">
           {form}
           <ul>
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
-            { rooms }
             { rooms }
           </ul>
         </div>

@@ -62,7 +62,7 @@ class Messages extends Component {
         this.updateDisplayedMessages(this.props.activeRoom);
         this.scrollToBottom();
       });
-    }, 200);
+    }, 300);
   }
 
   render() {

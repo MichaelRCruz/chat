@@ -3,6 +3,7 @@
 body {
   max-width: 1440px;
   margin: 0 auto;
+  /* background-color: #41626d; */
 }
 
 .header {
@@ -89,6 +90,9 @@ img {
 
   .sidebar {
     grid-area: sidebar;
+    background-color: #A1887F;
+    /* display: flex; */
+    /* flex-direction: column-reverse; */
   }
 
   .main {
@@ -97,12 +101,5 @@ img {
 
   .footer {
     grid-area: footer;
-  }
-
-  .listContainer {
-    position: fixed;
-    bottom: 0;
-    padding-bottom: 340px;
-    margin-left: 10px;
   }
 }

@@ -17,9 +17,9 @@ body {
   max-width: 1440px;
 }
 
-/* .sidebar {
+.sidebar {
   display: none;
-} */
+}
 
 .user-display-name {
   display: flex;

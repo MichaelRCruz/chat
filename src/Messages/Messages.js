@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
-import defaultUserImage from './../assets/images/tempAvatar.png';
+import defaultUserImage from './../assets/images/peaceful_potato.png';
 
 class Messages extends Component {
   constructor (props) {
@@ -45,6 +45,7 @@ class Messages extends Component {
     const throttler = this.throttling(() => {
       this.setState({allMessages: allMessages.slice(0)}, () => {
         this.updateDisplayedMessages(this.props.activeRoom);
+        this.scrollToBottom();
       });
     }, 100);
     this.messagesRef.on('child_added', snapshot => {

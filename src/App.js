@@ -6,7 +6,7 @@ import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 
-import defaultUserImage from './assets/images/tomatoes-default-user-image.png';
+import defaultUserImage from './assets/images/peaceful_potato.png';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",

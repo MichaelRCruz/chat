@@ -21,22 +21,30 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    const loggedInUser = {
-      email: this.props.user.email,
-      displayName: this.props.user.displayName,
-      photoURL: this.props.user.photoURL
-    }
-    const loggedOutUser = {
-      email: null,
-      displayName: 'Peaceful Potato',
-      photoURL: null
-    }
+    // const loggedInUser = {
+    //   email: this.props.user.email,
+    //   displayName: this.props.user.displayName,
+    //   photoURL: this.props.user.photoURL
+    // }
+    // const loggedOutUser = {
+    //   email: null,
+    //   displayName: 'Peaceful Potato',
+    //   photoURL: null
+    // }
     if (!this.props.activeRoom || !newMessageText) { return }
     this.messagesRef.push({
       content: newMessageText,
       sentAt: Date.now(),
       roomId: this.props.activeRoom.key,
-      creator: this.props.user ? loggedInUser : loggedOutUser
+      creator: this.props.user ? {
+        email: this.props.user.email,
+        displayName: this.props.user.displayName,
+        photoURL: this.props.user.photoURL
+      } : {
+        email: null,
+        displayName: 'Peaceful Potato',
+        photoURL: null
+      }
     });
     this.setState({ newMessageText: '' });
   }

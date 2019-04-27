@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import './RoomList.css';
 
 class RoomList extends Component {
@@ -28,7 +29,7 @@ class RoomList extends Component {
     if (newRoomName.length >= 30) {
       newRoomName = newRoomName.substring(0, 30);
     }
-    if (!this.props.user || !newRoomName) { return }
+    if (!this.props.user || !newRoomName) { return };
     if (this.state.rooms.length >= 5) {
       alert('Ricky, no more rooms!');
       return;

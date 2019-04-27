@@ -43,10 +43,6 @@ class Messages extends Component {
   watchFirebaseForMessages() {
     this.messagesRef.on('child_added', snapshot => {
       let message = Object.assign(snapshot.val(), {key: snapshot.key});
-      // this.setState({ allMessages: this.state.allMessages.concat(message) }, () => {
-      //   this.updateDisplayedMessages(this.props.activeRoom);
-      //   this.scrollToBottom();
-      // });
       this.debouncer(message);
     });
     this.messagesRef.on('child_removed', snapshot  => {

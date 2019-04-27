@@ -13,8 +13,8 @@
 .submitMessage {
   cursor: pointer;
   background-color: #41626d;
-  width: 43px;
-  height: 43px;
+  width: 47px;
+  height: 37px;
   border-radius: 5px;
   margin-right: 10px;
   margin-left: 10px;
@@ -33,6 +33,10 @@
   height: 30px;
   border-radius: 5px;
   font-size: 20px;
+}
+
+.input-text:focus {
+    outline-width: 0;
 }
 
 .send {

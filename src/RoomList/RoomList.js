@@ -55,12 +55,12 @@ class RoomList extends Component {
     const rooms = this.state.rooms.map(room => {
       return (
         <li className="roomNameContainer" key={room.key}>
-          <button onClick={() => this.props.setRoom(room) } className="roomName">
+          <button className="roomName" onClick={() => this.props.setRoom(room) }>
             { room.name }
           </button>
           {room.creator && this.props.user
             && room.creator.email === this.props.user.email &&
-            <button onClick={ () => this.removeRoom(room) } className="remove remove-room-button">
+            <button className="deleteButton" onClick={ () => this.removeRoom(room) } className="remove remove-room-button">
               &times;
             </button>
           }

@@ -41,28 +41,34 @@ class Messages extends Component {
   }
 
   watchFirebaseForMessages() {
+    const allMessages = new Array();
+    const throttler = this.throttling(() => {
+      this.setState({allMessages: allMessages.slice(0)}, () => {
+        this.updateDisplayedMessages(this.props.activeRoom);
+      });
+    }, 100);
     this.messagesRef.on('child_added', snapshot => {
       let message = Object.assign(snapshot.val(), {key: snapshot.key});
-      this.debouncer(message);
+      allMessages.push(message);
+      throttler();
     });
     this.messagesRef.on('child_removed', snapshot  => {
       this.setState({ allMessages: this.state.allMessages.filter( message => message.key !== snapshot.key )  }, () => {
-        this.updateDisplayedMessages( this.props.activeRoom )
+        this.updateDisplayedMessages(this.props.activeRoom);
       });
     });
   }
 
-  debouncer(message) {
-    let messages = [];
-    messages.push(message);
-    const onDeckMessage = messages[messages.length - 1];
-    setTimeout(() => {
-      const allMessages = this.state.allMessages.concat(onDeckMessage);
-      this.setState({allMessages}, () => {
-        this.updateDisplayedMessages(this.props.activeRoom);
-        this.scrollToBottom();
-      });
-    }, 300);
+  throttling(callback, delay) {
+    let timeout = null
+    return function(...args) {
+      if (!timeout) {
+        timeout = setTimeout(() => {
+          callback.call(this, ...args)
+          timeout = null
+        }, delay)
+      }
+    }
   }
 
   render() {

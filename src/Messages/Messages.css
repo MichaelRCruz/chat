@@ -1,7 +1,4 @@
-/* img {
-  width: 40px;
-  margin-right: 5px;
-} */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 ul {
   padding-left: 0;
@@ -15,6 +12,7 @@ li {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .messageImage {
@@ -25,7 +23,6 @@ li {
 
 .content {
   margin: 0;
-  width: 85%;
   padding: 0;
 }
 

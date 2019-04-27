@@ -61,7 +61,7 @@ class Messages extends Component {
             this.createMessage(this.state.newMessageText);
           }
         }>
-          <i className="material-icons">add</i>
+          <i className="send material-icons">send</i>
         </div>
       </div>
     );

@@ -9,8 +9,7 @@ class Messages extends Component {
     super(props)
     this.state = {
       allMessages: [],
-      displayedMessages: [],
-      newMessageText: ''
+      displayedMessages: []
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
@@ -22,26 +21,6 @@ class Messages extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.updateDisplayedMessages( nextProps.activeRoom );
-  }
-
-  createMessage(newMessageText) {
-    if (!this.props.activeRoom || !newMessageText) { return }
-    this.messagesRef.push({
-      content: newMessageText,
-      sentAt: Date.now(),
-      roomId: this.props.activeRoom.key,
-      creator: this.props.user ? {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL} : {email: null, displayName: 'Timid Tomato', photoURL: null }
-    });
-    this.setState({ newMessageText: '' });
-  }
-
-  handleChange(event) {
-    if (event.target.value.length > 500) {
-      alert("You have reached the character limit");
-      return;
-    } else {
-      this.setState({newMessageText: event.target.value });
-    }
   }
 
   removeMessage(room) {
@@ -73,34 +52,39 @@ class Messages extends Component {
   }
 
   render() {
+    const messages = this.state.displayedMessages.map( message =>
+      <li key={message.key} className="message">
+        <div className="imageMessageContainer">
+          <img
+            className="messageImage"
+            alt="user"
+            src={message.creator && message.creator.photoURL
+            ? message.creator.photoURL : defaultUserImage }
+           />
+          <div>
+            <div className="display-name">
+              {message.creator ? message.creator.displayName  : 'Peaceful Potato'}
+              {message.creator && this.props.user && message.creator.email === this.props.user.email &&
+                <button onClick={ () => this.removeMessage(message) }
+                        className="remove-message-button">
+                  &times;
+                </button>
+              }
+            </div>
+            <div className="content">{message.content}</div>
+          </div>
+        </div>
+        <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
+      </li>
+    )
     return (
-      <main id="messages-component">
+      <div className="messages-component">
         <h2 className="room-name">{ this.props.activeRoom ? this.props.activeRoom.name : '' }</h2>
-        <ul id="message-list">
-          {this.state.displayedMessages.map( message =>
-            <li key={message.key}>
-              <div className="photo-url">
-                <img src={ (message.creator && message.creator.photoURL) ? message.creator.photoURL : defaultUserImage } alt="user" />
-              </div>
-              <div className="info">
-                <div className="display-name">{ message.creator ? message.creator.displayName : 'Timid Tomato' }</div>
-                <Timeago timestamp={ message.sentAt || 'sometime' } />
-              </div>
-              <div className="content">
-                 { message.content }
-                 { message.creator && this.props.user && message.creator.email === this.props.user.email &&
-                   <button onClick={ () => this.removeMessage(message) } className="remove remove-message-button">&times;</button>
-                 }
-              </div>
-            </li>
-          )}
+        <ul className="message-list">
+          {messages}
           <div ref={(thisDiv) => this.bottomOfMessages = thisDiv}></div>
         </ul>
-        <form id="create-message" onSubmit={ (e) => { e.preventDefault(); this.createMessage(this.state.newMessageText) } }>
-          <input type="text" value={ this.state.newMessageText } onChange={ this.handleChange.bind(this) }  name="newMessageText" placeholder="Say something" />
-          <input type="submit" />
-        </form>
-      </main>
+      </div>
     );
   }
 }

@@ -93,7 +93,6 @@ class Messages extends Component {
     )
     return (
       <div className="messages-component">
-        <h2 className="room-name">{ this.props.activeRoom ? this.props.activeRoom.name : '' }</h2>
         <ul className="message-list">
           {messages}
           <div ref={(thisDiv) => this.bottomOfMessages = thisDiv}></div>

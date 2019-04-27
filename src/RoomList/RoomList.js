@@ -69,18 +69,27 @@ class RoomList extends Component {
         </li>
       );
     });
+    const form = (
+      <form className="creatRoomForm" onSubmit={(e) => {
+          e.preventDefault();
+          this.createRoom(this.state.newRoomName);
+        }}>
+        <input className="textInput"
+          type="text" value={this.state.newRoomName}
+          onChange={ this.handleChange.bind(this) }
+          name="newRoomName" placeholder="Create a new room"
+        />
+        <input type="submit" value="+" />
+      </form>
+    );
     return (
-        <section id="room-component">
+      <section className="roomComponent">
+        <div className="listContainer">
           <ul id="room-list">
             { rooms }
           </ul>
-        {this.props.user !== null &&
-          <form id="create-room" onSubmit={ (e) => { e.preventDefault(); this.createRoom(this.state.newRoomName) } }>
-            <input type="text" value={ this.state.newRoomName } onChange={ this.handleChange.bind(this) } name="newRoomName" placeholder="Create a new room" />
-            <input type="submit" value="+" />
-          </form>
-        }
-
+          {form}
+        </div>
       </section>
     );
   }

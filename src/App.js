@@ -69,12 +69,13 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="appComponent">
         <header className="header">
           <img className="logo" src={require("./assets/images/potato2.svg")} />
           <p className="app-name">Potato</p>
           <div className="on-off-button"
-               onClick={ this.state.user ? () => this.signOut() : this.signIn.bind(this) }>
+               onClick={ this.state.user ?
+               () => this.signOut() : this.signIn.bind(this) }>
             <i className="material-icons">power_settings_new</i>
             <p>Sign { this.state.user ? 'out' : 'in' }</p>
           </div>
@@ -86,10 +87,8 @@ class App extends Component {
             setRoom={this.setRoom.bind(this)}
             user={this.state.user}
           />
-          <div className="logo"></div>
-          <h1 className="wordmark">Potato</h1>
         </aside>
-        <main>
+        <main className="main">
           <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
         </main>
         <footer className="footer">

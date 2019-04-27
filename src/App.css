@@ -17,10 +17,6 @@ body {
   max-width: 1440px;
 }
 
-.sidebar {
-  display: none;
-}
-
 .user-display-name {
   display: flex;
   align-items: center;
@@ -43,6 +39,7 @@ img {
   align-items: center;
   cursor: pointer;
   margin-right: 2%;
+
 }
 
 .on-off-button:hover {
@@ -65,4 +62,45 @@ img {
 .add-room {
   color: #cfecd8;
   margin-left: 10px;
+}
+
+.sidebar {
+  display: none;
+}
+
+@media only screen and (min-device-width: 868px) {
+  .sidebar {
+    display: unset;
+  }
+
+  .appComponent {
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "sidebar footer";
+  }
+
+  .header {
+    grid-area: header;
+  }
+
+  .sidebar {
+    grid-area: sidebar;
+  }
+
+  .main {
+    grid-area: main;
+  }
+
+  .footer {
+    grid-area: footer;
+  }
+
+  .listContainer {
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 100px;
+  }
 }

@@ -21,16 +21,6 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    // const loggedInUser = {
-    //   email: this.props.user.email,
-    //   displayName: this.props.user.displayName,
-    //   photoURL: this.props.user.photoURL
-    // }
-    // const loggedOutUser = {
-    //   email: null,
-    //   displayName: 'Peaceful Potato',
-    //   photoURL: null
-    // }
     if (!this.props.activeRoom || !newMessageText) { return }
     this.messagesRef.push({
       content: newMessageText,
@@ -49,6 +39,12 @@ class Messages extends Component {
     this.setState({ newMessageText: '' });
   }
 
+  handleEnterDown = (event) => {
+    if(event.key == 'Enter'){
+      console.log('enter press here! ')
+    }
+  }
+
   handleAddRoom(e) {
     e.preventDefault();
   }
@@ -63,14 +59,15 @@ class Messages extends Component {
           onChange={ this.handleChange.bind(this) }
           name="newMessageText"
           placeholder="Say something"
+          onKeyPress={this.handleEnterDown}
         />
-        <div className="submitMessage" type="submit" onClick={(e) => {
+        <button className="submitMessage" type="submit" onClick={(e) => {
             e.preventDefault();
             this.createMessage(this.state.newMessageText);
           }
         }>
           <i className="send material-icons">send</i>
-        </div>
+        </button>
       </div>
     );
   }

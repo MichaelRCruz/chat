@@ -12,16 +12,16 @@ class Timeago extends Component {
   componentDidMount() {
     if ( Number.isInteger(this.props.timestamp) ) {
       this.tick();
-      this.interval = setInterval(this.tick.bind(this), 20000);
+      // this.interval = setInterval(this.tick.bind(this), 20000);
     }
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   tick() {
-    this.setState({ timeago: this.transform(this.props.timestamp) });
+    // this.setState({ timeago: this.transform(this.props.timestamp) });
   }
 
   transform(timestamp) {

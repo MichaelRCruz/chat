@@ -33,22 +33,40 @@ class Messages extends Component {
 
   updateDisplayedMessages(activeRoom) {
     if (!activeRoom) { return }
-    this.setState({ displayedMessages: this.state.allMessages.filter( message => message.roomId === activeRoom.key ) }, () => this.scrollToBottom() );
+    this.setState({
+      displayedMessages: this.state.allMessages.filter(message => {
+        return message.roomId === activeRoom.key;
+      })
+    }, () => this.scrollToBottom());
   }
 
   watchFirebaseForMessages() {
     this.messagesRef.on('child_added', snapshot => {
-      let message = Object.assign(snapshot.val(), {key: snapshot.key})
-      this.setState({ allMessages: this.state.allMessages.concat(message) }, () => {
-        this.updateDisplayedMessages(this.props.activeRoom);
-        this.scrollToBottom();
-      });
+      let message = Object.assign(snapshot.val(), {key: snapshot.key});
+      // this.setState({ allMessages: this.state.allMessages.concat(message) }, () => {
+      //   this.updateDisplayedMessages(this.props.activeRoom);
+      //   this.scrollToBottom();
+      // });
+      this.debouncer(message);
     });
     this.messagesRef.on('child_removed', snapshot  => {
       this.setState({ allMessages: this.state.allMessages.filter( message => message.key !== snapshot.key )  }, () => {
         this.updateDisplayedMessages( this.props.activeRoom )
       });
     });
+  }
+
+  debouncer(message) {
+    let messages = [];
+    messages.push(message);
+    const onDeckMessage = messages[messages.length - 1];
+    setTimeout(() => {
+      const allMessages = this.state.allMessages.concat(onDeckMessage);
+      this.setState({allMessages}, () => {
+        this.updateDisplayedMessages(this.props.activeRoom);
+        this.scrollToBottom();
+      });
+    }, 200);
   }
 
   render() {

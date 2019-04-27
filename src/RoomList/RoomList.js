@@ -85,7 +85,66 @@ class RoomList extends Component {
     return (
       <section className="roomComponent">
         <div className="listContainer">
-          <ul id="room-list">
+          <ul>
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
             { rooms }
           </ul>
           {form}

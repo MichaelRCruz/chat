@@ -41,7 +41,6 @@ class Messages extends Component {
 
   handleEnterDown = (event) => {
     if (event.key == 'Enter') {
-      console.log('enter press here! ', this.state.newMessageText);
       this.createMessage(this.state.newMessageText);
     }
   }

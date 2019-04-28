@@ -7,6 +7,7 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
   res.json({"greeting": "sup, yo"});
 });
 
+// https://us-central1-chat-asdf.cloudfunctions.net/handleHttpRedirect
 exports.handleHttpRedirect = functions.https.onRequest((req, res) => {
   console.log('inside handleHttpRedirect');
   res.redirect(303, 'https://michaelcruz.io/chat');

@@ -43,7 +43,7 @@
   color: #cfecd8;
 }
 
-@media only screen and (min-device-width: 868px) {
+@media only screen and (min-device-width: 768px) {
   .footerContainer {
     margin-left: 200px;
   }

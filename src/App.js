@@ -6,8 +6,6 @@ import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 
-import defaultUserImage from './assets/images/peaceful_potato.png';
-
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
   authDomain: "chat-asdf.firebaseapp.com",
@@ -71,7 +69,8 @@ class App extends Component {
     return (
       <div className="appComponent">
         <header className="header">
-          <img className="logo" src={require("./assets/images/potato2.svg")} />
+          <img className="logo" src={require("./assets/images/potato2.svg")}
+               alt="potato logo"/>
           <p className="app-name">Potato</p>
           <div className="on-off-button"
                onClick={ this.state.user ?

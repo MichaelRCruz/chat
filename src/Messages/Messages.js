@@ -41,7 +41,7 @@ class Messages extends Component {
   }
 
   watchFirebaseForMessages() {
-    const allMessages = new Array();
+    const allMessages = [];
     const throttler = this.throttling(() => {
       this.setState({allMessages: allMessages.slice(0)}, () => {
         this.updateDisplayedMessages(this.props.activeRoom);

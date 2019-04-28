@@ -91,8 +91,6 @@ img {
   .sidebar {
     grid-area: sidebar;
     background-color: #A1887F;
-    /* display: flex; */
-    /* flex-direction: column-reverse; */
   }
 
   .main {

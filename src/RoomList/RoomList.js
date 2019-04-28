@@ -59,7 +59,8 @@ class RoomList extends Component {
           </button>
           {room.creator && this.props.user
             && room.creator.email === this.props.user.email &&
-            <button className="deleteButton" onClick={ () => this.removeRoom(room) } className="remove remove-room-button">
+            <button className="deleteButton"
+                    onClick={() => this.removeRoom(room)}>
               &times;
             </button>
           }

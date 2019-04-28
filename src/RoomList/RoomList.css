@@ -1,13 +1,8 @@
-.createRoomForm {
-  margin-top: 100px;
-}
-
 .listContainer {
   position: fixed;
   bottom: 0;
-  height: 750px;
+  height: calc(100vh - 75px);
   width: 200px;
-  /* padding-top: 200px; */
   background-color: #A1887F;
 }
 

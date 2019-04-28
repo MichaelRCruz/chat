@@ -1,8 +1,14 @@
+.createRoomForm {
+  margin-top: 100px;
+}
+
 .listContainer {
-  /* background-color: #A1887F; */
   position: fixed;
   bottom: 0;
-  height: 830px;
+  height: 780px;
+  width: 200px;
+  /* padding-top: 200px; */
+  background-color: #A1887F;
 }
 
 .roomName {

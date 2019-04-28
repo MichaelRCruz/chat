@@ -68,7 +68,7 @@ class RoomList extends Component {
       );
     });
     const form = (
-      <form className="creatRoomForm" onSubmit={(e) => {
+      <form className="createRoomForm" onSubmit={(e) => {
           e.preventDefault();
           this.createRoom(this.state.newRoomName);
         }}>

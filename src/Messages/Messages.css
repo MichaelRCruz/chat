@@ -37,3 +37,9 @@ li {
 .imageMessageContainer {
   display: flex;
 }
+
+@media only screen and (min-device-width: 868px) {
+  .message-list:first-child {
+    margin-top: 650px;
+  }
+}

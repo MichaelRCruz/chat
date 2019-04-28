@@ -10,7 +10,7 @@ class Timeago extends Component {
   }
 
   componentDidMount() {
-    if ( Number.isInteger(this.props.timestamp) ) {
+    if (Number.isInteger(this.props.timestamp) ) {
       this.tick();
       // this.interval = setInterval(this.tick.bind(this), 20000);
     }
@@ -22,6 +22,13 @@ class Timeago extends Component {
 
   tick() {
     // this.setState({ timeago: this.transform(this.props.timestamp) });
+    this.setState({
+      timeago: new Date(this.props.timestamp).toLocaleDateString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      }).slice(11)
+    });
   }
 
   transform(timestamp) {
@@ -42,7 +49,7 @@ class Timeago extends Component {
 
   render() {
     return (
-      <div className="timeago">{ this.state.timeago }</div>
+      <p className="timeago">{ this.state.timeago }</p>
     )
   }
 }

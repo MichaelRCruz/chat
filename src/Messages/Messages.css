@@ -19,6 +19,7 @@ li {
   width: 40px;
   margin-right: 5px;
   margin-left: 10px;
+  flex-grow: 0;
 }
 
 .content {

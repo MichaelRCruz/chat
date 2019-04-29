@@ -16,6 +16,7 @@ body {
   justify-content: space-between;
   align-items: center;
   max-width: 1440px;
+  z-index: 2;
 }
 
 .user-display-name {

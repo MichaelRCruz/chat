@@ -9,7 +9,8 @@ class Messages extends Component {
     super(props)
     this.state = {
       allMessages: [],
-      displayedMessages: []
+      displayedMessages: [],
+      messageDeleted: false
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
@@ -24,7 +25,9 @@ class Messages extends Component {
   }
 
   removeMessage(room) {
-    this.messagesRef.child(room.key).remove();
+    this.setState({ messageDeleted: !this.state.messageDeleted }, () => {
+      this.messagesRef.child(room.key).remove();
+    });
   }
 
   scrollToBottom() {
@@ -34,6 +37,7 @@ class Messages extends Component {
   updateDisplayedMessages(activeRoom) {
     if (!activeRoom) { return }
     this.setState({
+      messageDeleted: true,
       displayedMessages: this.state.allMessages.filter(message => {
         return message.roomId === activeRoom.key;
       })
@@ -74,8 +78,10 @@ class Messages extends Component {
 
   render() {
     const messages = this.state.displayedMessages.map( message =>
-      <li key={message.key} className="message">
-        <div className="imageMessageContainer animated fadeInUp">
+      <li key={message.key}
+          className="message animated fadeInUp"
+      >
+        <div className="imageMessageContainer">
           <img
             className="messageImage"
             alt="user"

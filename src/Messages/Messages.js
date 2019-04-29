@@ -75,7 +75,7 @@ class Messages extends Component {
   render() {
     const messages = this.state.displayedMessages.map( message =>
       <li key={message.key} className="message">
-        <div className="imageMessageContainer">
+        <div className="imageMessageContainer animated fadeInUp">
           <img
             className="messageImage"
             alt="user"

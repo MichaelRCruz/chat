@@ -52,7 +52,7 @@ class Messages extends Component {
   render() {
     return (
       <div className="footerContainer">
-        <input
+        <textarea
           className="input-text"
           type="text"
           value={ this.state.newMessageText }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
+import Modal from './Modal/Modal';
 
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
@@ -21,7 +22,8 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
-      user: null
+      user: null,
+      show: false
     };
   }
 
@@ -65,12 +67,21 @@ class App extends Component {
     firebase.auth().signOut();
   }
 
+  toggleModal = () => {
+    console.log('modal toggled');
+    this.setState({
+      show: !this.state.show
+    });
+  }
+
   render() {
     return (
       <div className="appComponent">
         <header className="header">
           <img className="logo" src={require("./assets/images/potato2.svg")}
-               alt="potato logo"/>
+               onClick={this.toggleModal}
+               alt="potato logo"
+          />
           <p className="app-name">Potato</p>
           <div className="on-off-button"
                onClick={ this.state.user ?
@@ -97,6 +108,10 @@ class App extends Component {
             firebase={firebase}
           />
         </footer>
+        <Modal show={this.state.show} handleClose={this.toggleModal}>
+          <p>Modal</p>
+          <p>Data</p>
+        </Modal>
       </div>
     );
   }

@@ -69,7 +69,7 @@ img {
   display: none;
 }
 
-@media only screen and (min-device-width: 868px) {
+@media only screen and (min-device-width: 768px) {
   .sidebar {
     display: unset;
   }

@@ -75,6 +75,7 @@ class App extends Component {
   }
 
   render() {
+    const thing = <h1>Hello</h1>;
     return (
       <div className="appComponent">
         <header className="header">
@@ -92,6 +93,7 @@ class App extends Component {
         </header>
         <aside className="sidebar">
           <RoomList
+            className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
             setRoom={this.setRoom.bind(this)}
@@ -109,8 +111,7 @@ class App extends Component {
           />
         </footer>
         <Modal show={this.state.show} handleClose={this.toggleModal}>
-          <p>Modal</p>
-          <p>Data</p>
+          <h1></h1>
         </Modal>
       </div>
     );

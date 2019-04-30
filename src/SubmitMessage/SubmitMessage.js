@@ -79,7 +79,7 @@ class Messages extends Component {
           name="newMessageText"
           placeholder="Say something"
           onKeyPress={this.handleEnterDown}
-          required={true}
+          
         />
         <button type="submit" className="submitMessage" type="submit">
           <i className="send material-icons">send</i>

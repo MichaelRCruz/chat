@@ -23,7 +23,8 @@ class App extends Component {
     this.state = {
       activeRoom: null,
       user: null,
-      show: false
+      show: false,
+      showMenu: true
     };
   }
 
@@ -68,9 +69,14 @@ class App extends Component {
   }
 
   toggleModal = () => {
-    console.log('modal toggled');
     this.setState({
       show: !this.state.show
+    });
+  }
+
+  toggleMenu = () => {
+    this.setState({
+      showMenu: !this.state.showMenu
     });
   }
 
@@ -80,6 +86,8 @@ class App extends Component {
         <header className="header">
           <img className="logo" src={require("./assets/images/potato2.svg")}
                alt="potato logo"
+               onClick={ true ?
+                 () => this.toggleMenu() : () => this.toggleMenu()}
           />
           <p className="app-name">Potato</p>
           <div className="on-off-button"
@@ -89,7 +97,7 @@ class App extends Component {
             <p>Sign { this.state.user ? 'out' : 'in' }</p>
           </div>
         </header>
-        <aside className="sidebar">
+        <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
             className="lightContainer"
             firebase={firebase}
@@ -115,6 +123,7 @@ class App extends Component {
             activeRoom={this.state.activeRoom}
             setRoom={this.setRoom.bind(this)}
             user={this.state.user}
+            showMenu={this.state.showMenu}
           />
         </Modal>
       </div>

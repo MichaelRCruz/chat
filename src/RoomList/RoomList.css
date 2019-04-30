@@ -2,8 +2,9 @@
   position: fixed;
   bottom: 0;
   height: calc(100vh - 50px);
-  width: 200px;
+  width: 300px;
   background-color: #A1887F;
+  z-index: 4;
 }
 
 .roomName {

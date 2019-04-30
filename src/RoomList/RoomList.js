@@ -82,7 +82,7 @@ class RoomList extends Component {
     );
     return (
       <section className="roomComponent">
-        <div className="listContainer">
+        <div className={!this.props.showMenu ? "listContainer animated bounceInLeft" : "listContainer animated bounceOutLeft"}>
           {form}
           <ul>
             { rooms }

@@ -8,11 +8,19 @@ li {
   list-style-type: none;
 }
 
+.messages-component {
+  position: absolute;
+  z-index: 0;
+  background-color: #fff;
+}
+
 .message {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
   font-family: 'Roboto', sans-serif;
+  z-index: 3;
+  max-width: 1240px;
 }
 
 .messageImage {

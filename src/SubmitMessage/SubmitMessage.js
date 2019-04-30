@@ -2,6 +2,14 @@ import React, { Component } from 'react';
 
 import './SubmitMessage.css';
 
+const ReactDOM = require('react-dom')
+const ReactMarkdown = require('react-markdown')
+
+var showdown  = require('showdown'),
+    converter = new showdown.Converter(),
+    text      = '# hello, markdown!',
+    myHtml      = converter.makeHtml(text);
+
 class Messages extends Component {
   constructor (props) {
     super(props)
@@ -12,10 +20,6 @@ class Messages extends Component {
   }
 
   handleChange(event) {
-    console.log('event.target.value', event.target.value);
-    if (event.target.value === '\n') {
-      alert('Please enter a message to send. ;)');
-    }
     if (event.target.value.length >= 500) {
       alert("Please enter some text between 1 and 500 characters in length. :)");
       return;
@@ -25,7 +29,11 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    if (!this.props.activeRoom || !newMessageText) {
+    if (newMessageText === '\n') {
+      alert('Please enter a message to send. ;)');
+      this.setState({ newMessageText: '' });
+      return;
+    } else if (!this.props.activeRoom || !newMessageText) {
       return
     } else {
       this.messagesRef.push({
@@ -58,7 +66,11 @@ class Messages extends Component {
 
   render() {
     return (
-      <div className="footerContainer">
+      <form className="footerContainer" onSubmit={(e) => {
+          e.preventDefault();
+          this.createMessage(this.state.newMessageText);
+        }
+      }>
         <textarea
           className="input-text"
           type="text"
@@ -67,15 +79,12 @@ class Messages extends Component {
           name="newMessageText"
           placeholder="Say something"
           onKeyPress={this.handleEnterDown}
+          required={true}
         />
-        <button className="submitMessage" type="submit" onClick={(e) => {
-            e.preventDefault();
-            this.createMessage(this.state.newMessageText);
-          }
-        }>
+        <button type="submit" className="submitMessage" type="submit">
           <i className="send material-icons">send</i>
         </button>
-      </div>
+      </form>
     );
   }
 }

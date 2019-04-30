@@ -75,7 +75,6 @@ class App extends Component {
   }
 
   render() {
-    const thing = <h1>Hello</h1>;
     return (
       <div className="appComponent">
         <header className="header">

@@ -68,8 +68,7 @@ img {
 
 .sidebar {
   display: none;
-  position: absolute;
-  z-index: 999;
+  
 }
 
 @media only screen and (min-device-width: 768px) {

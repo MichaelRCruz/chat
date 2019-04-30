@@ -80,7 +80,6 @@ class App extends Component {
       <div className="appComponent">
         <header className="header">
           <img className="logo" src={require("./assets/images/potato2.svg")}
-               onClick={this.toggleModal}
                alt="potato logo"
           />
           <p className="app-name">Potato</p>

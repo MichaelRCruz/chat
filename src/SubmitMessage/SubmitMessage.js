@@ -12,8 +12,12 @@ class Messages extends Component {
   }
 
   handleChange(event) {
-    if (event.target.value.length > 200) {
-      alert("You have reached the character limit");
+    console.log('event.target.value', event.target.value);
+    if (event.target.value === '\n') {
+      alert('Please enter a message to send. ;)');
+    }
+    if (event.target.value.length >= 500) {
+      alert("Please enter some text between 1 and 500 characters in length. :)");
       return;
     } else {
       this.setState({newMessageText: event.target.value });
@@ -21,22 +25,25 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    if (!this.props.activeRoom || !newMessageText) { return }
-    this.messagesRef.push({
-      content: newMessageText,
-      sentAt: Date.now(),
-      roomId: this.props.activeRoom.key,
-      creator: this.props.user ? {
-        email: this.props.user.email,
-        displayName: this.props.user.displayName,
-        photoURL: this.props.user.photoURL
-      } : {
-        email: null,
-        displayName: 'Peaceful Potato',
-        photoURL: null
-      }
-    });
-    this.setState({ newMessageText: '' });
+    if (!this.props.activeRoom || !newMessageText) {
+      return
+    } else {
+      this.messagesRef.push({
+        content: newMessageText,
+        sentAt: Date.now(),
+        roomId: this.props.activeRoom.key,
+        creator: this.props.user ? {
+          email: this.props.user.email,
+          displayName: this.props.user.displayName,
+          photoURL: this.props.user.photoURL
+        } : {
+          email: null,
+          displayName: 'Peaceful Potato',
+          photoURL: null
+        }
+      });
+      this.setState({ newMessageText: '' });
+    }
   }
 
   handleEnterDown = (event) => {

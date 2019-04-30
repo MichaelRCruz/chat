@@ -111,7 +111,13 @@ class App extends Component {
           />
         </footer>
         <Modal show={this.state.show} handleClose={this.toggleModal}>
-          <h1></h1>
+          <RoomList
+            className="lightContainer"
+            firebase={firebase}
+            activeRoom={this.state.activeRoom}
+            setRoom={this.setRoom.bind(this)}
+            user={this.state.user}
+          />
         </Modal>
       </div>
     );

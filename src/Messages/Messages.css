@@ -20,7 +20,7 @@ li {
   margin-bottom: 10px;
   font-family: 'Roboto', sans-serif;
   z-index: 3;
-  max-width: 1240px;
+  max-width: 1140px;
 }
 
 .messageImage {
@@ -40,7 +40,7 @@ li {
 }
 
 .message-list:last-child {
-  margin-bottom: 75px;
+  margin-bottom: 100px;
 }
 
 .imageMessageContainer {

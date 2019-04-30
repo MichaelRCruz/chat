@@ -11,7 +11,7 @@ body {
   top: 0vh;
   height: 50px;
   width: 100%;
-  background-color: #6D4C41;
+  background-color: #422500;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -97,7 +97,7 @@ img {
 
   .sidebar {
     grid-area: sidebar;
-    background-color: #A1887F;
+    background-color: #E1E2E1;
   }
 
   .main {

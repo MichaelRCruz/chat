@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
 .footerContainer {
-  background-color: #E1E2E1;
+  background-color: #f2bcf8;
   height: 75px;
   display: flex;
   align-items: flex-center;
@@ -14,15 +14,15 @@
   cursor: pointer;
   background-color: #704D1A;
   width: 40px;
-  height: 50px;
-  border-radius: 50%;
+  height: 40px;
+  border-radius: 25%;
   margin-right: 10px;
   margin-left: 10px;
-  margin-bottom: 78px;
-  display: flex;
+  margin-bottom: 76px;
+  /* display: flex;
   justify-content: space-evenly;
-  align-items: center;
-  flex-shrink: none;
+  align-items: center; */
+  flex-shrink: 0;
 }
 
 .input-text {

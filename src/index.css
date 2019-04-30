@@ -1,9 +1,9 @@
 html {
-  background-color: #232323;
+  background-color: #F5F5F6;
 }
 
 body {
-  background-color: white !importanmt;
+  background-color: #fff !importanmt;
 }
 
 .mdc-components {
@@ -149,14 +149,14 @@ body {
 
     .mdc-component__buttons .mdc-component__containers__primary .mdc-button,
     .mdc-component__buttons .mdc-component__containers__primary .mdc-fab {
-      background-color: #704d1a;
+      background-color: #704c19;
       color: #ffffff;
     }
 
     .mdc-component__buttons .mdc-component__containers__primary .mdc-button--plain,
     .mdc-component__buttons .mdc-component__containers__primary .mdc-fab--plain {
       background-color: transparent;
-      color: #704d1a;
+      color: #704c19;
     }
 
     .mdc-component__buttons .mdc-component__containers__secondary .mdc-button,
@@ -178,7 +178,7 @@ body {
 
     .mdc-component__buttons .mdc-component__containers__primary .mdc-button--plain.mdc-ripple-upgraded::before,
     .mdc-component__buttons .mdc-component__containers__primary .mdc-button--plain.mdc-ripple-upgraded::after {
-      background-color: rgba(112, 77, 26, 0.06);
+      background-color: rgba(112, 76, 25, 0.06);
     }
 
     .mdc-component__buttons .mdc-component__containers__primary .mdc-fab.mdc-ripple-upgraded::after {
@@ -186,7 +186,7 @@ body {
     }
 
     .mdc-component__buttons .mdc-component__containers__primary .mdc-fab--plain.mdc-ripple-upgraded::after {
-      background-color: rgba(112, 77, 26, 0.16);
+      background-color: rgba(112, 76, 25, 0.16);
     }
 
     .mdc-component__buttons .mdc-component__containers__secondary .mdc-button--raised.mdc-ripple-upgraded::before,
@@ -233,23 +233,23 @@ body {
     .mdc-component__switches .mdc-component__containers__primary .mdc-checkbox__native-control:checked:not(:disabled) ~ .mdc-checkbox__background,
     .mdc-component__switches .mdc-component__containers__primary .mdc-checkbox__native-control:indeterminate:not(:disabled) ~ .mdc-checkbox__background,
     .mdc-component__switches .mdc-component__containers__primary .mdc-radio__native-control:checked+.mdc-radio__background .mdc-radio__inner-circle {
-      background-color: #704d1a;
-      border-color: #704d1a;
+      background-color: #704c19;
+      border-color: #704c19;
     }
 
     .mdc-component__switches .mdc-component__containers__primary .mdc-switch__native-control:checked~.mdc-switch__background::before,
     .mdc-component__switches .mdc-component__containers__primary .mdc-switch__native-control:checked~.mdc-switch__background .mdc-switch__knob::before,
     .mdc-component__switches .mdc-component__containers__primary .mdc-switch__native-control:checked~.mdc-switch__background .mdc-switch__knob {
-      background-color: #704d1a;
+      background-color: #704c19;
     }
 
     .mdc-component__switches .mdc-component__containers__primary .mdc-radio__native-control:checked+.mdc-radio__background .mdc-radio__outer-circle {
-      border-color: #704d1a;
+      border-color: #704c19;
     }
 
     .mdc-component__switches .mdc-component__containers__primary .mdc-checkbox__background::before,
     .mdc-component__switches .mdc-component__containers__primary .mdc-radio__background::before {
-      background-color: #704d1a;
+      background-color: #704c19;
     }
 
     .mdc-component__switches .mdc-component__containers__secondary .mdc-checkbox__native-control:checked:not(:disabled) ~ .mdc-checkbox__background,
@@ -278,7 +278,7 @@ body {
     .mdc-component__switches .mdc-component__containers__primary .mdc-checkbox.mdc-ripple-upgraded--unbounded::after,
     .mdc-component__switches .mdc-component__containers__primary .mdc-radio.mdc-ripple-upgraded--unbounded::before,
     .mdc-component__switches .mdc-component__containers__primary .mdc-radio.mdc-ripple-upgraded--unbounded::after {
-      background-color: rgba(112, 77, 26, 0.14);
+      background-color: rgba(112, 76, 25, 0.14);
     }
 
     .mdc-component__switches .mdc-component__containers__secondary .mdc-checkbox.mdc-ripple-upgraded--unbounded::before,
@@ -346,7 +346,7 @@ body {
   }
 
   .mdc-component__cards .mdc--theme-primary {
-    background-color: #704d1a;
+    background-color: #704c19;
     color: #ffffff;
   }
 
@@ -356,16 +356,16 @@ body {
   }
 
   .mdc-component__cards .material-image .material-image__background {
-    fill: #422500;
+    fill: #422400;
   }
 
   .mdc-component__cards .material-image .material-image--shape-circle,
   .mdc-component__cards .material-image .material-image--shape-triangle {
-    fill: #704d1a;
+    fill: #704c19;
   }
 
   .mdc-component__cards .material-image .material-image--shape-intersection {
-    fill: #422500;
+    fill: #422400;
   }
 
   .mdc-component__cards .mdc-button--raised.mdc--theme-primary.mdc-ripple-upgraded::after {
@@ -377,7 +377,7 @@ body {
   }
 
   .mdc-component__menu .mdc-toolbar {
-    background-color: #704d1a;
+    background-color: #704c19;
     z-index: 1;
   }
 
@@ -429,12 +429,12 @@ body {
 
   .mdc-component__menu .mdc-list-item.mdc-ripple-upgraded::before,
   .mdc-component__menu .mdc-list-item.mdc-ripple-upgraded::after {
-    background-color: rgba(112, 77, 26, 0.06);
+    background-color: rgba(112, 76, 25, 0.06);
   }
 
   .mdc-component__menu .mdc-permanent-drawer .mdc-permanent-drawer--selected::before,
   .mdc-component__menu .mdc-permanent-drawer .mdc-list-item:active::before {
-    background-color: #704d1a;
+    background-color: #704c19;
     opacity: .16;
   }
 
@@ -444,16 +444,16 @@ body {
   }
 
   .mdc-component__menu .material-image__background {
-    fill: #422500;
+    fill: #422400;
   }
 
   .mdc-component__menu .material-image--shape-circle,
   .mdc-component__menu .material-image--shape-triangle {
-    fill: #704d1a;
+    fill: #704c19;
   }
 
   .mdc-component__menu .material-image--shape-intersection {
-    fill: #422500;
+    fill: #422400;
   }
 
   .mdc-component__textfield .mdc-component__containers {
@@ -481,11 +481,11 @@ body {
   }
 
   .mdc-component__textfield .mdc-textfield--theme-primary .mdc-textfield__label {
-    color: #704d1a;
+    color: #704c19;
   }
 
   .mdc-component__textfield .mdc-textfield--theme-primary .mdc-textfield:not(.mdc-textfield--upgraded) .mdc-textfield__input:focus {
-    border-color: #704d1a;
+    border-color: #704c19;
   }
 
   .mdc-component__textfield .mdc-textfield--theme-secondary .mdc-textfield__label {
@@ -497,7 +497,7 @@ body {
   }
 
   .mdc-component__toolbar .app-bar {
-    background-color: #422500;
+    background-color: #422400;
     display: block;
     height: 20px;
     width: 100%;
@@ -570,7 +570,7 @@ body {
   }
 
   .mdc-component__toolbar .mdc--theme-primary {
-    background-color: #704d1a;
+    background-color: #704c19;
     color: #ffffff;
   }
 

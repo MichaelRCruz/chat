@@ -5,12 +5,16 @@
   "private": true,
   "dependencies": {
     "bad-words": "^3.0.2",
-    "firebase": "^5.9.3",
-    "firebase-tools": "^6.7.1",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "firebase": "^5.11.0",
+    "firebase-tools": "^6.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-markdown": "^4.0.8",
+    "react-redux": "^7.0.3",
     "react-showdown": "^1.6.0",
+    "redux": "^4.0.1",
+    "redux-form": "^8.2.0",
+    "redux-thunk": "^2.3.0",
     "showdown": "^1.9.0"
   },
   "devDependencies": {

@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
 import Modal from './Modal/Modal';
-import AuthModal from './AuthModal/AuthModal.js';
 
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
+
+import {reduxForm, Field, SubmissionError, focus} from 'redux-form';
+import Input from './Input/Input.js';
+import {required, nonEmpty, email} from './validators.js';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -82,11 +85,12 @@ class App extends Component {
   }
 
   createName = (name) => {
-    this.setState({user: {
-      email: null,
-      displayName: name,
-      photoURL: null
-    }});
+    console.log('name', name);
+    // this.setState({user: {
+    //   email: null,
+    //   displayName: name,
+    //   photoURL: null
+    // }});
   }
 
   toggleModal = () => {
@@ -102,6 +106,22 @@ class App extends Component {
   }
 
   render() {
+    console.log('this.props: ', this.props);
+    let successMessage;
+    if (this.props.submitSucceeded) {
+        successMessage = (
+            <div className="message message-success">
+                Message submitted successfully
+            </div>
+        );
+    }
+
+    let errorMessage;
+    if (this.props.error) {
+        errorMessage = (
+            <div className="message message-error">{this.props.error}</div>
+        );
+    }
     return (
       <div className="appComponent">
         <header className="header">
@@ -136,22 +156,26 @@ class App extends Component {
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
           <section>
-            <div className="oauthContainer" onClick={ this.state.user ?
-                () => this.signOut() : this.signIn.bind(this) }>
-              <i className="material-icons">power_settings_new</i>
-              <p>Sign { this.state.user ? 'out with Google' : 'in with Google' }</p>
-            </div>
-              <input
-                className="submitNameTextField"
-                type="text"
-                value={ this.state.newName }
-                onChange={ this.handleNameChange }
-                name="newMessageText"
-                placeholder="select cool name"
-              />
-              <button type="submit" className="submitName" type="submit" onClick={() => this.createName(this.state.newNameText)}>
-                <i className="material-icons">add</i>
-              </button>
+
+              <form
+                  onSubmit={this.props.handleSubmit(values =>
+                      this.createName(values)
+                  )}>
+                  {successMessage}
+                  {errorMessage}
+                <Field
+                    name="name"
+                    type="text"
+                    component={Input}
+                    label="Name"
+                    validate={[required, nonEmpty, email]}
+                />
+                <button type="submit" className="submitName" type="submit" disabled={
+                    this.props.pristine || this.props.submitting
+                }>
+                  <i className="material-icons">add</i>
+                </button>
+              </form>
           </section>
         </Modal>
       </div>
@@ -159,4 +183,10 @@ class App extends Component {
   }
 }
 
-export default App;
+// export default App;
+
+export default reduxForm({
+    form: 'contact',
+    onSubmitFail: (errors, dispatch) =>
+        dispatch(focus('contact', Object.keys(errors)[0]))
+})(App);

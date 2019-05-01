@@ -111,7 +111,8 @@ class Messages extends Component {
                 </button>
               }
             </div>
-            <Markdown markup={message.content} className="content" />
+            
+            <ReactMarkdown source={message.content} />
           </div>
         </div>
         <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />

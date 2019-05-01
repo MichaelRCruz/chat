@@ -86,6 +86,71 @@ class RoomList extends Component {
           {form}
           <ul>
             { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
+            { rooms }
           </ul>
         </div>
       </section>

@@ -90,9 +90,8 @@ class App extends Component {
                  () => this.toggleMenu() : () => this.toggleMenu()}
           />
           <p className="app-name">Potato</p>
-          <div className="on-off-button"
-               onClick={ this.state.user ?
-                 () => this.signOut() : this.signIn.bind(this) }>
+          <div className="on-off-button">
+            <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
             <i className="material-icons">power_settings_new</i>
             <p>Sign { this.state.user ? 'out' : 'in' }</p>
           </div>
@@ -106,7 +105,7 @@ class App extends Component {
             user={this.state.user}
           />
         </aside>
-        <main className="main">
+        <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
           <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
         </main>
         <footer className="footer">
@@ -116,15 +115,17 @@ class App extends Component {
             firebase={firebase}
           />
         </footer>
-        <Modal show={this.state.show} handleClose={this.toggleModal}>
-          <RoomList
-            className="lightContainer"
-            firebase={firebase}
-            activeRoom={this.state.activeRoom}
-            setRoom={this.setRoom.bind(this)}
-            user={this.state.user}
-            showMenu={this.state.showMenu}
-          />
+        <Modal show={this.state.show}
+               handleClose={this.toggleModal}
+               user={this.state.user}
+               firebase={firebase}>
+          <section>
+            <h1>Hello, world.</h1>
+            <button onClick={ this.state.user ?
+              () => this.signOut() : this.signIn.bind(this) }>
+              sign in/out
+            </button>
+          </section>
         </Modal>
       </div>
     );

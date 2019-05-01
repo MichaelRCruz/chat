@@ -5,6 +5,8 @@
   width: 300px;
   background-color: #704d1a;
   z-index: 4;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .roomName {

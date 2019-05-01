@@ -59,7 +59,7 @@ img {
 .logo {
   display: flex;
   align-items: center;
-  margin-left: 5px;
+  margin-left: 10px;
 }
 
 .add-room {
@@ -78,6 +78,20 @@ img {
 .overflowHidden {
   overflow: hidden;
   height: 0;
+}
+
+.loginModal {
+  color: #ffffff;
+  margin-right: 10px;
+}
+
+.oauthContainer {
+  display: flex;
+  align-items: center;
+}
+
+.submitNameTextInput {
+  border: 1px solid black;
 }
 
 @media only screen and (min-device-width: 812px) {

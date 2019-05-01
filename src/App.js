@@ -24,7 +24,8 @@ class App extends Component {
       activeRoom: null,
       user: null,
       show: false,
-      showMenu: true
+      showMenu: true,
+      newNameText: ''
     };
   }
 
@@ -68,6 +69,22 @@ class App extends Component {
     firebase.auth().signOut();
   }
 
+  handleNameChange = (event) => {
+    if (event.target.value.length >= 25) {
+      alert("Please enter some text between 1 and 20 characters in length. :)");
+      return;
+    } else {
+      console.log('event.target.value', event.target.value);
+      this.setState({
+        newNameText: event.target.value
+      });
+    }
+  }
+
+  createName = (name) => {
+    console.log('muh name: ', name);
+  }
+
   toggleModal = () => {
     this.setState({
       show: !this.state.show
@@ -90,11 +107,8 @@ class App extends Component {
                  () => this.toggleMenu() : () => this.toggleMenu()}
           />
           <p className="app-name">Potato</p>
-          <div className="on-off-button">
-            <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
-            <i className="material-icons">power_settings_new</i>
-            <p>Sign { this.state.user ? 'out' : 'in' }</p>
-          </div>
+          <i className="material-icons loginModal" onClick={this.toggleModal}>more_vert</i>
+
         </header>
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
@@ -120,11 +134,22 @@ class App extends Component {
                user={this.state.user}
                firebase={firebase}>
           <section>
-            <h1>Hello, world.</h1>
-            <button onClick={ this.state.user ?
-              () => this.signOut() : this.signIn.bind(this) }>
-              sign in/out
-            </button>
+            <div className="oauthContainer" onClick={ this.state.user ?
+                () => this.signOut() : this.signIn.bind(this) }>
+              <i className="material-icons">power_settings_new</i>
+              <p>Sign { this.state.user ? 'out with Google' : 'in with Google' }</p>
+            </div>
+              <input
+                className="submitNameTextField"
+                type="text"
+                value={ this.state.newName }
+                onChange={ this.handleNameChange }
+                name="newMessageText"
+                placeholder="select cool name"
+              />
+              <button type="submit" className="submitName" type="submit" onClick={() => this.createName(this.state.newNameText)}>
+                <i className="material-icons">add</i>
+              </button>
           </section>
         </Modal>
       </div>

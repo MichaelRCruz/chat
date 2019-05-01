@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 
 import './SubmitMessage.css';
 
-const ReactDOM = require('react-dom')
-const ReactMarkdown = require('react-markdown');
+const ReactDOM = require('react-dom');
 
 class Messages extends Component {
   constructor (props) {

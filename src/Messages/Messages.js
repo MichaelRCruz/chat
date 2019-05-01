@@ -4,6 +4,12 @@ import './Messages.css';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
+import { Markdown } from 'react-showdown';
+
+const ReactDOM = require('react-dom')
+const ReactMarkdown = require('react-markdown')
+
+
 class Messages extends Component {
   constructor (props) {
     super(props)
@@ -35,12 +41,19 @@ class Messages extends Component {
   }
 
   updateDisplayedMessages(activeRoom) {
-    if (!activeRoom) { return }
+    if (!activeRoom) { return };
+    const roomMessages = this.state.allMessages.filter(message => {
+      return message.roomId === activeRoom.key;
+    });
+    const messagesToHtml = roomMessages.map(message => {
+    // text = text.replace(/¨/g, '¨T');
+      // message = message.replace(/¨/g, '¨T');
+      // return converter.convert(message);
+      return message;
+    });
     this.setState({
       messageDeleted: true,
-      displayedMessages: this.state.allMessages.filter(message => {
-        return message.roomId === activeRoom.key;
-      })
+      displayedMessages: messagesToHtml
     }, () => this.scrollToBottom());
   }
 
@@ -98,7 +111,7 @@ class Messages extends Component {
                 </button>
               }
             </div>
-            <div className="content">{message.content}</div>
+            <Markdown markup={message.content} className="content" />
           </div>
         </div>
         <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />

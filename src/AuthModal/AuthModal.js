@@ -51,17 +51,17 @@ class AuthModal extends Component {
           <i className="material-icons">power_settings_new</i>
           <p>Sign { this.props.user ? 'out with Google' : 'in with Google' }</p>
         </div>
-          <input
-            className="submitNameTextField"
-            type="text"
-            value={ this.state.newNameText }
-            onChange={ this.handleNameChange }
-            name="newMessageText"
-            placeholder="select cool name"
-          />
-          <button type="submit" className="submitName" type="submit" onClick={() => this.createName(this.state.newNameText)}>
-            <i className="material-icons">add</i>
-          </button>
+        <input
+          className="submitNameTextField"
+          type="text"
+          value={ this.state.newNameText }
+          onChange={ this.handleNameChange }
+          name="newMessageText"
+          placeholder="select cool name"
+        />
+        <button type="submit" className="submitName" type="submit" onClick={() => this.createName(this.state.newNameText)}>
+          <i className="material-icons">add</i>
+        </button>
       </section>
     );
   }

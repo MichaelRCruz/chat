@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
 import Modal from './Modal/Modal';
+import AuthModal from './AuthModal/AuthModal.js';
 
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
@@ -70,11 +71,10 @@ class App extends Component {
   }
 
   handleNameChange = (event) => {
-    if (event.target.value.length >= 25) {
+    if (event.target.value.length >= 35) {
       alert("Please enter some text between 1 and 20 characters in length. :)");
       return;
     } else {
-      console.log('event.target.value', event.target.value);
       this.setState({
         newNameText: event.target.value
       });
@@ -82,7 +82,6 @@ class App extends Component {
   }
 
   createName = (name) => {
-    console.log('muh name: ', name);
     this.setState({user: {
       email: null,
       displayName: name,
@@ -135,9 +134,7 @@ class App extends Component {
           />
         </footer>
         <Modal show={this.state.show}
-               handleClose={this.toggleModal}
-               user={this.state.user}
-               firebase={firebase}>
+               handleClose={this.toggleModal}>
           <section>
             <div className="oauthContainer" onClick={ this.state.user ?
                 () => this.signOut() : this.signIn.bind(this) }>

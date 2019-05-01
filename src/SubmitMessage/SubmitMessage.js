@@ -3,12 +3,7 @@ import React, { Component } from 'react';
 import './SubmitMessage.css';
 
 const ReactDOM = require('react-dom')
-const ReactMarkdown = require('react-markdown')
-
-var showdown  = require('showdown'),
-    converter = new showdown.Converter(),
-    text      = '# hello, markdown!',
-    myHtml      = converter.makeHtml(text);
+const ReactMarkdown = require('react-markdown');
 
 class Messages extends Component {
   constructor (props) {
@@ -29,7 +24,7 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    if (newMessageText === '\n') {
+    if (newMessageText === '\n' || newMessageText.trim() === '') {
       alert('Please enter a message to send. ;)');
       this.setState({ newMessageText: '' });
       return;

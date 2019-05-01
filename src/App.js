@@ -83,6 +83,11 @@ class App extends Component {
 
   createName = (name) => {
     console.log('muh name: ', name);
+    this.setState({user: {
+      email: null,
+      displayName: name,
+      photoURL: null
+    }});
   }
 
   toggleModal = () => {

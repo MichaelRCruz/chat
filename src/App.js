@@ -9,7 +9,10 @@ import SubmitMessage from './SubmitMessage/SubmitMessage';
 
 import {reduxForm, Field, focus} from 'redux-form';
 import Input from './Input/Input.js';
-import {required, nonEmpty, email, matches} from './validators.js';
+import {required, nonEmpty, matches, length, isTrimmed, email} from './validators';
+
+const passwordLength = length({min: 10, max: 72});
+const matchesPassword = matches('password');
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -36,24 +39,6 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged( user => {
       this.setUser(user);
-      // var onComplete = function(error) {
-      //   if (error) {
-      //     console.log('Operation failed');
-      //   } else {
-      //     console.log(' Operation completed');
-      //   }
-      // };
-      // this.usersRef.push(user.providerData[0]);
-      // console.log(+user.providerData[0].uid, user.providerData[0]);
-      // this.usersRef.child(user.providerData[0].uid).setValue(user.providerData[0], onComplete);
-      // this.usersRef.orderByChild("uid").equalTo(user.providerData[0].uid).on("add_child", function(snapshot) {
-      //   console.log('snapshot.val()', snapshot.val());
-      //   if (!snapshot.val()) {
-      //     this.usersRef.push(user.providerData[0]);
-      //   } else {
-      //
-      //   }
-      // });
     });
   }
 
@@ -156,37 +141,45 @@ class App extends Component {
                handleClose={this.toggleModal}>
           <section>
               <form
+                  className="login-form"
                   onSubmit={this.props.handleSubmit(values =>
                       this.createName(values)
                   )}>
                   {successMessage}
                   {errorMessage}
-                <Field
-                    name="username"
-                    type="text"
-                    component={Input}
-                    label="username"
-                    validate={[required, nonEmpty]}
-                />
-                <Field
-                    name="password"
-                    type="password"
-                    component={Input}
-                    label="password"
-                    validate={[required, nonEmpty]}
-                />
-                <Field
-                    name="passwordConfirm"
-                    type="password"
-                    component={Input}
-                    label="passwordConfirm"
-                    validate={[required, nonEmpty]}
-                />
-                <button type="submit" className="submitName" disabled={
-                    this.props.pristine || this.props.submitting
-                }>
-                  <i className="material-icons">add</i>
-                </button>
+                  <label htmlFor="username">Username</label>
+                  <Field
+                      component={Input}
+                      type="text"
+                      name="username"
+                      validate={[required, nonEmpty, isTrimmed]}
+                  />
+                  <label htmlFor="email">email</label>
+                  <Field
+                      component={Input}
+                      type="email"
+                      name="email"
+                      validate={[required, nonEmpty, isTrimmed, email]}
+                  />
+                  <label htmlFor="password">Password</label>
+                  <Field
+                      component={Input}
+                      type="password"
+                      name="password"
+                      validate={[required, passwordLength, isTrimmed]}
+                  />
+                  <label htmlFor="passwordConfirm">Confirm password</label>
+                  <Field
+                      component={Input}
+                      type="password"
+                      name="passwordConfirm"
+                      validate={[required, nonEmpty, matchesPassword]}
+                  />
+                  <button
+                      type="submit"
+                      disabled={this.props.pristine || this.props.submitting}>
+                      Register
+                  </button>
               </form>
           </section>
         </Modal>

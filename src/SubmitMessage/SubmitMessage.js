@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import './SubmitMessage.css';
 
-const ReactDOM = require('react-dom');
-
 class Messages extends Component {
   constructor (props) {
     super(props)
@@ -75,7 +73,7 @@ class Messages extends Component {
           onKeyPress={this.handleEnterDown}
 
         />
-        <button type="submit" className="submitMessage" type="submit">
+        <button type="submit" className="submitMessage">
           <i className="send material-icons">send</i>
         </button>
       </form>

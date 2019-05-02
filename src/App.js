@@ -7,7 +7,7 @@ import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 
-import {reduxForm, Field, SubmissionError, focus} from 'redux-form';
+import {reduxForm, Field, focus} from 'redux-form';
 import Input from './Input/Input.js';
 import {required, nonEmpty, email} from './validators.js';
 
@@ -85,7 +85,7 @@ class App extends Component {
   }
 
   createName = (name) => {
-    console.log('name', name);
+    console.log('email form wired up and validated');
     // this.setState({user: {
     //   email: null,
     //   displayName: name,
@@ -106,7 +106,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('this.props: ', this.props);
     let successMessage;
     if (this.props.submitSucceeded) {
         successMessage = (
@@ -170,7 +169,7 @@ class App extends Component {
                     label="Name"
                     validate={[required, nonEmpty, email]}
                 />
-                <button type="submit" className="submitName" type="submit" disabled={
+                <button type="submit" className="submitName" disabled={
                     this.props.pristine || this.props.submitting
                 }>
                   <i className="material-icons">add</i>

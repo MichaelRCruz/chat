@@ -4,9 +4,6 @@ import './Messages.css';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-import { Markdown } from 'react-showdown';
-
-const ReactDOM = require('react-dom')
 const ReactMarkdown = require('react-markdown')
 
 
@@ -111,7 +108,7 @@ class Messages extends Component {
                 </button>
               }
             </div>
-            
+
             <ReactMarkdown source={message.content} />
           </div>
         </div>

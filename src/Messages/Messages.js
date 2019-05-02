@@ -109,7 +109,7 @@ class Messages extends Component {
               }
             </div>
 
-            <ReactMarkdown source={message.content} />
+            {message.content}
           </div>
         </div>
         <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {reduxForm, Field, focus} from 'redux-form';
+import {reduxForm, Field, focus, SubmissionError} from 'redux-form';
 import Input from '../Input/Input';
 import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
 
@@ -11,7 +11,8 @@ class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      errorMessage: null,
     };
   }
 
@@ -24,7 +25,22 @@ class Auth extends Component {
       })
       .catch(function(error) {
         console.log(error);
-    });
+        const {code, message} = error;
+        if (code === "auth/email-already-in-use") {
+          alert('email already in use');
+          // Convert ValidationErrors into SubmissionErrors for Redux Form
+          // return Promise.reject(
+          //   new SubmissionError({
+          //       ['auth/email-already-in-use']: message
+          //   })
+          // );
+        }
+        // return Promise.reject(
+        //     new SubmissionError({
+        //         _error: 'Error submitting message'
+        //     })
+        // );
+    }).bind(this);
   }
 
   signIn(email, password) {
@@ -111,5 +127,5 @@ class Auth extends Component {
 export default reduxForm({
     form: 'contact',
     onSubmitFail: (errors, dispatch) =>
-        dispatch(focus('contact', Object.keys(errors)[0]))
+        console.log('email already taken', errors)
 })(Auth);

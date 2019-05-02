@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import * as firebase from 'firebase';
+import Auth from './Auth/Auth';
 import Modal from './Modal/Modal';
 
 import Messages from './Messages/Messages';
@@ -139,49 +140,7 @@ class App extends Component {
         </footer>
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
-          <section>
-              <form
-                  className="login-form"
-                  onSubmit={this.props.handleSubmit(values =>
-                      this.createName(values)
-                  )}>
-                  {successMessage}
-                  {errorMessage}
-                  <label htmlFor="username">Username</label>
-                  <Field
-                      component={Input}
-                      type="text"
-                      name="username"
-                      validate={[required, nonEmpty, isTrimmed]}
-                  />
-                  <label htmlFor="email">email</label>
-                  <Field
-                      component={Input}
-                      type="email"
-                      name="email"
-                      validate={[required, nonEmpty, isTrimmed, email]}
-                  />
-                  <label htmlFor="password">Password</label>
-                  <Field
-                      component={Input}
-                      type="password"
-                      name="password"
-                      validate={[required, passwordLength, isTrimmed]}
-                  />
-                  <label htmlFor="passwordConfirm">Confirm password</label>
-                  <Field
-                      component={Input}
-                      type="password"
-                      name="passwordConfirm"
-                      validate={[required, nonEmpty, matchesPassword]}
-                  />
-                  <button
-                      type="submit"
-                      disabled={this.props.pristine || this.props.submitting}>
-                      Register
-                  </button>
-              </form>
-          </section>
+          <Auth firebase={firebase} />
         </Modal>
       </div>
     );

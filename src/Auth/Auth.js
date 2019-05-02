@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {reduxForm, Field, focus, SubmissionError} from 'redux-form';
+import {reduxForm, Field} from 'redux-form';
 import Input from '../Input/Input';
 import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
 
@@ -25,7 +25,7 @@ class Auth extends Component {
       })
       .catch(function(error) {
         console.log(error);
-        const {code, message} = error;
+        const {code} = error;
         if (code === "auth/email-already-in-use") {
           alert('email already in use');
           // Convert ValidationErrors into SubmissionErrors for Redux Form

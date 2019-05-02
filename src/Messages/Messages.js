@@ -4,7 +4,7 @@ import './Messages.css';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-const ReactMarkdown = require('react-markdown')
+// const ReactMarkdown = require('react-markdown');
 
 
 class Messages extends Component {

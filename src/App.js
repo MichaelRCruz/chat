@@ -8,12 +8,7 @@ import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 
-import {reduxForm, Field, focus} from 'redux-form';
-import Input from './Input/Input.js';
-import {required, nonEmpty, matches, length, isTrimmed, email} from './validators';
-
-const passwordLength = length({min: 10, max: 72});
-const matchesPassword = matches('password');
+import {reduxForm, focus} from 'redux-form';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -92,21 +87,6 @@ class App extends Component {
   }
 
   render() {
-    let successMessage;
-    if (this.props.submitSucceeded) {
-        successMessage = (
-            <div className="message message-success">
-                Message submitted successfully
-            </div>
-        );
-    }
-
-    let errorMessage;
-    if (this.props.error) {
-        errorMessage = (
-            <div className="message message-error">{this.props.error}</div>
-        );
-    }
     return (
       <div className="appComponent">
         <header className="header">

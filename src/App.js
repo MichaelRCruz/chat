@@ -9,7 +9,7 @@ import SubmitMessage from './SubmitMessage/SubmitMessage';
 
 import {reduxForm, Field, focus} from 'redux-form';
 import Input from './Input/Input.js';
-import {required, nonEmpty, email} from './validators.js';
+import {required, nonEmpty, email, matches} from './validators.js';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -84,8 +84,8 @@ class App extends Component {
     }
   }
 
-  createName = (name) => {
-    console.log('email form wired up and validated');
+  createName = (values) => {
+    console.log('email form wired up and validated: ', values);
     // this.setState({user: {
     //   email: null,
     //   displayName: name,
@@ -155,7 +155,6 @@ class App extends Component {
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
           <section>
-
               <form
                   onSubmit={this.props.handleSubmit(values =>
                       this.createName(values)
@@ -163,11 +162,25 @@ class App extends Component {
                   {successMessage}
                   {errorMessage}
                 <Field
-                    name="name"
+                    name="username"
                     type="text"
                     component={Input}
-                    label="Name"
-                    validate={[required, nonEmpty, email]}
+                    label="username"
+                    validate={[required, nonEmpty]}
+                />
+                <Field
+                    name="password"
+                    type="password"
+                    component={Input}
+                    label="password"
+                    validate={[required, nonEmpty]}
+                />
+                <Field
+                    name="passwordConfirm"
+                    type="password"
+                    component={Input}
+                    label="passwordConfirm"
+                    validate={[required, nonEmpty]}
                 />
                 <button type="submit" className="submitName" disabled={
                     this.props.pristine || this.props.submitting

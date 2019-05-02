@@ -20,10 +20,22 @@ class Auth extends Component {
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(res => {
         console.log('registration complete', res);
+        this.signIn(values.email, values.password);
       })
       .catch(function(error) {
         console.log(error);
     });
+  }
+
+  signIn(email, password) {
+    this.props.firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(res => {
+        console.log('user signed In: ', res);
+        this.props.toggleModal();
+      })
+      .catch(function(error) {
+        console.log('error at sugn in: ', error);
+      });
   }
 
   signOut() {

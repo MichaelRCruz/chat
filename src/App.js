@@ -140,7 +140,7 @@ class App extends Component {
         </footer>
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
-          <Auth firebase={firebase} />
+          <Auth firebase={firebase} toggleModal={this.toggleModal.bind(this)} />
         </Modal>
       </div>
     );

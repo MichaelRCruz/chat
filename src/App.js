@@ -39,19 +39,12 @@ class App extends Component {
   }
 
   setUser(user) {
+    console.log('user: ', user);
     this.setState({ user });
   }
 
   setRoom(room) {
     this.setState({ activeRoom: room });
-  }
-
-  signIn() {
-    firebase.auth().signInWithPopup( new firebase.auth.GoogleAuthProvider() );
-  }
-
-  signOut() {
-    firebase.auth().signOut();
   }
 
   handleNameChange = (event) => {

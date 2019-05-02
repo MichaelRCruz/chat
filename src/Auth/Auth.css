@@ -1,0 +1,11 @@
+.on-off-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: black;
+
+}
+
+.on-off-button:hover {
+  color: black;
+}

@@ -22,11 +22,12 @@ class Auth extends Component {
     this.props.firebase.auth()
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(res => {
-        console.log('registration complete', res);
+        // console.log('registration complete', res);
         this.setState({registered: true, user: res.user});
         this.props.firebase.auth().currentUser.updateProfile({
           displayName: values.username
         });
+        this.props.toggleModal();
       })
       .catch(function(error) {
         const {code, message} = error;
@@ -51,7 +52,7 @@ class Auth extends Component {
   signIn(email, password) {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
-        console.log('user signed In: ', res);
+        // console.log('user signed In: ', res);
         // this.setState({
         //   user:
         // });

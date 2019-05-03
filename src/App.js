@@ -39,7 +39,7 @@ class App extends Component {
   }
 
   setUser(user) {
-    console.log('user on page load: ', user);
+    // console.log('user on page load: ', user);
     this.setState({ user });
   }
 

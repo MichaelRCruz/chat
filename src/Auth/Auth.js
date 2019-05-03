@@ -93,57 +93,69 @@ class Auth extends Component {
         <div className="message message-error">{this.props.error}</div>
       );
     }
-    return (
-      <section className="authComponent">
-        <form
-          className="login-form"
-          onSubmit={this.props.handleSubmit(values =>
-            this.registerUser(values)
-          )}>
-          {successMessage}
-          {errorMessage}
-          <label htmlFor="username">Username</label>
-          <Field
-            component={Input}
-            type="text"
-            name="username"
-            validate={[required, nonEmpty, isTrimmed]}
-          />
-          <label htmlFor="email">email</label>
-          <Field
-            component={Input}
-            type="email"
-            name="email"
-            validate={[required, nonEmpty, isTrimmed, email]}
-          />
-          <label htmlFor="password">Password</label>
-          <Field
-            component={Input}
-            type="password"
-            name="password"
-            validate={[required, passwordLength, isTrimmed]}
-          />
-          <label htmlFor="passwordConfirm">Confirm password</label>
-          <Field
-            component={Input}
-            type="password"
-            name="passwordConfirm"
-            validate={[required, nonEmpty, matchesPassword]}
-          />
-          <button
-            type="submit"
-            disabled={this.props.pristine || this.props.submitting}>
-            click here to register
-          </button>
-        </form>
-        <div className="on-off-button"
-           onClick={this.signInWithGoogle.bind(this)}>
-          <i className="material-icons">power_settings_new</i>
-          <p>continue with Google</p>
-        </div>
-        <button onClick={() => this.signOut()}>click here to sign out</button>
-      </section>
+    const registrationForm = (
+      <form
+        className="login-form"
+        onSubmit={this.props.handleSubmit(values =>
+          this.registerUser(values)
+        )}>
+        {successMessage}
+        {errorMessage}
+        <label htmlFor="username">Username</label>
+        <Field
+          component={Input}
+          type="text"
+          name="username"
+          validate={[required, nonEmpty, isTrimmed]}
+        />
+        <label htmlFor="email">email</label>
+        <Field
+          component={Input}
+          type="email"
+          name="email"
+          validate={[required, nonEmpty, isTrimmed, email]}
+        />
+        <label htmlFor="password">Password</label>
+        <Field
+          component={Input}
+          type="password"
+          name="password"
+          validate={[required, passwordLength, isTrimmed]}
+        />
+        <label htmlFor="passwordConfirm">Confirm password</label>
+        <Field
+          component={Input}
+          type="password"
+          name="passwordConfirm"
+          validate={[required, nonEmpty, matchesPassword]}
+        />
+        <button
+          type="submit"
+          disabled={this.props.pristine || this.props.submitting}>
+          click here to register
+        </button>
+      </form>
     );
+    const googleButton = (
+      <div className="on-off-button"
+         onClick={this.signInWithGoogle.bind(this)}>
+        <i className="material-icons">power_settings_new</i>
+        <p>continue with Google</p>
+      </div>
+    );
+    const signOutButton = (
+      <button onClick={() => this.signOut()}>click here to sign out</button>
+    );
+    if (!this.props.user) {
+      return (
+        <section className="authComponent">
+          {registrationForm}
+          {googleButton}
+        </section>
+      );
+    } else {
+      return signOutButton;
+    }
   }
 }
 

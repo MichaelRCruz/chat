@@ -46,11 +46,11 @@ class Messages extends Component {
     }
   }
 
-  handleEnterDown = (event) => {
-    if (event.key === 'Enter') {
-      this.createMessage(this.state.newMessageText);
-    }
-  }
+  // handleEnterDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     this.createMessage(this.state.newMessageText);
+  //   }
+  // }
 
   handleAddRoom(e) {
     e.preventDefault();

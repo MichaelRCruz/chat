@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-import {reduxForm, Field} from 'redux-form';
+import {reduxForm, Field, focus} from 'redux-form';
 import Input from '../Input/Input';
 import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
 
 import './Auth.css';
 
-const passwordLength = length({min: 10, max: 72});
+const passwordLength = length({min: 6, max: 10});
 const matchesPassword = matches('password');
 
 class Auth extends Component {
@@ -14,7 +14,7 @@ class Auth extends Component {
     super(props);
     this.state = {
       user: null,
-      errorMessage: null,
+      registered: null,
     };
   }
 
@@ -23,26 +23,26 @@ class Auth extends Component {
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(res => {
         console.log('registration complete', res);
-        this.signIn(values);
+        this.setState({registered: true, user: res.user});
       })
       .catch(function(error) {
-        console.log(error);
-        const {code} = error;
+        const {code, message} = error;
         if (code === "auth/email-already-in-use") {
-          alert('email already in use');
-          // Convert ValidationErrors into SubmissionErrors for Redux Form
+          // alert(message);
           // return Promise.reject(
           //   new SubmissionError({
-          //       ['auth/email-already-in-use']: message
+          //     ['email']: message
           //   })
           // );
+          return alert(error.message);
         }
         // return Promise.reject(
-        //     new SubmissionError({
-        //         _error: 'Error submitting message'
-        //     })
+        //   new SubmissionError({
+        //     _error: 'Error registering user'
+        //   })
         // );
-    }).bind(this);
+        alert('error submitting form');
+    });
   }
 
   signIn(email, password) {
@@ -55,7 +55,7 @@ class Auth extends Component {
         this.props.toggleModal();
       })
       .catch(function(error) {
-        console.log('error at sugn in: ', error);
+        console.log('error at sugnIn(): ', error);
       });
   }
 
@@ -78,7 +78,7 @@ class Auth extends Component {
     if (this.props.submitSucceeded) {
       successMessage = (
         <div className="message message-success">
-            Message submitted successfully
+          Registration submitted successfully to server.
         </div>
       );
     }
@@ -92,49 +92,49 @@ class Auth extends Component {
     return (
       <section className="authComponent">
         <form
-            className="login-form"
-            onSubmit={this.props.handleSubmit(values =>
-                this.registerUser(values)
-            )}>
-            {successMessage}
-            {errorMessage}
-            <label htmlFor="username">Username</label>
-            <Field
-                component={Input}
-                type="text"
-                name="username"
-                validate={[required, nonEmpty, isTrimmed]}
-            />
-            <label htmlFor="email">email</label>
-            <Field
-                component={Input}
-                type="email"
-                name="email"
-                validate={[required, nonEmpty, isTrimmed, email]}
-            />
-            <label htmlFor="password">Password</label>
-            <Field
-                component={Input}
-                type="password"
-                name="password"
-                validate={[required, passwordLength, isTrimmed]}
-            />
-            <label htmlFor="passwordConfirm">Confirm password</label>
-            <Field
-                component={Input}
-                type="password"
-                name="passwordConfirm"
-                validate={[required, nonEmpty, matchesPassword]}
-            />
-            <button
-                type="submit"
-                disabled={this.props.pristine || this.props.submitting}>
-                Register
-            </button>
+          className="login-form"
+          onSubmit={this.props.handleSubmit(values =>
+            this.registerUser(values)
+          )}>
+          {successMessage}
+          {errorMessage}
+          <label htmlFor="username">Username</label>
+          <Field
+            component={Input}
+            type="text"
+            name="username"
+            validate={[required, nonEmpty, isTrimmed]}
+          />
+          <label htmlFor="email">email</label>
+          <Field
+            component={Input}
+            type="email"
+            name="email"
+            validate={[required, nonEmpty, isTrimmed, email]}
+          />
+          <label htmlFor="password">Password</label>
+          <Field
+            component={Input}
+            type="password"
+            name="password"
+            validate={[required, passwordLength, isTrimmed]}
+          />
+          <label htmlFor="passwordConfirm">Confirm password</label>
+          <Field
+            component={Input}
+            type="password"
+            name="passwordConfirm"
+            validate={[required, nonEmpty, matchesPassword]}
+          />
+          <button
+            type="submit"
+            disabled={this.props.pristine || this.props.submitting}>
+            Register
+          </button>
         </form>
         <div className="on-off-button"
-             onClick={ this.state.user ?
-               () => this.signOut() : this.signInWithGoogle.bind(this) }>
+           onClick={this.state.user ?
+             () => this.signOut() : this.signInWithGoogle.bind(this)}>
           <i className="material-icons">power_settings_new</i>
           <p>Sign { this.state.user ? 'out' : 'in' }</p>
         </div>
@@ -146,7 +146,8 @@ class Auth extends Component {
 // export default App;
 
 export default reduxForm({
-    form: 'contact',
-    onSubmitFail: (errors, dispatch) =>
-        console.log('email already taken', errors)
+    form: 'registerUser',
+    onSubmitFail: (errors, dispatch) => {
+      dispatch(focus('registerUser', Object.keys(errors)[0]))
+    }
 })(Auth);

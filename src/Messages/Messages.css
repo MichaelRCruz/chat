@@ -16,7 +16,6 @@ p, h1, h2, h3, h4, h5, h6 {
   position: absolute;
   z-index: 0;
   background-color: #fff;
-  width: calc(100vw - 300px);
 }
 
 .message {

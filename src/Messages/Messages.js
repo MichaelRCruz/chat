@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { Markdown } from 'react-showdown';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-// const ReactMarkdown = require('react-markdown');
+const ReactMarkdown = require('react-markdown');
 
 
 class Messages extends Component {
@@ -109,7 +110,7 @@ class Messages extends Component {
               }
             </div>
 
-            {message.content}
+            <Markdown markup={message.content} className="content" />
           </div>
         </div>
         <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />

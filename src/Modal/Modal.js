@@ -8,8 +8,8 @@ const Modal = ({ user, firebase, handleClose, show, children, signIn, signOut })
   return (
     <div className={showHideClassName}>
       <section className='modal-main'>
-        <button onClick={handleClose}>
-          X
+        <button className="exitButton" onClick={handleClose}>
+          <i class="material-icons">clear</i>
         </button>
         {children}
       </section>

@@ -24,6 +24,9 @@ class Auth extends Component {
       .then(res => {
         console.log('registration complete', res);
         this.setState({registered: true, user: res.user});
+        this.props.firebase.auth().currentUser.updateProfile({
+          displayName: values.username
+        });
       })
       .catch(function(error) {
         const {code, message} = error;

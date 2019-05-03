@@ -129,15 +129,15 @@ class Auth extends Component {
           <button
             type="submit"
             disabled={this.props.pristine || this.props.submitting}>
-            Register
+            click here to register
           </button>
         </form>
         <div className="on-off-button"
-           onClick={this.state.user ?
-             () => this.signOut() : this.signInWithGoogle.bind(this)}>
+           onClick={this.signInWithGoogle.bind(this)}>
           <i className="material-icons">power_settings_new</i>
-          <p>Sign { this.state.user ? 'out' : 'in' }</p>
+          <p>continue with Google</p>
         </div>
+        <button onClick={() => this.signOut()}>click here to sign out</button>
       </section>
     );
   }

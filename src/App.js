@@ -113,7 +113,9 @@ class App extends Component {
         </footer>
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
-          <Auth firebase={firebase} toggleModal={this.toggleModal.bind(this)} />
+          <Auth firebase={firebase}
+                toggleModal={this.toggleModal.bind(this)}
+                user={this.state.user}/>
         </Modal>
       </div>
     );

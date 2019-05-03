@@ -14,7 +14,7 @@ class Auth extends Component {
     super(props);
     this.state = {
       user: null,
-      registered: null,
+      register: false,
     };
   }
 
@@ -49,10 +49,15 @@ class Auth extends Component {
     });
   }
 
-  signIn(email, password) {
+  toggleRegistration() {
+    this.setState({ register: !this.state.register });
+  }
+
+  loginUser(values) {
+    const {email, password} = values;
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
-        // console.log('user signed In: ', res);
+        console.log('user signed In: ', res);
         // this.setState({
         //   user:
         // });
@@ -73,7 +78,7 @@ class Auth extends Component {
 
   signOut() {
     this.props.firebase.auth().signOut().then(res => {
-      this.props.toggleModal();
+      // this.props.toggleModal();
     });
   }
 
@@ -94,47 +99,80 @@ class Auth extends Component {
       );
     }
     const registrationForm = (
-      <form
-        className="login-form"
-        onSubmit={this.props.handleSubmit(values =>
-          this.registerUser(values)
-        )}>
-        {successMessage}
-        {errorMessage}
-        <label htmlFor="username">Username</label>
-        <Field
-          component={Input}
-          type="text"
-          name="username"
-          validate={[required, nonEmpty, isTrimmed]}
-        />
-        <label htmlFor="email">email</label>
-        <Field
-          component={Input}
-          type="email"
-          name="email"
-          validate={[required, nonEmpty, isTrimmed, email]}
-        />
-        <label htmlFor="password">Password</label>
-        <Field
-          component={Input}
-          type="password"
-          name="password"
-          validate={[required, passwordLength, isTrimmed]}
-        />
-        <label htmlFor="passwordConfirm">Confirm password</label>
-        <Field
-          component={Input}
-          type="password"
-          name="passwordConfirm"
-          validate={[required, nonEmpty, matchesPassword]}
-        />
-        <button
-          type="submit"
-          disabled={this.props.pristine || this.props.submitting}>
-          click here to register
-        </button>
-      </form>
+      <div>
+        <form
+          className="register-form"
+          onSubmit={this.props.handleSubmit(values =>
+            this.registerUser(values)
+          )}>
+          {errorMessage}
+          <label htmlFor="username">username</label>
+          <Field
+            component={Input}
+            type="text"
+            name="username"
+            validate={[required, nonEmpty, isTrimmed]}
+          />
+          <label htmlFor="email">email</label>
+          <Field
+            component={Input}
+            type="email"
+            name="email"
+            validate={[required, nonEmpty, isTrimmed, email]}
+          />
+          <label htmlFor="password">password</label>
+          <Field
+            component={Input}
+            type="password"
+            name="password"
+            validate={[required, passwordLength, isTrimmed]}
+          />
+          <label htmlFor="passwordConfirm">confirm password</label>
+          <Field
+            component={Input}
+            type="password"
+            name="passwordConfirm"
+            validate={[required, nonEmpty, matchesPassword]}
+          />
+          <button
+            type="submit"
+            disabled={this.props.pristine || this.props.submitting}>
+            click here to register
+          </button>
+        </form>
+        <button onClick={() => this.toggleRegistration()}>sign in</button>
+      </div>
+    );
+    const loginForm = (
+      <div>
+        <form
+          className="login-form"
+          onSubmit={this.props.handleSubmit(values =>
+            this.loginUser(values)
+          )}>
+          {errorMessage}
+          <label htmlFor="email">email</label>
+          <Field
+            component={Input}
+            type="email"
+            name="email"
+            validate={[required, nonEmpty, isTrimmed, email]}
+          />
+          <label htmlFor="password">Password</label>
+          <Field
+            component={Input}
+            type="password"
+            name="password"
+            validate={[required, passwordLength, isTrimmed]}
+          />
+          <button
+            type="submit"
+            disabled={this.props.pristine || this.props.submitting}>
+            click here to sign in
+          </button>
+        </form>
+        <button onClick={() => this.toggleRegistration()}>sign up</button>
+      </div>
     );
     const googleButton = (
       <div className="on-off-button"
@@ -149,7 +187,7 @@ class Auth extends Component {
     if (!this.props.user) {
       return (
         <section className="authComponent">
-          {registrationForm}
+          {this.state.register ? registrationForm : loginForm}
           {googleButton}
         </section>
       );

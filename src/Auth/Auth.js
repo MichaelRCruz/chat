@@ -82,6 +82,17 @@ class Auth extends Component {
     });
   }
 
+  deleteUser() {
+    const user = this.props.firebase.auth().currentUser;
+    user.delete().then(res => {
+      console.log('deleted user: ', res);
+      this.props.toggleModal();
+    }).catch(function(error) {
+      console.log('error in deleting user: ', error);
+      alert(error);
+    });
+  }
+
   render() {
     let successMessage;
     if (this.props.submitSucceeded) {
@@ -184,6 +195,9 @@ class Auth extends Component {
     const signOutButton = (
       <button onClick={() => this.signOut()}>click here to sign out</button>
     );
+    const deleteUserButton = (
+      <button onClick={() => this.deleteUser()}>click here to delete account</button>
+    );
     if (!this.props.user) {
       return (
         <section className="authComponent">
@@ -192,7 +206,12 @@ class Auth extends Component {
         </section>
       );
     } else {
-      return signOutButton;
+      return (
+        <div>
+          {signOutButton}
+          {deleteUserButton}
+        </div>
+      );
     }
   }
 }

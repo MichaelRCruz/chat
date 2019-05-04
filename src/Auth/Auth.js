@@ -94,6 +94,17 @@ class Auth extends Component {
     });
   }
 
+  updatePassword(values) {
+    const {password} = values;
+    var user = this.props.firebase.auth().currentUser;
+    user.updatePassword(password).then(res => {
+      this.props.toggleModal();
+      alert('password updated successfully: ');
+    }).catch(error => {
+      alert(error);
+    });
+  }
+
   render() {
     let successMessage;
     if (this.props.submitSucceeded) {
@@ -118,7 +129,7 @@ class Auth extends Component {
             this.registerUser(values)
           )}>
           <fieldset>
-            <legend>monsters</legend>
+            <legend>register account</legend>
             {errorMessage}
             <label htmlFor="username">username</label>
             <Field
@@ -166,7 +177,7 @@ class Auth extends Component {
             this.loginUser(values)
           )}>
           <fieldset>
-            <legend>monsters</legend>
+            <legend>sign in</legend>
             {errorMessage}
             <label htmlFor="email">email</label>
             <Field
@@ -192,6 +203,39 @@ class Auth extends Component {
         <button onClick={() => this.toggleRegistration()}>sign up</button>
       </div>
     );
+    const changePasswordForm = (
+      <div>
+        <form
+          className="updatePassword"
+          onSubmit={this.props.handleSubmit(values =>
+            this.updatePassword(values)
+          )}>
+          <fieldset>
+            <legend>update password</legend>
+            {errorMessage}
+            <label htmlFor="password">password</label>
+            <Field
+              component={Input}
+              type="password"
+              name="password"
+              validate={[required, nonEmpty, isTrimmed, passwordLength]}
+            />
+            <label htmlFor="confirmEmail">confirm password</label>
+            <Field
+              component={Input}
+              type="password"
+              name="confirmEmail"
+              validate={[required, nonEmpty, isTrimmed, passwordLength]}
+            />
+            <button
+              type="submit"
+              disabled={this.props.pristine || this.props.submitting}>
+              click here to update password
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    );
     const googleButton = (
       <div className="on-off-button"
          onClick={this.signInWithGoogle.bind(this)}>
@@ -215,6 +259,7 @@ class Auth extends Component {
     } else {
       return (
         <div>
+          {changePasswordForm}
           {signOutButton}
           {deleteUserButton}
         </div>

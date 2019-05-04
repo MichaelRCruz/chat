@@ -51,6 +51,10 @@ p, h1, h2, h3, h4, h5, h6 {
   margin-bottom: 100px;
 }
 
+.message-list:first-child {
+  margin-top: calc(100vh - 100px);
+}
+
 .imageMessageContainer {
   display: flex;
   overflow-x: auto;
@@ -61,7 +65,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 @media only screen and (min-device-width: 868px) {
   .message-list:first-child {
-    margin-top: calc(100vh - 125px);
+    margin-top: calc(100vh - 100px);
   }
   .message {
     width: calc(100vw - 300px);

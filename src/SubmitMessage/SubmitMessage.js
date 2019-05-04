@@ -21,8 +21,8 @@ class Messages extends Component {
   }
 
   createMessage(newMessageText) {
-    if (newMessageText === '\n' || newMessageText.trim() === '') {
-      alert('Please enter a message to send. ;)');
+    if (newMessageText === '\n' || newMessageText.trim() === '' || newMessageText.startsWith('#')) {
+      alert('Please enter a message to send and no markdown titles. Thanks ;)');
       this.setState({ newMessageText: '' });
       return;
     } else if (!this.props.activeRoom || !newMessageText) {
@@ -82,3 +82,5 @@ class Messages extends Component {
 }
 
 export default Messages;
+
+// src={flipped || solved ? `/img/${type}.png` : `/img/back.png`}

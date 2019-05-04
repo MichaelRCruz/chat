@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Markdown } from 'react-showdown';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-const ReactMarkdown = require('react-markdown');
+const ReactMarkdown = require('react-markdown/with-html')
 
 
 class Messages extends Component {
@@ -99,7 +98,7 @@ class Messages extends Component {
             src={message.creator && message.creator.photoURL
             ? message.creator.photoURL : defaultUserImage }
            />
-          <div>
+          <div className="nameMessageContainer">
             <div className="display-name">
               {message.creator ? message.creator.displayName  : 'Peaceful Potato'}
               {message.creator && this.props.user && message.creator.email === this.props.user.email &&
@@ -109,8 +108,9 @@ class Messages extends Component {
                 </button>
               }
             </div>
-
-            <Markdown markup={message.content} className="content" />
+            <div className="content">
+              <ReactMarkdown source={message.content} />
+            </div>
           </div>
         </div>
         <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />

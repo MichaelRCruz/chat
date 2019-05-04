@@ -49,6 +49,10 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .imageMessageContainer {
   display: flex;
+  overflow-x: auto;
+}
+
+.nameMessageContainer {
 }
 
 @media only screen and (min-device-width: 868px) {

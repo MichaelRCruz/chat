@@ -8,9 +8,11 @@
   z-index: 999;
 }
 
-.modal-main {
+.modal-body {
   position: fixed;
-  background: white;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
   width: 80%;
   height: 500px;
   top: 50%;
@@ -34,4 +36,14 @@ button, input[type="submit"], input[type="reset"] {
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+}
+
+.modalTitle {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center
+}
+
+.modalMain {
+  margin: 0 auto;
 }

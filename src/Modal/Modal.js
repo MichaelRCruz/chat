@@ -7,11 +7,15 @@ const Modal = ({ user, firebase, handleClose, show, children, signIn, signOut })
 
   return (
     <div className={showHideClassName}>
-      <section className='modal-main'>
-        <button className="exitButton" onClick={handleClose}>
-          <i className="material-icons">clear</i>
-        </button>
-        {children}
+      <section className='modal-body'>
+        <div className="modalTitle">
+          <button className="exitButton" onClick={handleClose}>
+            <i className="material-icons">clear</i>
+          </button>
+        </div>
+        <div className="modalMain">
+          {children}
+        </div>
       </section>
     </div>
   );

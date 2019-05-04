@@ -3,7 +3,7 @@
   bottom: 0;
   height: calc(100vh - 50px);
   width: 300px;
-  background-color: #704d1a;
+  background-color: #356859;
   z-index: 4;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

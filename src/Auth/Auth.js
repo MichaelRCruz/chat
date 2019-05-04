@@ -65,6 +65,7 @@ class Auth extends Component {
       })
       .catch(function(error) {
         console.log('error at sugnIn(): ', error);
+        alert(error.message)
       });
   }
 
@@ -116,40 +117,43 @@ class Auth extends Component {
           onSubmit={this.props.handleSubmit(values =>
             this.registerUser(values)
           )}>
-          {errorMessage}
-          <label htmlFor="username">username</label>
-          <Field
-            component={Input}
-            type="text"
-            name="username"
-            validate={[required, nonEmpty, isTrimmed]}
-          />
-          <label htmlFor="email">email</label>
-          <Field
-            component={Input}
-            type="email"
-            name="email"
-            validate={[required, nonEmpty, isTrimmed, email]}
-          />
-          <label htmlFor="password">password</label>
-          <Field
-            component={Input}
-            type="password"
-            name="password"
-            validate={[required, passwordLength, isTrimmed]}
-          />
-          <label htmlFor="passwordConfirm">confirm password</label>
-          <Field
-            component={Input}
-            type="password"
-            name="passwordConfirm"
-            validate={[required, nonEmpty, matchesPassword]}
-          />
-          <button
-            type="submit"
-            disabled={this.props.pristine || this.props.submitting}>
-            click here to register
-          </button>
+          <fieldset>
+            <legend>monsters</legend>
+            {errorMessage}
+            <label htmlFor="username">username</label>
+            <Field
+              component={Input}
+              type="text"
+              name="username"
+              validate={[required, nonEmpty, isTrimmed]}
+            />
+            <label htmlFor="email">email</label>
+            <Field
+              component={Input}
+              type="email"
+              name="email"
+              validate={[required, nonEmpty, isTrimmed, email]}
+            />
+            <label htmlFor="password">password</label>
+            <Field
+              component={Input}
+              type="password"
+              name="password"
+              validate={[required, passwordLength, isTrimmed]}
+            />
+            <label htmlFor="passwordConfirm">confirm password</label>
+            <Field
+              component={Input}
+              type="password"
+              name="passwordConfirm"
+              validate={[required, nonEmpty, matchesPassword]}
+            />
+            <button
+              type="submit"
+              disabled={this.props.pristine || this.props.submitting}>
+              click here to register
+            </button>
+          </fieldset>
         </form>
         <button onClick={() => this.toggleRegistration()}>sign in</button>
       </div>
@@ -161,26 +165,29 @@ class Auth extends Component {
           onSubmit={this.props.handleSubmit(values =>
             this.loginUser(values)
           )}>
-          {errorMessage}
-          <label htmlFor="email">email</label>
-          <Field
-            component={Input}
-            type="email"
-            name="email"
-            validate={[required, nonEmpty, isTrimmed, email]}
-          />
-          <label htmlFor="password">Password</label>
-          <Field
-            component={Input}
-            type="password"
-            name="password"
-            validate={[required, passwordLength, isTrimmed]}
-          />
-          <button
-            type="submit"
-            disabled={this.props.pristine || this.props.submitting}>
-            click here to sign in
-          </button>
+          <fieldset>
+            <legend>monsters</legend>
+            {errorMessage}
+            <label htmlFor="email">email</label>
+            <Field
+              component={Input}
+              type="email"
+              name="email"
+              validate={[required, nonEmpty, isTrimmed, email]}
+            />
+            <label htmlFor="password">Password</label>
+            <Field
+              component={Input}
+              type="password"
+              name="password"
+              validate={[required, passwordLength, isTrimmed]}
+            />
+            <button
+              type="submit"
+              disabled={this.props.pristine || this.props.submitting}>
+              click here to sign in
+            </button>
+          </fieldset>
         </form>
         <button onClick={() => this.toggleRegistration()}>sign up</button>
       </div>

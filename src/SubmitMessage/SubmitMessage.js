@@ -12,7 +12,7 @@ class Messages extends Component {
   }
 
   handleChange(event) {
-    if (event.target.value.length >= 500) {
+    if (event.target.value.length >= 1000) {
       alert("Please enter some text between 1 and 500 characters in length. :)");
       return;
     } else {

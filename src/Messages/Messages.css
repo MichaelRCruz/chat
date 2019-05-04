@@ -37,6 +37,9 @@ p, h1, h2, h3, h4, h5, h6 {
 .content {
   margin: 0;
   padding: 0;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .display-name {
@@ -58,5 +61,8 @@ p, h1, h2, h3, h4, h5, h6 {
 @media only screen and (min-device-width: 868px) {
   .message-list:first-child {
     margin-top: calc(100vh - 125px);
+  }
+  .message {
+    width: calc(100vw - 300px);
   }
 }

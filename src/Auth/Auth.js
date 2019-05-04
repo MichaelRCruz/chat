@@ -53,7 +53,7 @@ class Auth extends Component {
     this.setState({ register: !this.state.register });
   }
 
-  loginUser(values) {
+  signInWithEmail(values) {
     const {email, password} = values;
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
@@ -94,6 +94,15 @@ class Auth extends Component {
     });
   }
 
+  sendEmailVerification() {
+    var user = this.props.firebase.auth().currentUser;
+    user.sendEmailVerification().then(res => {
+      this.props.toggleModal();
+    }).catch(function(error) {
+      alert(error.message);
+    });
+  }
+
   updatePassword(values) {
     const {password} = values;
     var user = this.props.firebase.auth().currentUser;
@@ -102,6 +111,19 @@ class Auth extends Component {
       alert('password updated successfully: ');
     }).catch(error => {
       alert(error);
+    });
+  }
+
+  updateDisplayName(values) {
+    const {displayName} = values;
+    var user = this.props.firebase.auth().currentUser;
+    user.updateProfile({
+      displayName
+    }).then(res => {
+      alert('display name updated');
+      this.props.toggleModal();
+    }).catch(function(error) {
+      alert(error.messsage);
     });
   }
 
@@ -169,12 +191,12 @@ class Auth extends Component {
         <button onClick={() => this.toggleRegistration()}>sign in</button>
       </div>
     );
-    const loginForm = (
+    const signInWithEmailForm = (
       <div>
         <form
           className="login-form"
           onSubmit={this.props.handleSubmit(values =>
-            this.loginUser(values)
+            this.signInWithEmail(values)
           )}>
           <fieldset>
             <legend>sign in</legend>
@@ -236,6 +258,32 @@ class Auth extends Component {
         </form>
       </div>
     );
+    const updateDisplayName = (
+      <div>
+        <form
+          className="updateDisplayName"
+          onSubmit={this.props.handleSubmit(values =>
+            this.updateDisplayName(values)
+          )}>
+          <fieldset>
+            <legend>update display name</legend>
+            {errorMessage}
+            <label htmlFor="displayName">display name</label>
+            <Field
+              component={Input}
+              type="text"
+              name="displayName"
+              validate={[required, nonEmpty, isTrimmed]}
+            />
+            <button
+              type="submit"
+              disabled={this.props.pristine || this.props.submitting}>
+              click here to update display name
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    );
     const googleButton = (
       <div className="on-off-button"
          onClick={this.signInWithGoogle.bind(this)}>
@@ -249,10 +297,13 @@ class Auth extends Component {
     const deleteUserButton = (
       <button onClick={() => this.deleteUser()}>click here to delete account</button>
     );
+    const emailVerificationButton = (
+      <button onClick={() => this.sendEmailVerification()}>click here to send verification email</button>
+    );
     if (!this.props.user) {
       return (
         <section className="authComponent">
-          {this.state.register ? registrationForm : loginForm}
+          {this.state.register ? registrationForm : signInWithEmailForm}
           {googleButton}
         </section>
       );
@@ -261,6 +312,7 @@ class Auth extends Component {
         <div>
           {changePasswordForm}
           {signOutButton}
+          {emailVerificationButton}
           {deleteUserButton}
         </div>
       );

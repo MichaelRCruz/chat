@@ -15,19 +15,10 @@ class Messages extends Component {
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
-  // handleChange(event) {
-  //   if (event.target.value.length >= 1000) {
-  //     alert("Please enter some text between 1 and 500 characters in length. :)");
-  //     return;
-  //   } else {
-  //     this.setState({newMessageText: event.target.value });
-  //   }
-  // }
-
   componentDidMount() {
     let textarea = window.document.querySelector("textarea");
-    textarea.addEventListener("keypress", function() {
-      if(textarea.scrollTop != 0){
+    textarea.addEventListener('keypress', () => {
+      if (textarea.scrollTop != 0){
         textarea.style.height = textarea.scrollHeight + "px";
       }
     }, false);

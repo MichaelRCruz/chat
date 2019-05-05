@@ -53,24 +53,27 @@ class Messages extends Component {
 
   render() {
     return (
-      <form
-
-        onSubmit={this.props.handleSubmit(values =>
-            this.submitMessage(values.message)
-        )}>
-        <fieldset className="footerContainer">
-          <legend>submit message</legend>
-          <Field className="input-text"
-                 name="message"
-                 id="message"
-                 component={Textarea}
-                 validate={[required, nonEmpty, nonEmpty]}
-          />
-          <button className="submitMessage" type="submit">
-            <i className="send material-icons">send</i>
-          </button>
-        </fieldset>
-      </form>
+      <div className="footerContainer">
+        <form
+          onSubmit={this.props.handleSubmit(values =>
+              this.submitMessage(values.message)
+          )}>
+            <fieldset>
+              <legend>say something</legend>
+              <div className="formButtonWrapper">
+                <Field
+                  name="message"
+                  id="message"
+                  component={Textarea}
+                  validate={[required, nonEmpty]}
+                />
+                <button className="sendButton" type="submit">
+                  <i className="send material-icons">send</i>
+                </button>
+              </div>
+            </fieldset>
+        </form>
+      </div>
     );
   }
 }

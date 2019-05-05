@@ -24,6 +24,15 @@ class Messages extends Component {
   //   }
   // }
 
+  componentDidMount() {
+    let textarea = window.document.querySelector("textarea");
+    textarea.addEventListener("keypress", function() {
+      if(textarea.scrollTop != 0){
+        textarea.style.height = textarea.scrollHeight + "px";
+      }
+    }, false);
+  }
+
   submitMessage(message) {
     if (!this.props.activeRoom) {
       return
@@ -82,5 +91,3 @@ class Messages extends Component {
 export default reduxForm({
   form: 'message'
 })(Messages);
-
-// src={flipped || solved ? `/img/${type}.png` : `/img/back.png`}

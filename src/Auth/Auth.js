@@ -258,7 +258,7 @@ class Auth extends Component {
         </form>
       </div>
     );
-    const updateDisplayName = (
+    const updateDisplayNameForm = (
       <div>
         <form
           className="updateDisplayName"
@@ -311,6 +311,7 @@ class Auth extends Component {
       return (
         <div>
           {changePasswordForm}
+          {updateDisplayNameForm}
           {signOutButton}
           {emailVerificationButton}
           {deleteUserButton}

@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+// import SubmitMessageForm from './SubmitMessageForm';
+import {reduxForm, Field} from 'redux-form';
+// import Textarea from '../Input/Textarea';
+import {nonEmpty, isTrimmed} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -11,25 +15,21 @@ class Messages extends Component {
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
-  handleChange(event) {
-    if (event.target.value.length >= 1000) {
-      alert("Please enter some text between 1 and 500 characters in length. :)");
-      return;
-    } else {
-      this.setState({newMessageText: event.target.value });
-    }
-  }
+  // handleChange(event) {
+  //   if (event.target.value.length >= 1000) {
+  //     alert("Please enter some text between 1 and 500 characters in length. :)");
+  //     return;
+  //   } else {
+  //     this.setState({newMessageText: event.target.value });
+  //   }
+  // }
 
-  createMessage(newMessageText) {
-    if (newMessageText === '\n' || newMessageText.trim() === '' || newMessageText.startsWith('#')) {
-      alert('Please enter a message to send and no markdown titles. Thanks ;)');
-      this.setState({ newMessageText: '' });
-      return;
-    } else if (!this.props.activeRoom || !newMessageText) {
+  submitMessage(message) {
+    if (!this.props.activeRoom) {
       return
     } else {
       this.messagesRef.push({
-        content: newMessageText,
+        content: message,
         sentAt: Date.now(),
         roomId: this.props.activeRoom.key,
         creator: this.props.user ? {
@@ -42,45 +42,38 @@ class Messages extends Component {
           photoURL: null
         }
       });
-      this.setState({ newMessageText: '' });
     }
   }
 
-  handleEnterDown = (event) => {
-    if (event.key === 'Enter') {
-      this.createMessage(this.state.newMessageText);
-    }
-  }
-
-  handleAddRoom(e) {
-    e.preventDefault();
-  }
+  // handleEnterDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     this.submitMessage(this.state.newMessageText);
+  //   }
+  // }
 
   render() {
     return (
-      <form className="footerContainer" onSubmit={(e) => {
-          e.preventDefault();
-          this.createMessage(this.state.newMessageText);
-        }
-      }>
-        <textarea
-          className="input-text"
-          type="text"
-          value={ this.state.newMessageText }
-          onChange={ this.handleChange.bind(this) }
-          name="newMessageText"
-          placeholder="Say something"
-          onKeyPress={this.handleEnterDown}
-
-        />
-        <button type="submit" className="submitMessage">
-          <i className="send material-icons">send</i>
-        </button>
+      <form
+        className="footerContainer"
+        onSubmit={this.props.handleSubmit(values =>
+            this.submitMessage(values.message)
+        )}>
+        <fieldset>
+          <legend>submit message</legend>
+          <label htmlFor="message">message</label>
+          <Field className="input-text" name="message" id="message" component="textarea" />
+          <button className="submitMessage" type="submit">
+            <i className="send material-icons">send</i>
+          </button>
+        </fieldset>
       </form>
     );
   }
 }
 
-export default Messages;
+// export default Messages;
+export default reduxForm({
+  form: 'message'
+})(Messages);
 
 // src={flipped || solved ? `/img/${type}.png` : `/img/back.png`}

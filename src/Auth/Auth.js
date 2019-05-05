@@ -324,8 +324,8 @@ class Auth extends Component {
 // export default App;
 
 export default reduxForm({
-    form: 'registerUser',
-    onSubmitFail: (errors, dispatch) => {
-      dispatch(focus('registerUser', Object.keys(errors)[0]))
-    }
+  form: 'registerUser',
+  onSubmitFail: (errors, dispatch) => {
+    dispatch(focus('registerUser', Object.keys(errors)[0]))
+  }
 })(Auth);

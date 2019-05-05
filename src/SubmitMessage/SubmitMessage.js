@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
 import {reduxForm, Field} from 'redux-form';
-// import Textarea from '../Input/Textarea';
-import {nonEmpty, isTrimmed} from '../validators';
+import Textarea from '../Input/Textarea';
+import {required, nonEmpty, isTrimmed} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -54,14 +54,18 @@ class Messages extends Component {
   render() {
     return (
       <form
-        className="footerContainer"
+
         onSubmit={this.props.handleSubmit(values =>
             this.submitMessage(values.message)
         )}>
-        <fieldset>
+        <fieldset className="footerContainer">
           <legend>submit message</legend>
-          <label htmlFor="message">message</label>
-          <Field className="input-text" name="message" id="message" component="textarea" />
+          <Field className="input-text"
+                 name="message"
+                 id="message"
+                 component={Textarea}
+                 validate={[required, nonEmpty, nonEmpty]}
+          />
           <button className="submitMessage" type="submit">
             <i className="send material-icons">send</i>
           </button>

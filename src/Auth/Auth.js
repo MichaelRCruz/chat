@@ -16,6 +16,7 @@ class Auth extends Component {
       user: null,
       register: false,
     };
+    this.usersRef = this.props.firebase.database().ref('users');
   }
 
   registerUser(values) {

@@ -16,11 +16,12 @@ class Messages extends Component {
   }
 
   componentDidMount() {
+    // const roomId = this.props.activeRoom.key;
     const textarea = window.document.querySelector("textarea");
     textarea.addEventListener('keypress', () => {
+      const roomId = this.props.activeRoom.key;
       if (textarea.scrollTop != 0){
         textarea.style.height = textarea.scrollHeight + "px";
-
       }
     }, false);
   }
@@ -42,8 +43,6 @@ class Messages extends Component {
           displayName: 'Peaceful Potato',
           photoURL: null
         }
-      }).then(res => {
-        console.log('message sent');
       });
     }
   }
@@ -55,7 +54,6 @@ class Messages extends Component {
   // }
 
   render() {
-    console.log('textarea component: ', this.props);
     return (
       <div className="footerContainer">
         <form

@@ -34,6 +34,7 @@ class RoomList extends Component {
       return;
     } else {
       this.roomsRef.push({
+        active: false,
         name: newRoomName,
         createdAt: Date.now(),
         creator: {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL}

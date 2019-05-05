@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
 import {reduxForm, Field} from 'redux-form';
 import Textarea from '../Input/Textarea';
-import {required, nonEmpty, isTrimmed} from '../validators';
+import {required, nonEmpty, isTrimmed, mdTitle} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -16,10 +16,11 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    let textarea = window.document.querySelector("textarea");
+    const textarea = window.document.querySelector("textarea");
     textarea.addEventListener('keypress', () => {
       if (textarea.scrollTop != 0){
         textarea.style.height = textarea.scrollHeight + "px";
+
       }
     }, false);
   }
@@ -41,6 +42,8 @@ class Messages extends Component {
           displayName: 'Peaceful Potato',
           photoURL: null
         }
+      }).then(res => {
+        console.log('message sent');
       });
     }
   }
@@ -52,6 +55,7 @@ class Messages extends Component {
   // }
 
   render() {
+    console.log('textarea component: ', this.props);
     return (
       <div className="footerContainer">
         <form
@@ -59,13 +63,13 @@ class Messages extends Component {
               this.submitMessage(values.message)
           )}>
             <fieldset>
-              <legend>say something</legend>
+              <legend>😎😎😎</legend>
               <div className="formButtonWrapper">
                 <Field
                   name="message"
                   id="message"
                   component={Textarea}
-                  validate={[required, nonEmpty]}
+                  validate={[required, nonEmpty, mdTitle]}
                 />
                 <button className="sendButton" type="submit">
                   <i className="send material-icons">send</i>

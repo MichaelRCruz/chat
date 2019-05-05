@@ -28,8 +28,7 @@ export default class Textarea extends React.Component {
         />
         <label htmlFor={this.props.input.name}>
           {this.props.label}
-          {error}
-          {warning}
+          {error || warning || ':)'}
         </label>
       </div>
     );

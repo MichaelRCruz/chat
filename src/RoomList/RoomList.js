@@ -35,9 +35,13 @@ class RoomList extends Component {
     } else {
       this.roomsRef.push({
         active: false,
-        name: newRoomName,
         createdAt: Date.now(),
-        creator: {email: this.props.user.email, displayName: this.props.user.displayName, photoURL: this.props.user.photoURL}
+        creator: this.props.user.uid,
+        description: 'Your very first potato! How will you describe it?',
+        moderators: {
+          0: this.props.user.uid
+        },
+        name: `${this.props.user.displayName}'s potato`
       });
     }
     this.setState({ newRoomName: '' });

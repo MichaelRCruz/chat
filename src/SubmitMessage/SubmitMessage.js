@@ -35,6 +35,7 @@ class Messages extends Component {
         sentAt: Date.now(),
         roomId: this.props.activeRoom.key,
         creator: this.props.user ? {
+          uid: this.props.user.uid,
           email: this.props.user.email,
           displayName: this.props.user.displayName,
           photoURL: this.props.user.photoURL

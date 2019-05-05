@@ -45,10 +45,18 @@ exports.convertToUppercase = functions.database.ref('/test/{pushId}/text')
 exports.createUserConfig = functions.auth.user().onCreate(user => {
   const userRef = admin.database().ref('/users');
   userRef.child(user.uid).set({
-    roomDisplayName: user.displayName
+    roomDisplayName: user.displayName,
+    rooms: {
+      0:
+    }
   }).then(res => {
     console.log('createUserConfig() success: ', user.uid, user);
   }).catch(error => {
     console.log('createUserConfig failure', error);
   });
 });
+
+function createRoom() {
+  const roomRef = admin.database.ref('/rooms');
+
+}

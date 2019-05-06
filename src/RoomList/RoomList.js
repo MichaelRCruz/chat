@@ -6,6 +6,7 @@ class RoomList extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      userRooms: [],
       rooms: [],
       newRoomName: ''
     }
@@ -16,13 +17,53 @@ class RoomList extends Component {
     this.roomsRef.on('child_added', snapshot => {
       const room = snapshot.val();
       room.key = snapshot.key;
-      this.setState({ rooms: this.state.rooms.concat( room ) });
+      this.setState({ rooms: this.state.rooms.concat(room)});
       if (this.state.rooms.length === 1) { this.props.setRoom(room) }
     });
     this.roomsRef.on('child_removed', snapshot => {
-      this.setState({ rooms: this.state.rooms.filter( room => room.key !== snapshot.key )  })
+      this.setState({rooms: this.state.rooms.filter(room => room.key !== snapshot.key)})
     });
   }
+
+  componentWillReceiveProps(prevProps, nextProps) {
+    // this.watchFirebaseForRooms(prevProps.userRooms);
+    console.log(prevProps, nextProps);
+    if (prevProps.userConfig.rooms) {
+      const subscribedRooms = this.state.rooms.filter(room => {
+        return prevProps.userConfig.rooms.includes(room.key);
+      });
+      this.setState({
+        rooms: subscribedRooms
+      });
+    }
+  }
+
+  // watchFirebaseForRooms(userRooms) {
+  //   const rooms = [];
+  //   const throttler = this.throttling(() => {
+  //     this.setState({rooms: rooms.slice(0)}, () => {
+  //       if (this.state.rooms.length === 1) { this.props.setRoom(rooms[0]) }
+  //     });
+  //   }, 100);
+  //   this.roomsRef.on('child_added', snapshot => {
+  //     if (userRooms.includes(snapshot.key)) {
+  //       rooms.push(snapshot.val());
+  //       throttler();
+  //     }
+  //   });
+  // }
+  //
+  // throttling(callback, delay) {
+  //   let timeout = null
+  //   return function(...args) {
+  //     if (!timeout) {
+  //       timeout = setTimeout(() => {
+  //         callback.call(this, ...args)
+  //         timeout = null
+  //       }, delay)
+  //     }
+  //   }
+  // }
 
   createRoom(newRoomName) {
     if (newRoomName.length >= 30) {
@@ -56,9 +97,9 @@ class RoomList extends Component {
   }
 
   render() {
-    const rooms = this.state.rooms.map(room => {
+    const rooms = this.state.rooms.map((room, index) => {
       return (
-        <li className="roomNameContainer" key={room.key}>
+        <li className="roomNameContainer" key={index}>
           <button className="roomName" onClick={() => this.props.setRoom(room) }>
             { room.name }
           </button>

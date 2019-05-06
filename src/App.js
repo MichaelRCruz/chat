@@ -25,22 +25,32 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
+      userConfig: {},
       user: null,
       show: false,
       showMenu: true,
       newNameText: ''
     };
+    this.roomsRef = firebase.database().ref('users');
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged( user => {
+    firebase.auth().onAuthStateChanged(user => {
       this.setUser(user);
+      this.getUserConfig(user.uid);
+    });
+  }
+
+  getUserConfig(uid) {
+    this.roomsRef.on('child_added', snapshot => {
+      if (snapshot.key === uid) {
+        this.setState({userConfig: snapshot.val()});
+      }
     });
   }
 
   setUser(user) {
-    // console.log('user on page load: ', user);
-    this.setState({ user });
+    this.setState({user});
   }
 
   setRoom(room) {
@@ -60,11 +70,6 @@ class App extends Component {
 
   createName = (values) => {
     console.log('email form wired up and validated: ', values);
-    // this.setState({user: {
-    //   email: null,
-    //   displayName: name,
-    //   photoURL: null
-    // }});
   }
 
   toggleModal = () => {
@@ -94,11 +99,11 @@ class App extends Component {
         </header>
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
-            className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
             setRoom={this.setRoom.bind(this)}
             user={this.state.user}
+            userConfig={this.state.userConfig}
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>

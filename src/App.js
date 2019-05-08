@@ -36,7 +36,7 @@ class App extends Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.setUser(user);
+      this.setState({user});
       this.getUserConfig(user.uid);
     });
   }
@@ -47,10 +47,6 @@ class App extends Component {
         this.setState({userConfig: snapshot.val()});
       }
     });
-  }
-
-  setUser(user) {
-    this.setState({user});
   }
 
   setRoom(room) {
@@ -99,6 +95,7 @@ class App extends Component {
         </header>
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
+            className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
             setRoom={this.setRoom.bind(this)}

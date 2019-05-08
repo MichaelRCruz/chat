@@ -10,7 +10,7 @@ class RoomList extends Component {
       rooms: [],
       newRoomName: ''
     }
-    this.roomsRef = this.props.firebase.database().ref('rooms');
+    this.roomsRef = this.props.firebase.database().ref('/rooms');
   }
 
   componentDidMount() {
@@ -26,8 +26,6 @@ class RoomList extends Component {
   }
 
   componentWillReceiveProps(prevProps, nextProps) {
-    // this.watchFirebaseForRooms(prevProps.userRooms);
-    console.log(prevProps, nextProps);
     if (prevProps.userConfig.rooms) {
       const subscribedRooms = this.state.rooms.filter(room => {
         return prevProps.userConfig.rooms.includes(room.key);
@@ -37,33 +35,6 @@ class RoomList extends Component {
       });
     }
   }
-
-  // watchFirebaseForRooms(userRooms) {
-  //   const rooms = [];
-  //   const throttler = this.throttling(() => {
-  //     this.setState({rooms: rooms.slice(0)}, () => {
-  //       if (this.state.rooms.length === 1) { this.props.setRoom(rooms[0]) }
-  //     });
-  //   }, 100);
-  //   this.roomsRef.on('child_added', snapshot => {
-  //     if (userRooms.includes(snapshot.key)) {
-  //       rooms.push(snapshot.val());
-  //       throttler();
-  //     }
-  //   });
-  // }
-  //
-  // throttling(callback, delay) {
-  //   let timeout = null
-  //   return function(...args) {
-  //     if (!timeout) {
-  //       timeout = setTimeout(() => {
-  //         callback.call(this, ...args)
-  //         timeout = null
-  //       }, delay)
-  //     }
-  //   }
-  // }
 
   createRoom(newRoomName) {
     if (newRoomName.length >= 30) {
@@ -97,9 +68,9 @@ class RoomList extends Component {
   }
 
   render() {
-    const rooms = this.state.rooms.map((room, index) => {
+    const rooms = this.state.rooms.map((room) => {
       return (
-        <li className="roomNameContainer" key={index}>
+        <li className="roomNameContainer" key={room.key}>
           <button className="roomName" onClick={() => this.props.setRoom(room) }>
             { room.name }
           </button>

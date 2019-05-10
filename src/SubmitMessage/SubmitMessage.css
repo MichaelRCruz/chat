@@ -8,7 +8,6 @@ fieldset {
 }
 
 textarea {
-  width: 250px;
   outline: none;
   border: 1px solid lightgray;
   border-radius: 7px;
@@ -18,6 +17,11 @@ textarea {
   height: 1.5em;
   min-height: 1em;
   padding: 5px;
+  width: 100%;
+}
+
+.text-input {
+  flex: 1;
 }
 
 .footerContainer {
@@ -54,6 +58,7 @@ textarea {
   }
 
   textarea {
-    width: 1000px;
+    /* width: 1000px; */
+    background-color: green;
   }
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
 import {reduxForm, Field} from 'redux-form';
 import Textarea from '../Input/Textarea';
-import {required, nonEmpty, isTrimmed, mdTitle, mdBullet} from '../validators';
+import {required, nonEmpty, isTrimmed, mdTitle, mdBullet, codeBlock} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -68,7 +68,7 @@ class Messages extends Component {
                   name="message"
                   id="message"
                   component={Textarea}
-                  validate={[required, nonEmpty, mdTitle, mdBullet]}
+                  validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock]}
                 />
                 <button className="sendButton" type="submit">
                   <i className="send material-icons">send</i>

@@ -19,7 +19,7 @@ export default class Textarea extends React.Component {
       );
     }
     return (
-      <div className="form-input">
+      <div className="text-input">
         <Element
           {...this.props.input}
           id={this.props.input.name}

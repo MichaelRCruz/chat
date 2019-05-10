@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
 import {reduxForm, Field} from 'redux-form';
 import Textarea from '../Input/Textarea';
-import {required, nonEmpty, isTrimmed, mdTitle} from '../validators';
+import {required, nonEmpty, isTrimmed, mdTitle, mdBullet} from '../validators';
 
 import './SubmitMessage.css';
 

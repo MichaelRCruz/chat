@@ -23,4 +23,4 @@ export const mdTitle = value =>
   !value.trim().startsWith('#') ? undefined : 'No markdown titles, please.';
 
 export const mdBullet = value =>
-  !value.trim().startsWith('* ') ? undefined : 'No bullets, please.';
+  !value.trim().startsWith('*') ? undefined : 'No bullets, please.';

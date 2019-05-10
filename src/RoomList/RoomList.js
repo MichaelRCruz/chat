@@ -37,26 +37,27 @@ class RoomList extends Component {
   }
 
   createRoom(newRoomName) {
-    if (newRoomName.length >= 30) {
-      newRoomName = newRoomName.substring(0, 30);
-    }
-    if (!this.props.user || !newRoomName) { return };
-    if (this.state.rooms.length >= 5) {
-      alert('Ricky, no more rooms!');
-      return;
-    } else {
-      this.roomsRef.push({
-        active: false,
-        createdAt: Date.now(),
-        creator: this.props.user.uid,
-        description: 'Your very first potato! How will you describe it?',
-        moderators: {
-          0: this.props.user.uid
-        },
-        name: `${this.props.user.displayName}'s potato`
-      });
-    }
-    this.setState({ newRoomName: '' });
+    // if (newRoomName.length >= 30) {
+    //   newRoomName = newRoomName.substring(0, 30);
+    // }
+    // if (!this.props.user || !newRoomName) { return };
+    // if (this.state.rooms.length >= 5) {
+    //   alert('Ricky, no more rooms!');
+    //   return;
+    // } else {
+    //   this.roomsRef.push({
+    //     active: false,
+    //     createdAt: Date.now(),
+    //     creator: this.props.user.uid,
+    //     description: 'Your very first potato! How will you describe it?',
+    //     moderators: {
+    //       0: this.props.user.uid
+    //     },
+    //     name: `${this.props.user.displayName}'s potato`
+    //   });
+    // }
+    // this.setState({ newRoomName: '' });
+    console.log('createRoom() invoked');
   }
 
   handleChange(event) {

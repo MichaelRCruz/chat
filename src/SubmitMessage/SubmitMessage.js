@@ -68,7 +68,7 @@ class Messages extends Component {
                   name="message"
                   id="message"
                   component={Textarea}
-                  validate={[required, nonEmpty, mdTitle]}
+                  validate={[required, nonEmpty, mdTitle, mdBullet]}
                 />
                 <button className="sendButton" type="submit">
                   <i className="send material-icons">send</i>

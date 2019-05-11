@@ -28,7 +28,7 @@ export default class Textarea extends React.Component {
         />
         <label htmlFor={this.props.input.name}>
           {this.props.label}
-          {error || warning || 'The enter key has been temporarily disbaled through this stage if development.'}
+          {error || warning || 'enter is for new line only'}
         </label>
       </div>
     );

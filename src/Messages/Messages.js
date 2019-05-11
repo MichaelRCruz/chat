@@ -4,7 +4,7 @@ import './Messages.css';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-const ReactMarkdown = require('react-markdown/with-html')
+const ReactMarkdown = require('react-markdown/with-html');
 
 
 class Messages extends Component {
@@ -109,7 +109,7 @@ class Messages extends Component {
               }
             </div>
             <div className="content">
-              <ReactMarkdown source={message.content} />
+              <ReactMarkdown escapeHtml={false} source={message.content} />
             </div>
           </div>
         </div>

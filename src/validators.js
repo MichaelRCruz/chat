@@ -25,5 +25,9 @@ export const mdTitle = value =>
 export const mdBullet = value =>
   !value.trim().startsWith('*') ? undefined : 'No bullets, please.';
 
-export const codeBlock = value =>
-  !value.trim().startsWith('``') ? undefined : 'No empty code blocks, please.';
+export const codeBlock = value => {
+  const codeBody = value.replace(/`/g, '').trim();
+  if (!codeBody.length) {
+    return 'No empty code blocks, please.';
+  }
+}

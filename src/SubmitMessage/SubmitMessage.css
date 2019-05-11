@@ -52,6 +52,11 @@ textarea {
   color: #cfecd8;
 }
 
+iframe {
+  width: 100%;
+  height: auto;
+}
+
 @media only screen and (min-device-width: 812px) {
   .footerContainer {
     margin-left: 300px;

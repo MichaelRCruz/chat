@@ -71,6 +71,14 @@ class Messages extends Component {
   //   }
   // }
 
+onEnterPress = (e) => {
+  console.log('where is thisL ', e);
+  if(e.keyCode == 13 && e.shiftKey == true) {
+    e.preventDefault();
+    this.submitMessage(e.target.value)
+  }
+}
+
   render() {
     return (
       <div className="footerContainer">
@@ -81,6 +89,7 @@ class Messages extends Component {
             <fieldset>
               <legend>😎😎😎</legend>
               <div className="formButtonWrapper"
+                    onKeyDown={(e) => this.onEnterPress(e)}
                     tabIndex="0">
                 <Field
                   name="message"

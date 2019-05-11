@@ -1,11 +1,11 @@
 import React from 'react';
 
 export default class Textarea extends React.Component {
-  // componentDidUpdate(prevProps) {
-  //   if (!prevProps.meta.active && this.props.meta.active) {
-  //     this.input.focus();
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (!prevProps.meta.active && this.props.meta.active) {
+      this.input.focus();
+    }
+  }
   render() {
     const Element = this.props.element || 'textarea';
     let error;
@@ -28,7 +28,7 @@ export default class Textarea extends React.Component {
         />
         <label htmlFor={this.props.input.name}>
           {this.props.label}
-          {error || warning || 'enter is for new line only'}
+          {error || warning || 'shift enter to submit message'}
         </label>
       </div>
     );

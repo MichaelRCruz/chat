@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
-import {reduxForm, Field} from 'redux-form';
+import {reduxForm, Field, reset} from 'redux-form';
 import Textarea from '../Input/Textarea';
-import {required, nonEmpty, isTrimmed, mdTitle, mdBullet, codeBlock} from '../validators';
+import {required, nonEmpty, isTrimmed, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -44,6 +44,8 @@ class Messages extends Component {
           displayName: 'Peaceful Potato',
           photoURL: null
         }
+      }).then(res => {
+        this.props.dispatch(reset('message'));
       });
     }
   }
@@ -68,7 +70,7 @@ class Messages extends Component {
                   name="message"
                   id="message"
                   component={Textarea}
-                  validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock]}
+                  validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
                 />
                 <button className="sendButton" type="submit">
                   <i className="send material-icons">send</i>

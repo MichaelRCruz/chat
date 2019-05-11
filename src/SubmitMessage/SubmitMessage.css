@@ -18,6 +18,7 @@ textarea {
   min-height: 1em;
   padding: 5px;
   width: 100%;
+  background-color: lightgray;
 }
 
 .text-input {
@@ -54,11 +55,6 @@ textarea {
 @media only screen and (min-device-width: 812px) {
   .footerContainer {
     margin-left: 300px;
-    max-width: 1140px;
-  }
-
-  textarea {
-    /* width: 1000px; */
-    background-color: green;
+    /* max-width: 1140px; */
   }
 };

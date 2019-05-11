@@ -18,6 +18,8 @@ class Messages extends Component {
   componentDidMount() {
     // const roomId = this.props.activeRoom.key;
     const textarea = window.document.querySelector("textarea");
+    // document.querySelector('#message')
+    console.log(document.querySelector('#message').value);
     textarea.addEventListener('keypress', () => {
       const roomId = this.props.activeRoom.key;
       if (textarea.scrollTop != 0){
@@ -46,13 +48,26 @@ class Messages extends Component {
         }
       }).then(res => {
         this.props.dispatch(reset('message'));
+        const textarea = window.document.querySelector("textarea");
+        textarea.style.height = '1.5em';
       });
     }
   }
 
-  // handleEnterDown = (event) => {
-  //   if (event.key === 'Enter') {
-  //     this.submitMessage(this.state.newMessageText);
+  handleEnterDown(event) {
+    // if (event.key === 'Enter') {
+    //   this.submitMessage(this.state.newMessageText);
+    // }
+    console.log('kwjfowjelk');
+  }
+
+
+  // onKeyPressed = (e) => {
+  //   if (!e.shiftKey && e.keyCode == 13 && e.target.value != '/n') {
+  //     this.submitMessage(e.target.value);
+  //     // console.log('are we reaching', e.shiftKey);
+  //   } else if (!e.shiftKey && e.keyCode == 13) {
+  //     return;
   //   }
   // }
 
@@ -65,14 +80,17 @@ class Messages extends Component {
           )}>
             <fieldset>
               <legend>😎😎😎</legend>
-              <div className="formButtonWrapper">
+              <div className="formButtonWrapper"
+                    tabIndex="0">
                 <Field
                   name="message"
                   id="message"
                   component={Textarea}
                   validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
                 />
-                <button className="sendButton" type="submit">
+                <button className="sendButton"
+                        type="submit"
+                        onKeyPress={() => this.handleEnterDown()}>
                   <i className="send material-icons">send</i>
                 </button>
               </div>

@@ -89,8 +89,7 @@ class Messages extends Component {
                   validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
                 />
                 <button className="sendButton"
-                        type="submit"
-                        onKeyPress={() => this.handleEnterDown()}>
+                        type="submit">
                   <i className="send material-icons">send</i>
                 </button>
               </div>

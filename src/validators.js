@@ -34,3 +34,9 @@ export const codeBlock = value => {
     return 'No empty code blocks, please.';
   }
 }
+
+export const newLines = value => {
+  const blankText = value.trim().trimEnd();
+  console.log('what is blank text: ', blankText);
+  blankText ? undefined : 'Please include content.'
+}

@@ -72,10 +72,11 @@ class Messages extends Component {
   // }
 
 onEnterPress = (e) => {
-  console.log('where is thisL ', e);
+  const filteredText = e.target.value.trim();
+
   if(e.keyCode == 13 && e.shiftKey == true) {
     e.preventDefault();
-    this.submitMessage(e.target.value)
+    this.submitMessage(filteredText)
   }
 }
 

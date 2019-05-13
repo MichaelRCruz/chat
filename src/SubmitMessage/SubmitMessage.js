@@ -71,14 +71,14 @@ class Messages extends Component {
   //   }
   // }
 
-onEnterPress = (e) => {
-  const filteredText = e.target.value.trim();
-
-  if(e.keyCode == 13 && e.shiftKey == true) {
-    e.preventDefault();
-    this.submitMessage(filteredText)
-  }
-}
+// onEnterPress = (e) => {
+//   const filteredText = e.target.value.trim();
+//
+//   if(e.keyCode == 13 && e.shiftKey == true) {
+//     e.preventDefault();
+//     this.submitMessage(filteredText)
+//   }
+// }
 
   render() {
     return (
@@ -90,8 +90,7 @@ onEnterPress = (e) => {
             <fieldset>
               <legend>😎😎😎</legend>
               <div className="formButtonWrapper"
-                    onKeyDown={(e) => this.onEnterPress(e)}
-                    tabIndex="0">
+                   tabIndex="0">
                 <Field
                   name="message"
                   id="message"
@@ -99,7 +98,8 @@ onEnterPress = (e) => {
                   validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
                 />
                 <button className="sendButton"
-                        type="submit">
+                        type="submit"
+                        disabled={this.props.pristine || this.props.submitting}>
                   <i className="send material-icons">send</i>
                 </button>
               </div>

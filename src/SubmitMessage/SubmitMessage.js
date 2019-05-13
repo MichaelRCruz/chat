@@ -16,12 +16,9 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    // const roomId = this.props.activeRoom.key;
     const textarea = window.document.querySelector("textarea");
-    // document.querySelector('#message')
     console.log(document.querySelector('#message').value);
-    textarea.addEventListener('keypress', () => {
-      const roomId = this.props.activeRoom.key;
+    textarea.addEventListener('keydown', (e) => {
       if (textarea.scrollTop != 0){
         textarea.style.height = textarea.scrollHeight + "px";
       }
@@ -60,8 +57,6 @@ class Messages extends Component {
       handleSubmit();
     }
   }
-
-
 
   render() {
     const {handleSubmit} = this.props;

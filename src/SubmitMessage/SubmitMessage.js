@@ -54,39 +54,27 @@ class Messages extends Component {
     }
   }
 
-  handleEnterDown(event) {
-    // if (event.key === 'Enter') {
-    //   this.submitMessage(this.state.newMessageText);
-    // }
-    console.log('kwjfowjelk');
+  handleKeyDown = (event, handleSubmit) => {
+    if (event.key === 'Enter' && event.shiftKey === true) {
+      event.preventDefault();
+      handleSubmit();
+    }
   }
 
 
-  // onKeyPressed = (e) => {
-  //   if (!e.shiftKey && e.keyCode == 13 && e.target.value != '/n') {
-  //     this.submitMessage(e.target.value);
-  //     // console.log('are we reaching', e.shiftKey);
-  //   } else if (!e.shiftKey && e.keyCode == 13) {
-  //     return;
-  //   }
-  // }
-
-// onEnterPress = (e) => {
-//   const filteredText = e.target.value.trim();
-//
-//   if(e.keyCode == 13 && e.shiftKey == true) {
-//     e.preventDefault();
-//     this.submitMessage(filteredText)
-//   }
-// }
 
   render() {
+    const {handleSubmit} = this.props;
     return (
       <div className="footerContainer">
         <form
           onSubmit={this.props.handleSubmit(values =>
               this.submitMessage(values.message)
-          )}>
+          )}
+          onKeyDown={e => {this.handleKeyDown(e, handleSubmit(values => {
+            this.submitMessage(values.message);
+          }));
+        }}>
             <fieldset>
               <legend>😎😎😎</legend>
               <div className="formButtonWrapper"

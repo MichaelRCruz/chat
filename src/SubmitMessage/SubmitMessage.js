@@ -17,11 +17,9 @@ class Messages extends Component {
 
   componentDidMount() {
     const textarea = window.document.querySelector("textarea");
-    console.log(document.querySelector('#message').value);
-    textarea.addEventListener('keydown', (e) => {
-      if (textarea.scrollTop != 0){
-        textarea.style.height = textarea.scrollHeight + "px";
-      }
+    textarea.addEventListener('keyup', (e) => {
+      textarea.style.height = 0;
+      textarea.style.height = textarea.scrollHeight + "px";
     }, false);
   }
 
@@ -52,7 +50,7 @@ class Messages extends Component {
   }
 
   handleKeyDown = (event, handleSubmit) => {
-    if (event.key === 'Enter' && event.shiftKey === true) {
+    if (event.key === 'Enter' && event.shiftKey === false) {
       event.preventDefault();
       handleSubmit();
     }

@@ -44,28 +44,18 @@ admin.initializeApp(functions.config().firebase);
 
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   const roomRef = admin.database().ref('/rooms');
-  roomRef.push({
+  const userRef = admin.database().ref('/users');
+  const newRoom = roomRef.push({
     temp: 'temp test',
     active: false,
     creator: user.uid,
     dscription: `${user.displayName}'s first Potato. Welcome!`,
     moderators: [user.uid],
     name: `${user.displayName}'s Potato`
-  }).then(res => {
-    // console.log('res.repo.path: ', res.repo.path.pieces_[1]);
-    console.log('res: ', res);
-  }).catch(error => {
-    console.log(error);
   });
+  const newUser = userRef.child(user.uid).set({
+    lastVisited: newRoom.key,
+    rooms: [newRoom.key]
+  });
+  console.log('I hope this is it', newRoom.key);
 });
-
-// function createRoom(user) {
-//   const roomRef = admin.database.ref('rooms');
-//   return roomRef.push({
-//     active: false,
-//     creator: user.uid,
-//     dscription: `${user.displayName}'s first Potato.`,
-//     moderators: [user.uid],
-//     name: `${user.displayName}'s Potato`
-//   });
-// };

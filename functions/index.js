@@ -45,17 +45,17 @@ admin.initializeApp(functions.config().firebase);
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   const roomRef = admin.database().ref('/rooms');
   const userRef = admin.database().ref('/users');
-  const newRoom = roomRef.push({
+  roomRef.push({
     temp: 'temp test',
     active: false,
     creator: user.uid,
     dscription: `${user.displayName}'s first Potato. Welcome!`,
     moderators: [user.uid],
     name: `${user.displayName}'s Potato`
+  }).then(snapshot => {
+    const newUser = userRef.child(user.uid).set({
+      lastVisited: snapshot.key,
+      rooms: [snapshot.key]
+    });
   });
-  const newUser = userRef.child(user.uid).set({
-    lastVisited: newRoom.key,
-    rooms: [newRoom.key]
-  });
-  console.log('I hope this is it', newRoom.key);
 });

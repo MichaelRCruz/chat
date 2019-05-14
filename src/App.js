@@ -45,6 +45,15 @@ class App extends Component {
     this.roomsRef.on('child_added', snapshot => {
       if (snapshot.key === uid) {
         this.setState({userConfig: snapshot.val()});
+        this.getLastVisitedandSetActiveRoom(snapshot.key);
+      }
+    });
+  }
+
+  getLastVisitedandSetActiveRoom(roomId) {
+    this.roomsRef.on('child_added', snapshot => {
+      if (snapshot.key === roomId) {
+        this.setRoom(snapshot.val());
       }
     });
   }

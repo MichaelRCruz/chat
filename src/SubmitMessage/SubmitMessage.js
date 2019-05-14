@@ -15,14 +15,6 @@ class Messages extends Component {
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
-  componentDidMount() {
-    const textarea = window.document.querySelector("textarea");
-    textarea.addEventListener('keyup', (e) => {
-      textarea.style.height = 0;
-      textarea.style.height = textarea.scrollHeight + "px";
-    }, false);
-  }
-
   submitMessage(message) {
     if (!this.props.activeRoom) {
       return
@@ -56,6 +48,12 @@ class Messages extends Component {
     }
   }
 
+  handleTextAreaChange = () => {
+    const textarea = window.document.querySelector("textarea");
+    textarea.style.height = 0;
+    textarea.style.height = textarea.scrollHeight + "px";
+  }
+
   render() {
     const {handleSubmit} = this.props;
     return (
@@ -77,6 +75,7 @@ class Messages extends Component {
                   id="message"
                   component={Textarea}
                   validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
+                  onChange={this.handleTextAreaChange}
                 />
                 <button className="sendButton"
                         type="submit"

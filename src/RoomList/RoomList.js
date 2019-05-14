@@ -103,7 +103,7 @@ class RoomList extends Component {
         <div className={!this.props.showMenu ? "listContainer animated bounceInLeft" : "listContainer animated bounceOutLeft"}>
           {form}
           <ul>
-            { rooms }
+            { this.props.user ? rooms : [] }
           </ul>
         </div>
       </section>

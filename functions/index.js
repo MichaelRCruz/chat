@@ -43,6 +43,7 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
+  console.log('user: ', user)
   const roomRef = admin.database().ref('/rooms');
   const userRef = admin.database().ref('/users');
   roomRef.push({

@@ -37,7 +37,7 @@ class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       this.setState({user});
-      this.getUserConfig(user.uid);
+      if (user) this.getUserConfig(user.uid);
     });
   }
 
@@ -113,7 +113,7 @@ class App extends Component {
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
-          <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} />
+          <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} userConfig={this.state.userConfig}/>
         </main>
         <footer className="footer">
           <SubmitMessage
@@ -126,7 +126,8 @@ class App extends Component {
                handleClose={this.toggleModal}>
           <Auth firebase={firebase}
                 toggleModal={this.toggleModal.bind(this)}
-                user={this.state.user}/>
+                user={this.state.user}
+          />
         </Modal>
       </div>
     );

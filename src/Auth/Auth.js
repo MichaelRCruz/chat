@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
+import ChangePasswordForm from './ChangePasswordForm';
 
 import {reduxForm, Field, focus} from 'redux-form';
 import Input from '../Input/Input';
@@ -107,8 +108,7 @@ class Auth extends Component {
     });
   }
 
-  updatePassword(values) {
-    const {password} = values;
+  updatePassword(password) {
     var user = this.props.firebase.auth().currentUser;
     user.updatePassword(password).then(res => {
       this.props.toggleModal();
@@ -160,37 +160,7 @@ class Auth extends Component {
       </div>
     );
     const changePasswordForm = (
-      <div>
-        <form
-          className="updatePassword"
-          onSubmit={this.props.handleSubmit(values =>
-            this.updatePassword(values)
-          )}>
-          <fieldset>
-            <legend>update password</legend>
-            {errorMessage}
-            <label htmlFor="password">password</label>
-            <Field
-              component={Input}
-              type="password"
-              name="password"
-              validate={[required, nonEmpty, isTrimmed, passwordLength]}
-            />
-            <label htmlFor="confirmEmail">confirm password</label>
-            <Field
-              component={Input}
-              type="password"
-              name="confirmEmail"
-              validate={[required, nonEmpty, isTrimmed, passwordLength]}
-            />
-            <button
-              type="submit"
-              disabled={this.props.pristine || this.props.submitting}>
-              click here to update password
-            </button>
-          </fieldset>
-        </form>
-      </div>
+      <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
     );
     const updateDisplayNameForm = (
       <div>

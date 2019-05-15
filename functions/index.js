@@ -46,17 +46,17 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   console.log('user: ', user)
   const roomRef = admin.database().ref('/rooms');
   const userRef = admin.database().ref('/users');
-  roomRef.push({
+  return roomRef.child(`uid-${user.uid}`).set({
     temp: 'temp test',
     active: false,
     creator: user.uid,
     dscription: `${user.displayName}'s first Potato. Welcome!`,
     moderators: [user.uid],
     name: `${user.displayName}'s Potato`
-  }).then(snapshot => {
-    const newUser = userRef.child(user.uid).set({
-      lastVisited: snapshot.key,
-      rooms: [snapshot.key]
+  }).then(res => {
+    return userRef.child(user.uid).set({
+      lastVisited: `uid-${user.uid}`,
+      rooms: [`uid-${user.uid}`]
     });
   });
 });

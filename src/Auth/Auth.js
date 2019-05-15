@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
 import ChangePasswordForm from './ChangePasswordForm';
+import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 
-import {reduxForm, Field, focus} from 'redux-form';
-import Input from '../Input/Input';
-import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
+// import {reduxForm, Field, focus} from 'redux-form';
+// import Input from '../Input/Input';
+// import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
 
 import './Auth.css';
 
-const passwordLength = length({min: 6, max: 10});
-const matchesPassword = matches('password');
+// const passwordLength = length({min: 6, max: 10});
+// const matchesPassword = matches('password');
 
 class Auth extends Component {
   constructor(props) {
@@ -163,30 +164,7 @@ class Auth extends Component {
       <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
     );
     const updateDisplayNameForm = (
-      <div>
-        <form
-          className="updateDisplayName"
-          onSubmit={this.props.handleSubmit(values =>
-            this.updateDisplayName(values)
-          )}>
-          <fieldset>
-            <legend>update display name</legend>
-            {errorMessage}
-            <label htmlFor="displayName">display name</label>
-            <Field
-              component={Input}
-              type="text"
-              name="displayName"
-              validate={[required, nonEmpty, isTrimmed]}
-            />
-            <button
-              type="submit"
-              disabled={this.props.pristine || this.props.submitting}>
-              click here to update display name
-            </button>
-          </fieldset>
-        </form>
-      </div>
+      <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
     );
     const googleButton = (
       <div className="on-off-button"
@@ -225,11 +203,11 @@ class Auth extends Component {
   }
 }
 
-// export default App;
+export default Auth;
 
-export default reduxForm({
-  form: 'registerUser2',
-  onSubmitFail: (errors, dispatch) => {
-    dispatch(focus('registerUser2', Object.keys(errors)[0]))
-  }
-})(Auth);
+// export default reduxForm({
+//   form: 'registerUser2',
+//   onSubmitFail: (errors, dispatch) => {
+//     dispatch(focus('registerUser2', Object.keys(errors)[0]))
+//   }
+// })(Auth);

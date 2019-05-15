@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import RegistrationForm from './RegistrationForm';
+import SignInWithEmailForm from './SignInWithEmailForm';
 
 import {reduxForm, Field, focus} from 'redux-form';
 import Input from '../Input/Input';
@@ -19,14 +21,14 @@ class Auth extends Component {
     this.usersRef = this.props.firebase.database().ref('users');
   }
 
-  registerUser(values) {
+  registerUser = (displayName, email, password) => {
     this.props.firebase.auth()
-      .createUserWithEmailAndPassword(values.email, values.password)
+      .createUserWithEmailAndPassword(email, password)
       .then(res => {
         // console.log('registration complete', res);
         this.setState({registered: true, user: res.user});
         this.props.firebase.auth().currentUser.updateProfile({
-          displayName: values.username
+          displayName
         });
         this.props.toggleModal();
       })
@@ -54,8 +56,7 @@ class Auth extends Component {
     this.setState({ register: !this.state.register });
   }
 
-  signInWithEmail(values) {
-    const {email, password} = values;
+  signInWithEmail(email, password) {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
         console.log('user signed In: ', res);
@@ -148,83 +149,13 @@ class Auth extends Component {
     }
     const registrationForm = (
       <div>
-        <form
-          className="register-form"
-          onSubmit={this.props.handleSubmit(values =>
-            this.registerUser(values)
-          )}>
-          <fieldset>
-            <legend>register account</legend>
-            {errorMessage}
-            <label htmlFor="username">username</label>
-            <Field
-              component={Input}
-              type="text"
-              name="username"
-              validate={[required, nonEmpty, isTrimmed]}
-            />
-            <label htmlFor="email">email</label>
-            <Field
-              component={Input}
-              type="email"
-              name="email"
-              validate={[required, nonEmpty, isTrimmed, email]}
-            />
-            <label htmlFor="password">password</label>
-            <Field
-              component={Input}
-              type="password"
-              name="password"
-              validate={[required, passwordLength, isTrimmed]}
-            />
-            <label htmlFor="passwordConfirm">confirm password</label>
-            <Field
-              component={Input}
-              type="password"
-              name="passwordConfirm"
-              validate={[required, nonEmpty, matchesPassword]}
-            />
-            <button
-              type="submit"
-              disabled={this.props.pristine || this.props.submitting}>
-              click here to register
-            </button>
-          </fieldset>
-        </form>
+        <RegistrationForm registerUser={this.registerUser.bind(this)} />
         <button onClick={() => this.toggleRegistration()}>sign in</button>
       </div>
     );
     const signInWithEmailForm = (
       <div>
-        <form
-          className="login-form"
-          onSubmit={this.props.handleSubmit(values =>
-            this.signInWithEmail(values)
-          )}>
-          <fieldset>
-            <legend>sign in</legend>
-            {errorMessage}
-            <label htmlFor="email">email</label>
-            <Field
-              component={Input}
-              type="email"
-              name="email"
-              validate={[required, nonEmpty, isTrimmed, email]}
-            />
-            <label htmlFor="password">Password</label>
-            <Field
-              component={Input}
-              type="password"
-              name="password"
-              validate={[required, passwordLength, isTrimmed]}
-            />
-            <button
-              type="submit"
-              disabled={this.props.pristine || this.props.submitting}>
-              click here to sign in
-            </button>
-          </fieldset>
-        </form>
+        <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
         <button onClick={() => this.toggleRegistration()}>sign up</button>
       </div>
     );
@@ -327,8 +258,8 @@ class Auth extends Component {
 // export default App;
 
 export default reduxForm({
-  form: 'registerUser',
+  form: 'registerUser2',
   onSubmitFail: (errors, dispatch) => {
-    dispatch(focus('registerUser', Object.keys(errors)[0]))
+    dispatch(focus('registerUser2', Object.keys(errors)[0]))
   }
 })(Auth);

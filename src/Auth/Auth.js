@@ -4,14 +4,7 @@ import SignInWithEmailForm from './SignInWithEmailForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 
-// import {reduxForm, Field, focus} from 'redux-form';
-// import Input from '../Input/Input';
-// import {required, nonEmpty, matches, length, isTrimmed, email} from '../validators';
-
 import './Auth.css';
-
-// const passwordLength = length({min: 6, max: 10});
-// const matchesPassword = matches('password');
 
 class Auth extends Component {
   constructor(props) {
@@ -27,7 +20,6 @@ class Auth extends Component {
     this.props.firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(res => {
-        // console.log('registration complete', res);
         this.setState({registered: true, user: res.user});
         this.props.firebase.auth().currentUser.updateProfile({
           displayName
@@ -37,19 +29,8 @@ class Auth extends Component {
       .catch(function(error) {
         const {code, message} = error;
         if (code === "auth/email-already-in-use") {
-          // alert(message);
-          // return Promise.reject(
-          //   new SubmissionError({
-          //     ['email']: message
-          //   })
-          // );
           return alert(error.message);
         }
-        // return Promise.reject(
-        //   new SubmissionError({
-        //     _error: 'Error registering user'
-        //   })
-        // );
         alert('error submitting form');
     });
   }
@@ -62,9 +43,6 @@ class Auth extends Component {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
         console.log('user signed In: ', res);
-        // this.setState({
-        //   user:
-        // });
         this.props.toggleModal();
       })
       .catch(function(error) {
@@ -83,9 +61,6 @@ class Auth extends Component {
 
   signOut() {
     this.props.firebase.auth().signOut().then(res => {
-      // this.props.toggleModal();
-      // this.setState({user: null});
-      // this.props.setUser({});
     });
   }
 

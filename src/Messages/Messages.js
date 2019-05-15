@@ -42,15 +42,9 @@ class Messages extends Component {
     const roomMessages = this.state.allMessages.filter(message => {
       return message.roomId === activeRoom.key;
     });
-    const messagesToHtml = roomMessages.map(message => {
-    // text = text.replace(/¨/g, '¨T');
-      // message = message.replace(/¨/g, '¨T');
-      // return converter.convert(message);
-      return message;
-    });
     this.setState({
       messageDeleted: true,
-      displayedMessages: messagesToHtml
+      displayedMessages: roomMessages
     }, () => this.scrollToBottom());
   }
 
@@ -87,34 +81,39 @@ class Messages extends Component {
   }
 
   render() {
-    const messages = this.state.displayedMessages.map( message =>
-      <li key={message.key}
-          className="message animated fadeInUp"
-      >
-        <div className="imageMessageContainer">
-          <img
-            className="messageImage"
-            alt="user"
-            src={message.creator && message.creator.photoURL
-            ? message.creator.photoURL : defaultUserImage }
-           />
-          <div className="nameMessageContainer">
-            <div className="display-name">
-              {message.creator ? message.creator.displayName  : 'Peaceful Potato'}
-              {message.creator && this.props.user && message.creator.email === this.props.user.email &&
-                <button onClick={ () => this.removeMessage(message) }
-                        className="remove-message-button">
-                  &times;
-                </button>
-              }
-            </div>
-            <div className="content">
-              <ReactMarkdown escapeHtml={false} source={message.content} />
+    const messages = this.state.displayedMessages.map((message, index) => {
+      const prevMessage = this.state.displayedMessages[Math.abs(index - 1)];
+      const prevUid = prevMessage.creator.uid || '';
+      return (
+        <li key={message.key}
+            className="message animated fadeInUp"
+        >
+          <div className="imageMessageContainer">
+            <img
+              className={"messageImage " + (prevUid != message.creator.uid ? '' : 'visibilityHidden')}
+              alt="user"
+              src={message.creator && message.creator.photoURL
+              ? message.creator.photoURL : defaultUserImage}
+             />
+
+            <div className="nameMessageContainer">
+              <div className="display-name">
+                {message.creator && this.props.user && message.creator.email === this.props.user.email &&
+                  <button onClick={ () => this.removeMessage(message) }
+                          className="remove-message-button">
+                    &times;
+                  </button>
+                }
+                {prevUid != message.creator.uid ? message.creator.displayName  : ''}
+              </div>
+              <div className="content">
+                <ReactMarkdown escapeHtml={false} source={message.content} />
+              </div>
             </div>
           </div>
-        </div>
-        <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
-      </li>
+          <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
+        </li>
+      )}
     )
     return (
       <div className="messages-component">

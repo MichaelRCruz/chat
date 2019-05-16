@@ -64,9 +64,9 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
 // https://us-central1-chat-asdf.cloudfunctions.net/gitHubPushWebHook
 exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
-  const {after, head_commit} = req.body;
-  return messageRef.child(`GITHUB-${after}`).set({
-    content: '#### repo update alert\n' + '```' + '\n' + JSON.stringify(head_commit, null, 2) + '\n' + '```',
+  const {head_commit} = req.body;
+  return messageRef.child(`GITHUB-${head_commit.id}`).set({
+    content: '### repo update alert\n' + '```' + '\n' + JSON.stringify(head_commit, null, 2) + '\n' + '```',
     sentAt: Date.now(),
     roomId: "-Ld7mZCDqAEcMSGxJt-x",
     creator: {

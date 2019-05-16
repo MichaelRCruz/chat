@@ -132,6 +132,7 @@ class RegistrationForm extends Component {
     return (
      <form className="registration" onSubmit={e => this.handleSubmit(e)}>
        <h2>Register</h2>
+
        <div className="registration__hint">* required field</div>
        <div className="form-group">
          <label htmlFor="name">Name *</label>
@@ -139,12 +140,14 @@ class RegistrationForm extends Component {
            name="name" id="name" onChange={e => this.updateName(e.target.value)}/>
          <ValidationError hasError={!this.state.nameValid} message={this.state.validationMessages.name}/>
        </div>
+
        <div className="form-group">
          <label htmlFor="email">Email *</label>
          <input type="text" className="registration__control"
            name="email" id="email" onChange={e => this.updateEmail(e.target.value)}/>
          <ValidationError hasError={!this.state.emailValid} message={this.state.validationMessages.email}/>
        </div>
+
        <div className="form-group">
           <ValidationError hasError={!this.state.passwordValid} message={this.state.validationMessages.password}/>
           <label htmlFor="password">Password *</label>
@@ -152,6 +155,7 @@ class RegistrationForm extends Component {
            name="password" id="password" onChange={e => this.updatePassword(e.target.value)}/>
           <div className="registration__hint">6 to 72 characters, must include a number</div>
        </div>
+       
        <div className="form-group">
         <ValidationError hasError={!this.state.passwordMatch} message={this.state.validationMessages.repeatPassword}/>
          <label htmlFor="repeatPassword">Repeat Password *</label>

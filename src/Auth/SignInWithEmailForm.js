@@ -100,19 +100,16 @@ class SignInWithEmailForm extends Component {
        <h2>Sign In</h2>
        <div className="registration__hint">* required field</div>
        <div className="form-group">
-       <ValidationError hasError={!this.state.emailValid} message={this.state.validationMessages.email} />
          <label htmlFor="email">Email *</label>
          <input type="text" className="registration__control"
            name="email" id="email" onChange={e => this.updateEmail(e.target.value)}/>
        </div>
        <div className="form-group">
-          <ValidationError hasError={!this.state.passwordValid} message={this.state.validationMessages.password} />
           <label htmlFor="password">Password *</label>
           <input type="password" className="registration__control"
            name="password" id="password" onChange={e => this.updatePassword(e.target.value)} />
           <div className="registration__hint">warning placeholder</div>
        </div>
-
        <div className="registration__button__group">
         <button type="reset" className="registration__button">
             Cancel

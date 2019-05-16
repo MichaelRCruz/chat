@@ -81,9 +81,9 @@ class Messages extends Component {
   }
 
   render() {
-    const messages = this.state.displayedMessages.map((message, index) => {
-      const prevMessage = this.state.displayedMessages[Math.abs(index - 1)];
-      const prevUid = prevMessage.creator.uid || '';
+    const messages = this.state.displayedMessages.map((message, i, messages) => {
+      const prevMessage = message[i - 1];
+      const prevUid = prevMessage ? prevMessage.creator.uid : '';
       return (
         <li key={message.key}
             className="message animated fadeInUp"

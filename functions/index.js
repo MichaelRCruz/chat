@@ -60,3 +60,10 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
     });
   });
 });
+
+// https://us-central1-chat-asdf.cloudfunctions.net/gitHubPushWebHook
+exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
+  const body = req.body;
+  console.log('GitHub POST body from webhook: ', body);
+  res.end();
+});

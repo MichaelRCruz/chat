@@ -43,6 +43,7 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
+  
   console.log('user: ', user)
   const roomRef = admin.database().ref('/rooms');
   const userRef = admin.database().ref('/users');
@@ -65,7 +66,7 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
 exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {head_commit} = req.body;
-  return messageRef.child(`GITHUB-${head_commit.id}`).set({
+  return messageRef.push({
     content: '### repo update alert\n' + '```' + '\n' + JSON.stringify(head_commit, null, 2) + '\n' + '```',
     sentAt: Date.now(),
     roomId: "-Ld7mZCDqAEcMSGxJt-x",

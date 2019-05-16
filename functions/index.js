@@ -65,8 +65,6 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
 exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {after, head_commit} = req.body;
-  console.log('GitHub POST body from webhook: ', push);
-
   return messageRef.child(`GITHUB-${after}`).set({
     content: '#### repo update alert\n' + '```' + '\n' + head_commit + '\n' + '```',
     sentAt: Date.now(),

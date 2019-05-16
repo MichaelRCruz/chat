@@ -75,6 +75,7 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
       displayName: "GitHub",
       photoURL: "https://avatars3.githubusercontent.com/u/9919?s=40&v=4"
     }
+  }).then(() => {
+    res.end();
   });
-  res.end();
 });

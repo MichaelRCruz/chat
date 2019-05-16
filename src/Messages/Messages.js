@@ -82,7 +82,7 @@ class Messages extends Component {
 
   render() {
     const messages = this.state.displayedMessages.map((message, i, messages) => {
-      const prevMessage = message[i - 1];
+      const prevMessage = messages[i - 1];
       const prevUid = prevMessage ? prevMessage.creator.uid : '';
       return (
         <li key={message.key}
@@ -98,13 +98,13 @@ class Messages extends Component {
 
             <div className="nameMessageContainer">
               <div className="display-name">
+                {message.creator.displayName}
                 {message.creator && this.props.user && message.creator.email === this.props.user.email &&
                   <button onClick={ () => this.removeMessage(message) }
                           className="remove-message-button">
                     &times;
                   </button>
                 }
-                {prevUid != message.creator.uid ? message.creator.displayName  : ''}
               </div>
               <div className="content">
                 <ReactMarkdown escapeHtml={false} source={message.content} />

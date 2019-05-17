@@ -6,7 +6,6 @@ class RoomList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      userRooms: [],
       rooms: [],
       newRoomName: ''
     }
@@ -14,27 +13,35 @@ class RoomList extends Component {
   }
 
   componentDidMount() {
-    this.roomsRef.on('child_added', snapshot => {
-      const room = snapshot.val();
-      room.key = snapshot.key;
-      this.setState({ rooms: this.state.rooms.concat(room)});
-      // if (this.state.rooms.length === 1) { this.props.setRoom(room) }
-    });
-    this.roomsRef.on('child_removed', snapshot => {
-      this.setState({rooms: this.state.rooms.filter(room => room.key !== snapshot.key)})
-    });
+    // this.roomsRef.on('child_added', snapshot => {
+    //   const room = snapshot.val();
+    //   room.key = snapshot.key;
+    //   this.setState({ rooms: this.state.rooms.concat(room)});
+    //   // if (this.state.rooms.length === 1) { this.props.setRoom(room) }
+    // });
+    // this.roomsRef.on('child_removed', snapshot => {
+    //   this.setState({rooms: this.state.rooms.filter(room => room.key !== snapshot.key)})
+    // });
+    console.log(this.props.userConfig);
+    // const subscribedRooms = this.state.rooms.filter(room => {
+    //   return this.props.userConfig.rooms.includes(room.key);
+    // });
+    // this.setState({
+    //   rooms: this.props.userConfig.rooms
+    // });
   }
 
-  componentWillReceiveProps(prevProps, nextProps) {
-    if (prevProps.userConfig.rooms) {
-      const subscribedRooms = this.state.rooms.filter(room => {
-        return prevProps.userConfig.rooms.includes(room.key);
-      });
-      this.setState({
-        rooms: subscribedRooms
-      });
-    }
-  }
+  // componentWillReceiveProps(prevProps, nextProps) {
+  //   if (true) {
+  //     // const subscribedRooms = this.state.rooms.filter(room => {
+  //     //   return this.props.userConfig.rooms.includes(room.key);
+  //     // });
+  //     console.log(prevProps);
+  //     this.setState({
+  //       rooms: []
+  //     });
+  //   }
+  // }
 
   createRoom(newRoomName) {
     // if (newRoomName.length >= 30) {
@@ -68,11 +75,16 @@ class RoomList extends Component {
     this.roomsRef.child(room.key).remove();
   }
 
+  // setRoom = room => {
+  //   console.log('do the thing', room);
+  //   this.props.setActiveRoom(room.key);
+  // }
+
   render() {
-    const rooms = this.state.rooms.map((room) => {
+    const rooms = [].map((room) => {
       return (
         <li className="roomNameContainer" key={room.key}>
-          <button className="roomName" onClick={() => this.props.setRoom(room) }>
+          <button className="roomName" onClick={this.props.setActiveRoom(room.key)}>
             { room.name }
           </button>
           {room.creator && this.props.user

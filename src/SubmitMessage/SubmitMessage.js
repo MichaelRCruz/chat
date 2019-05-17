@@ -16,6 +16,7 @@ class Messages extends Component {
   }
 
   submitMessage(message) {
+    console.log(message);
     if (!this.props.activeRoom) {
       return
     } else {
@@ -60,7 +61,7 @@ class Messages extends Component {
       <div className="footerContainer">
         <form
           onSubmit={this.props.handleSubmit(values =>
-              this.submitMessage(values.message)
+            this.submitMessage(values.message)
           )}
           onKeyDown={e => {this.handleKeyDown(e, handleSubmit(values => {
             this.submitMessage(values.message);

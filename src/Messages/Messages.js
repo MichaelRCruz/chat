@@ -11,6 +11,8 @@ class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      activeRoom: null,
+      userConfig: null,
       allMessages: [],
       displayedMessages: [],
       messageDeleted: false
@@ -23,8 +25,12 @@ class Messages extends Component {
     this.scrollToBottom();
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.updateDisplayedMessages( nextProps.activeRoom );
+  componentWillReceiveProps(prevProps) {
+    this.setState({
+      activeRoom: prevProps.activeRoom,
+      userConfig: prevProps.userConfig,
+    });
+    // this.updateDisplayedMessages();
   }
 
   removeMessage(room) {
@@ -37,10 +43,10 @@ class Messages extends Component {
     this.bottomOfMessages.scrollIntoView();
   }
 
-  updateDisplayedMessages(activeRoom) {
-    if (!activeRoom) { return };
+  updateDisplayedMessages() {
+    // if (!activeRoom) { return };
     const roomMessages = this.state.allMessages.filter(message => {
-      return message.roomId === activeRoom.key;
+      return message.roomId === this.state.userConfig.lastVisited;
     });
     this.setState({
       messageDeleted: true,
@@ -52,8 +58,8 @@ class Messages extends Component {
     const allMessages = [];
     const throttler = this.throttling(() => {
       this.setState({allMessages: allMessages.slice(0)}, () => {
-        this.updateDisplayedMessages(this.props.activeRoom);
-        this.scrollToBottom();
+        this.updateDisplayedMessages();
+        // this.scrollToBottom();
       });
     }, 100);
     this.messagesRef.on('child_added', snapshot => {
@@ -63,7 +69,7 @@ class Messages extends Component {
     });
     this.messagesRef.on('child_removed', snapshot  => {
       this.setState({ allMessages: this.state.allMessages.filter( message => message.key !== snapshot.key )  }, () => {
-        this.updateDisplayedMessages(this.props.activeRoom);
+        this.updateDisplayedMessages();
       });
     });
   }

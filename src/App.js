@@ -26,42 +26,55 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
-      userConfig: {},
+      userConfig: null,
       user: null,
       show: false,
       showMenu: true,
       newNameText: ''
     };
-    this.roomsRef = firebase.database().ref('users');
+    this.usersRef = firebase.database().ref('users');
   }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.setState({user});
-      if (user) this.getUserConfig(user.uid);
+      this.setState({user}, () => {
+        this.setUserConfig(user.uid);
+      });
+      if (user) this.setUserConfig(user.uid);
     });
   }
 
-  getUserConfig(uid) {
-    this.roomsRef.on('child_added', snapshot => {
+  setUserConfig(uid) {
+    this.usersRef.on('child_added', snapshot => {
       if (snapshot.key === uid) {
-        this.setState({userConfig: snapshot.val()});
-        this.getLastVisitedandSetActiveRoom(snapshot.key);
+        this.setState({userConfig: snapshot.val()}, () => {
+          this.setActiveRoom(snapshot.val().lastVisited);
+        });
+        // this.getLastVisitedandSetActiveRoom(snapshot.key);
       }
     });
   }
 
-  getLastVisitedandSetActiveRoom(roomId) {
-    this.roomsRef.on('child_added', snapshot => {
-      if (snapshot.key === roomId) {
-        this.setRoom(snapshot.val());
-      }
+  setActiveRoom(roomId) {
+    const activeRommRef = firebase.database().ref(`rooms/${roomId}`);
+    activeRommRef.once('value').then(snapshot => {
+      const activeRoomWithKey = snapshot.val();
+      activeRoomWithKey['key'] = snapshot.key;
+      this.setState({ activeRoom: activeRoomWithKey });
     });
   }
 
-  setRoom(room) {
-    this.setState({ activeRoom: room });
-  }
+  // getLastVisitedandSetActiveRoom(roomId) {
+  //   this.roomsRef.on('child_added', snapshot => {
+  //     if (snapshot.key === roomId) {
+  //       this.setRoom(snapshot.val());
+  //     }
+  //   });
+  // }
+
+  // setRoom(room) {
+  //   this.setState({ activeRoom: room });
+  // }
 
   handleNameChange = (event) => {
     if (event.target.value.length >= 35) {
@@ -108,13 +121,17 @@ class App extends Component {
             className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
-            setRoom={this.setRoom.bind(this)}
             user={this.state.user}
             userConfig={this.state.userConfig}
+            setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
-          <Messages firebase={firebase} activeRoom={this.state.activeRoom} user={this.state.user} userConfig={this.state.userConfig}/>
+          <Messages firebase={firebase}
+                    activeRoom={this.state.activeRoom}
+                    user={this.state.user}
+                    userConfig={this.state.userConfig}
+          />
         </main>
         <footer className="footer">
           <SubmitMessage

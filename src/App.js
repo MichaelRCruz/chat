@@ -7,6 +7,7 @@ import Modal from './Modal/Modal';
 import Messages from './Messages/Messages';
 import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
+import Splash from './Splash/Splash';
 
 import {reduxForm, focus} from 'redux-form';
 
@@ -90,7 +91,7 @@ class App extends Component {
   }
 
   render() {
-    return (
+    const app = (
       <div className="appComponent">
         <header className="header">
           <img className="logo" src={require("./assets/images/potato2.svg")}
@@ -122,6 +123,20 @@ class App extends Component {
             firebase={firebase}
           />
         </footer>
+      </div>
+    );
+    const splash = (
+      <div>
+        <Splash />
+        <img src={require("./assets/images/potato2.svg")}
+             alt="potato logo"
+             onClick={this.toggleModal}
+        />
+      </div>
+    );
+    return (
+      <div>
+        {this.state.user ? app : splash}
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
           <Auth firebase={firebase}

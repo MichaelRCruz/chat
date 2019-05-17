@@ -61,6 +61,7 @@ class Auth extends Component {
 
   signOut() {
     this.props.firebase.auth().signOut().then(res => {
+      this.props.toggleModal();
     });
   }
 

@@ -66,7 +66,7 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {head_commit} = req.body;
   return messageRef.push({
-    content: '### repo update alert\n' + '```' + '\n' + JSON.stringify(head_commit, null, 2) + '\n' + '```',
+    content: '### repo update alert\n' + head commit... + '\n' + head_commit.url,
     sentAt: Date.now(),
     roomId: "-Ld7mZCDqAEcMSGxJt-x",
     creator: {

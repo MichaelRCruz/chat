@@ -27,54 +27,75 @@ class App extends Component {
     this.state = {
       activeRoom: null,
       userConfig: null,
+      subscribedRooms: null,
       user: null,
       show: false,
       showMenu: true,
       newNameText: ''
     };
-    this.usersRef = firebase.database().ref('users');
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      this.setState({user}, () => {
-        this.setUserConfig(user.uid);
-      });
-      if (user) this.setUserConfig(user.uid);
-    });
+    firebase.auth().onAuthStateChanged(async user => {
+      const userConfig = await this.getUserConfig(user.uid);
+      const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
+      const subscribedRooms = await this.getSubscribedRooms(userConfig.rooms);
+      // console.log(roomWithKey);
+      await this.setState({ user, userConfig, subscribedRooms, activeRoom: lastVisitedRoom });
+    })
   }
 
-  setUserConfig(uid) {
-    this.usersRef.on('child_added', snapshot => {
-      if (snapshot.key === uid) {
-        this.setState({userConfig: snapshot.val()}, () => {
-          this.setActiveRoom(snapshot.val().lastVisited);
-        });
-        // this.getLastVisitedandSetActiveRoom(snapshot.key);
+  getUserConfig(uid) {
+    return new Promise((resolve, reject) => {
+      const userConfigRef = firebase.database().ref(`users/${uid}`);
+      if (!userConfigRef) {
+        reject(new Error('config does not exist for user'), null);
       }
+      userConfigRef.on('value', snapshot => {
+        resolve(snapshot.val());
+      });
     });
   }
 
-  setActiveRoom(roomId) {
-    const activeRommRef = firebase.database().ref(`rooms/${roomId}`);
-    activeRommRef.once('value').then(snapshot => {
-      const activeRoomWithKey = snapshot.val();
-      activeRoomWithKey['key'] = snapshot.key;
-      this.setState({ activeRoom: activeRoomWithKey });
+  getLastVisitedRoom(lastRoomId) {
+    return new Promise((resolve, reject) => {
+      const lastVisitedRoomRef = firebase.database().ref(`rooms/${lastRoomId}`);
+      if (!lastVisitedRoomRef) {
+        reject(new Error('room does not exist for user'), null);
+      }
+      lastVisitedRoomRef.on('value', snapshot => {
+        const lastVisitedRoom = snapshot.val();
+        lastVisitedRoom.key = snapshot.key;
+        resolve(lastVisitedRoom);
+      });
     });
   }
 
-  // getLastVisitedandSetActiveRoom(roomId) {
-  //   this.roomsRef.on('child_added', snapshot => {
-  //     if (snapshot.key === roomId) {
-  //       this.setRoom(snapshot.val());
-  //     }
-  //   });
-  // }
+  getSubscribedRooms(subscribedRoomsIds) {
+    return new Promise((resolve, reject) => {
+      let rooms = [];
+      const subscribedRoomsRef = firebase.database().ref('rooms');
+      if (!subscribedRoomsRef) {
+        reject(new Error('sunscirbed room does not exist'), null);
+      }
+      subscribedRoomsRef.on('value', snapshot => {
+        const subscribedRoom = snapshot.val();
+        subscribedRoom.key = snapshot.key;
+        for (const room in snapshot.val()) {
+          if (subscribedRoomsIds.includes(room)) {
+            const roomWithKey = snapshot.val()[room];
+            roomWithKey.key = room;
+            rooms.push(roomWithKey);
+          }
+        }
+      });
+      resolve(rooms);
+    });
+  }
 
-  // setRoom(room) {
-  //   this.setState({ activeRoom: room });
-  // }
+  setActiveRoom(activeRoom) {
+    this.setState({ activeRoom });
+  }
 
   handleNameChange = (event) => {
     if (event.target.value.length >= 35) {
@@ -121,6 +142,7 @@ class App extends Component {
             className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
+            subscribedRooms={this.state.subscribedRooms}
             user={this.state.user}
             userConfig={this.state.userConfig}
             setActiveRoom={this.setActiveRoom.bind(this)}
@@ -135,6 +157,7 @@ class App extends Component {
         </main>
         <footer className="footer">
           <SubmitMessage
+            userConfig={this.state.userConfig}
             activeRoom={this.state.activeRoom}
             user={this.state.user}
             firebase={firebase}

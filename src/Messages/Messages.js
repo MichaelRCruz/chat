@@ -26,10 +26,10 @@ class Messages extends Component {
   }
 
   componentWillReceiveProps(prevProps) {
-    this.setState({
-      activeRoom: prevProps.activeRoom,
-      userConfig: prevProps.userConfig,
-    });
+    // this.setState({
+    //   activeRoom: prevProps.activeRoom,
+    //   userConfig: prevProps.userConfig,
+    // });
     // this.updateDisplayedMessages();
   }
 
@@ -46,7 +46,7 @@ class Messages extends Component {
   updateDisplayedMessages() {
     // if (!activeRoom) { return };
     const roomMessages = this.state.allMessages.filter(message => {
-      return message.roomId === this.state.userConfig.lastVisited;
+      return message.roomId === this.props.userConfig.lastVisited;
     });
     this.setState({
       messageDeleted: true,

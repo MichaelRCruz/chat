@@ -11,7 +11,7 @@ class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeRoom: null,
+      activeRoom: props.activeRoom,
       userConfig: null,
       allMessages: [],
       displayedMessages: [],
@@ -23,6 +23,7 @@ class Messages extends Component {
   componentDidMount() {
     this.watchFirebaseForMessages();
     this.scrollToBottom();
+    console.log('sup yo');
   }
 
   componentWillReceiveProps(prevProps) {
@@ -31,6 +32,8 @@ class Messages extends Component {
     //   userConfig: prevProps.userConfig,
     // });
     // this.updateDisplayedMessages();
+    this.watchFirebaseForMessages();
+    this.scrollToBottom();
   }
 
   removeMessage(room) {

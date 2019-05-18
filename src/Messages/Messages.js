@@ -46,7 +46,7 @@ class Messages extends Component {
   updateDisplayedMessages() {
     // if (!activeRoom) { return };
     const roomMessages = this.state.allMessages.filter(message => {
-      return message.roomId === this.props.userConfig.lastVisited;
+      return message.roomId === this.props.activeRoom.key;
     });
     this.setState({
       messageDeleted: true,

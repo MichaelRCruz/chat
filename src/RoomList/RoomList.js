@@ -13,13 +13,17 @@ class RoomList extends Component {
 
   componentDidMount() {
     const rooms = [];
+    const subscribedRoomsIds = this.props.userConfig.rooms;
     const throttler = this.throttling(() => {
+      console.log(subscribedRoomsIds, rooms.slice(0));
       this.setState({subscribedRooms: rooms.slice(0)});
     }, 100);
     const subscribedRoomsRef = this.props.firebase.database().ref('rooms');
     subscribedRoomsRef.on('child_added', snapshot => {
-      let room = Object.assign(snapshot.val(), {key: snapshot.key});
-      rooms.push(room);
+      const room = Object.assign(snapshot.val(), {key: snapshot.key});
+      if (subscribedRoomsIds.includes(room.key)) {
+        rooms.push(room);
+      }
       throttler();
     });
     const unsubscribedRoomsRef = this.props.firebase.database().ref('rooms');
@@ -117,13 +121,13 @@ class RoomList extends Component {
   // }
 
   render() {
-    console.log(this.state);
-    console.log(this.props);
     const { subscribedRooms } = this.state;
     const rooms = subscribedRooms.map(subscribedRoom => {
       return (
         <li className="roomNameContainer" key={subscribedRoom.key}>
-          <button className="roomName" onClick={() => this.props.setActiveRoom(subscribedRoom)}>
+          <button className="roomName" onClick={() => {
+            this.props.setActiveRoom(subscribedRoom)  
+          }}>
             { subscribedRoom.name }
           </button>
           <button className="deleteButton"

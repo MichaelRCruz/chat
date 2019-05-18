@@ -27,7 +27,6 @@ class App extends Component {
     this.state = {
       activeRoom: null,
       userConfig: null,
-      subscribedRooms: null,
       user: null,
       show: false,
       showMenu: true,
@@ -39,9 +38,9 @@ class App extends Component {
     firebase.auth().onAuthStateChanged(async user => {
       const userConfig = await this.getUserConfig(user.uid);
       const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
-      const subscribedRooms = await this.getSubscribedRooms(userConfig.rooms);
+      // const subscribedRooms = await this.getSubscribedRooms(userConfig.rooms);
       // console.log(roomWithKey);
-      await this.setState({ user, userConfig, subscribedRooms, activeRoom: lastVisitedRoom });
+      await this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
     })
   }
 
@@ -68,28 +67,6 @@ class App extends Component {
         lastVisitedRoom.key = snapshot.key;
         resolve(lastVisitedRoom);
       });
-    });
-  }
-
-  getSubscribedRooms(subscribedRoomsIds) {
-    return new Promise((resolve, reject) => {
-      let rooms = [];
-      const subscribedRoomsRef = firebase.database().ref('rooms');
-      if (!subscribedRoomsRef) {
-        reject(new Error('sunscirbed room does not exist'), null);
-      }
-      subscribedRoomsRef.on('value', snapshot => {
-        const subscribedRoom = snapshot.val();
-        subscribedRoom.key = snapshot.key;
-        for (const room in snapshot.val()) {
-          if (subscribedRoomsIds.includes(room)) {
-            const roomWithKey = snapshot.val()[room];
-            roomWithKey.key = room;
-            rooms.push(roomWithKey);
-          }
-        }
-      });
-      resolve(rooms);
     });
   }
 
@@ -142,7 +119,6 @@ class App extends Component {
             className="lightContainer"
             firebase={firebase}
             activeRoom={this.state.activeRoom}
-            subscribedRooms={this.state.subscribedRooms}
             user={this.state.user}
             userConfig={this.state.userConfig}
             setActiveRoom={this.setActiveRoom.bind(this)}

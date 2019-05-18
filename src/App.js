@@ -20,6 +20,18 @@ const config = {
   messagingSenderId: "145747598382"
 };
 firebase.initializeApp(config);
+const messaging = firebase.messaging()
+messaging.requestPermission()
+  .then(function() {
+    console.log('have permission');
+    return messaging.getToken();
+  })
+  .then(function(token) {
+    console.log(token);
+  })
+  .catch(function(err) {
+    console.log('error occured');
+  });
 
 class App extends Component {
   constructor(props) {

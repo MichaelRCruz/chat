@@ -15,7 +15,6 @@ class RoomList extends Component {
     const rooms = [];
     const subscribedRoomsIds = this.props.userConfig.rooms;
     const throttler = this.throttling(() => {
-      console.log(subscribedRoomsIds, rooms.slice(0));
       this.setState({subscribedRooms: rooms.slice(0)});
     }, 100);
     const subscribedRoomsRef = this.props.firebase.database().ref('rooms');
@@ -126,7 +125,7 @@ class RoomList extends Component {
       return (
         <li className="roomNameContainer" key={subscribedRoom.key}>
           <button className="roomName" onClick={() => {
-            this.props.setActiveRoom(subscribedRoom)  
+            this.props.setActiveRoom(subscribedRoom)
           }}>
             { subscribedRoom.name }
           </button>

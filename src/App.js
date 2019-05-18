@@ -36,11 +36,13 @@ class App extends Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async user => {
-      const userConfig = await this.getUserConfig(user.uid);
-      const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
-      // const subscribedRooms = await this.getSubscribedRooms(userConfig.rooms);
-      // console.log(roomWithKey);
-      await this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
+      if (user) {
+        const userConfig = await this.getUserConfig(user.uid);
+        const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
+        this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
+      } else {
+        this.setState({ user });
+      }
     })
   }
 

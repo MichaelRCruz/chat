@@ -23,17 +23,13 @@ class Messages extends Component {
   componentDidMount() {
     this.watchFirebaseForMessages();
     this.scrollToBottom();
-    console.log('sup yo');
   }
 
-  componentWillReceiveProps(prevProps) {
-    // this.setState({
-    //   activeRoom: prevProps.activeRoom,
-    //   userConfig: prevProps.userConfig,
-    // });
-    // this.updateDisplayedMessages();
-    this.watchFirebaseForMessages();
-    this.scrollToBottom();
+  componentWillReceiveProps(prevProps, nextProps) {
+    if (this.props != nextProps) {
+      this.watchFirebaseForMessages();
+      this.scrollToBottom();
+    }
   }
 
   removeMessage(room) {
@@ -62,7 +58,6 @@ class Messages extends Component {
     const throttler = this.throttling(() => {
       this.setState({allMessages: allMessages.slice(0)}, () => {
         this.updateDisplayedMessages();
-        // this.scrollToBottom();
       });
     }, 100);
     this.messagesRef.on('child_added', snapshot => {
@@ -71,9 +66,9 @@ class Messages extends Component {
       throttler();
     });
     this.messagesRef.on('child_removed', snapshot  => {
-      this.setState({ allMessages: this.state.allMessages.filter( message => message.key !== snapshot.key )  }, () => {
-        this.updateDisplayedMessages();
-      });
+      let message = Object.assign(snapshot.val(), {key: snapshot.key});
+      allMessages.push(message);
+      throttler();
     });
   }
 

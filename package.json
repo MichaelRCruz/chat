@@ -6,7 +6,9 @@
   "dependencies": {
     "bad-words": "^3.0.2",
     "firebase": "^5.11.0",
+    "firebase-admin": "^7.3.0",
     "firebase-tools": "^6.7.2",
+    "google-auth-library": "^4.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-markdown": "^4.0.8",

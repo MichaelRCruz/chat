@@ -13,13 +13,13 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
-// messaging.setBackgroundMessageHandler(function(payload) {
-//   const title = 'Hello, world from SW.';
-//   const options = {
-//     body: payload.data.status
-//   }
-//   return self.registration.showNotification(title, options);
-// });
+messaging.setBackgroundMessageHandler(function(payload) {
+  const title = 'Hello, world from SW.';
+  const options = {
+    body: payload.data.status
+  }
+  return self.registration.showNotification(title, options);
+});
 
 // importScripts("https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js");
 // importScripts("https://www.gstatic.com/firebasejs/5.9.4/firebase-messaging.js");

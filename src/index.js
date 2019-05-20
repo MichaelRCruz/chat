@@ -13,8 +13,10 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
 import store from "./store";
-// import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './registerServiceWorker';
 import './index.css';
+
+registerServiceWorker.register;
 
 ReactDOM.render(
   <Provider store={store}>
@@ -25,11 +27,11 @@ ReactDOM.render(
 
 // var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('firebase-messaging-sw.js')
-  .then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);
-  }).catch(function(err) {
-    console.log('Service worker registration failed, error:', err);
-  });
-}
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.register('firebase-messaging-sw.js')
+//   .then(function(registration) {
+//     console.log('Registration successful, scope is:', registration.scope);
+//   }).catch(function(err) {
+//     console.log('Service worker registration failed, error:', err);
+//   });
+// }

@@ -23,9 +23,9 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+// var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-if ('serviceWorker' in navigator && !isSafari) {
+if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('firebase-messaging-sw.js')
   .then(function(registration) {
     console.log('Registration successful, scope is:', registration.scope);

@@ -34,29 +34,33 @@ const config = {
 firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
-messaging.requestPermission()
-  .then(function() {
-    console.log('have permission');
-    return messaging.getToken();
-  })
-  .then(function(token) {
-    // here is where the token is sent to the server.
-    console.log('message token: ', token);
-  })
-  .catch(function(err) {
-    console.log('error occured', err);
-  });
-messaging.onMessage(function(payload) {
-  console.log('onMessage', payload);
-});
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('firebase-messaging-sw.js')
   .then(function(registration) {
     console.log('Registration successful, scope is:', registration.scope);
     messaging.useServiceWorker(registration);
+    requestPermission();
   }).catch(function(err) {
     console.log('Service worker registration failed, error:', err);
+  });
+}
+
+function requestPermission() {
+  messaging.requestPermission()
+    .then(function() {
+      console.log('have permission');
+      return messaging.getToken();
+    })
+    .then(function(token) {
+      // here is where the token is sent to the server.
+      console.log('message token: ', token);
+    })
+    .catch(function(err) {
+      console.log('error occured', err);
+    });
+  messaging.onMessage(function(payload) {
+    console.log('onMessage', payload);
   });
 }
 

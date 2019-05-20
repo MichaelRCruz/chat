@@ -23,6 +23,8 @@ firebase.initializeApp(config);
 
 var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
+console.log('is safari', isSafari);
+
 if (!isSafari) {
   const messaging = firebase.messaging();
   messaging.requestPermission()

@@ -33,20 +33,24 @@ const config = {
 };
 firebase.initializeApp(config);
 
-const messaging = firebase.messaging();
+const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+                 navigator.userAgent &&
+                 navigator.userAgent.indexOf('CriOS') == -1 &&
+                 navigator.userAgent.indexOf('FxiOS') == -1;
 
-if ('serviceWorker' in navigator) {
+if (('serviceWorker' in navigator) && !isSafari) {
+  const messaging = firebase.messaging();
   navigator.serviceWorker.register('firebase-messaging-sw.js')
   .then(function(registration) {
     console.log('Registration successful, scope is:', registration.scope);
     messaging.useServiceWorker(registration);
-    requestPermission();
+    requestPermission(messaging);
   }).catch(function(err) {
     console.log('Service worker registration failed, error:', err);
   });
 }
 
-function requestPermission() {
+function requestPermission(messaging) {
   messaging.requestPermission()
     .then(function() {
       console.log('have permission');

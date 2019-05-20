@@ -9,9 +9,10 @@
 // This link also includes instructions on opting out of this behavior.
 
 export default function register() {
+  console.log('supo');
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js`;
+      const swUrl = `${process.env.PUBLIC_URL}/chat/firebase-messaging-sw.js`;
       navigator.serviceWorker
         .register(swUrl)
         .then(registration => {

@@ -21,16 +21,18 @@
 //   return self.registration.showNotification(title, options);
 // });
 //
-importScripts("https://www.gstatic.com/firebasejs/5.9.4/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/5.9.4/firebase-messaging.js");
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('../firebase-messaging-sw.js')
-  .then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);
-  }).catch(function(err) {
-    console.log('Service worker registration failed, error:', err);
-  });
-}
+importScripts('https://www.gstatic.com/firebasejs/4.1.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.1.1/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/4.1.1/firebase.js');
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.register('../firebase-messaging-sw.js')
+//   .then(function(registration) {
+//     console.log('Registration successful, scope is:', registration.scope);
+//   }).catch(function(err) {
+//     console.log('Service worker registration failed, error:', err);
+//   });
+// }
+console.log('inside fms...')
 firebase.initializeApp({
 	// Project Settings => Add Firebase to your web app
   messagingSenderId: "145747598382"

@@ -28,6 +28,7 @@ firebase.initializeApp(config);
 //     return messaging.getToken();
 //   })
 //   .then(function(token) {
+//     // here is where the token is sent to the server.
 //     console.log('message token: ', token);
 //   })
 //   .catch(function(err) {

@@ -21,7 +21,26 @@ const config = {
 };
 firebase.initializeApp(config);
 
-// const messaging = firebase.messaging();
+var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+if (!isSafari) {
+  const messaging = firebase.messaging();
+  messaging.requestPermission()
+    .then(function() {
+      console.log('have permission');
+      return messaging.getToken();
+    })
+    .then(function(token) {
+      // here is where the token is sent to the server.
+      console.log('message token: ', token);
+    })
+    .catch(function(err) {
+      console.log('error occured');
+    });
+  messaging.onMessage(function(payload) {
+    console.log('onMessage', payload);
+  });
+}
 // messaging.requestPermission()
 //   .then(function() {
 //     console.log('have permission');

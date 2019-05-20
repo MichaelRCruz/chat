@@ -6,6 +6,7 @@
     "rules": "storage.rules"
   },
   "hosting": {
+    "public": "./",
     "headers": [
       {
         "source": "/firebase-messaging-sw.js",

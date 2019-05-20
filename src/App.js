@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import * as firebase from 'firebase';
 import Auth from './Auth/Auth';
 import Modal from './Modal/Modal';
 
@@ -10,33 +9,6 @@ import SubmitMessage from './SubmitMessage/SubmitMessage';
 import Splash from './Splash/Splash';
 
 import {reduxForm, focus} from 'redux-form';
-
-const config = {
-  apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
-  authDomain: "chat-asdf.firebaseapp.com",
-  databaseURL: "https://chat-asdf.firebaseio.com",
-  projectId: "chat-asdf",
-  storageBucket: "chat-asdf.appspot.com",
-  messagingSenderId: "145747598382"
-};
-firebase.initializeApp(config);
-
-const messaging = firebase.messaging();
-messaging.requestPermission()
-  .then(function() {
-    console.log('have permission');
-    return messaging.getToken();
-  })
-  .then(function(token) {
-    // here is where the token is sent to the server.
-    console.log('message token: ', token);
-  })
-  .catch(function(err) {
-    console.log('error occured', err);
-  });
-messaging.onMessage(function(payload) {
-  console.log('onMessage', payload);
-});
 
 class App extends Component {
   constructor(props) {
@@ -49,10 +21,11 @@ class App extends Component {
       showMenu: true,
       newNameText: ''
     };
+    this.firebase = this.props.firebase;
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(async user => {
+    this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         const userConfig = await this.getUserConfig(user.uid);
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
@@ -65,7 +38,7 @@ class App extends Component {
 
   getUserConfig(uid) {
     return new Promise((resolve, reject) => {
-      const userConfigRef = firebase.database().ref(`users/${uid}`);
+      const userConfigRef = this.firebase.database().ref(`users/${uid}`);
       if (!userConfigRef) {
         reject(new Error('config does not exist for user'), null);
       }
@@ -77,7 +50,7 @@ class App extends Component {
 
   getLastVisitedRoom(lastRoomId) {
     return new Promise((resolve, reject) => {
-      const lastVisitedRoomRef = firebase.database().ref(`rooms/${lastRoomId}`);
+      const lastVisitedRoomRef = this.firebase.database().ref(`rooms/${lastRoomId}`);
       if (!lastVisitedRoomRef) {
         reject(new Error('room does not exist for user'), null);
       }
@@ -136,7 +109,7 @@ class App extends Component {
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
             className="lightContainer"
-            firebase={firebase}
+            firebase={this.firebase}
             activeRoom={this.state.activeRoom}
             user={this.state.user}
             userConfig={this.state.userConfig}
@@ -144,7 +117,7 @@ class App extends Component {
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
-          <Messages firebase={firebase}
+          <Messages firebase={this.firebase}
                     activeRoom={this.state.activeRoom}
                     user={this.state.user}
                     userConfig={this.state.userConfig}
@@ -155,7 +128,7 @@ class App extends Component {
             userConfig={this.state.userConfig}
             activeRoom={this.state.activeRoom}
             user={this.state.user}
-            firebase={firebase}
+            firebase={this.firebase}
           />
         </footer>
       </div>
@@ -174,7 +147,7 @@ class App extends Component {
         {this.state.user ? app : splash}
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
-          <Auth firebase={firebase}
+          <Auth firebase={this.firebase}
                 toggleModal={this.toggleModal.bind(this)}
                 user={this.state.user}
           />

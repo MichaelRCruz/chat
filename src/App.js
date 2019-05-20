@@ -32,7 +32,7 @@ messaging.requestPermission()
     console.log('message token: ', token);
   })
   .catch(function(err) {
-    console.log('error occured');
+    console.log('error occured', err);
   });
 messaging.onMessage(function(payload) {
   console.log('onMessage', payload);

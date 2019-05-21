@@ -13,7 +13,7 @@ class Auth extends Component {
       user: null,
       register: false,
     };
-    this.usersRef = this.props.firebase.database().ref('users');
+    // this.usersRef = this.props.firebase.database().ref('users');
   }
 
   registerUser = (displayName, email, password) => {
@@ -85,6 +85,10 @@ class Auth extends Component {
     });
   }
 
+  requestNotifPermission() {
+    this.props.requestNotifPermission();
+  }
+
   updatePassword(password) {
     var user = this.props.firebase.auth().currentUser;
     user.updatePassword(password).then(res => {
@@ -101,7 +105,7 @@ class Auth extends Component {
     user.updateProfile({
       displayName
     }).then(res => {
-      alert('display name updated');
+      console.log(res);
       this.props.toggleModal();
     }).catch(function(error) {
       alert(error.messsage);
@@ -156,8 +160,15 @@ class Auth extends Component {
       <button onClick={() => this.deleteUser()}>click here to delete account</button>
     );
     const emailVerificationButton = (
-      <button onClick={() => this.sendEmailVerification()}>click here to send verification email</button>
+      <button onClick={() => this.sendEmailVerification()}>
+        click here to send verification email
+      </button>
     );
+    const requestNotifPermissionButton = (
+      <button onClick={() => this.requestNotifPermission()}>
+        click here to authorize notifications
+      </button>
+    )
     if (!this.props.user) {
       return (
         <section className="authComponent">
@@ -173,6 +184,7 @@ class Auth extends Component {
           {signOutButton}
           {emailVerificationButton}
           {deleteUserButton}
+          {requestNotifPermissionButton}
         </div>
       );
     }

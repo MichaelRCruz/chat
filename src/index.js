@@ -33,6 +33,8 @@ const config = {
 };
 firebase.initializeApp(config);
 
+
+// don't want to detect by browser; would rather detect by email
 const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                  navigator.userAgent &&
                  navigator.userAgent.indexOf('CriOS') == -1 &&
@@ -45,37 +47,40 @@ try {
     .then(function(registration) {
       console.log('Registration successful, scope is:', registration.scope);
       messaging.useServiceWorker(registration);
-      requestPermission(messaging);
+      // requestPermission(messaging);
     }).catch(function(err) {
       console.log('Service worker registration failed, error:', err);
     });
+    messaging.onMessage(function(payload) {
+      console.log('onMessage', payload);
+    });
   }
 } catch (error) {
-  console.log('error inside catch of try/catch');
   console.log(error);
 }
 
-function requestPermission(messaging) {
-  messaging.requestPermission()
-    .then(function() {
-      console.log('have permission');
-      return messaging.getToken();
-    })
-    .then(function(token) {
-      // here is where the token is sent to the server.
-      console.log('message token: ', token);
-    })
-    .catch(function(err) {
-      console.log('error occured', err);
-    });
-  messaging.onMessage(function(payload) {
-    console.log('onMessage', payload);
-  });
-}
+// function requestPermission(messaging) {
+//   messaging.requestPermission()
+//     .then(function() {
+//       console.log('have permission');
+//       return messaging.getToken();
+//     })
+//     .then(function(token) {
+//       // here is where the token is sent to the server.
+//       console.log('message token: ', token);
+//     })
+//     .catch(function(err) {
+//       console.log('error occured', err);
+//     });
+//   messaging.onMessage(function(payload) {
+//     console.log('onMessage', payload);
+//   });
+// }
 
 ReactDOM.render(
   <Provider store={store}>
-    <App firebase={firebase} />
+    <App firebase={firebase}
+    />
   </Provider>,
   document.getElementById("root")
 );

@@ -22,6 +22,7 @@ class App extends Component {
       newNameText: ''
     };
     this.firebase = this.props.firebase;
+    this.messaging = this.props.firebase.messaging();
   }
 
   componentDidMount() {
@@ -33,6 +34,7 @@ class App extends Component {
       } else {
         this.setState({ user });
       }
+      this.requestNotifPermission();
     })
   }
 
@@ -85,6 +87,22 @@ class App extends Component {
     this.setState({
       show: !this.state.show
     });
+  }
+
+  requestNotifPermission = () => {
+    let _self = this;
+    this.messaging.requestPermission()
+      .then(function() {
+        console.log('have permission');
+        return _self.messaging.getToken();
+      })
+      .then(function(token) {
+        // here is where the token is sent to the server.
+        console.log('message token: ', token);
+      })
+      .catch(function(err) {
+        console.log('error occured', err);
+      });
   }
 
   toggleMenu = () => {
@@ -150,6 +168,7 @@ class App extends Component {
           <Auth firebase={this.firebase}
                 toggleModal={this.toggleModal.bind(this)}
                 user={this.state.user}
+                requestNotifPermission={this.requestNotifPermission.bind(this)}
           />
         </Modal>
       </div>

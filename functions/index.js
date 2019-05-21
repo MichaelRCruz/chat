@@ -79,3 +79,21 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
     res.end();
   });
 });
+
+// exports.sendMessageToUser = functions.https.onRequest((req, res) => {
+//   const messageRef = admin.database().ref('/messages');
+//   const {head_commit} = req.body;
+//   return messageRef.push({
+//     content: '### repo update alert\n' + 'head commit...\n' + head_commit.url,
+//     sentAt: Date.now(),
+//     roomId: "-Ld7mZCDqAEcMSGxJt-x",
+//     creator: {
+//       uid: null,
+//       email: null,
+//       displayName: "GitHub",
+//       photoURL: "https://avatars3.githubusercontent.com/u/9919?s=40&v=4"
+//     }
+//   }).then(() => {
+//     res.end();
+//   });
+// });

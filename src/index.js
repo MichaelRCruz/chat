@@ -38,16 +38,21 @@ const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
                  navigator.userAgent.indexOf('CriOS') == -1 &&
                  navigator.userAgent.indexOf('FxiOS') == -1;
 
-if (('serviceWorker' in navigator) && !isSafari) {
-  const messaging = firebase.messaging();
-  navigator.serviceWorker.register('firebase-messaging-sw.js')
-  .then(function(registration) {
-    console.log('Registration successful, scope is:', registration.scope);
-    messaging.useServiceWorker(registration);
-    requestPermission(messaging);
-  }).catch(function(err) {
-    console.log('Service worker registration failed, error:', err);
-  });
+try {
+  if (('serviceWorker' in navigator) && !isSafari) {
+    const messaging = firebase.messaging();
+    navigator.serviceWorker.register('firebase-messaging-sw.js')
+    .then(function(registration) {
+      console.log('Registration successful, scope is:', registration.scope);
+      messaging.useServiceWorker(registration);
+      requestPermission(messaging);
+    }).catch(function(err) {
+      console.log('Service worker registration failed, error:', err);
+    });
+  }
+} catch (error) {
+  console.log('error inside catch of try/catch');
+  console.log(error);
 }
 
 function requestPermission(messaging) {

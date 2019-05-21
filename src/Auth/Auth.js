@@ -53,7 +53,7 @@ class Auth extends Component {
 
   signInWithGoogle() {
     this.props.firebase.auth()
-      .signInWithPopup( new this.props.firebase.auth.GoogleAuthProvider() )
+      .signInWithRedirect( new this.props.firebase.auth.GoogleAuthProvider() )
       .then(res => {
         this.props.toggleModal();
       });

@@ -1,6 +1,14 @@
 const functions = require('firebase-functions');
+const fetch = require("node-fetch");
+const cors = require('cors')({
+  origin: true,
+});
 
 const admin = require('firebase-admin');
+serviceAccount = require('./serviceAccountKey.json');
+
+const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
 // exports.helloWorld = functions.https.onRequest((req, res) => {
@@ -42,6 +50,37 @@ admin.initializeApp(functions.config().firebase);
 //   // });
 // });
 
+// https://us-central1-chat-asdf.cloudfunctions.net/manageDeviceGroup
+// exports.manageDeviceGroup = functions.https.onRequest((req, res) => {
+//   return cors(req, res, async () => {
+//     const {name, fcmToken} = JSON.parse(req.body);
+//     console.log(name, fcmToken);
+//     const body = JSON.stringify({
+//       operation: "create",
+//       notification_key_name: name,
+//       registration_ids: [fcmToken]
+//     });
+//     const fetchResponse = await fetch('https://fcm.googleapis.com/fcm/notification', {
+//       method: 'POST',
+//       headers: {
+//     		'Content-Type': 'application/json',
+//         'Aurthorization': 'key=AIzaSyBm5JwOWxePR3MLcQZiOFZul0Rk3W95mos',
+//     		'project_id': '145747598382'
+//     	},
+//       body
+//     }).then(function(response) {
+//       return response;
+//     }).then(response => {
+//       return response;
+//     }).catch(function(error) {
+//       console.log("error from fetch", error);
+//       return error;
+//     });
+//     console.log(typeof fetchResponse, fetchResponse);
+//     res.json(fetchResponse);
+//   });
+// });
+
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   console.log('user: ', user)
   const roomRef = admin.database().ref('/rooms');
@@ -61,7 +100,7 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/gitHubPushWebHook
+// https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
 exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {head_commit} = req.body;
@@ -80,13 +119,45 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/manageDeviceGroup
-exports.manageDeviceGroup = functions.https.onRequest((req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  const headers = req.headers;
-  const body = req.body;
-  const query = req.query;
-  res.json({
-    headers, body, query
+// https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
+exports.addTokenToTopic = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, () => {
+    const {name, fcmToken} = JSON.parse(req.body);
+    admin.messaging().subscribeToTopic([fcmToken], 'name')
+      .then(function(response) {
+        // See the MessagingTopicManagementResponse reference documentation
+        // for the contents of response.
+        console.log('Successfully subscribed to topic:', response);
+        res.send(response);
+      })
+      .catch(function(error) {
+        console.log('Error subscribing to topic:', error);
+        res.send(error);
+      });
+  });
+});
+
+// https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToTopic
+exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+  // The topic name can be optionally prefixed with "/topics/".
+    const {topic, message} = JSON.parse(req.body);
+    const payloadMessage = {
+      data: {
+        score: '850',
+        time: '2:45'
+      },
+      topic
+    };
+
+    // Send a message to devices subscribed to the provided topic.
+    admin.messaging().send(payloadMessage)
+      .then((response) => {
+        // Response is a message ID string.
+        res.send(response);
+      })
+      .catch((error) => {
+        res.send(error);
+      });
   });
 });

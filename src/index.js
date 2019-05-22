@@ -22,6 +22,7 @@ import './index.css';
 //     console.log('muh registration: ', registration);
 //     // messaging.useServiceWorker(registration);
 //   });
+console.log('0.004');
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -79,7 +80,7 @@ try {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App firebase={firebase}
+    <App firebase={firebase} isSafari={isSafari}
     />
   </Provider>,
   document.getElementById("root")

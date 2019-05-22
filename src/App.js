@@ -19,26 +19,54 @@ class App extends Component {
       user: null,
       show: false,
       showMenu: true,
-      newNameText: ''
+      newNameText: '',
+      fcmToken: null
     };
     this.firebase = this.props.firebase;
-    this.messaging = this.props.firebase.messaging();
+    this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null
   }
 
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
+        const fcmToken = await this.requestNotifPermission();
+        // this.setFcmToken(fcmToken);
         const userConfig = await this.getUserConfig(user.uid);
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
-        this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
+        this.messaging.onTokenRefresh(function() {
+          this.requestNotifPermission();
+        });
+        this.setState({ user, userConfig, fcmToken, activeRoom: lastVisitedRoom });
       } else {
         this.setState({ user });
       }
-      this.requestNotifPermission();
     })
   }
 
-  getUserConfig(uid) {
+  requestNotifPermission = () => {
+    if (!this.props.isSafari) {
+      let _self = this;
+      return this.messaging.requestPermission()
+        .then(function() {
+          return _self.messaging.getToken();
+        }).then(token => {
+          alert(token);
+          return token;
+        })
+        .catch(function(err) {
+          console.log('error occured from requestNotifPermission()', err);
+          return null;
+        });
+    } else {
+      return null;
+    }
+  }
+
+  setFcmToken = fcmToken => {
+    console.log('fcmToken: ', fcmToken);
+  }
+
+  getUserConfig(uid, deviceFcmToken) {
     return new Promise((resolve, reject) => {
       const userConfigRef = this.firebase.database().ref(`users/${uid}`);
       if (!userConfigRef) {
@@ -89,22 +117,6 @@ class App extends Component {
     });
   }
 
-  requestNotifPermission = () => {
-    let _self = this;
-    this.messaging.requestPermission()
-      .then(function() {
-        console.log('have permission');
-        return _self.messaging.getToken();
-      })
-      .then(function(token) {
-        // here is where the token is sent to the server.
-        console.log('message token: ', token);
-      })
-      .catch(function(err) {
-        console.log('error occured', err);
-      });
-  }
-
   toggleMenu = () => {
     this.setState({
       showMenu: !this.state.showMenu
@@ -153,11 +165,11 @@ class App extends Component {
     );
     const splash = (
       <div>
-        <Splash />
         <img src={require("./assets/images/potato2.svg")}
              alt="potato logo"
              onClick={this.toggleModal}
         />
+        <Splash />
       </div>
     );
     return (

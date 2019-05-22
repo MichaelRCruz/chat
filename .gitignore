@@ -21,5 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 /src/serviceAccountKey.json
+/functions/serviceAccountKey.json
 
 /example-requests

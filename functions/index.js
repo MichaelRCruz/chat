@@ -120,15 +120,18 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
 });
 
 // https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
-exports.addTokenToTopic = functions.https.onRequest(async (req, res) => {
+exports.addTokenToTopic = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const {name, fcmToken} = JSON.parse(req.body);
-    admin.messaging().subscribeToTopic([fcmToken], 'name')
+    const {uid, fcmToken} = JSON.parse(req.body);
+    const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
+    admin.messaging().subscribeToTopic([fcmToken], `topic-${uid}`)
       .then(function(response) {
         // See the MessagingTopicManagementResponse reference documentation
         // for the contents of response.
         console.log('Successfully subscribed to topic:', response);
-        res.send(response);
+        return userRef.child(fcmToken).set(true).then(function() {
+          return res.send(response);
+        });
       })
       .catch(function(error) {
         console.log('Error subscribing to topic:', error);
@@ -140,23 +143,18 @@ exports.addTokenToTopic = functions.https.onRequest(async (req, res) => {
 // https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToTopic
 exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-  // The topic name can be optionally prefixed with "/topics/".
-    const {topic, message} = JSON.parse(req.body);
+    const {uid, message} = JSON.parse(req.body);
     const payloadMessage = {
-      data: {
-        score: '850',
-        time: '2:45'
-      },
-      topic
+      data: { message },
+      topic: `topic-${uid}`
     };
-
-    // Send a message to devices subscribed to the provided topic.
     admin.messaging().send(payloadMessage)
       .then((response) => {
-        // Response is a message ID string.
+        console.log(response);
         res.send(response);
       })
       .catch((error) => {
+        console.log(error);
         res.send(error);
       });
   });

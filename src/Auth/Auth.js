@@ -86,7 +86,7 @@ class Auth extends Component {
   }
 
   requestNotifPermission() {
-    this.props.requestNotifPermission();
+    this.props.requestNotifPermission(this.props.user.uid);
   }
 
   updatePassword(password) {
@@ -99,8 +99,7 @@ class Auth extends Component {
     });
   }
 
-  updateDisplayName(values) {
-    const {displayName} = values;
+  updateDisplayName(displayName) {
     var user = this.props.firebase.auth().currentUser;
     user.updateProfile({
       displayName
@@ -109,6 +108,20 @@ class Auth extends Component {
       this.props.toggleModal();
     }).catch(function(error) {
       alert(error.messsage);
+    });
+  }
+
+  sendNotification() {
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToTopic`, {
+      method: 'post',
+      body: JSON.stringify({
+        message: 'Hello, world.',
+        uid: this.props.user.uid
+      })
+    }).then(function(response) {
+      return response;
+    }).catch(err => {
+      console.log(err);
     });
   }
 
@@ -168,7 +181,12 @@ class Auth extends Component {
       <button onClick={() => this.requestNotifPermission()}>
         click here to authorize notifications
       </button>
-    )
+    );
+    const sendNotification = (
+      <button onClick={() => this.sendNotification()}>
+        click here to send a test message to all your signed in devices
+      </button>
+    );
     if (!this.props.user) {
       return (
         <section className="authComponent">
@@ -185,6 +203,7 @@ class Auth extends Component {
           {emailVerificationButton}
           {deleteUserButton}
           {requestNotifPermissionButton}
+          {sendNotification}
         </div>
       );
     }

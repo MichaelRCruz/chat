@@ -15,12 +15,10 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
-      userConfig: null,
-      user: null,
       show: false,
       showMenu: true,
-      newNameText: '',
-      fcmToken: null
+      user: null,
+      userConfig: null
     };
     this.firebase = this.props.firebase;
     this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null
@@ -29,29 +27,31 @@ class App extends Component {
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        const fcmToken = await this.requestNotifPermission();
-        // this.setFcmToken(fcmToken);
+        const notificationKey = await this.requestNotifPermission(user.uid);
         const userConfig = await this.getUserConfig(user.uid);
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         this.messaging.onTokenRefresh(function() {
+          console.log('refreshed token');
           this.requestNotifPermission();
         });
-        this.setState({ user, userConfig, fcmToken, activeRoom: lastVisitedRoom });
+        this.setState({ user, userConfig, notificationKey, activeRoom: lastVisitedRoom });
       } else {
         this.setState({ user });
       }
     })
   }
 
-  requestNotifPermission = () => {
+  requestNotifPermission = uid => {
     if (!this.props.isSafari) {
       let _self = this;
       return this.messaging.requestPermission()
         .then(function() {
           return _self.messaging.getToken();
         }).then(token => {
-          alert(token);
-          return token;
+          return this.handleFcmToken(token, uid)
+            .then(notificationKey => {
+              return notificationKey;
+            });
         })
         .catch(function(err) {
           console.log('error occured from requestNotifPermission()', err);
@@ -60,6 +60,23 @@ class App extends Component {
     } else {
       return null;
     }
+  }
+
+  handleFcmToken = (fcmToken, uid) => {
+    console.log(fcmToken);
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
+      method: 'post',
+      body: JSON.stringify({
+        fcmToken, uid
+      })
+    }).then(function(response) {
+      return response.json();
+    }).then(res => {
+      console.log(res);
+      return res;
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   setFcmToken = fcmToken => {
@@ -94,17 +111,6 @@ class App extends Component {
 
   setActiveRoom(activeRoom) {
     this.setState({ activeRoom });
-  }
-
-  handleNameChange = (event) => {
-    if (event.target.value.length >= 35) {
-      alert("Please enter some text between 1 and 20 characters in length. :)");
-      return;
-    } else {
-      this.setState({
-        newNameText: event.target.value
-      });
-    }
   }
 
   createName = (values) => {

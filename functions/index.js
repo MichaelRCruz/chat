@@ -80,20 +80,13 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   });
 });
 
-// exports.sendMessageToUser = functions.https.onRequest((req, res) => {
-//   const messageRef = admin.database().ref('/messages');
-//   const {head_commit} = req.body;
-//   return messageRef.push({
-//     content: '### repo update alert\n' + 'head commit...\n' + head_commit.url,
-//     sentAt: Date.now(),
-//     roomId: "-Ld7mZCDqAEcMSGxJt-x",
-//     creator: {
-//       uid: null,
-//       email: null,
-//       displayName: "GitHub",
-//       photoURL: "https://avatars3.githubusercontent.com/u/9919?s=40&v=4"
-//     }
-//   }).then(() => {
-//     res.end();
-//   });
-// });
+// https://us-central1-chat-asdf.cloudfunctions.net/manageDeviceGroup
+exports.manageDeviceGroup = functions.https.onRequest((req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  const headers = req.headers;
+  const body = req.body;
+  const query = req.query;
+  res.json({
+    headers, body, query
+  });
+});

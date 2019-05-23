@@ -160,6 +160,35 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
+
+// https://us-central1-chat-asdf.cloudfunctions.net/getOnlineUsers
+exports.getOnlineUsers = functions.https.onRequest((req, res) => {
+  function listAllUsers(nextPageToken) {
+    // List batch of users, 1000 at a time.
+    admin.auth().listUsers(1000, nextPageToken)
+      .then(function(listUsersResult) {
+        listUsersResult.users.forEach(function(userRecord) {
+          console.log('user', userRecord.toJSON());
+        });
+        if (listUsersResult.pageToken) {
+          // List next batch of users.
+          listAllUsers(listUsersResult.pageToken);
+        }
+      })
+      .catch(function(error) {
+        console.log('Error listing users:', error);
+      });
+  }
+  // Start listing users from the beginning, 1000 at a time.
+  listAllUsers();
+});
+
+
+
+
+
+
+
 // exports.addTokenToTopic = functions.https.onRequest((req, res) => {
 //   return cors(req, res, () => {
 //     const {uid, fcmToken} = JSON.parse(req.body);

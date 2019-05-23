@@ -27,18 +27,41 @@ class App extends Component {
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        const notificationKey = await this.requestNotifPermission(user.uid);
+        this.handleConnection(user.uid);
+        const fcmToken = await this.requestNotifPermission(user.uid);
         const userConfig = await this.getUserConfig(user.uid);
+        const userConfigWithToken = Object.assign({}, userConfig, {fcmToken});
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         this.messaging.onTokenRefresh(function() {
           console.log('refreshed token');
           this.requestNotifPermission();
         });
-        this.setState({ user, userConfig, notificationKey, activeRoom: lastVisitedRoom });
+        this.setState({ user, userConfig: userConfigWithToken, activeRoom: lastVisitedRoom });
       } else {
         this.setState({ user });
       }
-    })
+    });
+  }
+
+  handleConnection(uid) {
+    // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
+    const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
+    const isOfflineForDatabase = {
+      isOnline: false,
+      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+    };
+    const isOnlineForDatabase = {
+      isOnline: true,
+      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+    };
+    this.firebase.database().ref('.info/connected').on('value', function(snapshot) {
+      if (snapshot.val() == false) {
+        return;
+      };
+      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+          userStatusDatabaseRef.set(isOnlineForDatabase);
+      });
+    });
   }
 
   requestNotifPermission = uid => {
@@ -48,9 +71,9 @@ class App extends Component {
         .then(function() {
           return _self.messaging.getToken();
         }).then(token => {
-          return this.handleFcmToken(token, uid)
-            .then(notificationKey => {
-              return notificationKey;
+          return this.handleFcmToken(token, uid, true)
+            .then(fcmToken => {
+              return token;
             });
         })
         .catch(function(err) {
@@ -62,20 +85,15 @@ class App extends Component {
     }
   }
 
-  handleFcmToken = (fcmToken, uid) => {
+  handleFcmToken = (fcmToken, uid, subscription) => {
     console.log(fcmToken);
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
-      method: 'post',
-      body: JSON.stringify({
-        fcmToken, uid
-      })
+      method: 'POST',
+      body: JSON.stringify({ fcmToken, uid })
     }).then(function(response) {
-      return response.json();
-    }).then(res => {
-      console.log(res);
-      return res;
-    }).catch(err => {
-      console.log(err);
+      return response;
+    }).catch(error => {
+      console.log(error);
     });
   }
 
@@ -83,7 +101,7 @@ class App extends Component {
     console.log('fcmToken: ', fcmToken);
   }
 
-  getUserConfig(uid, deviceFcmToken) {
+  getUserConfig(uid) {
     return new Promise((resolve, reject) => {
       const userConfigRef = this.firebase.database().ref(`users/${uid}`);
       if (!userConfigRef) {
@@ -186,6 +204,7 @@ class App extends Component {
           <Auth firebase={this.firebase}
                 toggleModal={this.toggleModal.bind(this)}
                 user={this.state.user}
+                userConfig={this.state.userConfig}
                 requestNotifPermission={this.requestNotifPermission.bind(this)}
           />
         </Modal>

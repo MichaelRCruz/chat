@@ -86,7 +86,6 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   const roomRef = admin.database().ref('/rooms');
   const userRef = admin.database().ref('/users');
   return roomRef.child(`uid-${user.uid}`).set({
-    temp: 'temp test',
     active: false,
     creator: user.uid,
     dscription: `${user.displayName}'s first Potato. Welcome!`,
@@ -94,8 +93,9 @@ exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
     name: `${user.displayName}'s Potato`
   }).then(res => {
     return userRef.child(user.uid).set({
+      displayName: user.displayName,
       lastVisited: `uid-${user.uid}`,
-      rooms: [`uid-${user.uid}`]
+      rooms: [`uid-${user.uid}`, '-Ld7mZCDqAEcMSGxJt-x']
     });
   });
 });

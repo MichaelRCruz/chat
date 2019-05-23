@@ -7,14 +7,15 @@ class RoomList extends Component {
     super(props)
     this.state = {
       newRoomName: '',
-      subscribedRooms: []
+      subscribedRooms: [],
+      onlineUsers: []
     }
   }
 
   componentDidMount() {
     const rooms = [];
     const subscribedRoomsIds = this.props.userConfig.rooms;
-    const throttler = this.throttling(() => {
+    const roomThrottler = this.throttling(() => {
       this.setState({subscribedRooms: rooms.slice(0)});
     }, 100);
     const subscribedRoomsRef = this.props.firebase.database().ref('rooms');
@@ -23,12 +24,28 @@ class RoomList extends Component {
       if (subscribedRoomsIds.includes(room.key)) {
         rooms.push(room);
       }
-      throttler();
+      roomThrottler();
     });
-    const unsubscribedRoomsRef = this.props.firebase.database().ref('rooms');
-    unsubscribedRoomsRef.on('child_added', snapshot => {
-      this.setState({subscribedRooms: this.state.subscribedRooms.filter( message => message.key !== snapshot.key)});
+    const users = [];
+    const userThrottler = this.throttling(() => {
+      this.setState({onlineUsers: users.slice(0)});
+    }, 100);
+    const subscribedUsersRef = this.props.firebase.database().ref('users');
+    subscribedUsersRef.on('child_added', snapshot => {
+      const user = Object.assign(snapshot.val(), {key: snapshot.key});
+      if (user.activity.isOnline) {
+        users.push(user);
+      }
+      userThrottler();
     });
+    // const isOnlineRef = this.props.firebase.database().ref(`users/${this.props.user.uid}`);
+    // isOnlineRef.on('child_changed', snapshot  => {
+    //   // if (user.activity.isOnline) {
+    //   //   users.push(user);
+    //   // }
+    //   // userThrottler();
+    //   console.log('user logged off');
+    // });
   }
 
   throttling(callback, delay) {
@@ -137,6 +154,11 @@ class RoomList extends Component {
         </li>
       );
     });
+    const onlineUsers = this.state.onlineUsers.map(user => {
+      return (
+        <h1 key={user.key}>{user.displayName}</h1>
+      );
+    });
     const form = (
       <form className="createRoomForm" onSubmit={(e) => {
           e.preventDefault();
@@ -152,10 +174,12 @@ class RoomList extends Component {
     );
     return (
       <section className="roomComponent">
-        <div className={!this.props.showMenu ? "listContainer animated bounceInLeft" : "listContainer animated bounceOutLeft"}>
-          {form}
+        <div className="listContainer">
           <ul>
             {rooms}
+          </ul>
+          <ul>
+            {onlineUsers}
           </ul>
         </div>
       </section>

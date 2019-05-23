@@ -66,9 +66,7 @@ class Messages extends Component {
       throttler();
     });
     this.messagesRef.on('child_removed', snapshot  => {
-      let message = Object.assign(snapshot.val(), {key: snapshot.key});
-      allMessages.push(message);
-      throttler();
+      this.watchFirebaseForMessages();
     });
   }
 
@@ -90,7 +88,7 @@ class Messages extends Component {
       const prevUid = prevMessage ? prevMessage.creator.uid : '';
       return (
         <li key={message.key}
-            className="message animated fadeInUp"
+            className="message"
         >
           <div className="imageMessageContainer">
             <img

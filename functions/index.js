@@ -159,3 +159,39 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
       });
   });
 });
+
+// exports.addTokenToTopic = functions.https.onRequest((req, res) => {
+//   return cors(req, res, () => {
+//     const {uid, fcmToken} = JSON.parse(req.body);
+//     const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
+//     admin.messaging().subscribeToTopic([fcmToken], `topic-${uid}`)
+//       .then(function(response) {
+//         // See the MessagingTopicManagementResponse reference documentation
+//         // for the contents of response.
+//         console.log('Successfully handled subscription]:', response);
+//         const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
+//         const transaction = admin.database().runTransaction(t => {
+//           return t.get(userRef).then(doc => {
+//             if (doc.data().fcmTokens) {
+//               t.update(userRef, {[fcmToken]: isSubscribed});
+//               return Promise.resolve('updated tokens');
+//             } else {
+//               return Promise.reject('did not write to db');
+//             }
+//           }).then(result => {
+//             console.log('Transaction success', result);
+//           }).catch(err => {
+//             console.log('Transaction failure:', err);
+//           });
+//         })
+//         .catch(function(error) {
+//           console.log('Error subscribing to topic:', error);
+//         });
+//       })
+//       .catch(function(error) {
+//         console.log('Error subscribing to topic:', error);
+//         res.send(error);
+//       });
+//       res.send({fcmToken});
+//   });
+// });

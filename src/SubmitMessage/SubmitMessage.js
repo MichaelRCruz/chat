@@ -45,17 +45,19 @@ class Messages extends Component {
 
   detectUserAndSendMessage = message => {
     const words = message.split(' ');
-    const users = ['mykey'];
+    const roomSubscribers = ['mykey'];
     const usersToMessage = [];
     words.forEach(word => {
-      if (word.startsWith('@') && users.includes(word.substring(1))) {
-        usersToMessage.push(word.substring(1));
+      const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+      if (word.startsWith('@') && roomSubscribers.includes(user)) {
+        console.log(user);
+        usersToMessage.push(user);
       }
     });
     if (usersToMessage.length) {
       return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
         method: 'POST',
-        body: JSON.stringify({ displayName: users[0], message })
+        body: JSON.stringify({ displayName: usersToMessage[0], message })
       }).then(response => {
         return response;
       }).catch(error => {

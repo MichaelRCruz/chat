@@ -22,7 +22,7 @@ import './index.css';
 //     console.log('muh registration: ', registration);
 //     // messaging.useServiceWorker(registration);
 //   });
-console.log('0.010');
+console.log('0.012');
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",

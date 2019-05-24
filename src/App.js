@@ -28,7 +28,6 @@ class App extends Component {
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        // this.setOnlineUsers();
         this.handleConnection(user.uid);
         const fcmToken = await this.requestNotifPermission(user.uid);
         const userConfig = await this.getUserConfig(user.uid);
@@ -117,10 +116,11 @@ class App extends Component {
   getLastVisitedRoom(lastRoomId) {
     return new Promise((resolve, reject) => {
       const lastVisitedRoomRef = this.firebase.database().ref(`rooms/${lastRoomId}`);
+      const usersRef = this.firebase.database().ref(`users`);
       if (!lastVisitedRoomRef) {
         reject(new Error('room does not exist for user'), null);
       }
-      lastVisitedRoomRef.on('value', snapshot => {
+      lastVisitedRoomRef.once('value', snapshot => {
         const lastVisitedRoom = snapshot.val();
         lastVisitedRoom.key = snapshot.key;
         resolve(lastVisitedRoom);

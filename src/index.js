@@ -1,28 +1,12 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import App from './App';
-// import registerServiceWorker from './registerServiceWorker';
-// import './index.css';
-//
-// ReactDOM.render(<App />, document.getElementById('root'));
-// registerServiceWorker();
-
-
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
 import store from "./store";
 import * as firebase from 'firebase';
-// import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-// registerServiceWorker.register
-//   .then(registration => {
-//     console.log('muh registration: ', registration);
-//     // messaging.useServiceWorker(registration);
-//   });
-console.log('0.012');
+console.log('0.013');
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -48,7 +32,6 @@ try {
     .then(function(registration) {
       console.log('Registration successful, scope is:', registration.scope);
       messaging.useServiceWorker(registration);
-      // requestPermission(messaging);
     }).catch(function(err) {
       console.log('Service worker registration failed, error:', err);
     });
@@ -60,24 +43,6 @@ try {
   console.log(error);
 }
 
-// function requestPermission(messaging) {
-//   messaging.requestPermission()
-//     .then(function() {
-//       console.log('have permission');
-//       return messaging.getToken();
-//     })
-//     .then(function(token) {
-//       // here is where the token is sent to the server.
-//       console.log('message token: ', token);
-//     })
-//     .catch(function(err) {
-//       console.log('error occured', err);
-//     });
-//   messaging.onMessage(function(payload) {
-//     console.log('onMessage', payload);
-//   });
-// }
-
 ReactDOM.render(
   <Provider store={store}>
     <App firebase={firebase} isSafari={isSafari}
@@ -85,5 +50,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById("root")
 );
-
-// var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

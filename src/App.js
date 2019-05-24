@@ -15,18 +15,20 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
+      onlineUsers: [],
       show: false,
       showMenu: true,
       user: null,
       userConfig: null
     };
     this.firebase = this.props.firebase;
-    this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null
+    this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null;
   }
 
   componentDidMount() {
     this.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
+        // this.setOnlineUsers();
         this.handleConnection(user.uid);
         const fcmToken = await this.requestNotifPermission(user.uid);
         const userConfig = await this.getUserConfig(user.uid);

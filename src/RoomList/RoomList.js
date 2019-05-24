@@ -26,6 +26,16 @@ class RoomList extends Component {
       }
       roomThrottler();
     });
+    this.setOnlineUsers();
+    const subscribedUsersRef = this.props.firebase.database().ref('users');
+    const isOnlineRef = this.props.firebase.database().ref(`users`);
+    subscribedUsersRef.on('child_changed', snapshot  => {
+      this.setOnlineUsers()
+      console.log(snapshot.val(), 'user logged off');
+    });
+  }
+
+  setOnlineUsers() {
     const users = [];
     const userThrottler = this.throttling(() => {
       this.setState({onlineUsers: users.slice(0)});
@@ -38,14 +48,6 @@ class RoomList extends Component {
       }
       userThrottler();
     });
-    // const isOnlineRef = this.props.firebase.database().ref(`users/${this.props.user.uid}`);
-    // isOnlineRef.on('child_changed', snapshot  => {
-    //   // if (user.activity.isOnline) {
-    //   //   users.push(user);
-    //   // }
-    //   // userThrottler();
-    //   console.log('user logged off');
-    // });
   }
 
   throttling(callback, delay) {
@@ -58,45 +60,6 @@ class RoomList extends Component {
         }, delay)
       }
     }
-  }
-
-  // getSubscribedRooms(subscribedRoomsIds) {
-  //   return new Promise((resolve, reject) => {
-  //     let rooms = [];
-  //     const subscribedRoomsRef = this.props.firebase.database().ref('rooms');
-  //     if (!subscribedRoomsRef) {
-  //       reject(new Error('subscirbed room does not exist'), null);
-  //     }
-  //     subscribedRoomsRef.on('child_added', snapshot => {
-  //       let room = Object.assign(snapshot.val(), {key: snapshot.key});
-  //       rooms.push(room);
-  //     });
-  //     resolve(rooms);
-  //   });
-  // }
-  //
-  // getSubscribedRooms(subscribedRoomsIds) {
-  //   const rooms = [];
-  //   const throttler = this.throttling(() => {
-  //     this.setState({subscribedRooms: rooms.slice(0)}
-  //   }, 100);
-  //   const subscribedRoomsRef = this.props.firebase.database().ref('rooms');
-  //   subscribedRoomsRef.on('child_added', snapshot => {
-  //     let room = Object.assign(snapshot.val(), {key: snapshot.key});
-  //     rooms.push(room);
-  //     throttler();
-  //   });
-  //   const unsubscribedRoomsRef = this.props.firebase.database().ref('rooms');
-  //   unsubscribedRoomsRef.on('child_added', snapshot => {
-  //     this.setState({subscribedRooms: this.state.subscribedRooms.filter( message => message.key !== snapshot.key)}
-  //   });
-  // }
-
-  componentWillReceiveProps(prevProps, nextProps) {
-    // console.log(prevProps, nextProps);
-    // this.setState({
-    //   subscribedRooms: nextProps.subscribedRooms
-    // });
   }
 
   createRoom(newRoomName) {
@@ -131,11 +94,6 @@ class RoomList extends Component {
     this.roomsRef.child(room).remove();
   }
 
-  // setRoom = room => {
-  //   console.log('do the thing', room);
-  //   this.props.setActiveRoom(room.key);
-  // }
-
   render() {
     const { subscribedRooms } = this.state;
     const rooms = subscribedRooms.map(subscribedRoom => {
@@ -154,9 +112,11 @@ class RoomList extends Component {
         </li>
       );
     });
-    const onlineUsers = this.state.onlineUsers.map(user => {
+    const onlineUsers = this.state.onlineUsers.map((user, index) => {
       return (
-        <h1 key={user.key}>{user.displayName}</h1>
+        <li key={index}>
+          <h1>{user.displayName}</h1>
+        </li>
       );
     });
     const form = (

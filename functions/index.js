@@ -197,6 +197,23 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   });
 });
 
+exports.getMessages = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    const roomId = req.query.roomId;
+    const messagesRef = admin.database().ref(`messages`);
+    messagesRef.once("value", snap => {
+      const messages = [];
+      snap.forEach(message => {
+        if (message.val().roomId === roomId) {
+          messages.push(message.val());
+        }
+      });
+      res.set('Access-Control-Allow-Origin', '*');
+      res.send(messages);
+    });
+  });
+});
+
 
 // https://us-central1-chat-asdf.cloudfunctions.net/getOnlineUsers
 // exports.getOnlineUsers = functions.https.onRequest((req, res) => {

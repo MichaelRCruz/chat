@@ -164,21 +164,23 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
 exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     res.set('Access-Control-Allow-Origin', '*');
-    const {displayName, message} = JSON.parse(req.body);
+    const {displayNames, message} = JSON.parse(req.body);
     const usersRef = admin.database().ref('users');
-    let targetedUser;
+    let targetedUser = false;
     usersRef.once("value", snap => {
+      let multiCastTokens = [];
       snap.forEach(user => {
-        if (user.val().displayName === displayName) {
-          targetedUser = user;
+        if (displayNames.includes(user.val().displayName)) {
+          targetedUser = true;
+          const fcmTokens = Object.keys(user.val().fcmTokens);
+          multiCastTokens = multiCastTokens.concat(fcmTokens);
         }
       });
+      const payload = {
+        data: { title: 'Approachable is better than simple.', message}
+      };
       if (targetedUser) {
-        let payloadMessage = {
-          data: { message },
-          topic: `topic-${targetedUser.key}`
-        };
-        admin.messaging().send(payloadMessage)
+        admin.messaging().sendToDevice(multiCastTokens, payload)
           .then((response) => {
             res.send(response);
           })

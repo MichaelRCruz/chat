@@ -105,7 +105,7 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {head_commit} = req.body;
   return messageRef.push({
-    content: '### repo update alert\n' + 'head commit...\n' + head_commit.url,
+    content: '### repo update alert',
     sentAt: Date.now(),
     roomId: "-Ld7mZCDqAEcMSGxJt-x",
     creator: {
@@ -160,28 +160,60 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
+// https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser
+exports.sendMessageToUser = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    const {displayName, message} = req.body;
+    const usersRef = admin.database().ref('users');
+    let targetedUser;
+    usersRef.once("value", snap => {
+      snap.forEach(user => {
+        if (user.val().displayName === displayName) {
+          targetedUser = user;
+        }
+      });
+      if (targetedUser) {
+        let payloadMessage = {
+          data: { message },
+          topic: `topic-${targetedUser.key}`
+        };
+        admin.messaging().send(payloadMessage)
+          .then((response) => {
+            res.send('message sent');
+          })
+          .catch((error) => {
+            console.log(error);
+            res.send(error);
+          });
+      } else {
+        res.send('message failed to send');
+      }
+    });
+  });
+});
+
 
 // https://us-central1-chat-asdf.cloudfunctions.net/getOnlineUsers
-exports.getOnlineUsers = functions.https.onRequest((req, res) => {
-  function listAllUsers(nextPageToken) {
-    // List batch of users, 1000 at a time.
-    admin.auth().listUsers(1000, nextPageToken)
-      .then(function(listUsersResult) {
-        listUsersResult.users.forEach(function(userRecord) {
-          console.log('user', userRecord.toJSON());
-        });
-        if (listUsersResult.pageToken) {
-          // List next batch of users.
-          listAllUsers(listUsersResult.pageToken);
-        }
-      })
-      .catch(function(error) {
-        console.log('Error listing users:', error);
-      });
-  }
-  // Start listing users from the beginning, 1000 at a time.
-  listAllUsers();
-});
+// exports.getOnlineUsers = functions.https.onRequest((req, res) => {
+//   function listAllUsers(nextPageToken) {
+//     // List batch of users, 1000 at a time.
+//     admin.auth().listUsers(1000, nextPageToken)
+//       .then(function(listUsersResult) {
+//         listUsersResult.users.forEach(function(userRecord) {
+//           console.log('user', userRecord.toJSON());
+//         });
+//         if (listUsersResult.pageToken) {
+//           // List next batch of users.
+//           listAllUsers(listUsersResult.pageToken);
+//         }
+//       })
+//       .catch(function(error) {
+//         console.log('Error listing users:', error);
+//       });
+//   }
+//   // Start listing users from the beginning, 1000 at a time.
+//   listAllUsers();
+// });
 
 
 

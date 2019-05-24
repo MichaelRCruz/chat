@@ -170,16 +170,18 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
     usersRef.once("value", snap => {
       let multiCastTokens = [];
       snap.forEach(user => {
-        if (displayNames.includes(user.val().displayName)) {
+        const isIncluded = displayNames.includes(user.val().displayName);
+        const hasFcmTokens = user.val().fcmTokens;
+        if (isIncluded && hasFcmTokens) {
           targetedUser = true;
           const fcmTokens = Object.keys(user.val().fcmTokens);
           multiCastTokens = multiCastTokens.concat(fcmTokens);
         }
       });
-      const payload = {
-        data: { title: 'Approachable is better than simple.', message}
-      };
       if (targetedUser) {
+        const payload = {
+          data: { title: 'Approachable is better than simple.', message}
+        };
         admin.messaging().sendToDevice(multiCastTokens, payload)
           .then((response) => {
             res.send(response);

@@ -51,7 +51,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
       }
     })
     .then(() => {
-      return registration.showNotification("my notification title");
+      return registration.showNotification("new message from michaelcruz.io");
     });
   return promiseChain;
 });

@@ -9,7 +9,8 @@ class RoomList extends Component {
       newRoomName: '',
       subscribedRooms: [],
       onlineUsers: []
-    }
+    },
+    this.subscribedUsersRef = this.props.firebase.database().ref('users');
   }
 
   componentDidMount() {
@@ -27,11 +28,9 @@ class RoomList extends Component {
       roomThrottler();
     });
     this.setOnlineUsers();
-    const subscribedUsersRef = this.props.firebase.database().ref('users');
     const isOnlineRef = this.props.firebase.database().ref(`users`);
-    subscribedUsersRef.on('child_changed', snapshot  => {
-      this.setOnlineUsers()
-      console.log(snapshot.val(), 'user logged off');
+    this.subscribedUsersRef.on('child_changed', snapshot  => {
+      this.setOnlineUsers();
     });
   }
 
@@ -40,8 +39,7 @@ class RoomList extends Component {
     const userThrottler = this.throttling(() => {
       this.setState({onlineUsers: users.slice(0)});
     }, 100);
-    const subscribedUsersRef = this.props.firebase.database().ref('users');
-    subscribedUsersRef.on('child_added', snapshot => {
+    this.subscribedUsersRef.on('child_added', snapshot => {
       const user = Object.assign(snapshot.val(), {key: snapshot.key});
       if (user.activity.isOnline) {
         users.push(user);
@@ -90,10 +88,6 @@ class RoomList extends Component {
     this.setState({newRoomName: event.target.value });
   }
 
-  removeRoom(room) {
-    this.roomsRef.child(room).remove();
-  }
-
   render() {
     const { subscribedRooms } = this.state;
     const rooms = subscribedRooms.map(subscribedRoom => {
@@ -103,11 +97,6 @@ class RoomList extends Component {
             this.props.setActiveRoom(subscribedRoom)
           }}>
             { subscribedRoom.name }
-          </button>
-          <button className="deleteButton"
-                  onClick={() => this.removeRoom(subscribedRoom.key)}
-          >
-            &times;
           </button>
         </li>
       );

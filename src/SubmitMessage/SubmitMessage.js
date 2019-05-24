@@ -18,7 +18,7 @@ class Messages extends Component {
   submitMessage(message) {
     console.log(message);
     if (!this.props.activeRoom) {
-      return
+      return;
     } else {
       this.messagesRef.push({
         content: message,
@@ -36,8 +36,30 @@ class Messages extends Component {
         }
       }).then(res => {
         this.props.dispatch(reset('message'));
+        this.detectUserAndSendMessage(message);
         const textarea = window.document.querySelector("textarea");
         textarea.style.height = '1.5em';
+      });
+    }
+  }
+
+  detectUserAndSendMessage = message => {
+    const words = message.split(' ');
+    const users = ['mykey'];
+    const usersToMessage = [];
+    words.forEach(word => {
+      if (word.startsWith('@') && users.includes(word.substring(1))) {
+        usersToMessage.push(word.substring(1));
+      }
+    });
+    if (usersToMessage.length) {
+      return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
+        method: 'POST',
+        body: JSON.stringify({ displayName: users[0], message })
+      }).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
       });
     }
   }

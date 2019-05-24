@@ -163,7 +163,8 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
 // https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser
 exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const {displayName, message} = req.body;
+    res.set('Access-Control-Allow-Origin', '*');
+    const {displayName, message} = JSON.parse(req.body);
     const usersRef = admin.database().ref('users');
     let targetedUser;
     usersRef.once("value", snap => {
@@ -179,10 +180,10 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
         };
         admin.messaging().send(payloadMessage)
           .then((response) => {
-            res.send('message sent');
+            res.send(response);
           })
           .catch((error) => {
-            console.log(error);
+            console.log('catch from admin.messaging: ', error);
             res.send(error);
           });
       } else {

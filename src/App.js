@@ -88,7 +88,6 @@ class App extends Component {
   }
 
   handleFcmToken = (fcmToken, uid, subscription) => {
-    console.log(fcmToken);
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
       method: 'POST',
       body: JSON.stringify({ fcmToken, uid })

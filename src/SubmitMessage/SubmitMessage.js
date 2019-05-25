@@ -16,25 +16,23 @@ class Messages extends Component {
   }
 
   submitMessage(message) {
-    console.log(message);
     if (!this.props.activeRoom) {
       return;
     } else {
-      this.messagesRef.push({
+      const ref = this.messagesRef.push();
+      const yourData = {
+        key: ref.key,
         content: message,
         sentAt: Date.now(),
         roomId: this.props.activeRoom.key,
-        creator: this.props.user ? {
+        creator: {
           uid: this.props.user.uid,
           email: this.props.user.email,
           displayName: this.props.user.displayName,
           photoURL: this.props.user.photoURL
-        } : {
-          email: null,
-          displayName: 'Peaceful Potato',
-          photoURL: null
         }
-      }).then(res => {
+      };
+      ref.set(yourData, () => {
         this.props.dispatch(reset('message'));
         this.detectUserAndSendMessage(message);
         const textarea = window.document.querySelector("textarea");
@@ -45,7 +43,7 @@ class Messages extends Component {
 
   detectUserAndSendMessage = message => {
     const words = message.split(' ');
-    const roomSubscribers = Object.values(this.props.activeRoom.users);
+    const roomSubscribers = Object.values(this.props.activeRoom.users || {});
     const usersToMessage = [];
     words.forEach(word => {
       const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');

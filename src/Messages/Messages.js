@@ -21,13 +21,11 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    // this.watchFirebaseForMessages();
-    this.getMessages().then(messages => {
-      messages.forEach(message => {
-        message.roomId = this.state.activeRoom.key;
+    this.registerListeners();
+    this.getMessages().then(async messages => {
+      await this.setState({ displayedMessages: messages }, () => {
+        this.scrollToBottom();
       });
-      this.setState({ displayedMessages: messages });
-      this.scrollToBottom();
     });
   }
 
@@ -47,68 +45,93 @@ class Messages extends Component {
 
   componentWillReceiveProps(prevProps, nextProps) {
     if (this.props != nextProps) {
-      // this.watchFirebaseForMessages();
-      // this.scrollToBottom();
-      // console.log(prevProps);
       this.getMessages(prevProps.activeRoom.key).then(messages => {
-        messages.forEach(message => {
-          message.roomId = this.state.activeRoom.key;
+        const foo = messages.slice(300);
+        this.setState({ displayedMessages: messages, activeRoom: prevProps.activeRoom }, () => {
+          this.scrollToBottom();
         });
-        this.setState({ displayedMessages: messages });
-        this.scrollToBottom();
       });
     }
   }
 
-  removeMessage(room) {
-    this.setState({ messageDeleted: !this.state.messageDeleted }, () => {
-      this.messagesRef.child(room.key).remove();
+  registerListeners = () => {
+    this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_added', snapshot => {
+      if (snapshot.val().roomId === this.state.activeRoom.key) {
+        const messages = this.state.displayedMessages;
+        this.setState({
+          displayedMessages: messages.concat([snapshot.val()])
+        }, () => this.bottomOfMessages.scrollIntoView());
+      }
     });
+    this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_removed', async snapshot  => {
+      if (snapshot.val().roomId === this.state.activeRoom.key) {
+        console.log('were in');
+        const filteredMessages = this.state.displayedMessages.filter(message => {
+          return message.key !== snapshot.val().key;
+        });
+        const messages = await this.getMessages();
+        this.setState({displayedMessages: messages});
+      }
+    });
+  }
+
+  removeMessage(message) {
+    console.log(message.key, message);
+    this.messagesRef.child(message.key).remove();
+
+    // var adaRef = firebase.database().ref('messages/ada');
+    // adaRef.remove()
+    //   .then(function() {
+    //     console.log("Remove succeeded.")
+    //   })
+    //   .catch(function(error) {
+    //     console.log("Remove failed: " + error.message)
+    //   });
   }
 
   scrollToBottom() {
     this.bottomOfMessages.scrollIntoView();
   }
 
-  updateDisplayedMessages() {
-    // if (!activeRoom) { return };
-    const roomMessages = this.state.allMessages.filter(message => {
-      return message.roomId === this.props.activeRoom.key;
-    });
-    this.setState({
-      messageDeleted: true,
-      displayedMessages: roomMessages
-    }, () => this.scrollToBottom());
-  }
-
-  watchFirebaseForMessages() {
-    const allMessages = [];
-    const throttler = this.throttling(() => {
-      this.setState({allMessages: allMessages.slice(0)}, () => {
-        this.updateDisplayedMessages();
-      });
-    }, 100);
-    this.messagesRef.on('child_added', snapshot => {
-      let message = Object.assign(snapshot.val(), {key: snapshot.key});
-      allMessages.push(message);
-      throttler();
-    });
-    this.messagesRef.on('child_removed', snapshot  => {
-      this.watchFirebaseForMessages();
-    });
-  }
-
-  throttling(callback, delay) {
-    let timeout = null
-    return function(...args) {
-      if (!timeout) {
-        timeout = setTimeout(() => {
-          callback.call(this, ...args)
-          timeout = null
-        }, delay)
-      }
-    }
-  }
+  // updateDisplayedMessages() {
+  //   // if (!activeRoom) { return };
+  //   const roomMessages = this.state.allMessages.filter(message => {
+  //     return message.roomId === this.props.activeRoom.key;
+  //   });
+  //   this.setState({
+  //     messageDeleted: true,
+  //     displayedMessages: roomMessages
+  //   }, () => this.scrollToBottom());
+  // }
+  //
+  // watchFirebaseForMessages() {
+  //   const allMessages = [];
+  //   const throttler = this.throttling(() => {
+  //     this.setState({allMessages: allMessages.slice(0)}, () => {
+  //       this.updateDisplayedMessages();
+  //     });
+  //   }, 100);
+  //   this.messagesRef.on('child_added', snapshot => {
+  //     let message = Object.assign(snapshot.val(), {key: snapshot.key});
+  //     allMessages.push(message);
+  //     throttler();
+  //   });
+  //   this.messagesRef.on('child_removed', snapshot  => {
+  //     this.watchFirebaseForMessages();
+  //   });
+  // }
+  //
+  // throttling(callback, delay) {
+  //   let timeout = null
+  //   return function(...args) {
+  //     if (!timeout) {
+  //       timeout = setTimeout(() => {
+  //         callback.call(this, ...args)
+  //         timeout = null
+  //       }, delay)
+  //     }
+  //   }
+  // }
 
   render() {
     const messages = this.state.displayedMessages.map((message, i, messages) => {

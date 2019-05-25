@@ -21,14 +21,42 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    this.watchFirebaseForMessages();
-    this.scrollToBottom();
+    // this.watchFirebaseForMessages();
+    this.getMessages().then(messages => {
+      messages.forEach(message => {
+        message.roomId = this.state.activeRoom.key;
+      });
+      this.setState({ displayedMessages: messages });
+      this.scrollToBottom();
+    });
+  }
+
+  getMessages = roomId => {
+    if (!roomId) {
+      roomId = this.state.activeRoom.key;
+    }
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}`, {
+      }).then(res => {
+        return res.json();
+      }).then(data => {
+        return data;
+      }).catch(error => {
+        console.log(error);
+      });
   }
 
   componentWillReceiveProps(prevProps, nextProps) {
     if (this.props != nextProps) {
-      this.watchFirebaseForMessages();
-      this.scrollToBottom();
+      // this.watchFirebaseForMessages();
+      // this.scrollToBottom();
+      // console.log(prevProps);
+      this.getMessages(prevProps.activeRoom.key).then(messages => {
+        messages.forEach(message => {
+          message.roomId = this.state.activeRoom.key;
+        });
+        this.setState({ displayedMessages: messages });
+        this.scrollToBottom();
+      });
     }
   }
 

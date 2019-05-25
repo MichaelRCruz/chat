@@ -205,7 +205,8 @@ exports.getMessages = functions.https.onRequest((req, res) => {
       const messages = [];
       snap.forEach(message => {
         if (message.val().roomId === roomId) {
-          messages.push(message.val());
+          const messageWithKey = Object.assign({}, message.val(), {key: message.key});
+          messages.push(messageWithKey);
         }
       });
       res.set('Access-Control-Allow-Origin', '*');

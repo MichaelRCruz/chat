@@ -68,6 +68,9 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 @media only screen and (min-device-width: 868px) {
+  .message-list {
+    margin-top: 60px !important;
+  }
   .message-list:first-child {
     margin-top: calc(100vh - 100px);
   }

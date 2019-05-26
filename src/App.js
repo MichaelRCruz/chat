@@ -21,6 +21,7 @@ class App extends Component {
       user: null,
       userConfig: null
     };
+    this.myRef = React.createRef();
     this.firebase = this.props.firebase;
     this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null;
   }

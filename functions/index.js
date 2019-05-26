@@ -200,8 +200,9 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
 exports.getMessages = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     const roomId = req.query.roomId;
+    const messageCount = parseInt(req.query.messageCount, 10);
     const messagesRef = admin.database().ref(`messages`);
-    messagesRef.once("value", snap => {
+    messagesRef.orderByChild('sentAt').limitToLast(messageCount).once("value", snap => {
       const messages = [];
       snap.forEach(message => {
         if (message.val().roomId === roomId) {

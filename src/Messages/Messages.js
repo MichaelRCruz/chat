@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
@@ -6,34 +7,59 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 
 const ReactMarkdown = require('react-markdown/with-html');
 
-
 class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
       activeRoom: props.activeRoom,
       userConfig: null,
-      allMessages: [],
       displayedMessages: [],
-      messageDeleted: false
+      messageCount: 200,
+      cursor: null
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
   componentDidMount() {
+    let _self = this;
+    const cursor = this.state.cursor;
+    this.myRef = React.createRef()
     this.registerListeners();
-    this.getMessages().then(async messages => {
-      await this.setState({ displayedMessages: messages }, () => {
-        this.scrollToBottom();
+    this.getMessages().then(messages => {
+      this.setState({ displayedMessages: messages, cursor: messages[0].key, messageCount: messages.length }, () => {
+        this.bottomOfMessages.scrollIntoView();
+        this.setScrollListener();
       });
     });
   }
 
-  getMessages = roomId => {
+  setScrollListener = () => {
+    const _self = this;
+    window.onscroll = function() {
+      if (window.pageYOffset === 0) {
+        const ref = _self.cursorRef;
+        _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
+          _self.setState({
+            displayedMessages: messages,
+            cursor: messages[0].key,
+            messageCount: messages.length
+          }, () => {
+            ref.scrollIntoView();
+            window.scrollBy(0, -60);
+          });
+        });
+      }
+    };
+  }
+
+  getMessages = (roomId, messageCount) => {
     if (!roomId) {
       roomId = this.state.activeRoom.key;
     }
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}`, {
+    if (!messageCount) {
+      messageCount = 200;
+    }
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
       }).then(res => {
         return res.json();
       }).then(data => {
@@ -48,7 +74,7 @@ class Messages extends Component {
       this.getMessages(prevProps.activeRoom.key).then(messages => {
         const foo = messages.slice(300);
         this.setState({ displayedMessages: messages, activeRoom: prevProps.activeRoom }, () => {
-          this.scrollToBottom();
+          this.bottomOfMessages.scrollIntoView();
         });
       });
     }
@@ -79,10 +105,6 @@ class Messages extends Component {
     this.messagesRef.child(message.key).remove();
   }
 
-  scrollToBottom() {
-    this.bottomOfMessages.scrollIntoView();
-  }
-
   // throttling(callback, delay) {
   //   let timeout = null
   //   return function(...args) {
@@ -102,6 +124,7 @@ class Messages extends Component {
       return (
         <li key={message.key}
             className="message"
+            ref={message.key === this.state.cursor ? el => this.cursorRef = el : null}
         >
           <div className="imageMessageContainer">
             <img

@@ -36,7 +36,11 @@ class Messages extends Component {
     const _self = this;
     window.onscroll = function() {
       if (window.pageYOffset === 0) {
+        if (ref) ref.scrollIntoView();
         const ref = _self.cursorRef;
+        if (ref && ref.getBoundingClientRect().height > 0) {
+          ref.scrollIntoView();
+        }
         _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
           _self.setState({
             displayedMessages: messages,
@@ -44,7 +48,7 @@ class Messages extends Component {
             messageCount: messages.length
           }, () => {
             if (ref) ref.scrollIntoView();
-            window.scrollBy(0, -400);
+            // window.scrollBy(0, -60);
           });
         });
       }

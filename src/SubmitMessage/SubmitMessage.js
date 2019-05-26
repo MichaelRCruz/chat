@@ -20,6 +20,7 @@ class Messages extends Component {
       return;
     } else {
       const ref = this.messagesRef.push();
+      const key = ref.key;
       const yourData = {
         key: ref.key,
         content: message,

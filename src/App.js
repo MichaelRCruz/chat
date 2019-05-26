@@ -21,24 +21,21 @@ class App extends Component {
       user: null,
       userConfig: null
     };
-    this.myRef = React.createRef();
-    this.firebase = this.props.firebase;
-    this.messaging = !this.props.isSafari ? this.props.firebase.messaging() : null;
   }
 
   componentDidMount() {
-    this.firebase.auth().onAuthStateChanged(async user => {
+    this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.handleConnection(user.uid);
-        const fcmToken = await this.requestNotifPermission(user.uid);
         const userConfig = await this.getUserConfig(user.uid);
-        const userConfigWithToken = Object.assign({}, userConfig, {fcmToken});
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
-        this.messaging.onTokenRefresh(function() {
-          console.log('refreshed token');
-          this.requestNotifPermission();
-        });
-        this.setState({ user, userConfig: userConfigWithToken, activeRoom: lastVisitedRoom });
+        if (this.props.firebase.messaging.isSupported()) {
+          const messaging = this.props.firebase.messaging();
+          messaging.onTokenRefresh(function() {
+            this.requestNotifPermission(user.uid);
+          });
+        }
+        this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
       } else {
         this.setState({ user });
       }
@@ -47,16 +44,16 @@ class App extends Component {
 
   handleConnection(uid) {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
-    const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
+    const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
       isOnline: false,
-      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
     };
     const isOnlineForDatabase = {
       isOnline: true,
-      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
     };
-    this.firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    this.props.firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() == false) {
         return;
       };
@@ -104,7 +101,7 @@ class App extends Component {
 
   getUserConfig(uid) {
     return new Promise((resolve, reject) => {
-      const userConfigRef = this.firebase.database().ref(`users/${uid}`);
+      const userConfigRef = this.props.firebase.database().ref(`users/${uid}`);
       if (!userConfigRef) {
         reject(new Error('config does not exist for user'), null);
       }
@@ -116,8 +113,8 @@ class App extends Component {
 
   getLastVisitedRoom(lastRoomId) {
     return new Promise((resolve, reject) => {
-      const lastVisitedRoomRef = this.firebase.database().ref(`rooms/${lastRoomId}`);
-      const usersRef = this.firebase.database().ref(`users`);
+      const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
+      const usersRef = this.props.firebase.database().ref(`users`);
       if (!lastVisitedRoomRef) {
         reject(new Error('room does not exist for user'), null);
       }
@@ -165,7 +162,7 @@ class App extends Component {
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
             className="lightContainer"
-            firebase={this.firebase}
+            firebase={this.props.firebase}
             activeRoom={this.state.activeRoom}
             user={this.state.user}
             userConfig={this.state.userConfig}
@@ -173,7 +170,7 @@ class App extends Component {
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
-          <Messages firebase={this.firebase}
+          <Messages firebase={this.props.firebase}
                     activeRoom={this.state.activeRoom}
                     user={this.state.user}
                     userConfig={this.state.userConfig}
@@ -184,7 +181,7 @@ class App extends Component {
             userConfig={this.state.userConfig}
             activeRoom={this.state.activeRoom}
             user={this.state.user}
-            firebase={this.firebase}
+            firebase={this.props.firebase}
           />
         </footer>
       </div>
@@ -203,7 +200,7 @@ class App extends Component {
         {this.state.user ? app : splash}
         <Modal show={this.state.show}
                handleClose={this.toggleModal}>
-          <Auth firebase={this.firebase}
+          <Auth firebase={this.props.firebase}
                 toggleModal={this.toggleModal.bind(this)}
                 user={this.state.user}
                 userConfig={this.state.userConfig}

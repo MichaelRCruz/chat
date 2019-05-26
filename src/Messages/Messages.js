@@ -35,20 +35,17 @@ class Messages extends Component {
   setScrollListener = () => {
     const _self = this;
     window.onscroll = function() {
-      if (window.pageYOffset === 0) {
+      if (Math.round(window.pageYOffset) === 0) {
+        // window.scrollBy(0, 800);
         if (ref) ref.scrollIntoView();
+        window.scrollBy(0, 700);
         const ref = _self.cursorRef;
-        if (ref && ref.getBoundingClientRect().height > 0) {
-          ref.scrollIntoView();
-        }
         _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
           _self.setState({
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
           }, () => {
-            if (ref) ref.scrollIntoView();
-            // window.scrollBy(0, -60);
           });
         });
       }
@@ -60,13 +57,11 @@ class Messages extends Component {
       roomId = this.state.activeRoom.key;
     }
     if (!messageCount) {
-      messageCount = 200;
+      messageCount = 300;
     }
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
       }).then(res => {
         return res.json();
-      }).then(data => {
-        return data;
       }).catch(error => {
         console.log(error);
       });

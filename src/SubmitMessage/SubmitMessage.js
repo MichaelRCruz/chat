@@ -35,7 +35,7 @@ class Messages extends Component {
       };
       ref.set(yourData, () => {
         this.props.dispatch(reset('message'));
-        this.detectUserAndSendMessage(message);
+        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(message);
         const textarea = window.document.querySelector("textarea");
         textarea.style.height = '1.5em';
       });

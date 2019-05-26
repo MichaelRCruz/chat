@@ -18,15 +18,8 @@ const config = {
 };
 firebase.initializeApp(config);
 
-
-// don't want to detect by browser; would rather detect by email
-const isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
-                 navigator.userAgent &&
-                 navigator.userAgent.indexOf('CriOS') == -1 &&
-                 navigator.userAgent.indexOf('FxiOS') == -1;
-
 try {
-  if (('serviceWorker' in navigator) && !isSafari) {
+  if (('serviceWorker' in navigator) && firebase.messaging().isSupported()) {
     const messaging = firebase.messaging();
     navigator.serviceWorker.register('firebase-messaging-sw.js')
     .then(function(registration) {
@@ -45,7 +38,7 @@ try {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App firebase={firebase} isSafari={isSafari}
+    <App firebase={firebase}
     />
   </Provider>,
   document.getElementById("root")

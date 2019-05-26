@@ -23,7 +23,6 @@ class Messages extends Component {
   componentDidMount() {
     let _self = this;
     const cursor = this.state.cursor;
-    this.myRef = React.createRef()
     this.registerListeners();
     this.getMessages().then(messages => {
       this.setState({ displayedMessages: messages, cursor: messages[0].key, messageCount: messages.length }, () => {
@@ -41,11 +40,11 @@ class Messages extends Component {
         _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
           _self.setState({
             displayedMessages: messages,
-            cursor: messages[0].key,
+            cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
           }, () => {
-            ref.scrollIntoView();
-            window.scrollBy(0, -60);
+            if (ref) ref.scrollIntoView();
+            window.scrollBy(0, -400);
           });
         });
       }

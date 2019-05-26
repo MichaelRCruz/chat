@@ -18,22 +18,18 @@ const config = {
 };
 firebase.initializeApp(config);
 
-try {
-  if (('serviceWorker' in navigator) && firebase.messaging().isSupported()) {
-    const messaging = firebase.messaging();
-    navigator.serviceWorker.register('firebase-messaging-sw.js')
-    .then(function(registration) {
-      console.log('Registration successful, scope is:', registration.scope);
-      messaging.useServiceWorker(registration);
-    }).catch(function(err) {
-      console.log('Service worker registration failed, error:', err);
-    });
-    messaging.onMessage(function(payload) {
-      console.log('onMessage', payload);
-    });
-  }
-} catch (error) {
-  console.log(error);
+if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging();
+  navigator.serviceWorker.register('firebase-messaging-sw.js')
+  .then(function(registration) {
+    console.log('Registration successful, scope is:', registration.scope);
+    messaging.useServiceWorker(registration);
+  }).catch(function(err) {
+    console.log('Service worker registration failed, error:', err);
+  });
+  messaging.onMessage(function(payload) {
+    console.log('onMessage', payload);
+  });
 }
 
 ReactDOM.render(

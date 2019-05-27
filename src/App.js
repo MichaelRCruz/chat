@@ -187,26 +187,23 @@ class App extends Component {
       </div>
     );
     const splash = (
-      <div>
-        <img src={require("./assets/images/potato2.svg")}
-             alt="potato logo"
-             onClick={this.toggleModal}
+      <Splash toggleModal={this.toggleModal.bind(this)} />
+    );
+    const modal = (
+      <Modal show={this.state.show}
+             handleClose={this.toggleModal.bind(this)}>
+        <Auth firebase={this.props.firebase}
+              toggleModal={this.toggleModal.bind(this)}
+              user={this.state.user}
+              userConfig={this.state.userConfig}
+              requestNotifPermission={this.requestNotifPermission.bind(this)}
         />
-        <Splash />
-      </div>
+      </Modal>
     );
     return (
       <div>
         {this.state.user ? app : splash}
-        <Modal show={this.state.show}
-               handleClose={this.toggleModal}>
-          <Auth firebase={this.props.firebase}
-                toggleModal={this.toggleModal.bind(this)}
-                user={this.state.user}
-                userConfig={this.state.userConfig}
-                requestNotifPermission={this.requestNotifPermission.bind(this)}
-          />
-        </Modal>
+        {modal}
       </div>
     );
   }

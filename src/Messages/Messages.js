@@ -35,19 +35,18 @@ class Messages extends Component {
   setScrollListener = () => {
     const _self = this;
     window.onscroll = function() {
+      // const cursorPosition = _self.cursorRef.getBoundingClientRect().bottom);
+      let originalCursorRef;
       if (Math.round(window.pageYOffset) === 0) {
-        const ref = _self.cursorRef;
+        if (_self.cursorRef) {
+          originalCursorRef = _self.cursorRef.scrollIntoView(true);
+        }
         _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
           _self.setState({
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
-          }, () => {
-            if (ref) {
-              ref.scrollIntoView(true);
-            }
-            // window.scrollBy(0, 40);
-          });
+          }, () => { if (originalCursorRef) originalCursorRef.scrollIntoView(true); });
         });
       }
     };
@@ -71,8 +70,14 @@ class Messages extends Component {
   componentWillReceiveProps(prevProps, nextProps) {
     if (this.props != nextProps) {
       this.getMessages(prevProps.activeRoom.key).then(messages => {
-        const foo = messages.slice(300);
-        this.setState({ displayedMessages: messages, activeRoom: prevProps.activeRoom }, () => {
+        if (!messages) {
+          messages = [];
+        }
+        this.setState({
+          displayedMessages: messages,
+          activeRoom: prevProps.activeRoom,
+          cursor: messages[0] ? messages[0].key : null,
+        }, () => {
           this.bottomOfMessages.scrollIntoView();
         });
       });

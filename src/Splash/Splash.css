@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
+
+.splashComponent {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerContentContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 85%;
+  margin: 10px auto 10px auto;
+}
+
+.nameLogoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.appName {
+  font-family: 'Pacifico', cursive;
+  color: #191a1b;
+  font-size: 30px;
+  margin-left: 10px;
+}
+
+.menuIcon {
+  font-weight: bold;
+}
+
+.splashMain {
+  margin-top: 75px;
+  height: calc(100vh - 73px - 75px);
+}
+
+.mainContentContainer {
+  width: 85%;
+  margin: auto;
+}
+
+.hero {
+  font-family: 'Roboto', sans-serif;
+}
+
+.appDescription {
+  font-family: 'Roboto', sans-serif;
+  line-height: 28px;
+  color: #191a1b;
+  margin-top: 20px;
+}
+
+.splashFooter {
+  margin: 0;
+  padding: 0;
+}
+
+.getStartedButton {
+  width: inherit;
+  padding: 18px 20px;
+  background-color: #506cf0;
+  padding: 18px 20px;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  border-radius: 6px;
+  margin-top: 40px;
+}

@@ -67,6 +67,10 @@ p, h1, h2, h3, h4, h5, h6 {
 .nameMessageContainer {
 }
 
+/* .message-list {
+  margin-top: 60px !important;
+} */
+
 @media only screen and (min-device-width: 868px) {
   /* .message-list {
     margin-top: 60px !important;

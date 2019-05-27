@@ -14,7 +14,7 @@ class Messages extends Component {
       activeRoom: props.activeRoom,
       userConfig: null,
       displayedMessages: [],
-      messageCount: 200,
+      messageCount: 0,
       cursor: null
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -36,9 +36,6 @@ class Messages extends Component {
     const _self = this;
     window.onscroll = function() {
       if (Math.round(window.pageYOffset) === 0) {
-        // window.scrollBy(0, 800);
-        if (ref) ref.scrollIntoView();
-        window.scrollBy(0, 700);
         const ref = _self.cursorRef;
         _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
           _self.setState({
@@ -46,6 +43,10 @@ class Messages extends Component {
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
           }, () => {
+            if (ref) {
+              ref.scrollIntoView(true);
+            }
+            // window.scrollBy(0, 40);
           });
         });
       }
@@ -57,7 +58,7 @@ class Messages extends Component {
       roomId = this.state.activeRoom.key;
     }
     if (!messageCount) {
-      messageCount = 300;
+      messageCount = 200;
     }
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
       }).then(res => {

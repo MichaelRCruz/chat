@@ -25,12 +25,14 @@ const Splash = ({toggleModal}) => {
             Live chat with anyone, simplified.
           </h1>
           <p className="appDescription">
-            Welcome to your new live chat application! Share your thoughts and ideas with anybody. Click the link below to get started.
+            Welcome to your new live chat application! Share your thoughts and ideas with anybody, anywhere. Click the link below to get started.
           </p>
           <button className="getStartedButton" onClick={toggleModal}>GET STARTED</button>
-          <div className="companyImagesContainer">
-            <img className="google" alt="" src={"https://assets-global.website-files.com/5c991ff59b4c11294d51a8bd/5c991ff59b4c11602151a923_Google.svg"} />
-          </div>
+        </div>
+        <div className="companyImagesContainer">
+          <img className="firebaseLogo" alt="" src={require("../assets/Built_with_Firebase_Logo_Light.svg")} />
+          <img className="reactLogo" alt="" src={require("../assets/react_logo.svg")} />
+          <img className="githubPagesLogo" alt="" src={require("../assets/github_pages.png")} />
         </div>
       </main>
       <footer className="splashFooter">

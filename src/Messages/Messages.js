@@ -21,8 +21,6 @@ class Messages extends Component {
   }
 
   componentDidMount() {
-    let _self = this;
-    const cursor = this.state.cursor;
     this.registerListeners();
     this.getMessages().then(messages => {
       this.setState({
@@ -42,15 +40,13 @@ class Messages extends Component {
       // const cursorPosition = _self.cursorRef.getBoundingClientRect().bottom);
       let originalCursorRef;
       if (Math.round(window.pageYOffset) === 0) {
-        if (_self.cursorRef) {
-          originalCursorRef = _self.cursorRef.scrollIntoView(true);
-        }
+        if (_self.cursorRef) originalCursorRef = _self.cursorRef;
         _self.getMessages(null, _self.state.messageCount + 100).then(messages => {
           _self.setState({
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
-          }, () => { if (originalCursorRef) originalCursorRef.scrollIntoView(true); });
+          }, () => { originalCursorRef.scrollIntoView(); });
         });
       }
     };
@@ -103,9 +99,7 @@ class Messages extends Component {
           return message.key !== snapshot.val().key;
         });
         const messages = await this.getMessages();
-        this.setState({displayedMessages: messages}, () => {
-          this.bottomOfMessages.scrollIntoView();
-        });
+        this.setState({displayedMessages: messages});
       }
     });
   }
@@ -114,18 +108,6 @@ class Messages extends Component {
     console.log(message.key, message);
     this.messagesRef.child(message.key).remove();
   }
-
-  // throttling(callback, delay) {
-  //   let timeout = null
-  //   return function(...args) {
-  //     if (!timeout) {
-  //       timeout = setTimeout(() => {
-  //         callback.call(this, ...args)
-  //         timeout = null
-  //       }, delay)
-  //     }
-  //   }
-  // }
 
   render() {
     const messages = this.state.displayedMessages.map((message, i, messages) => {

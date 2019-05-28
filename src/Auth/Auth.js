@@ -34,11 +34,11 @@ class Auth extends Component {
     });
   }
 
-  toggleRegistration() {
+  toggleRegistration = () => {
     this.setState({ register: !this.state.register });
   }
 
-  signInWithEmail(email, password) {
+  signInWithEmail = (email, password) => {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
       .then(res => {
         console.log('user signed In: ', res);
@@ -50,7 +50,7 @@ class Auth extends Component {
       });
   }
 
-  signInWithGoogle() {
+  signInWithGoogle = () => {
     this.props.firebase.auth()
       .signInWithRedirect( new this.props.firebase.auth.GoogleAuthProvider() )
       .then(res => {
@@ -58,14 +58,14 @@ class Auth extends Component {
       });
   }
 
-  signOut() {
+  signOut = () => {
     const {userConfig} = this.props;
     this.props.firebase.auth().signOut().then(res => {
       return;
     });
   }
 
-  deleteUser() {
+  deleteUser = () => {
     const user = this.props.firebase.auth().currentUser;
     user.delete().then(res => {
       console.log('deleted user: ', res);
@@ -76,7 +76,7 @@ class Auth extends Component {
     });
   }
 
-  sendEmailVerification() {
+  sendEmailVerification = () => {
     var user = this.props.firebase.auth().currentUser;
     user.sendEmailVerification().then(res => {
       this.props.toggleModal();
@@ -85,11 +85,11 @@ class Auth extends Component {
     });
   }
 
-  requestNotifPermission() {
+  requestNotifPermission = () => {
     this.props.requestNotifPermission(this.props.user.uid);
   }
 
-  updatePassword(password) {
+  updatePassword = password => {
     var user = this.props.firebase.auth().currentUser;
     user.updatePassword(password).then(res => {
       this.props.toggleModal();
@@ -99,7 +99,7 @@ class Auth extends Component {
     });
   }
 
-  updateDisplayName(displayName) {
+  updateDisplayName = displayName => {
     var user = this.props.firebase.auth().currentUser;
     user.updateProfile({
       displayName
@@ -111,7 +111,7 @@ class Auth extends Component {
     });
   }
 
-  sendNotification() {
+  sendNotification = () => {
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToTopic`, {
       method: 'post',
       body: JSON.stringify({
@@ -126,21 +126,6 @@ class Auth extends Component {
   }
 
   render() {
-    let successMessage;
-    if (this.props.submitSucceeded) {
-      successMessage = (
-        <div className="message message-success">
-          Registration submitted successfully to server.
-        </div>
-      );
-    }
-
-    let errorMessage;
-    if (this.props.error) {
-      errorMessage = (
-        <div className="message message-error">{this.props.error}</div>
-      );
-    }
     const registrationForm = (
       <div>
         <RegistrationForm registerUser={this.registerUser.bind(this)} />
@@ -148,26 +133,7 @@ class Auth extends Component {
       </div>
     );
     const signInWithEmailForm = (
-      <div>
-        <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
-        <button onClick={() => this.toggleRegistration()}>sign up</button>
-      </div>
-    );
-    const changePasswordForm = (
-      <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
-    );
-    const updateDisplayNameForm = (
-      <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
-    );
-    const googleButton = (
-      <div className="on-off-button"
-         onClick={this.signInWithGoogle.bind(this)}>
-        <i className="material-icons">power_settings_new</i>
-        <p>continue with Google</p>
-      </div>
-    );
-    const signOutButton = (
-      <button onClick={() => this.signOut()}>click here to sign out</button>
+      <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
     );
     const deleteUserButton = (
       <button onClick={() => this.deleteUser()}>click here to delete account</button>
@@ -177,33 +143,30 @@ class Auth extends Component {
         click here to send verification email
       </button>
     );
-    const requestNotifPermissionButton = (
-      <button onClick={() => this.requestNotifPermission()}>
-        click here to authorize notifications
-      </button>
-    );
-    const sendNotification = (
-      <button onClick={() => this.sendNotification()}>
-        click here to send a test message to all your signed in devices
-      </button>
-    );
     if (!this.props.user) {
       return (
         <section className="authComponent">
           {this.state.register ? registrationForm : signInWithEmailForm}
-          {googleButton}
+          <div className="googleButton" onClick={this.signInWithGoogle.bind(this)}>
+            <i className="material-icons">power_settings_new</i>
+            <p>continue with Google</p>
+          </div>
         </section>
       );
     } else {
       return (
         <div>
-          {changePasswordForm}
-          {updateDisplayNameForm}
-          {signOutButton}
+          <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
+          <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
+          <button onClick={() => this.signOut()}>click here to sign out</button>
           {emailVerificationButton}
           {deleteUserButton}
-          {requestNotifPermissionButton}
-          {sendNotification}
+          <button onClick={() => this.requestNotifPermission()}>
+            click here to authorize notifications
+          </button>
+          <button onClick={() => this.sendNotification()}>
+            click here to send a test message to all your signed in devices
+          </button>
         </div>
       );
     }
@@ -211,10 +174,3 @@ class Auth extends Component {
 }
 
 export default Auth;
-
-// export default reduxForm({
-//   form: 'registerUser2',
-//   onSubmitFail: (errors, dispatch) => {
-//     dispatch(focus('registerUser2', Object.keys(errors)[0]))
-//   }
-// })(Auth);

@@ -9,6 +9,7 @@
 }
 
 .modal-body {
+  background-color: #fff;
   position: fixed;
   display: flex;
   flex-direction: column;

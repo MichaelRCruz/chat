@@ -1,23 +1,24 @@
 import React from 'react';
-
 import './Modal.css';
 
 const Modal = ({ handleClose, show, children }) => {
-  const showHideClassName = show ? 'modal display-block' : 'modal display-none';
+  const modalCssClass = show ? 'modal display-block' : 'modal display-none';
 
   return (
-    <div className={showHideClassName}>
-      <section className='modal-body'>
-        <div className="modalTitle">
+    <aside className={modalCssClass}>
+      <div className='modal-body'>
+        <header className="modalTitle">
           <button className="exitButton" onClick={handleClose}>
             <i className="material-icons">clear</i>
           </button>
-        </div>
-        <div className="modalMain">
+        </header>
+        <main className="modalMain">
+
           {children}
-        </div>
-      </section>
-    </div>
+
+        </main>
+      </div>
+    </aside>
   );
 };
 

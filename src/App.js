@@ -38,7 +38,7 @@ class App extends Component {
         }
         this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
       } else {
-        this.setState({ user, isLoading: false });
+        this.setState({ user, isLoading: false, show: false, activeRoom: null, onlineUsers: [], userConfig: null });
       }
     });
   }
@@ -211,7 +211,8 @@ class App extends Component {
     } else {
       return (
         <div>
-          {this.state.user ? app : splash}
+          {this.state.user ? app : null}
+          {!this.state.user && !this.state.isLoading ? splash : null}
           {modal}
         </div>
       );

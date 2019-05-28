@@ -46,7 +46,7 @@ class Messages extends Component {
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
-          }, () => { originalCursorRef.scrollIntoView(); });
+          }, () => { if (originalCursorRef) originalCursorRef.scrollIntoView(); });
         });
       }
     };

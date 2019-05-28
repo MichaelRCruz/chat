@@ -4,10 +4,6 @@ ul {
   padding-left: 0;
 }
 
-li {
-  list-style-type: none;
-}
-
 p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
@@ -26,6 +22,7 @@ p, h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  list-style-type: none;
   font-family: 'Roboto', sans-serif;
   z-index: 3;
   max-width: 1140px;
@@ -34,6 +31,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .messageImage {
   width: 40px;
+  height: 40px;
   margin-right: 5px;
   margin-left: 10px;
   flex-shrink: 0;

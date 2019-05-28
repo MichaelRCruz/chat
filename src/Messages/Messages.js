@@ -85,12 +85,12 @@ class Messages extends Component {
   }
 
   registerListeners = () => {
-    this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_added', snapshot => {
+    this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_added', async snapshot => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
-        const messages = this.state.displayedMessages;
-        this.setState({
-          displayedMessages: messages.concat([snapshot.val()])
-        }, () => this.bottomOfMessages.scrollIntoView());
+        const messages = await this.getMessages();
+        this.setState({displayedMessages: messages}, () => {
+          this.bottomOfMessages.scrollIntoView();
+        });
       }
     });
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_removed', async snapshot  => {
@@ -99,7 +99,9 @@ class Messages extends Component {
           return message.key !== snapshot.val().key;
         });
         const messages = await this.getMessages();
-        this.setState({displayedMessages: messages});
+        this.setState({displayedMessages: messages}, () => {
+          this.bottomOfMessages.scrollIntoView();
+        });
       }
     });
   }

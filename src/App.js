@@ -43,7 +43,7 @@ class App extends Component {
     });
   }
 
-  handleConnection(uid) {
+  handleConnection = uid => {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
     const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
@@ -100,7 +100,7 @@ class App extends Component {
     console.log('fcmToken: ', fcmToken);
   }
 
-  getUserConfig(uid) {
+  getUserConfig = uid => {
     return new Promise((resolve, reject) => {
       const userConfigRef = this.props.firebase.database().ref(`users/${uid}`);
       if (!userConfigRef) {
@@ -112,7 +112,7 @@ class App extends Component {
     });
   }
 
-  getLastVisitedRoom(lastRoomId) {
+  getLastVisitedRoom = lastRoomId => {
     return new Promise((resolve, reject) => {
       const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
       const usersRef = this.props.firebase.database().ref(`users`);
@@ -127,7 +127,7 @@ class App extends Component {
     });
   }
 
-  setActiveRoom(activeRoom) {
+  setActiveRoom = activeRoom => {
     this.setState({ activeRoom });
   }
 
@@ -157,7 +157,7 @@ class App extends Component {
                  () => this.toggleMenu() : () => this.toggleMenu()}
           />
           <p className="app-name">Potato</p>
-          <i className="material-icons loginModal" onClick={this.toggleModal}>more_vert</i>
+          <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
 
         </header>
         <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
@@ -187,36 +187,36 @@ class App extends Component {
         </footer>
       </div>
     );
+    const auth = (
+      <Auth
+        firebase={this.props.firebase}
+        toggleModal={this.toggleModal.bind(this)}
+        user={this.state.user}
+        userConfig={this.state.userConfig}
+        requestNotifPermission={this.requestNotifPermission.bind(this)}
+      />
+    );
     const splash = (
       <Splash toggleModal={this.toggleModal.bind(this)} />
     );
     const modal = (
       <Modal
         show={this.state.show}
-        handleClose={this.toggleModal.bind(this)}>
-        <Auth
-          firebase={this.props.firebase}
-          toggleModal={this.toggleModal.bind(this)}
-          user={this.state.user}
-          userConfig={this.state.userConfig}
-          requestNotifPermission={this.requestNotifPermission.bind(this)}
-        />
+        handleClose={this.toggleModal.bind(this)}
+        children={auth}>
       </Modal>
     );
     const loadingAnimation = (
       <div className="loadingAnimation"></div>
     );
-    if (this.state.isLoading && !this.state.user) {
-      return loadingAnimation;
-    } else {
-      return (
-        <div>
-          {this.state.user ? app : null}
-          {!this.state.user && !this.state.isLoading ? splash : null}
-          {modal}
-        </div>
-      );
-    }
+    return (
+      <div>
+        {this.state.user ? app : null}
+        {!this.state.user && !this.state.isLoading ? splash : null}
+        {!this.state.user && this.state.isLoading ? loadingAnimation : null}
+        {this.state.show ? modal : null}
+      </div>
+    );
   }
 }
 

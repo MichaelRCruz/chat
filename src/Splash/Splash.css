@@ -96,6 +96,10 @@
   width: 300px;
 }
 
+.githubPagesLogo {
+  width: 280px;
+}
+
 .reactLogo {
   animation: reactLogoSpin infinite 20s linear;
   width: 300px;
@@ -136,6 +140,7 @@
 @media screen and (min-width: 512px) and (max-width: 1600px) {
   .getStartedButton {
     max-width: 255px;
+    margin-top: 50px;
   }
   .splashMain {
     margin: auto;

@@ -44,10 +44,6 @@ body {
 
 }
 
-.on-off-button:hover {
-  color: #cfecd8;
-}
-
 .app-name {
   font-family: 'Pacifico', cursive;
   color: #cfecd8;
@@ -77,11 +73,6 @@ body {
 .overflowHidden {
   overflow: hidden;
   height: 0;
-}
-
-.loginModal {
-  color: #ffffff;
-  margin-right: 10px;
 }
 
 .oauthContainer {

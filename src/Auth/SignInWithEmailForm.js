@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ValidationError from '../ValidationError.js';
-// import './App.css';
+import './SignInWithEmailForm.css';
 
 class SignInWithEmailForm extends Component {
 
@@ -36,7 +36,6 @@ class SignInWithEmailForm extends Component {
   validateName(fieldValue) {
     const fieldErrors = {...this.state.validationMessages};
     let hasError = false;
-
     fieldValue = fieldValue.trim();
     if(fieldValue.length === 0) {
       fieldErrors.name = 'Name is required';
@@ -50,12 +49,10 @@ class SignInWithEmailForm extends Component {
         hasError = false;
       }
     }
-
     this.setState({
       validationMessages: fieldErrors,
       emailValid: !hasError
     }, this.formValid );
-
   }
 
   validatePassword(fieldValue) {

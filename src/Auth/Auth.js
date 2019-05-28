@@ -13,7 +13,6 @@ class Auth extends Component {
       user: null,
       register: false,
     };
-    // this.usersRef = this.props.firebase.database().ref('users');
   }
 
   registerUser = (displayName, email, password) => {
@@ -62,7 +61,7 @@ class Auth extends Component {
   signOut() {
     const {userConfig} = this.props;
     this.props.firebase.auth().signOut().then(res => {
-      // this.props.toggleModal();
+      return;
     });
   }
 

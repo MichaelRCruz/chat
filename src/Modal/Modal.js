@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Modal.css';
 
-const Modal = ({ user, firebase, handleClose, show, children, signIn, signOut }) => {
+const Modal = ({ handleClose, show, children }) => {
   const showHideClassName = show ? 'modal display-block' : 'modal display-none';
 
   return (

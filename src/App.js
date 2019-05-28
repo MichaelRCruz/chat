@@ -15,6 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
+      isLoading: true,
       onlineUsers: [],
       show: false,
       showMenu: true,
@@ -35,9 +36,9 @@ class App extends Component {
             this.requestNotifPermission(user.uid);
           });
         }
-        this.setState({ user, userConfig, activeRoom: lastVisitedRoom });
+        this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
       } else {
-        this.setState({ user });
+        this.setState({ user, isLoading: false });
       }
     });
   }
@@ -190,22 +191,31 @@ class App extends Component {
       <Splash toggleModal={this.toggleModal.bind(this)} />
     );
     const modal = (
-      <Modal show={this.state.show}
-             handleClose={this.toggleModal.bind(this)}>
-        <Auth firebase={this.props.firebase}
-              toggleModal={this.toggleModal.bind(this)}
-              user={this.state.user}
-              userConfig={this.state.userConfig}
-              requestNotifPermission={this.requestNotifPermission.bind(this)}
+      <Modal
+        show={this.state.show}
+        handleClose={this.toggleModal.bind(this)}>
+        <Auth
+          firebase={this.props.firebase}
+          toggleModal={this.toggleModal.bind(this)}
+          user={this.state.user}
+          userConfig={this.state.userConfig}
+          requestNotifPermission={this.requestNotifPermission.bind(this)}
         />
       </Modal>
     );
-    return (
-      <div>
-        {this.state.user ? app : splash}
-        {modal}
-      </div>
+    const loadingAnimation = (
+      <div className="loadingAnimation"></div>
     );
+    if (this.state.isLoading && !this.state.user) {
+      return loadingAnimation;
+    } else {
+      return (
+        <div>
+          {this.state.user ? app : splash}
+          {modal}
+        </div>
+      );
+    }
   }
 }
 

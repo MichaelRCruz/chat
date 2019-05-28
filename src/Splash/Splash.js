@@ -16,7 +16,7 @@ const Splash = ({toggleModal}) => {
               <p className="appName">Potato</p>
             </div>
           </a>
-          <i onClick={toggleModal} class="material-icons menuIcon">menu</i>
+          <i onClick={toggleModal} className="material-icons menuIcon">menu</i>
         </div>
       </header>
       <main className="splashMain">

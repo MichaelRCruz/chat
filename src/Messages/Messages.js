@@ -25,7 +25,11 @@ class Messages extends Component {
     const cursor = this.state.cursor;
     this.registerListeners();
     this.getMessages().then(messages => {
-      this.setState({ displayedMessages: messages, cursor: messages[0].key, messageCount: messages.length }, () => {
+      this.setState({
+        displayedMessages: messages,
+        cursor: messages[0].key,
+        messageCount: messages.length
+      }, () => {
         this.bottomOfMessages.scrollIntoView();
         this.setScrollListener();
       });
@@ -41,7 +45,7 @@ class Messages extends Component {
         if (_self.cursorRef) {
           originalCursorRef = _self.cursorRef.scrollIntoView(true);
         }
-        _self.getMessages(null, _self.state.messageCount + 200).then(messages => {
+        _self.getMessages(null, _self.state.messageCount + 100).then(messages => {
           _self.setState({
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
@@ -57,7 +61,7 @@ class Messages extends Component {
       roomId = this.state.activeRoom.key;
     }
     if (!messageCount) {
-      messageCount = 200;
+      messageCount = 100;
     }
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
       }).then(res => {

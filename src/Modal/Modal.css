@@ -38,10 +38,6 @@ button, input[type="submit"], input[type="reset"] {
 	outline: inherit;
 }
 
-.exitButton {
-  color: #d3d3d3;
-}
-
 .modalTitle {
   display: flex;
   flex-direction: row-reverse;

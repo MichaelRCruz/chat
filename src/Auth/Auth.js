@@ -22,7 +22,7 @@ class Auth extends Component {
       this.props.toggleModal();
     })
     .catch(function(error) {
-      console.log('error at sugnIn(): ', error);
+      console.log('error at signIn(): ', error);
       alert(error.message)
     });
   };
@@ -30,17 +30,14 @@ class Auth extends Component {
   signInWithGoogle = () => {
     this.props.firebase.auth()
     .signInWithRedirect( new this.props.firebase.auth.GoogleAuthProvider() )
-    .then(res => {
+    .then(() => {
       this.props.toggleModal();
+      this.toggleRegistrationMode(false);
     });
   };
 
   signOut = () => {
-    const {userConfig} = this.props;
-    this.props.firebase.auth().signOut()
-    .then(res => {
-      return;
-    });
+    this.props.firebase.auth().signOut();
   };
 
   deleteUser = () => {
@@ -120,20 +117,14 @@ class Auth extends Component {
     const registrationForm = (
       <RegistrationForm
         registerUser={this.registerUser.bind(this)}
-        googleAuth={this.signInWithGoogle.bind(this)}
-        toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
+        signInWithGoogle={this.signInWithGoogle.bind(this)}
       />
     );
     const signInWithEmailForm = (
-      <div className="signInWithEmailFormComponent">
-        <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
-        <button onClick={() => this.toggleRegistrationMode(true)}>
-          <p>render form</p>
-        </button>
-        <button className="googleButton" googleAuth={this.signInWithGoogle.bind(this)}>
-          <p>Sign in with Google</p>
-        </button>
-      </div>
+      <SignInWithEmailForm
+        signInWithEmail={this.signInWithEmail.bind(this)}
+        signInWithGoogle={this.signInWithGoogle.bind(this)}
+      />
     );
     const deleteUserButton = (
       <button onClick={() => this.deleteUser()}>click here to delete account</button>

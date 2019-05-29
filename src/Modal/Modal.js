@@ -13,9 +13,7 @@ const Modal = ({ handleClose, show, children }) => {
           </button>
         </header>
         <main className="modalMain">
-
           {children}
-
         </main>
       </div>
     </aside>

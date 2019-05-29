@@ -17,15 +17,6 @@ class RegistrationForm extends Component {
     }
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { displayname, email, password, retypePassword } = this.state;
-    this.props.registerUser(displayname, email, password)
-    .then(() => {
-      this.props.toggleRegistrationMode(false);
-    });
-  };
-
   formValidated = () => {
     const {
       displaynameValue,
@@ -72,6 +63,15 @@ class RegistrationForm extends Component {
     });
   };
 
+  registerUser = () => {
+    const {displayName, emailValue, passwordValue} = this.state;
+    this.props.registerUser(displayName, emailValue, passwordValue);
+  }
+
+  signInWithGoogle = () => {
+    this.props.signInWithGoogle();
+  }
+
   render () {
     return (
       <div className="registrationFormComponent">
@@ -104,11 +104,13 @@ class RegistrationForm extends Component {
            />
              <p className="formErrorText">{this.state.retypePasswordError}</p>
           </div>
-          <button className="registrationButton" onClick={this.signInWithGoogle}>
+          <button className="registrationButton" onClick={this.registerUser}>
             sign in
           </button>
         </form>
-        <button className="googleButton">Sign in with Google</button>
+        <button className="googleButton" onClick={this.signInWithGoogle}>
+          Sign in with Google
+        </button>
       </div>
     )
   }

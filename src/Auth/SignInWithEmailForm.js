@@ -14,12 +14,6 @@ class SignInWithEmailForm extends Component {
     }
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { emailValue, passwordValue } = this.state;
-    this.props.signInWithEmail(emailValue, passwordValue);
-  };
-
   formValidated = () => {
     const {emailValue, passwordValue, emailError, passwordError} = this.state;
     const hasErrors = emailError.length || passwordError.length ? true : false;
@@ -47,28 +41,43 @@ class SignInWithEmailForm extends Component {
     });
   };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    const { emailValue, passwordValue } = this.state;
+    this.props.signInWithEmail(emailValue, passwordValue);
+  };
+
+  signInWithGoogle = () => {
+    this.props.signInWithGoogle();
+  }
+
   render () {
     const { emailError, passwordError } = this.state;
     return (
-      <form className="signInWithEmailComponent" onSubmit={e => this.handleSubmit(e)}>
-        <div className="emailFormGroup">
-          <input className="emailInput" type="text" name="email"
-            onChange={e => this.validateEmail(e.target.value)}
-          />
-          <p>{this.state.emailError}</p>
-        </div>
-        <div className="passwordFormGroup">
-          <input className="passwordInput" type="password" name="password"
-            onChange={e => this.validatePassword(e.target.value)}
-          />
-          <p>{this.state.passwordError}</p>
-        </div>
-        <div className="signInButtonGroup">
-          <button type="submit" className="signInWithEmailButton" disabled={!this.state.formValidated}>
-            Save
-          </button>
-        </div>
-      </form>
+      <div className="signInFormComponent">
+        <form className="signInForm" onSubmit={e => this.handleSubmit(e)}>
+          <div className="emailFormGroup">
+            <input className="emailInput" type="text" name="email"
+              onChange={e => this.validateEmail(e.target.value)}
+            />
+            <p>{this.state.emailError}</p>
+          </div>
+          <div className="passwordFormGroup">
+            <input className="passwordInput" type="password" name="password"
+              onChange={e => this.validatePassword(e.target.value)}
+            />
+            <p>{this.state.passwordError}</p>
+          </div>
+          <div className="signInButtonGroup">
+            <button type="submit" className="signInWithEmailButton" disabled={!this.state.formValidated}>
+              Save
+            </button>
+          </div>
+        </form>
+        <button className="googleButton" onClick={this.signInWithGoogle}>
+          Sign in with Google
+        </button>
+      </div>
    );
  };
 

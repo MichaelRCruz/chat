@@ -27,7 +27,7 @@ class App extends Component {
   componentDidMount() {
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        this.handleConnection(user.uid);
+        await this.handleConnection(user.uid);
         const userConfig = await this.getUserConfig(user.uid);
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         if (this.props.firebase.messaging.isSupported()) {
@@ -38,7 +38,7 @@ class App extends Component {
         }
         this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
       } else {
-        this.setState({ user, isLoading: false, show: false, activeRoom: null, onlineUsers: [], userConfig: null });
+        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showMenu: false, onlineUsers: [] });
       }
     });
   }
@@ -54,12 +54,10 @@ class App extends Component {
       isOnline: true,
       lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
     };
-    this.props.firebase.database().ref('.info/connected').on('value', function(snapshot) {
-      if (snapshot.val() == false) {
-        return;
-      };
-      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-          userStatusDatabaseRef.set(isOnlineForDatabase);
+    this.props.firebase.database().ref('.info/connected').on('value', snapshot => {
+      if (snapshot.val() === false) return;
+      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(() => {
+        userStatusDatabaseRef.set(isOnlineForDatabase);
       });
     });
   }
@@ -148,6 +146,7 @@ class App extends Component {
   }
 
   render() {
+    const { firebase, activeRoom, user, userConfig, showMenu, show, isLoading } = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -160,30 +159,30 @@ class App extends Component {
           <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
 
         </header>
-        <aside className={this.state.showMenu ? "sidebar" : "displayUnset"}>
+        <aside className={showMenu ? "sidebar" : "displayUnset"}>
           <RoomList
             className="lightContainer"
             firebase={this.props.firebase}
-            activeRoom={this.state.activeRoom}
-            user={this.state.user}
-            userConfig={this.state.userConfig}
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
             setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
           <Messages
             firebase={this.props.firebase}
-            activeRoom={this.state.activeRoom}
-            user={this.state.user}
-            userConfig={this.state.userConfig}
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
           />
         </main>
         <footer className="footer">
           <SubmitMessage
-            userConfig={this.state.userConfig}
-            activeRoom={this.state.activeRoom}
-            user={this.state.user}
             firebase={this.props.firebase}
+            userConfig={userConfig}
+            activeRoom={activeRoom}
+            user={user}
           />
         </footer>
       </div>
@@ -191,9 +190,9 @@ class App extends Component {
     const auth = (
       <Auth
         firebase={this.props.firebase}
+        user={user}
+        userConfig={userConfig}
         toggleModal={this.toggleModal.bind(this)}
-        user={this.state.user}
-        userConfig={this.state.userConfig}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
       />
     );
@@ -202,9 +201,9 @@ class App extends Component {
     );
     const modal = (
       <Modal
-        show={this.state.show}
-        handleClose={this.toggleModal.bind(this)}
-        children={auth}>
+        show={show}
+        children={auth}
+        handleClose={this.toggleModal.bind(this)}>
       </Modal>
     );
     const loadingAnimation = (
@@ -212,10 +211,10 @@ class App extends Component {
     );
     return (
       <div>
-        {this.state.user ? app : null}
-        {!this.state.user && !this.state.isLoading ? splash : null}
-        {!this.state.user && this.state.isLoading ? loadingAnimation : null}
-        {this.state.show ? modal : null}
+        {user ? app : null}
+        {!user && !isLoading ? splash : null}
+        {!user && isLoading ? loadingAnimation : null}
+        {show ? modal : null}
       </div>
     );
   }

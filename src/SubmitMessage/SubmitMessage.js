@@ -91,8 +91,7 @@ class Messages extends Component {
         }}>
             <fieldset>
               <legend>😎😎😎</legend>
-              <div className="formButtonWrapper"
-                   tabIndex="0">
+              <div className="formButtonWrapper" tabIndex="0">
                 <Field
                   name="message"
                   id="message"
@@ -101,8 +100,8 @@ class Messages extends Component {
                   onChange={this.handleTextAreaChange}
                 />
                 <button className="sendButton"
-                        type="submit"
-                        disabled={this.props.pristine || this.props.submitting}>
+                  type="submit"
+                  disabled={this.props.pristine || this.props.submitting}>
                   <i className="send material-icons">send</i>
                 </button>
               </div>

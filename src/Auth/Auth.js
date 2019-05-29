@@ -11,31 +11,8 @@ class Auth extends Component {
     super(props);
     this.state = {
       user: null,
-      register: false,
+      isRegistrationMode: false
     };
-  }
-
-  registerUser = (displayName, email, password) => {
-    this.props.firebase.auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(res => {
-        this.setState({registered: true, user: res.user});
-        this.props.firebase.auth().currentUser.updateProfile({
-          displayName
-        });
-        this.props.toggleModal();
-      })
-      .catch(function(error) {
-        const {code, message} = error;
-        if (code === "auth/email-already-in-use") {
-          return alert(error.message);
-        }
-        alert('error submitting form');
-    });
-  }
-
-  toggleRegistration = () => {
-    this.setState({ register: !this.state.register });
   }
 
   signInWithEmail = (email, password) => {
@@ -77,11 +54,11 @@ class Auth extends Component {
   }
 
   sendEmailVerification = () => {
-    var user = this.props.firebase.auth().currentUser;
+    const user = this.props.firebase.auth().currentUser;
     user.sendEmailVerification().then(res => {
       this.props.toggleModal();
     }).catch(function(error) {
-      alert(error.message);
+      console.log(error.message);
     });
   }
 
@@ -125,15 +102,44 @@ class Auth extends Component {
     });
   }
 
+  registerUser = (displayName, email, password) => {
+    this.props.firebase.auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(res => {
+        this.setState({isRegistrationMode: true, user: res.user});
+        this.props.firebase.auth().currentUser.updateProfile({
+          displayName
+        });
+        this.props.toggleModal();
+      })
+      .catch(error => {
+        const { code, message } = error;
+        if (code === "auth/email-already-in-use") {
+          return alert(error.message);
+        }
+    });
+  }
+
+  toggleRegistrationMode = isRegistrationMode => {
+    this.setState({ isRegistrationMode });
+  }
+
   render() {
     const registrationForm = (
       <div>
         <RegistrationForm registerUser={this.registerUser.bind(this)} />
-        <button onClick={() => this.toggleRegistration()}>sign in</button>
+        <button onClick={() => this.toggleRegistrationMode(false)}>
+          <p>render form</p>
+        </button>
       </div>
     );
     const signInWithEmailForm = (
-      <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
+      <div>
+        <SignInWithEmailForm signInWithEmail={this.signInWithEmail.bind(this)} />
+        <button onClick={() => this.toggleRegistrationMode(true)}>
+          <p>render form</p>
+        </button>
+      </div>
     );
     const deleteUserButton = (
       <button onClick={() => this.deleteUser()}>click here to delete account</button>
@@ -146,11 +152,10 @@ class Auth extends Component {
     if (!this.props.user) {
       return (
         <section className="authComponent">
-          {this.state.register ? registrationForm : signInWithEmailForm}
-          <div className="googleButton" onClick={this.signInWithGoogle.bind(this)}>
-            <i className="material-icons">power_settings_new</i>
-            <p>continue with Google</p>
-          </div>
+          {this.state.isRegistrationMode ? registrationForm : signInWithEmailForm}
+          <button className="googleButton" onClick={this.signInWithGoogle.bind(this)}>
+            <p>Sign in with Google</p>
+          </button>
         </section>
       );
     } else {

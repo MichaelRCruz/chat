@@ -1,6 +1,5 @@
 .googleButton {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: black;
+  border: 1px solid lightGray;
+  background: url("../assets/google_oauth.svg") no-repeat;
+  background-size: 20%;
 }

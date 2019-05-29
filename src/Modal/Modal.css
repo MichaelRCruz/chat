@@ -17,7 +17,7 @@
   height: 100%;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .display-block {
@@ -57,7 +57,7 @@ button, input[type="submit"], input[type="reset"] {
 
 @media only screen and (min-device-width: 812px) {
   .modal-body {
-    width: 400px;
-    height: 500px;
+    width: 350px;
+    height: 450px;
   }
 };

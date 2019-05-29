@@ -3,7 +3,6 @@ import React from 'react';
 import './Splash.css';
 
 const Splash = ({toggleModal}) => {
-
   return (
     <div className="splashComponent">
       <header className="splashHeader">

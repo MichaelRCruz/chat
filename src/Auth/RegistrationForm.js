@@ -1,179 +1,124 @@
 import React, { Component } from 'react';
-import ValidationError from '../ValidationError.js';
-// import './App.css';
+import Validation from '../validation.js';
+import './RegistrationForm.css';
 
 class RegistrationForm extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      email: '',
-      password: '',
-      repeatPassword: '',
-      nameValid: false,
-      passwordValid: false,
-      passwordMatch: false,
-      formValid: false,
-      validationMessages: {
-        name: '',
-        email: '',
-        password: '',
-        repeatPassword: ''
-      }
+      displaynameValue: '',
+      emailValue: '',
+      passwordValue: '',
+      retypePasswordValue: '',
+      displaynameError: '',
+      emailError: '',
+      passwordError: '',
+      retypePasswordError: ''
     }
-  }
+  };
 
-  updateName(name) {
-    this.setState({name}, () => {this.validateName(name)});
-  }
-
-  updateEmail(email) {
-    this.setState({email}, () => {this.validateName(email)});
-  }
-
-  updatePassword(password) {
-    this.setState({password}, () => {this.validatePassword(password)});
-  }
-
-  updateRepeatPassword(repeatPassword) {
-    this.setState({repeatPassword}, () => {this.matchPasswords(repeatPassword)});
-  }
-
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
-    const { name, email, password, repeatPassword } = this.state;
-    this.props.registerUser(name, email, password);
-  }
-
-  validateName(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    fieldValue = fieldValue.trim();
-    if(fieldValue.length === 0) {
-      fieldErrors.name = 'Name is required';
-      hasError = true;
-    } else {
-      if (fieldValue.length < 3) {
-        fieldErrors.name = 'Name must be at least 3 characters long';
-        hasError = true;
-      } else {
-        fieldErrors.name = '';
-        hasError = false;
-      }
-    }
-
-    this.setState({
-      validationMessages: fieldErrors,
-      nameValid: !hasError
-    }, this.formValid );
-
-  }
-
-  validatePassword(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    fieldValue = fieldValue.trim();
-    if(fieldValue.length === 0) {
-      fieldErrors.password = 'Password is required';
-      hasError = true;
-    } else {
-      if (fieldValue.length < 6 || fieldValue.length > 72) {
-        fieldErrors.password = 'Password must be between 6 and 72 characters long';
-        hasError = true;
-      } else {
-        if(!fieldValue.match(new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/))) {
-          fieldErrors.password = 'Password must contain at least one number and one letter';
-          hasError = true;
-        } else {
-          fieldErrors.password = '';
-          hasError = false;
-        }
-      }
-    }
-
-    this.setState({
-      validationMessages: fieldErrors,
-      passwordValid: !hasError
-    }, this.formValid );
-
-  }
-
-  matchPasswords(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    const password = this.state.password;
-
-    if(fieldValue !== password) {
-      fieldErrors.repeatPassword = 'Passwords do not match';
-      hasError = true;
-    } else {
-      fieldErrors.repeatPassword = '';
-      hasError = false;
-    }
-
-    this.setState({
-      validationMessages: fieldErrors,
-      passwordMatch: !hasError
-    }, this.formValid );
-
-  }
-
-  formValid() {
-    this.setState({
-      formValid: this.state.nameValid && this.state.passwordValid && this.state.passwordMatch
+    const { displayname, email, password, retypePassword } = this.state;
+    this.props.registerUser(displayname, email, password)
+    .then(() => {
+      this.props.toggleRegistrationMode(false);
     });
-  }
+  };
+
+  formValidated = () => {
+    const {
+      displaynameValue,
+      emailValue,
+      passwordValue,
+      retypePasswordValue,
+      displaynameError,
+      emailError,
+      passwordError,
+      retypePasswordError
+    } = this.state;
+    const hasErrors = displaynameError.length || emailError.length || passwordError.length || retypePasswordError.length ? true : false;
+    const hasValues = displaynameValue.length || emailValue.length || passwordValue.length || retypePasswordValue.length;
+    this.setState({ formValidated: !hasErrors && hasValues });
+  };
+
+  handleFieldValue = validationResponse => {
+    this.setState({
+      [validationResponse[0]]: validationResponse[1]
+    }, this.formValidated );
+  };
+
+  validateDisplayname = fieldValue => {
+    this.setState({ displaynameValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().displayname(fieldValue));
+    });
+  };
+
+  validateEmail = fieldValue => {
+    this.setState({ emailValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().email(fieldValue));
+    });
+  };
+
+  validatePassword = fieldValue => {
+    this.setState({ passwordValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().password(fieldValue));
+    });
+  };
+
+  validateRetypePassword = fieldValue => {
+    this.setState({ retypePasswordValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().retypePassword(this.state.passwordValue, this.state.retypePasswordValue));
+    });
+  };
 
   render () {
     return (
-     <form className="registration" onSubmit={e => this.handleSubmit(e)}>
-       <h2>Register</h2>
-
-       <div className="registration__hint">* required field</div>
-       <div className="form-group">
-         <label htmlFor="name">Name *</label>
-         <input type="text" className="registration__control"
-           name="name" id="name" onChange={e => this.updateName(e.target.value)}/>
-         <ValidationError hasError={!this.state.nameValid} message={this.state.validationMessages.name}/>
-       </div>
-
-       <div className="form-group">
-         <label htmlFor="email">Email *</label>
-         <input type="text" className="registration__control"
-           name="email" id="email" onChange={e => this.updateEmail(e.target.value)}/>
-         <ValidationError hasError={!this.state.emailValid} message={this.state.validationMessages.email}/>
-       </div>
-
-       <div className="form-group">
-          <ValidationError hasError={!this.state.passwordValid} message={this.state.validationMessages.password}/>
-          <label htmlFor="password">Password *</label>
-          <input type="password" className="registration__control"
-           name="password" id="password" onChange={e => this.updatePassword(e.target.value)}/>
-          <div className="registration__hint">6 to 72 characters, must include a number</div>
-       </div>
-       
-       <div className="form-group">
-        <ValidationError hasError={!this.state.passwordMatch} message={this.state.validationMessages.repeatPassword}/>
-         <label htmlFor="repeatPassword">Repeat Password *</label>
-         <input type="password" className="registration__control"
-           name="repeatPassword" id="repeatPassword" onChange={e => this.updateRepeatPassword(e.target.value)}/>
-       </div>
-
-       <div className="registration__button__group">
-        <button type="reset" className="registration__button">
-            Cancel
-        </button>
-        <button type="submit" className="registration__button" disabled={!this.state.formValid}>
-            Save
-        </button>
-       </div>
-     </form>
-   )
- }
+      <div className="registrationFormComponent">
+        <form className="registrationForm" onSubmit={e => this.handleSubmit(e)}>
+          <div className="nameFormGroup">
+            <input
+             className="nameInput" type="text"
+             onChange={e => this.validateDisplayname(e.target.value)}
+           />
+             <p className="formErrorText">{this.state.displaynameError}</p>
+          </div>
+          <div className="emailFormGroup">
+            <input
+             className="emailInput" type="text"
+             onChange={e => this.validateEmail(e.target.value)}
+           />
+             <p className="formErrorText">{this.state.emailError}</p>
+          </div>
+          <div className="passwordFormGroup">
+            <input
+             className="passwordInput" type="text"
+             onChange={e => this.validatePassword(e.target.value)}
+           />
+             <p className="formErrorText">{this.state.passwordError}</p>
+          </div>
+          <div className="retypePasswordFormGroup">
+            <input
+             className="retypePasswordInput" type="text"
+             onChange={e => this.validateRetypePassword(e.target.value)}
+           />
+             <p className="formErrorText">{this.state.retypePasswordError}</p>
+          </div>
+          <button className="registrationButton" onClick={this.signInWithGoogle}>
+            sign in
+          </button>
+        </form>
+        <button className="googleButton">Sign in with Google</button>
+      </div>
+    )
+  }
 }
 
 export default RegistrationForm;
+
+// <button className="googleButton">
+//   <p>Sign in with Google</p>
+// </button>
+// <button onClick={() => this.toggleRegistrationMode(false)}>
+//   <p>render form</p>
+// </button>

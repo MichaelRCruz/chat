@@ -151,10 +151,10 @@ class App extends Component {
     const app = (
       <div className="appComponent">
         <header className="header">
-          <img className="logo" src={require("./assets/images/potato2.svg")}
-               alt="potato logo"
-               onClick={ true ?
-                 () => this.toggleMenu() : () => this.toggleMenu()}
+          <img
+            className="logo" src={require("./assets/images/potato2.svg")}
+            alt="potato logo"
+            onClick={this.toggleMenu}
           />
           <p className="app-name">Potato</p>
           <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
@@ -171,10 +171,11 @@ class App extends Component {
           />
         </aside>
         <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
-          <Messages firebase={this.props.firebase}
-                    activeRoom={this.state.activeRoom}
-                    user={this.state.user}
-                    userConfig={this.state.userConfig}
+          <Messages
+            firebase={this.props.firebase}
+            activeRoom={this.state.activeRoom}
+            user={this.state.user}
+            userConfig={this.state.userConfig}
           />
         </main>
         <footer className="footer">

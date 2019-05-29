@@ -107,11 +107,6 @@ body {
     z-index: 4;
   }
 
-  /* .sidebar {
-    grid-area: sidebar;
-    background-color: #E1E2E1;
-  } */
-
   .main {
     grid-area: main;
   }

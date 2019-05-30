@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Validation from '../validation.js';
-// import googleAuthButton from './assets/btn_google_signin_light_normal_web@2x.png';
 import './RegistrationForm.css';
 
 class RegistrationForm extends Component {
@@ -64,56 +63,87 @@ class RegistrationForm extends Component {
     });
   };
 
-  registerUser = () => {
-    const {displayName, emailValue, passwordValue} = this.state;
-    this.props.registerUser(displayName, emailValue, passwordValue);
-  }
+  handleSubmit = event => {
+    event.preventDefault();
+    const { emailValue, passwordValue } = this.state;
+    this.props.signInWithEmail(emailValue, passwordValue);
+  };
 
   signInWithGoogle = () => {
     this.props.signInWithGoogle();
   }
 
+  toggleRegistrationMode = () => {
+    this.props.toggleRegistrationMode(false);
+  }
+
   render () {
+    const { emailError, passwordError } = this.state;
     return (
-      <div className="registrationFormComponent">
-        <form className="registrationForm" onSubmit={e => this.handleSubmit(e)}>
-          <div className="nameFormGroup">
-            <input
-             className="nameInput" type="text"
-             onChange={e => this.validateDisplayname(e.target.value)}
-           />
-             <p className="formErrorText">{this.state.displaynameError}</p>
+      <form className="registrationFormComponent" onSubmit={e => this.handleSubmit(e)}>
+        <fieldset className="registrationFieldset">
+          <legend className="registrationLegend">sign in</legend>
+          <div className="parentFlex">
+            <p className="appName">Potato</p>
+            <div className="formGroup registrationFormGroup">
+              <input
+                className="input displaynameInput"
+                type="text"
+                name="email"
+                placeholder="e.g., sk8terboi_21"
+                onChange={e => this.validateDisplayname(e.target.value)}
+              />
+              <p className="errorMessage">{emailError}</p>
+            </div>
+            <div className="formGroup emailFormGroup">
+              <input
+                className="input emailInput"
+                type="email"
+                name="email"
+                placeholder="email"
+                onChange={e => this.validateEmail(e.target.value)}
+              />
+              <p className="errorMessage">{passwordError}</p>
+            </div>
+            <div className="formGroup passwordFormGroup">
+              <input
+                className="input passwordInput"
+                type="password"
+                name="password"
+                placeholder="password"
+                onChange={e => this.validatePassword(e.target.value)}
+              />
+              <p className="errorMessage">{passwordError}</p>
+            </div>
+            <div className="formGroup retypePasswordFormGroup">
+              <input
+                className="input passwordInput"
+                type="password"
+                name="retypePassword"
+                placeholder="password"
+                onChange={e => this.validateRetypePassword(e.target.value)}
+              />
+              <p className="errorMessage">{passwordError}</p>
+            </div>
+            <button
+              className="registrationButton"
+              type="submit"
+              disabled={!this.state.formValidated}>
+              sign in
+            </button>
+            <span className="horizontalRule"> or </span>
+            <img
+              className="googleButton"
+              onClick={this.signInWithGoogle}
+              src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+              alt=""
+            />
+            <p className="toggleFormLink">
+              <span onClick={this.toggleRegistrationMode}>already have one? sign in!</span>
+            </p>
           </div>
-          <div className="emailFormGroup">
-            <input
-             className="emailInput" type="text"
-             onChange={e => this.validateEmail(e.target.value)}
-           />
-             <p className="formErrorText">{this.state.emailError}</p>
-          </div>
-          <div className="passwordFormGroup">
-            <input
-             className="passwordInput" type="text"
-             onChange={e => this.validatePassword(e.target.value)}
-           />
-             <p className="formErrorText">{this.state.passwordError}</p>
-          </div>
-          <div className="retypePasswordFormGroup">
-            <input
-             className="retypePasswordInput" type="text"
-             onChange={e => this.validateRetypePassword(e.target.value)}
-           />
-             <p className="formErrorText">{this.state.retypePasswordError}</p>
-          </div>
-          <button className="registrationButton" onClick={this.registerUser}>
-            sign in
-          </button>
-        </form>
-        <img src={require('../assets/btn_google_signin_light_normal_web@2x.png')} alt=""
-          className="googleButton"
-          onClick={this.signInWithGoogle}
-        />
-      </div>
+        </fieldset>
+      </form>
     )
   }
 }

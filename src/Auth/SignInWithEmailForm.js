@@ -63,7 +63,7 @@ class SignInWithEmailForm extends Component {
           <legend className="signInWithEmailLegend">sign in</legend>
           <div className="parentFlex">
             <p className="appName">Potato</p>
-            <div className="emailFormGroup">
+            <div className="formGroup emailFormGroup">
               <input
                 className="input emailInput"
                 type="text"
@@ -73,7 +73,7 @@ class SignInWithEmailForm extends Component {
               />
               <p className="errorMessage">{emailError}</p>
             </div>
-            <div className="passwordFormGroup">
+            <div className="formGroup passwordFormGroup">
               <input
                 className="input passwordInput"
                 type="password"
@@ -83,31 +83,27 @@ class SignInWithEmailForm extends Component {
               />
               <p className="errorMessage">{passwordError}</p>
             </div>
-            <div className="signInButtonGroup">
-              <button
-                className="signInWithEmailButton"
-                type="submit"
-                disabled={!this.state.formValidated}>
-                sign in
-              </button>
-            </div>
+            <button
+              className="signInWithEmailButton"
+              type="submit"
+              disabled={!this.state.formValidated}>
+              sign in
+            </button>
             <span className="horizontalRule"> or </span>
-            <div className="googleSignInButtonGroup">
-              <img
-                className="googleButton"
-                onClick={this.signInWithGoogle}
-                src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
-                alt=""
-              />
-            </div>
-            <p className="toggleFormText">
-              <span onClick={() => this.toggleRegistrationMode()}>create account</span>
+            <img
+              className="googleButton"
+              onClick={this.signInWithGoogle}
+              src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+              alt=""
+            />
+            <p className="toggleFormLink">
+              <span onClick={this.toggleRegistrationMode}>create an account!</span>
             </p>
           </div>
         </fieldset>
       </form>
-    )};
-
+    )
+  };
 };
 
 export default SignInWithEmailForm;

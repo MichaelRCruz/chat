@@ -32,13 +32,14 @@
 	border: none;
 	cursor: pointer;
 	outline: none;
+  background: none;
 }
 
 .modalTitle {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  height: 50px;
+  height: 28px;
 }
 
 .modalMain {
@@ -49,7 +50,7 @@
 @media only screen and (min-device-width: 812px) {
   .modalBody {
     width: 350px;
-    height: 550px;
+    height: 570px;
     border-radius: 8px;
   }
 };

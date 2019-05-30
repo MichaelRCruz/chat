@@ -6,14 +6,16 @@
   width: 92%;
 }
 
+.signInFieldset {
+  padding-left: 0;
+}
+
 .signInWithEmailLegend {
   margin-left: 25px;
 }
 
 .googleButton {
-  height: auto;
-  width: 295px;
-  min-width: 64px;
+  width: 80%;
   cursor: pointer;
 }
 
@@ -25,44 +27,46 @@
   height: calc(80vh - 50px);
 }
 
-.signInFieldset {
-  padding-left: 0;
-}
-
 .input {
   font-size: 16px;
-  width: 290px;
+  width: 100%;
   height: 40px;
   border: 1px solid lightgray;
 }
 
-.input:focus {
+.inout:focus {
   outline: 0;
 }
 
 .signInWithEmailButton {
-  width: 295px;
-  padding: 18px 20px;
+  display: block;
+  width: 80%;
   background-color: #506cf0;
   color: #fff;
   font-family: 'Roboto', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 6px;
 }
 
-.horizontalRule:after,
-.horizontalRule:before {
+.horizontalRule:after, .horizontalRule:before {
   content:"\00a0\00a0\00a0\00a0\00a0";
-  text-decoration:line-through;
+  text-decoration: line-through;
 }
 
 .errorMessage {
   height: 20px;
-  width: 295px;
+}
+
+.toggleFormLink span {
+  cursor: pointer;
+}
+
+.formGroup {
+  width: 80%;
 }
 
 @media screen and (min-width: 750px) {
   .parentFlex {
-    height: 450px;
+    height: 505px;
   }
 };

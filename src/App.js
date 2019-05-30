@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import Auth from './Auth/Auth';
 import Modal from './Modal/Modal';
@@ -10,7 +10,7 @@ import Splash from './Splash/Splash';
 
 import {reduxForm, focus} from 'redux-form';
 
-class App extends Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('0.015');
+    console.log('0.016');
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.handleConnection(user.uid);

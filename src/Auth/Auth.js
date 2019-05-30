@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 import './Auth.css';
 
-class Auth extends Component {
+class Auth extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

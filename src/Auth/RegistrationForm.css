@@ -11,7 +11,7 @@
 }
 
 .registrationLegend {
-  margin-left: 25px;
+  text-align: center;
 }
 
 .googleButton {
@@ -24,7 +24,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: calc(100vh - 125px);
+  height: calc(var(--vh, 1vh) * 100 - 28px - 75px);
 }
 
 .input {

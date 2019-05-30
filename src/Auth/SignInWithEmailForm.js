@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Validation from '../validation.js';
 import './SignInWithEmailForm.css';
 
-class SignInWithEmailForm extends Component {
+class SignInWithEmailForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -60,9 +60,8 @@ class SignInWithEmailForm extends Component {
     return (
       <form className="signInFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="signInFieldset">
-          <legend className="signInWithEmailLegend">sign in</legend>
+          <legend className="signInWithEmailLegend"><p className="appName">Potato</p></legend>
           <div className="parentFlex">
-            <p className="appName">Potato</p>
             <div className="formGroup emailFormGroup">
               <input
                 className="input emailInput"
@@ -93,7 +92,7 @@ class SignInWithEmailForm extends Component {
             <img
               className="googleButton"
               onClick={this.signInWithGoogle}
-              src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+              src={require('../assets/btn_google_signin_dark_normal_web@2x.png')}
               alt=""
             />
             <p className="toggleFormLink">

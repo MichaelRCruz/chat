@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Validation from '../validation.js';
 import './RegistrationForm.css';
 
-class RegistrationForm extends Component {
+class RegistrationForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,22 +78,21 @@ class RegistrationForm extends Component {
   }
 
   render () {
-    const { emailError, passwordError } = this.state;
+    const { displaynameError, emailError, passwordError, retypePasswordError } = this.state;
     return (
       <form className="registrationFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="registrationFieldset">
-          <legend className="registrationLegend">sign up</legend>
+          <legend className="registrationLegend"><p className="appName">Potato</p></legend>
           <div className="parentFlex">
-            <p className="appName">Potato</p>
             <div className="formGroup registrationFormGroup">
               <input
                 className="input displaynameInput"
                 type="text"
                 name="email"
-                placeholder="e.g., sk8terboi_21"
+                placeholder="e.g., mykey_42"
                 onChange={e => this.validateDisplayname(e.target.value)}
               />
-              <p className="errorMessage">{emailError}</p>
+              <p className="errorMessage">{displaynameError}</p>
             </div>
             <div className="formGroup emailFormGroup">
               <input
@@ -103,7 +102,7 @@ class RegistrationForm extends Component {
                 placeholder="email"
                 onChange={e => this.validateEmail(e.target.value)}
               />
-              <p className="errorMessage">{passwordError}</p>
+              <p className="errorMessage">{emailError}</p>
             </div>
             <div className="formGroup passwordFormGroup">
               <input
@@ -123,7 +122,7 @@ class RegistrationForm extends Component {
                 placeholder="password"
                 onChange={e => this.validateRetypePassword(e.target.value)}
               />
-              <p className="errorMessage">{passwordError}</p>
+              <p className="errorMessage">{retypePasswordError}</p>
             </div>
             <button
               className="registrationButton"
@@ -135,7 +134,7 @@ class RegistrationForm extends Component {
             <img
               className="googleButton"
               onClick={this.signInWithGoogle}
-              src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+              src={require('../assets/btn_google_signin_dark_normal_web@2x.png')}
               alt=""
             />
             <p className="toggleFormLink">

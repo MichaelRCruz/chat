@@ -4,24 +4,19 @@ import './Splash.css';
 class Splash extends React.Component  {
   constructor (props) {
     super(props);
-    this.state = {
-
-    }
   }
 
   componentDidMount() {
-    // this.topOfSplashPage.scrollIntoView();
+    window.scrollTo(0, 1);
   };
 
   toggleModal = () => {
-    this.topOfSplashPage.scrollIntoView();
     this.props.toggleModal();
   }
 
   render() {
     return (
       <div className="splashComponent">
-        <div ref={(thisDiv) => this.topOfSplashPage = thisDiv}></div>
         <header className="splashHeader">
           <div className="headerContentContainer">
             <a className="anchor" href="https://michaelcruz.io/chat">

@@ -51,6 +51,10 @@ class SignInWithEmailForm extends Component {
     this.props.signInWithGoogle();
   }
 
+  toggleRegistrationMode = () => {
+    this.props.toggleRegistrationMode(true);
+  }
+
   render () {
     const { emailError, passwordError } = this.state;
     return (
@@ -58,33 +62,36 @@ class SignInWithEmailForm extends Component {
         <fieldset className="signInFieldset">
           <legend className="signInWithEmailLegend">sign in</legend>
           <div className="parentFlex">
+            <p className="appName">Potato</p>
             <div className="emailFormGroup">
               <input
                 className="input emailInput"
                 type="text"
                 name="email"
+                placeholder="email"
                 onChange={e => this.validateEmail(e.target.value)}
               />
-              <p>{emailError}</p>
+              <p className="errorMessage">{emailError}</p>
             </div>
             <div className="passwordFormGroup">
               <input
                 className="input passwordInput"
                 type="password"
                 name="password"
+                placeholder="password"
                 onChange={e => this.validatePassword(e.target.value)}
               />
-              <p>{passwordError}</p>
+              <p className="errorMessage">{passwordError}</p>
             </div>
             <div className="signInButtonGroup">
               <button
                 className="signInWithEmailButton"
                 type="submit"
-                disabled={!this.state.formValidated}
-              >
+                disabled={!this.state.formValidated}>
                 sign in
               </button>
             </div>
+            <span className="horizontalRule"> or </span>
             <div className="googleSignInButtonGroup">
               <img
                 className="googleButton"
@@ -93,6 +100,9 @@ class SignInWithEmailForm extends Component {
                 alt=""
               />
             </div>
+            <p className="toggleFormText">
+              <span onClick={() => this.toggleRegistrationMode()}>create account</span>
+            </p>
           </div>
         </fieldset>
       </form>

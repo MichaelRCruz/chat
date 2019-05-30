@@ -29,7 +29,6 @@
 }
 
 .exitButton {
-	color: lightgray;
 	border: none;
 	cursor: pointer;
 	outline: none;
@@ -38,7 +37,8 @@
 .modalTitle {
   display: flex;
   flex-direction: row-reverse;
-  align-items: center
+  align-items: center;
+  height: 50px;
 }
 
 .modalMain {
@@ -49,6 +49,7 @@
 @media only screen and (min-device-width: 812px) {
   .modalBody {
     width: 350px;
-    height: 450px;
+    height: 550px;
+    border-radius: 8px;
   }
 };

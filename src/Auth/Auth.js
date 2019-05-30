@@ -124,12 +124,14 @@ class Auth extends Component {
       <RegistrationForm
         registerUser={this.registerUser.bind(this)}
         signInWithGoogle={this.signInWithGoogle.bind(this)}
+        toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
       />
     );
     const signInWithEmailForm = (
       <SignInWithEmailForm
         signInWithEmail={this.signInWithEmail.bind(this)}
         signInWithGoogle={this.signInWithGoogle.bind(this)}
+        toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
       />
     );
     const deleteUserButton = (

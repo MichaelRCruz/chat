@@ -139,7 +139,7 @@ class RegistrationForm extends Component {
               alt=""
             />
             <p className="toggleFormLink">
-              <span onClick={this.toggleRegistrationMode}>already have one? sign in!</span>
+              have an account? <span onClick={this.toggleRegistrationMode}>sign in!</span>
             </p>
           </div>
         </fieldset>

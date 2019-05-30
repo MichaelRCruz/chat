@@ -97,7 +97,7 @@ class SignInWithEmailForm extends Component {
               alt=""
             />
             <p className="toggleFormLink">
-              <span onClick={this.toggleRegistrationMode}>create an account!</span>
+              don't have an account? <span onClick={this.toggleRegistrationMode}>sign up!</span>
             </p>
           </div>
         </fieldset>

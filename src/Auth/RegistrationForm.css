@@ -32,6 +32,7 @@
   width: 100%;
   height: 40px;
   border: 1px solid lightgray;
+  padding-left: 8px;
 }
 
 .input:focus {
@@ -57,8 +58,14 @@
   height: 20px;
 }
 
+.toggleFormLink {
+  font-size: 12px;
+}
+
 .toggleFormLink span {
   cursor: pointer;
+  text-decoration: underline;
+  padding-left: 4px;
 }
 
 .formGroup {

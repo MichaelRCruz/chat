@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
-
 import './Auth.css';
 
 class Auth extends Component {
@@ -143,13 +142,11 @@ class Auth extends Component {
     );
     if (!this.props.user) {
       return (
-        <section className="authComponent">
-          {this.state.isRegistrationMode ? registrationForm : signInWithEmailForm}
-        </section>
+        this.state.isRegistrationMode ? registrationForm : signInWithEmailForm
       );
     } else {
       return (
-        <section className="authComponent">
+        <React.Fragment>
           <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
           <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
           <button onClick={() => this.signOut()}>click here to sign out</button>
@@ -158,7 +155,7 @@ class Auth extends Component {
           <button onClick={() => this.requestNotifPermission()}>
             click here to authorize notifications
           </button>
-        </section>
+        </React.Fragment>
       );
     }
   }

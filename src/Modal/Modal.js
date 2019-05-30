@@ -6,7 +6,7 @@ const Modal = ({ handleClose, show, children }) => {
 
   return (
     <aside className={modalCssClass}>
-      <div className='modal-body'>
+      <div className='modalBody'>
         <header className="modalTitle">
           <button className="exitButton" onClick={handleClose}>
             <i className="material-icons">clear</i>

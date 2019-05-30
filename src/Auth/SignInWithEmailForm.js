@@ -56,28 +56,41 @@ class SignInWithEmailForm extends Component {
     return (
       <form className="signInFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="signInFieldset">
-          <legend>sign in</legend>
+          <legend className="signInWithEmailLegend">sign in</legend>
           <div className="parentFlex">
             <div className="emailFormGroup">
-              <input className="emailInput" type="text" name="email"
+              <input
+                className="input emailInput"
+                type="text"
+                name="email"
                 onChange={e => this.validateEmail(e.target.value)}
               />
               <p>{emailError}</p>
             </div>
             <div className="passwordFormGroup">
-              <input className="passwordInput" type="password" name="password"
+              <input
+                className="input passwordInput"
+                type="password"
+                name="password"
                 onChange={e => this.validatePassword(e.target.value)}
               />
               <p>{passwordError}</p>
             </div>
             <div className="signInButtonGroup">
-              <button type="submit" className="signInWithEmailButton" disabled={!this.state.formValidated}>
+              <button
+                className="signInWithEmailButton"
+                type="submit"
+                disabled={!this.state.formValidated}
+              >
                 sign in
               </button>
             </div>
             <div className="googleSignInButtonGroup">
-              <img className="googleButton" onClick={this.signInWithGoogle} alt=""
+              <img
+                className="googleButton"
+                onClick={this.signInWithGoogle}
                 src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+                alt=""
               />
             </div>
           </div>

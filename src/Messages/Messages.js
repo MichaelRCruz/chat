@@ -60,11 +60,11 @@ class Messages extends Component {
       messageCount = 100;
     }
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
-      }).then(res => {
-        return res.json();
-      }).catch(error => {
-        console.log(error);
-      });
+    }).then(res => {
+      return res.json();
+    }).catch(error => {
+      console.log(error);
+    });
   }
 
   componentWillReceiveProps(prevProps, nextProps) {

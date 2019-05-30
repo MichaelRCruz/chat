@@ -1,5 +1,4 @@
 const functions = require('firebase-functions');
-const fetch = require("node-fetch");
 const cors = require('cors')({
   origin: true,
 });
@@ -10,76 +9,6 @@ serviceAccount = require('./serviceAccountKey.json');
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
-
-// exports.helloWorld = functions.https.onRequest((req, res) => {
-//   res.json({"greeting": "sup, yo"});
-// });
-
-// https://us-central1-chat-asdf.cloudfunctions.net/handleHttpRedirect
-// exports.handleHttpRedirect = functions.https.onRequest((req, res) => {
-//   console.log('inside handleHttpRedirect');
-//   res.redirect(303, 'https://michaelcruz.io/chat');
-// });
-//
-// exports.insertIntoDb = functions.https.onRequest((req, res) => {
-//   const text = req.query.text;
-//   admin.database().ref('/test').push({text: text}).then(snapshot => {
-//     console.log('snapshot.ref: ', snapshot.ref);
-//     res.redirect(303, snapshot.ref);
-//   });
-// });
-//
-// exports.convertToUppercase = functions.database.ref('/test/{pushId}/text')
-//   .onWrite(event => {
-//     const text = event.data.val();
-//     const uppercaseText = text.toUpperCase();
-//     console.log('text uppercaseText', text, uppercaseText);
-//     return event.data.ref.parent.child('uppercaseText').set(uppercaseText);
-// ;});
-
-// https://us-central1-chat-asdf.cloudfunctions.net/flagAsActive
-// exports.flagAsActive = functions.https.onRequest((req, res) => {
-//   const roomId = req.query.roomId;
-//   const roomRef = admin.database().ref(`/rooms/${roomId}`);
-//   roomRef.update({active: true}).then(res => {
-//     console.log('cloud function active: ', roomId);
-//   });
-//   // admin.database().ref('/test').push({text: text}).then(snapshot => {
-//   //   console.log('snapshot.ref: ', snapshot.ref);
-//   //   res.redirect(303, snapshot.ref);
-//   // });
-// });
-
-// https://us-central1-chat-asdf.cloudfunctions.net/manageDeviceGroup
-// exports.manageDeviceGroup = functions.https.onRequest((req, res) => {
-//   return cors(req, res, async () => {
-//     const {name, fcmToken} = JSON.parse(req.body);
-//     console.log(name, fcmToken);
-//     const body = JSON.stringify({
-//       operation: "create",
-//       notification_key_name: name,
-//       registration_ids: [fcmToken]
-//     });
-//     const fetchResponse = await fetch('https://fcm.googleapis.com/fcm/notification', {
-//       method: 'POST',
-//       headers: {
-//     		'Content-Type': 'application/json',
-//         'Aurthorization': 'key=AIzaSyBm5JwOWxePR3MLcQZiOFZul0Rk3W95mos',
-//     		'project_id': '145747598382'
-//     	},
-//       body
-//     }).then(function(response) {
-//       return response;
-//     }).then(response => {
-//       return response;
-//     }).catch(function(error) {
-//       console.log("error from fetch", error);
-//       return error;
-//     });
-//     console.log(typeof fetchResponse, fetchResponse);
-//     res.json(fetchResponse);
-//   });
-// });
 
 exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
   console.log('user: ', user)
@@ -225,68 +154,3 @@ exports.handleSignOut = functions.https.onRequest((req, res) => {
     .then(() => res.send(true));
   });
 });
-
-
-// https://us-central1-chat-asdf.cloudfunctions.net/getOnlineUsers
-// exports.getOnlineUsers = functions.https.onRequest((req, res) => {
-//   function listAllUsers(nextPageToken) {
-//     // List batch of users, 1000 at a time.
-//     admin.auth().listUsers(1000, nextPageToken)
-//       .then(function(listUsersResult) {
-//         listUsersResult.users.forEach(function(userRecord) {
-//           console.log('user', userRecord.toJSON());
-//         });
-//         if (listUsersResult.pageToken) {
-//           // List next batch of users.
-//           listAllUsers(listUsersResult.pageToken);
-//         }
-//       })
-//       .catch(function(error) {
-//         console.log('Error listing users:', error);
-//       });
-//   }
-//   // Start listing users from the beginning, 1000 at a time.
-//   listAllUsers();
-// });
-
-
-
-
-
-
-
-// exports.addTokenToTopic = functions.https.onRequest((req, res) => {
-//   return cors(req, res, () => {
-//     const {uid, fcmToken} = JSON.parse(req.body);
-//     const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
-//     admin.messaging().subscribeToTopic([fcmToken], `topic-${uid}`)
-//       .then(function(response) {
-//         // See the MessagingTopicManagementResponse reference documentation
-//         // for the contents of response.
-//         console.log('Successfully handled subscription]:', response);
-//         const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
-//         const transaction = admin.database().runTransaction(t => {
-//           return t.get(userRef).then(doc => {
-//             if (doc.data().fcmTokens) {
-//               t.update(userRef, {[fcmToken]: isSubscribed});
-//               return Promise.resolve('updated tokens');
-//             } else {
-//               return Promise.reject('did not write to db');
-//             }
-//           }).then(result => {
-//             console.log('Transaction success', result);
-//           }).catch(err => {
-//             console.log('Transaction failure:', err);
-//           });
-//         })
-//         .catch(function(error) {
-//           console.log('Error subscribing to topic:', error);
-//         });
-//       })
-//       .catch(function(error) {
-//         console.log('Error subscribing to topic:', error);
-//         res.send(error);
-//       });
-//       res.send({fcmToken});
-//   });
-// });

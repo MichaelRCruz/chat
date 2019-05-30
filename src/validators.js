@@ -35,8 +35,8 @@ export const codeBlock = value => {
   }
 }
 
-export const newLines = value => {
-  const blankText = value.trim().trimEnd();
-  console.log('what is blank text: ', blankText);
-  blankText ? undefined : 'Please include content.'
-}
+// export const newLines = value => {
+//   const blankText = value.trim().trimEnd();
+//   console.log('what is blank text: ', blankText);
+//   blankText ? null : 'Please include content.'
+// }

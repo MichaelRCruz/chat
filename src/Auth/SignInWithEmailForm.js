@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Validation from '../validation.js';
 import './SignInWithEmailForm.css';
 
@@ -62,13 +62,13 @@ class SignInWithEmailForm extends Component {
               <input className="emailInput" type="text" name="email"
                 onChange={e => this.validateEmail(e.target.value)}
               />
-              <p>{this.state.emailError}</p>
+              <p>{emailError}</p>
             </div>
             <div className="passwordFormGroup">
               <input className="passwordInput" type="password" name="password"
                 onChange={e => this.validatePassword(e.target.value)}
               />
-              <p>{this.state.passwordError}</p>
+              <p>{passwordError}</p>
             </div>
             <div className="signInButtonGroup">
               <button type="submit" className="signInWithEmailButton" disabled={!this.state.formValidated}>
@@ -76,7 +76,7 @@ class SignInWithEmailForm extends Component {
               </button>
             </div>
             <div className="googleSignInButtonGroup">
-              <img className="googleButton" onClick={this.signInWithGoogle}
+              <img className="googleButton" onClick={this.signInWithGoogle} alt=""
                 src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
               />
             </div>

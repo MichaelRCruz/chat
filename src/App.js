@@ -26,6 +26,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log('0.015');
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.handleConnection(user.uid);
@@ -60,7 +61,7 @@ class App extends Component {
       lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
     };
     this.props.firebase.database().ref('.info/connected').on('value', function(snapshot) {
-      if (snapshot.val() == false) {
+      if (snapshot.val() === false) {
         return;
       };
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
@@ -120,7 +121,6 @@ class App extends Component {
   getLastVisitedRoom = lastRoomId => {
     return new Promise((resolve, reject) => {
       const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
-      const usersRef = this.props.firebase.database().ref(`users`);
       if (!lastVisitedRoomRef) {
         reject(new Error('room does not exist for user'), null);
       }
@@ -153,7 +153,7 @@ class App extends Component {
   }
 
   render() {
-    const { firebase, activeRoom, user, userConfig, showMenu, show, isLoading, currentFcmToken } = this.state;
+    const {activeRoom, user, userConfig, showMenu, show, isLoading, currentFcmToken} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">

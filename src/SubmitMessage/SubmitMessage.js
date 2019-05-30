@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import SubmitMessageForm from './SubmitMessageForm';
 import {reduxForm, Field, reset} from 'redux-form';
 import Textarea from '../Input/Textarea';
-import {required, nonEmpty, isTrimmed, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
+import {required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -20,7 +20,6 @@ class Messages extends Component {
       return;
     } else {
       const ref = this.messagesRef.push();
-      const key = ref.key;
       const yourData = {
         key: ref.key,
         content: message,
@@ -47,7 +46,7 @@ class Messages extends Component {
     const roomSubscribers = Object.values(this.props.activeRoom.users || {});
     const usersToMessage = [];
     words.forEach(word => {
-      const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+      const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
       if (word.startsWith('@') && roomSubscribers.includes(user)) {
         usersToMessage.push(user);
       }
@@ -90,7 +89,7 @@ class Messages extends Component {
           }));
         }}>
             <fieldset>
-              <legend>😎😎😎</legend>
+              <legend>submit message</legend>
               <div className="formButtonWrapper" tabIndex="0">
                 <Field
                   name="message"

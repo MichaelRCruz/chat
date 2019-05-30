@@ -109,7 +109,7 @@ class Auth extends Component {
       });
     })
     .catch(error => {
-      const { code, message } = error;
+      const { code } = error;
       if (code === "auth/email-already-in-use") {
         return alert(error.message);
       }

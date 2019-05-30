@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
@@ -34,6 +33,10 @@ class Messages extends Component {
     });
   }
 
+  componentWillUnmount() {
+    window.onscroll = null;
+  }
+
   setScrollListener = () => {
     const _self = this;
     window.onscroll = function() {
@@ -42,11 +45,13 @@ class Messages extends Component {
       if (Math.round(window.pageYOffset) === 0) {
         if (_self.cursorRef) originalCursorRef = _self.cursorRef;
         _self.getMessages(null, _self.state.messageCount + 100).then(messages => {
-          _self.setState({
+          return _self.setState({
             displayedMessages: messages,
             cursor: messages[0] ? messages[0].key : null,
             messageCount: messages.length
-          }, () => { if (originalCursorRef) originalCursorRef.scrollIntoView(); });
+          }, () => {
+            if (originalCursorRef) originalCursorRef.scrollIntoView();
+          });
         });
       }
     };
@@ -68,7 +73,7 @@ class Messages extends Component {
   }
 
   componentWillReceiveProps(prevProps, nextProps) {
-    if (this.props != nextProps) {
+    if (this.props !== nextProps) {
       this.getMessages(prevProps.activeRoom.key).then(messages => {
         if (!messages) {
           messages = [];
@@ -95,9 +100,6 @@ class Messages extends Component {
     });
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_removed', async snapshot  => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
-        const filteredMessages = this.state.displayedMessages.filter(message => {
-          return message.key !== snapshot.val().key;
-        });
         const messages = await this.getMessages();
         this.setState({displayedMessages: messages});
       }
@@ -105,7 +107,6 @@ class Messages extends Component {
   }
 
   removeMessage(message) {
-    console.log(message.key, message);
     this.messagesRef.child(message.key).remove();
   }
 
@@ -120,7 +121,7 @@ class Messages extends Component {
         >
           <div className="imageMessageContainer">
             <img
-              className={"messageImage " + (prevUid != message.creator.uid ? '' : 'visibilityHidden')}
+              className={"messageImage " + (prevUid !== message.creator.uid ? '' : 'visibilityHidden')}
               alt="user"
               src={message.creator && message.creator.photoURL
               ? message.creator.photoURL : defaultUserImage}

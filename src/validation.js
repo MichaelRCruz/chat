@@ -1,7 +1,4 @@
 export default class Validation {
-  constructor() {
-
-  }
 
   realFetch = (uri, inputOptions) => {
     const { headers, ...extraOpts } = inputOptions || {};

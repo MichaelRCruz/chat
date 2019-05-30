@@ -9,7 +9,7 @@ class RoomList extends Component {
       newRoomName: '',
       subscribedRooms: [],
       onlineUsers: []
-    },
+    }
     this.subscribedUsersRef = this.props.firebase.database().ref('users');
   }
 
@@ -28,7 +28,6 @@ class RoomList extends Component {
       roomThrottler();
     });
     this.setOnlineUsers();
-    const isOnlineRef = this.props.firebase.database().ref(`users`);
     this.subscribedUsersRef.on('child_changed', snapshot  => {
       this.setOnlineUsers();
     });

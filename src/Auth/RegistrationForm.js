@@ -109,7 +109,7 @@ class RegistrationForm extends Component {
             sign in
           </button>
         </form>
-        <img src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+        <img src={require('../assets/btn_google_signin_light_normal_web@2x.png')} alt=""
           className="googleButton"
           onClick={this.signInWithGoogle}
         />

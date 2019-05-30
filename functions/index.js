@@ -122,14 +122,14 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
 // https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
 exports.addTokenToTopic = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const {uid, fcmToken} = JSON.parse(req.body);
+    const {uid, fcmToken, subscription} = JSON.parse(req.body);
     const userRef = admin.database().ref(`/users/${uid}/fcmTokens`);
     admin.messaging().subscribeToTopic([fcmToken], `topic-${uid}`)
       .then(function(response) {
         // See the MessagingTopicManagementResponse reference documentation
         // for the contents of response.
         console.log('Successfully subscribed to topic:', response);
-        return userRef.child(fcmToken).set(true).then(function() {
+        return userRef.child(fcmToken).set(subscription).then(function() {
           return res.send(response);
         });
       })
@@ -149,14 +149,14 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
       topic: `topic-${uid}`
     };
     admin.messaging().send(payloadMessage)
-      .then((response) => {
-        console.log(response);
-        res.send(response);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.send(error);
-      });
+    .then((response) => {
+      console.log(response);
+      res.send(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.send(error);
+    });
   });
 });
 
@@ -183,13 +183,13 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
           data: { title: 'Approachable is better than simple.', message}
         };
         admin.messaging().sendToDevice(multiCastTokens, payload)
-          .then((response) => {
-            res.send(response);
-          })
-          .catch((error) => {
-            console.log('catch from admin.messaging: ', error);
-            res.send(error);
-          });
+        .then((response) => {
+          res.send(response);
+        })
+        .catch((error) => {
+          console.log('catch from admin.messaging: ', error);
+          res.send(error);
+        });
       } else {
         res.send('message failed to send');
       }
@@ -213,6 +213,16 @@ exports.getMessages = functions.https.onRequest((req, res) => {
       res.set('Access-Control-Allow-Origin', '*');
       res.send(messages);
     });
+  });
+});
+
+exports.handleSignOut = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const uid = req.query.uid;
+    const pendingFcmToken = req.query.fcmToken;
+    admin.database().ref(`/users/${uid}/fcmTokens/${pendingFcmToken}`).set(false)
+    .then(() => res.send(true));
   });
 });
 

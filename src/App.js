@@ -15,6 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       activeRoom: null,
+      currentFcmToken: null,
       isLoading: true,
       onlineUsers: [],
       show: false,
@@ -27,23 +28,27 @@ class App extends Component {
   componentDidMount() {
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        await this.handleConnection(user.uid);
-        const userConfig = await this.getUserConfig(user.uid);
+        this.handleConnection(user.uid);
+        let userConfig = await this.getUserConfig(user.uid);
         const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         if (this.props.firebase.messaging.isSupported()) {
           const messaging = this.props.firebase.messaging();
+          const currentFcmToken = await messaging.getToken();
+          this.handleFcmToken(currentFcmToken, user.uid, true)
+          userConfig = Object.assign({}, userConfig, { currentFcmToken });
           messaging.onTokenRefresh(function() {
+            console.log('refreshed token');
             this.requestNotifPermission(user.uid);
           });
         }
-        this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
+        await this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
       } else {
         this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showMenu: false, onlineUsers: [] });
       }
     });
   }
 
-  handleConnection = uid => {
+  handleConnection(uid) {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
     const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
@@ -54,42 +59,44 @@ class App extends Component {
       isOnline: true,
       lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
     };
-    this.props.firebase.database().ref('.info/connected').on('value', snapshot => {
-      if (snapshot.val() === false) return;
-      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(() => {
+    this.props.firebase.database().ref('.info/connected').on('value', function(snapshot) {
+      if (snapshot.val() == false) {
+        return;
+      };
+      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
         userStatusDatabaseRef.set(isOnlineForDatabase);
       });
     });
   }
 
   requestNotifPermission = uid => {
-    if (!this.props.isSafari) {
-      let _self = this;
-      return this.messaging.requestPermission()
-        .then(function() {
-          return _self.messaging.getToken();
-        }).then(token => {
-          return this.handleFcmToken(token, uid, true)
-            .then(fcmToken => {
-              return token;
-            });
-        })
-        .catch(function(err) {
-          console.log('error occured from requestNotifPermission()', err);
-          return null;
-        });
-    } else {
+    let _self = this;
+    return this.messaging.requestPermission()
+    .then(function() {
+      return _self.messaging.getToken();
+    })
+    .then(token => {
+      console.log(token);
+      return this.handleFcmToken(token, uid, true)
+      .then(fcmToken => {
+        return token;
+      });
+    })
+    .catch(function(err) {
+      console.log('error occured from requestNotifPermission()', err);
       return null;
-    }
+    });
   }
 
   handleFcmToken = (fcmToken, uid, subscription) => {
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
       method: 'POST',
-      body: JSON.stringify({ fcmToken, uid })
-    }).then(function(response) {
+      body: JSON.stringify({ fcmToken, uid, subscription})
+    })
+    .then(function(response) {
       return response;
-    }).catch(error => {
+    })
+    .catch(error => {
       console.log(error);
     });
   }
@@ -146,7 +153,7 @@ class App extends Component {
   }
 
   render() {
-    const { firebase, activeRoom, user, userConfig, showMenu, show, isLoading } = this.state;
+    const { firebase, activeRoom, user, userConfig, showMenu, show, isLoading, currentFcmToken } = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -169,7 +176,7 @@ class App extends Component {
             setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
-        <main className={!this.state.showMenu ? "main" : "main overflowHidden"}>
+        <main className={!showMenu ? "main" : "main overflowHidden"}>
           <Messages
             firebase={this.props.firebase}
             activeRoom={activeRoom}
@@ -180,9 +187,9 @@ class App extends Component {
         <footer className="footer">
           <SubmitMessage
             firebase={this.props.firebase}
-            userConfig={userConfig}
             activeRoom={activeRoom}
             user={user}
+            userConfig={userConfig}
           />
         </footer>
       </div>
@@ -190,10 +197,12 @@ class App extends Component {
     const auth = (
       <Auth
         firebase={this.props.firebase}
-        user={user}
         userConfig={userConfig}
+        user={user}
+        currentFcmToken={currentFcmToken}
         toggleModal={this.toggleModal.bind(this)}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
+        handleFcmToken={this.handleFcmToken.bind(this)}
       />
     );
     const splash = (

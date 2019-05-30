@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Validation from '../validation.js';
+// import googleAuthButton from './assets/btn_google_signin_light_normal_web@2x.png';
 import './RegistrationForm.css';
 
 class RegistrationForm extends Component {
@@ -108,19 +109,13 @@ class RegistrationForm extends Component {
             sign in
           </button>
         </form>
-        <button className="googleButton" onClick={this.signInWithGoogle}>
-          Sign in with Google
-        </button>
+        <img src={require('../assets/btn_google_signin_light_normal_web@2x.png')}
+          className="googleButton"
+          onClick={this.signInWithGoogle}
+        />
       </div>
     )
   }
 }
 
 export default RegistrationForm;
-
-// <button className="googleButton">
-//   <p>Sign in with Google</p>
-// </button>
-// <button onClick={() => this.toggleRegistrationMode(false)}>
-//   <p>render form</p>
-// </button>

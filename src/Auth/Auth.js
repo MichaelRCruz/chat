@@ -36,8 +36,15 @@ class Auth extends Component {
     });
   };
 
-  signOut = () => {
-    this.props.firebase.auth().signOut();
+  signOut = async () => {
+    const { firebase, userConfig } = this.props;
+    const uid = await firebase.auth().currentUser.uid;
+    firebase.auth().signOut()
+    .then(() => {
+      if (userConfig.currentFcmToken) {
+        return this.props.handleFcmToken(userConfig.currentFcmToken, uid, false);
+      }
+    });
   };
 
   deleteUser = () => {
@@ -145,7 +152,7 @@ class Auth extends Component {
         <section className="authComponent">
           <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
           <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
-          <button onClick={this.signOut}>click here to sign out</button>
+          <button onClick={() => this.signOut()}>click here to sign out</button>
           {emailVerificationButton}
           {deleteUserButton}
           <button onClick={() => this.requestNotifPermission()}>

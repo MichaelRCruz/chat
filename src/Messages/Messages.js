@@ -150,7 +150,7 @@ class Messages extends Component {
       <div className="messages-component">
         <ul className="message-list">
           {this.props.user ? messages : []}
-          <div ref={(thisDiv) => this.bottomOfMessages = thisDiv}></div>
+          <div ref={thisDiv => this.bottomOfMessages = thisDiv}></div>
         </ul>
       </div>
     );

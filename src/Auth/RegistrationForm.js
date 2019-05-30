@@ -82,7 +82,7 @@ class RegistrationForm extends Component {
     return (
       <form className="registrationFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="registrationFieldset">
-          <legend className="registrationLegend">sign in</legend>
+          <legend className="registrationLegend">sign up</legend>
           <div className="parentFlex">
             <p className="appName">Potato</p>
             <div className="formGroup registrationFormGroup">

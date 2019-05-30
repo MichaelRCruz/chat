@@ -47,7 +47,7 @@
   justify-content: center;
 }
 
-@media only screen and (min-device-width: 812px) {
+@media screen and (min-width: 450px) {
   .modalBody {
     width: 350px;
     height: 570px;

@@ -3,11 +3,16 @@
 
 .registrationFormComponent {
   font-family: 'Roboto', sans-serif;
-  width: 92%;
+  width: 90%;
+}
+
+.signInFieldset {
+  margin: 0;
+  padding: 0;
 }
 
 .registrationFieldset {
-  padding-left: 0;
+  padding: 0;
 }
 
 .registrationLegend {
@@ -29,10 +34,10 @@
 
 .input {
   font-size: 16px;
-  width: 100%;
   height: 40px;
-  border: 1px solid lightgray;
+  border: 1px solid #232323;
   padding-left: 8px;
+  border-radius: 6px;
 }
 
 .input:focus {
@@ -42,6 +47,7 @@
 .registrationButton {
   display: block;
   width: 80%;
+  height: 55px;
   background-color: #506cf0;
   color: #fff;
   font-family: 'Roboto', sans-serif;
@@ -68,12 +74,8 @@
   padding-left: 4px;
 }
 
-.formGroup {
-  width: 80%;
-}
-
 @media screen and (min-width: 450px) {
   .parentFlex {
-    height: 505px;
+    height: 470px;
   }
 };

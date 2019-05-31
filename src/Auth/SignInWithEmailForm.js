@@ -15,7 +15,7 @@ class SignInWithEmailForm extends React.Component {
   };
 
   formValidated = () => {
-    const {emailValue, passwordValue, emailError, passwordError} = this.state;
+    const { emailValue, passwordValue, emailError, passwordError } = this.state;
     const hasErrors = emailError.length || passwordError.length ? true : false;
     const hasValues = emailValue.length && passwordValue.length;
     this.setState({
@@ -86,7 +86,7 @@ class SignInWithEmailForm extends React.Component {
               className="signInWithEmailButton"
               type="submit"
               disabled={!this.state.formValidated}>
-              sign in
+              sign in with email
             </button>
             <span className="horizontalRule"> or </span>
             <img

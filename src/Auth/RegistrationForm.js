@@ -128,7 +128,7 @@ class RegistrationForm extends React.Component {
               className="registrationButton"
               type="submit"
               disabled={!this.state.formValidated}>
-              sign in
+              create account
             </button>
             <span className="horizontalRule"> or </span>
             <img

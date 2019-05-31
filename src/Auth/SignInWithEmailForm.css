@@ -3,11 +3,12 @@
 
 .signInFormComponent {
   font-family: 'Roboto', sans-serif;
-  width: 92%;
+  width: 90%;
 }
 
 .signInFieldset {
-  padding-left: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .signInWithEmailLegend {
@@ -27,21 +28,29 @@
   height: calc(var(--vh, 1vh) * 100 - 28px - 75px);
 }
 
-.input {
-  font-size: 16px;
-  width: 100%;
-  height: 40px;
-  border: 1px solid lightgray;
-  padding-left: 8px;
+.formGroup {
+  width: 80%;
 }
 
-.inout:focus {
+.input {
+  font-size: 16px;
+  display: block;
+  margin: auto;
+  width: 95%;
+  height: 40px;
+  border: 1px solid #232323;
+  padding-left: 8px;
+  border-radius: 6px;
+}
+
+.input:focus {
   outline: 0;
 }
 
 .signInWithEmailButton {
   display: block;
   width: 80%;
+  height: 55px;
   background-color: #506cf0;
   color: #fff;
   font-family: 'Roboto', sans-serif;
@@ -67,12 +76,8 @@
   text-decoration: underline;
 }
 
-.formGroup {
-  width: 80%;
-}
-
 @media screen and (min-width: 450px) {
   .parentFlex {
-    height: 505px;
+    height: 470px;
   }
 };

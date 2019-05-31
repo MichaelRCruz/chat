@@ -21,6 +21,7 @@ export default class Textarea extends React.Component {
     return (
       <div className="text-input">
         <Element
+          className="supposedTextArea"
           {...this.props.input}
           id={this.props.input.name}
           type={this.props.type}

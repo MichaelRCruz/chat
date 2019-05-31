@@ -88,10 +88,11 @@ class Messages extends Component {
             this.submitMessage(values.message);
           }));
         }}>
-            <fieldset>
+            <fieldset className="supposedFiledset">
               <legend>submit message</legend>
               <div className="formButtonWrapper" tabIndex="0">
                 <Field
+                  className="supposedTextArea"
                   name="message"
                   id="message"
                   component={Textarea}

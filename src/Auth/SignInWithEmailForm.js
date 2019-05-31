@@ -60,7 +60,7 @@ class SignInWithEmailForm extends React.Component {
     return (
       <form className="signInFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="signInFieldset">
-          <legend className="signInWithEmailLegend"><p className="appName">Potato</p></legend>
+          <legend className="signInWithEmailLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             <div className="formGroup emailFormGroup">
               <input

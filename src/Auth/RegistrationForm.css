@@ -6,9 +6,14 @@
   width: 90%;
 }
 
-.signInFieldset {
+.registrationFieldset {
   margin: 0;
   padding: 0;
+}
+
+.appNameAtAuth {
+  font-family: 'Pacifico', cursive;
+  font-size: 30px;
 }
 
 .registrationFieldset {
@@ -17,6 +22,7 @@
 
 .registrationLegend {
   text-align: center;
+  border-radius: 6px;
 }
 
 .googleButton {

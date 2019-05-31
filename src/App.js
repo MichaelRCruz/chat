@@ -22,8 +22,8 @@ class App extends React.Component {
       showMenu: true,
       user: null,
       userConfig: null
-    };
-  }
+    }
+  };
 
   componentDidMount() {
     console.log('0.016');
@@ -47,9 +47,9 @@ class App extends React.Component {
         this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showMenu: false, onlineUsers: [] });
       }
     });
-  }
+  };
 
-  handleConnection(uid) {
+  handleConnection = uid => {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
     const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
@@ -87,7 +87,7 @@ class App extends React.Component {
       console.log('error occured from requestNotifPermission()', err);
       return null;
     });
-  }
+  };
 
   handleFcmToken = (fcmToken, uid, subscription) => {
     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
@@ -100,11 +100,11 @@ class App extends React.Component {
     .catch(error => {
       console.log(error);
     });
-  }
+  };
 
   setFcmToken = fcmToken => {
     console.log('fcmToken: ', fcmToken);
-  }
+  };
 
   getUserConfig = uid => {
     return new Promise((resolve, reject) => {
@@ -116,7 +116,7 @@ class App extends React.Component {
         resolve(snapshot.val());
       });
     });
-  }
+  };
 
   getLastVisitedRoom = lastRoomId => {
     return new Promise((resolve, reject) => {
@@ -130,27 +130,27 @@ class App extends React.Component {
         resolve(lastVisitedRoom);
       });
     });
-  }
+  };
 
   setActiveRoom = activeRoom => {
     this.setState({ activeRoom });
-  }
+  };
 
   createName = (values) => {
     console.log('email form wired up and validated: ', values);
-  }
+  };
 
   toggleModal = () => {
     this.setState({
       show: !this.state.show
     });
-  }
+  };
 
   toggleMenu = () => {
     this.setState({
       showMenu: !this.state.showMenu
     });
-  }
+  };
 
   render() {
     const {activeRoom, user, userConfig, showMenu, show, isLoading, currentFcmToken} = this.state;

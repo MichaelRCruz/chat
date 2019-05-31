@@ -9,6 +9,12 @@
 .signInFieldset {
   margin: 0;
   padding: 0;
+  border-radius: 6px;
+}
+
+.appNameAtAuth {
+  font-family: 'Pacifico', cursive;
+  font-size: 30px;
 }
 
 .signInWithEmailLegend {

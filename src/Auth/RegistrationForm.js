@@ -28,8 +28,11 @@ class RegistrationForm extends React.Component {
       passwordError,
       retypePasswordError
     } = this.state;
-    const hasErrors = displaynameError.length || emailError.length || passwordError.length || retypePasswordError.length ? true : false;
-    const hasValues = displaynameValue.length || emailValue.length || passwordValue.length || retypePasswordValue.length;
+    const hasErrors = displaynameError.length || emailError.length
+                     || passwordError.length || retypePasswordError.length
+                     ? true : false;
+    const hasValues = displaynameValue.length || emailValue.length
+                     || passwordValue.length || retypePasswordValue.length;
     this.setState({ formValidated: !hasErrors && hasValues });
   };
 
@@ -59,7 +62,8 @@ class RegistrationForm extends React.Component {
 
   validateRetypePassword = fieldValue => {
     this.setState({ retypePasswordValue: fieldValue }, () => {
-      this.handleFieldValue(new Validation().retypePassword(this.state.passwordValue, this.state.retypePasswordValue));
+      this.handleFieldValue(new Validation()
+      .retypePassword(this.state.passwordValue, this.state.retypePasswordValue));
     });
   };
 
@@ -82,7 +86,7 @@ class RegistrationForm extends React.Component {
     return (
       <form className="registrationFormComponent" onSubmit={e => this.handleSubmit(e)}>
         <fieldset className="registrationFieldset">
-          <legend className="registrationLegend"><p className="appName">Potato</p></legend>
+          <legend className="registrationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             <div className="formGroup registrationFormGroup">
               <input

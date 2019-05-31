@@ -35,7 +35,7 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: calc(var(--vh, 1vh) * 100 - 28px - 75px);
+  height: calc(var(--vh, 1vh) * 100 - 28px - 75px - 28px);
 }
 
 .input {

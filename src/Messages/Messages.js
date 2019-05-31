@@ -115,9 +115,10 @@ class Messages extends Component {
       const prevMessage = messages[i - 1];
       const prevUid = prevMessage ? prevMessage.creator.uid : '';
       return (
-        <li key={message.key}
-            className="message"
-            ref={message.key === this.state.cursor ? el => this.cursorRef = el : null}
+        <li
+          key={message.key}
+          className="message"
+          ref={message.key === this.state.cursor ? el => this.cursorRef = el : null}
         >
           <div className="imageMessageContainer">
             <img
@@ -126,13 +127,13 @@ class Messages extends Component {
               src={message.creator && message.creator.photoURL
               ? message.creator.photoURL : defaultUserImage}
              />
-
             <div className="nameMessageContainer">
               <div className="display-name">
                 {message.creator.displayName}
                 {message.creator && this.props.user && message.creator.email === this.props.user.email &&
-                  <button onClick={ () => this.removeMessage(message) }
-                          className="remove-message-button">
+                  <button
+                    onClick={ () => this.removeMessage(message) }
+                    className="remove-message-button">
                     &times;
                   </button>
                 }

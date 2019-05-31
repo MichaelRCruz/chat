@@ -7,7 +7,7 @@ class Splash extends React.Component  {
   }
 
   componentDidMount() {
-    window.scrollTo(0, 1);
+    // window.scrollTo(0, 1);
   };
 
   toggleModal = () => {

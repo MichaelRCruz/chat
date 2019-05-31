@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
-import ChangePasswordForm from './ChangePasswordForm';
-import UpdateDisplayNameForm from './UpdateDisplayNameForm';
+// import ChangePasswordForm from './ChangePasswordForm';
+// import UpdateDisplayNameForm from './UpdateDisplayNameForm';
+import UserProfile from './UserProfile';
 import './Auth.css';
 
 class Auth extends React.Component {
@@ -46,58 +47,6 @@ class Auth extends React.Component {
     });
   };
 
-  deleteUser = () => {
-    const user = this.props.firebase.auth().currentUser;
-    user.delete()
-    .then(res => {
-      console.log('deleted user: ', res);
-      this.props.toggleModal();
-    })
-    .catch(function(error) {
-      console.log('error in deleting user: ', error);
-      alert(error);
-    });
-  };
-
-  sendEmailVerification = () => {
-    const user = this.props.firebase.auth().currentUser;
-    user.sendEmailVerification()
-    .then(res => {
-      this.props.toggleModal();
-    })
-    .catch(function(error) {
-      console.log(error.message);
-    });
-  };
-
-  requestNotifPermission = () => {
-    this.props.requestNotifPermission(this.props.user.uid);
-  };
-
-  updatePassword = password => {
-    var user = this.props.firebase.auth().currentUser;
-    user.updatePassword(password)
-    .then(res => {
-      this.props.toggleModal();
-      alert('password updated successfully: ');
-    })
-    .catch(error => {
-      alert(error);
-    });
-  };
-
-  updateDisplayName = displayName => {
-    var user = this.props.firebase.auth().currentUser;
-    user.updateProfile({ displayName })
-    .then(res => {
-      console.log(res);
-      this.props.toggleModal();
-    })
-    .catch(error => {
-      alert(error.messsage);
-    });
-  };
-
   registerUser = (displayName, email, password) => {
     let _self = this;
     this.props.firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -134,30 +83,18 @@ class Auth extends React.Component {
         toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
       />
     );
-    const deleteUserButton = (
-      <button onClick={() => this.deleteUser()}>click here to delete account</button>
-    );
-    const emailVerificationButton = (
-      <button onClick={() => this.sendEmailVerification()}>
-        click here to send verification email
-      </button>
-    );
     if (!this.props.user) {
       return (
         this.state.isRegistrationMode ? registrationForm : signInWithEmailForm
       );
     } else {
       return (
-        <React.Fragment>
-          <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
-          <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
-          <button onClick={() => this.signOut()}>click here to sign out</button>
-          {emailVerificationButton}
-          {deleteUserButton}
-          <button onClick={() => this.requestNotifPermission()}>
-            click here to authorize notifications
-          </button>
-        </React.Fragment>
+        <UserProfile
+          firebase={this.props.firebase}
+          toggleModal={this.props.toggleModal}
+          handleFcmToken={this.props.handleFcmToken}
+          userConfig={this.props.userConfig}
+        />
       );
     }
   }

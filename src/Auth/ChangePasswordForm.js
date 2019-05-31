@@ -1,124 +1,96 @@
-import React, { Component } from 'react';
-import ValidationError from '../ValidationError.js';
-// import './App.css';
+import React from 'react';
+import Validation from '../validation.js';
+// import './RegistrationForm.css';
 
-class ChangePasswordForm extends Component {
-
+class ChangePasswordForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      password: '',
-      repeatPassword: '',
-      passwordValid: false,
-      passwordMatch: false,
-      formValid: false,
-      validationMessages: {
-        password: '',
-        repeatPassword: ''
-      }
+      passwordValue: '',
+      retypePasswordValue: '',
+      passwordError: '',
+      retypePasswordError: ''
     }
-  }
+  };
 
-  updatePassword(password) {
-    this.setState({password}, () => {this.validatePassword(password)});
-  }
+  formValidated = () => {
+    const {
+      passwordValue,
+      retypePasswordValue,
+      passwordError,
+      retypePasswordError
+    } = this.state;
+    const hasErrors = passwordError.length || retypePasswordError.length
+                    ? true : false;
+    const hasValues = passwordValue.length || retypePasswordValue.length;
+    this.setState({ formValidated: !hasErrors && hasValues });
+  };
 
-  updateRepeatPassword(repeatPassword) {
-    this.setState({repeatPassword}, () => {this.matchPasswords(repeatPassword)});
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    const {password} = this.state;
-    this.props.updatePassword(password);
-  }
-
-  validatePassword(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    fieldValue = fieldValue.trim();
-    if(fieldValue.length === 0) {
-      fieldErrors.password = 'Password is required';
-      hasError = true;
-    } else {
-      if (fieldValue.length < 6 || fieldValue.length > 72) {
-        fieldErrors.password = 'Password must be between 6 and 72 characters long';
-        hasError = true;
-      } else {
-        if(!fieldValue.match(new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/))) {
-          fieldErrors.password = 'Password must contain at least one number and one letter';
-          hasError = true;
-        } else {
-          fieldErrors.password = '';
-          hasError = false;
-        }
-      }
-    }
-
+  handleFieldValue = validationResponse => {
     this.setState({
-      validationMessages: fieldErrors,
-      passwordValid: !hasError
-    }, this.formValid );
+      [validationResponse[0]]: validationResponse[1]
+    }, this.formValidated );
+  };
 
-  }
-
-  matchPasswords(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    const password = this.state.password;
-
-    if(fieldValue !== password) {
-      fieldErrors.repeatPassword = 'Passwords do not match';
-      hasError = true;
-    } else {
-      fieldErrors.repeatPassword = '';
-      hasError = false;
-    }
-
-    this.setState({
-      validationMessages: fieldErrors,
-      passwordMatch: !hasError
-    }, this.formValid );
-
-  }
-
-  formValid() {
-    this.setState({
-      formValid: this.state.passwordValid && this.state.passwordMatch
+  validatePassword = fieldValue => {
+    this.setState({ passwordValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().password(fieldValue));
     });
-  }
+  };
+
+  validateRetypePassword = fieldValue => {
+    this.setState({ retypePasswordValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation()
+      .retypePassword(this.state.passwordValue, this.state.retypePasswordValue));
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { passwordValue } = this.state;
+    this.props.updatePassword(passwordValue);
+  };
 
   render () {
+    const { passwordError, retypePasswordError } = this.state;
     return (
-     <form className="registration" onSubmit={e => this.handleSubmit(e)}>
-       <h2>Change Password</h2>
-       <div className="form-group">
-          <ValidationError hasError={!this.state.passwordValid} message={this.state.validationMessages.password}/>
-          <label htmlFor="password">Password *</label>
-          <input type="password" className="registration__control"
-           name="password" id="password" onChange={e => this.updatePassword(e.target.value)}/>
-          <div className="registration__hint">6 to 72 characters, must include a number</div>
-       </div>
-       <div className="form-group">
-        <ValidationError hasError={!this.state.passwordMatch} message={this.state.validationMessages.repeatPassword}/>
-         <label htmlFor="repeatPassword">Repeat Password *</label>
-         <input type="password" className="registration__control"
-           name="repeatPassword" id="repeatPassword" onChange={e => this.updateRepeatPassword(e.target.value)}/>
-       </div>
-
-       <div className="registration__button__group">
-        <button type="reset" className="registration__button">
-            Cancel
-        </button>
-        <button type="submit" className="registration__button" disabled={!this.state.formValid}>
-            Save
-        </button>
-       </div>
-     </form>
-   )
- }
+      <form className="changePasswordFormComponent" onSubmit={e => this.handleSubmit(e)}>
+        <fieldset className="changePasswordFieldset">
+          <legend className="changePasswordLegend">
+            <p className="changePasswordLegendContent">change password</p>
+          </legend>
+          <div className="changePasswordParentFlex">
+            <div className="formGroup changePasswordFormGroup">
+              <input
+                className="changePasswordInput"
+                type="password"
+                name="password"
+                placeholder="password"
+                onChange={e => this.validatePassword(e.target.value)}
+              />
+              <p className="errorMessage">{passwordError}</p>
+            </div>
+            <div className="formGroup changePasswordRetypeFormGroup">
+              <input
+                className="changePasswordInput"
+                type="password"
+                name="retypePassword"
+                placeholder="password"
+                onChange={e => this.validateRetypePassword(e.target.value)}
+              />
+              <p className="errorMessage">{retypePasswordError}</p>
+            </div>
+            <button
+              className="changePasswordButton"
+              type="submit"
+              disabled={!this.state.formValidated}>
+              change password
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    )
+  }
 }
 
 export default ChangePasswordForm;

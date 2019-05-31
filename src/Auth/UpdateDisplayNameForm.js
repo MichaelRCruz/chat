@@ -1,84 +1,70 @@
-import React, { Component } from 'react';
-import ValidationError from '../ValidationError.js';
-// import './App.css';
+import React from 'react';
+import Validation from '../validation.js';
 
-class UpdateDisplayNameForm extends Component {
-
+class ChangeDisplaynameForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      nameValid: false,
-      formValid: false,
-      validationMessages: {
-        name: ''
-      }
+      displaynameValue: '',
+      displaynameError: ''
     }
-  }
+  };
 
-  updateName(name) {
-    this.setState({name}, () => {this.validateName(name)});
-  }
+  formValidated = () => {
+    const { displaynameValue, displaynameError } = this.state;
+    const hasErrors = displaynameError.length ? true : false;
+    const hasValues = displaynameValue.length;
+    this.setState({ formValidated: !hasErrors && hasValues });
+  };
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const {name} = this.state;
-    this.props.updateDisplayName(name);
-  }
-
-  validateName(fieldValue) {
-    const fieldErrors = {...this.state.validationMessages};
-    let hasError = false;
-
-    fieldValue = fieldValue.trim();
-    if(fieldValue.length === 0) {
-      fieldErrors.name = 'Name is required';
-      hasError = true;
-    } else {
-      if (fieldValue.length < 3) {
-        fieldErrors.name = 'Name must be at least 3 characters long';
-        hasError = true;
-      } else {
-        fieldErrors.name = '';
-        hasError = false;
-      }
-    }
-
+  handleFieldValue = validationResponse => {
     this.setState({
-      validationMessages: fieldErrors,
-      nameValid: !hasError
-    }, this.formValid );
+      [validationResponse[0]]: validationResponse[1]
+    }, this.formValidated );
+  };
 
-  }
-
-  formValid() {
-    this.setState({
-      formValid: this.state.nameValid
+  validateDisplayname = fieldValue => {
+    this.setState({ displaynameValue: fieldValue }, () => {
+      this.handleFieldValue(new Validation().displayname(fieldValue));
     });
-  }
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { displaynameValue } = this.state;
+    this.props.updateDisplayName(displaynameValue);
+  };
 
   render () {
+    const { displaynameError } = this.state;
     return (
-     <form className="registration" onSubmit={e => this.handleSubmit(e)}>
-       <h2>update display name</h2>
-       <div className="form-group">
-         <label htmlFor="name">Name *</label>
-         <input type="text" className="registration__control"
-           name="name" id="name" onChange={e => this.updateName(e.target.value)}/>
-         <ValidationError hasError={!this.state.nameValid} message={this.state.validationMessages.name}/>
-       </div>
-
-       <div className="registration__button__group">
-        <button type="reset" className="registration__button">
-            Cancel
-        </button>
-        <button type="submit" className="registration__button" disabled={!this.state.formValid}>
-            Save
-        </button>
-       </div>
-     </form>
-   )
- }
+      <form className="changeDisplaynameFormComponent" onSubmit={e => this.handleSubmit(e)}>
+        <fieldset className="changeDisplaynameFieldset">
+          <legend className="changeDisplaynameLegend">
+            <p className="changeDisplaynameLegendContent">change displayname</p>
+          </legend>
+          <div className="changeDisplaynameParentFlex">
+            <div className="changeDisplaynameFormGroup">
+              <input
+                className="changeDisplaynameInput"
+                type="text"
+                name="email"
+                placeholder="e.g., mykey_42"
+                onChange={e => this.validateDisplayname(e.target.value)}
+              />
+              <p className="changeDisplaynameErrorMessage">{displaynameError}</p>
+              <button
+                className="changeDisplaynameButton"
+                type="submit"
+                disabled={!this.state.formValidated}>
+                change displayname
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    )
+  }
 }
 
-export default UpdateDisplayNameForm;
+export default ChangeDisplaynameForm;

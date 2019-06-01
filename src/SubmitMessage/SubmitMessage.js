@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-// import SubmitMessageForm from './SubmitMessageForm';
-import {reduxForm, Field, reset} from 'redux-form';
-import Textarea from '../Input/Textarea';
-import {required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
+import Validation from '../validation.js';
+// import {reduxForm, Field, reset} from 'redux-form';
+// import Textarea from '../Input/Textarea';
+// import {required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -10,19 +10,66 @@ class Messages extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      newMessageText: ''
+      messageValue: '',
+      isValidated: false
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
-  submitMessage(message) {
+  detectUserAndSendMessage = message => {
+    const words = message.split(' ');
+    const roomSubscribers = Object.values(this.props.activeRoom.users || {});
+    const usersToMessage = [];
+    words.forEach(word => {
+      let user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
+      user = user.replace(/@/g,'');
+      console.log(user, roomSubscribers);
+      if (word.startsWith('@') && roomSubscribers.includes(user)) {
+        usersToMessage.push(user);
+      }
+    });
+    if (usersToMessage.length) {
+      console.log('usersToMessage: ', usersToMessage);
+      return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
+        method: 'POST',
+        body: JSON.stringify({ displayNames: usersToMessage, message })
+      }).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
+      });
+    }
+  };
+
+  formValidated = () => {
+    const { messageValue, messageError } = this.state;
+    const hasErrors = messageError.length ? true : false;
+    const hasValues = messageValue.length ? true : false;
+    this.setState({ isValidated: !hasErrors && hasValues });
+  };
+
+  handleFieldValue = validationResponse => {
+    this.setState({
+      [validationResponse[0]]: validationResponse[1]
+    }, this.formValidated );
+  };
+
+  validateMessage = messageValue => {
+    this.setState({ messageValue }, () => {
+      this.handleFieldValue(new Validation().message(messageValue));
+    });
+  };
+
+  submitMessage = event => {
+    event.preventDefault();
+    const { messageValue } = this.state;
     if (!this.props.activeRoom) {
       return;
     } else {
       const ref = this.messagesRef.push();
       const yourData = {
         key: ref.key,
-        content: message,
+        content: messageValue,
         sentAt: Date.now(),
         roomId: this.props.activeRoom.key,
         creator: {
@@ -33,86 +80,52 @@ class Messages extends Component {
         }
       };
       ref.set(yourData, () => {
-        this.props.dispatch(reset('message'));
-        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(message);
+        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
         const textarea = window.document.querySelector("textarea");
         textarea.style.height = '1.5em';
       });
     }
-  }
+  };
 
-  detectUserAndSendMessage = message => {
-    const words = message.split(' ');
-    const roomSubscribers = Object.values(this.props.activeRoom.users || {});
-    const usersToMessage = [];
-    words.forEach(word => {
-      const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
-      if (word.startsWith('@') && roomSubscribers.includes(user)) {
-        usersToMessage.push(user);
-      }
-    });
-    if (usersToMessage.length) {
-      return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
-        method: 'POST',
-        body: JSON.stringify({ displayNames: usersToMessage, message })
-      }).then(response => {
-        return response;
-      }).catch(error => {
-        return error;
-      });
-    }
-  }
-
-  handleKeyDown = (event, handleSubmit) => {
+  handleKeyDown = (event) => {
     if (event.key === 'Enter' && event.shiftKey === false) {
       event.preventDefault();
-      handleSubmit();
+      this.submitMessage(event);
     }
-  }
-
-  handleTextAreaChange = () => {
-    const textarea = window.document.querySelector("textarea");
-    textarea.style.height = 0;
-    textarea.style.height = textarea.scrollHeight + "px";
-  }
+  };
 
   render() {
-    const {handleSubmit} = this.props;
     return (
       <div className="footerContainer">
         <form
-          onSubmit={this.props.handleSubmit(values =>
-            this.submitMessage(values.message)
-          )}
-          onKeyDown={e => {this.handleKeyDown(e, handleSubmit(values => {
-            this.submitMessage(values.message);
-          }));
-        }}>
-            <fieldset className="supposedFiledset">
-              <legend>submit message</legend>
-              <div className="formButtonWrapper" tabIndex="0">
-                <Field
-                  className="supposedTextArea"
-                  name="message"
-                  id="message"
-                  component={Textarea}
-                  validate={[required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing]}
-                  onChange={this.handleTextAreaChange}
-                />
-                <button className="sendButton"
-                  type="submit"
-                  disabled={this.props.pristine || this.props.submitting}>
-                  <i className="send material-icons">send</i>
-                </button>
-              </div>
-            </fieldset>
+          className=""
+          onSubmit={e => this.submitMessage(e)}
+          onKeyDown={e => this.handleKeyDown(e)}
+        >
+          <fieldset className="supposedFiledset">
+          <legend>submit message</legend>
+            <div className="formButtonWrapper" tabIndex="0">
+              <textarea
+                className="supposedTextArea"
+                name="message"
+                id="message"
+                type="textarea"
+                name="message"
+                onChange={e => this.validateMessage(e.target.value)}
+              />
+              <button
+                onClick={(e) => this.submitMessage(e)}
+                className="sendButton"
+                type="submit"
+                disabled={!this.state.isValidated}>
+                <i className="send material-icons">send</i>
+              </button>
+            </div>
+          </fieldset>
         </form>
       </div>
     );
   }
 }
 
-// export default Messages;
-export default reduxForm({
-  form: 'message'
-})(Messages);
+export default Messages;

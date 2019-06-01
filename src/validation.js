@@ -88,4 +88,8 @@ export default class Validation {
     }
   };
 
+  message = message => {
+    return ['messageError', ''];
+  }
+
 }

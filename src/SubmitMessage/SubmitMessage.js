@@ -55,6 +55,9 @@ class Messages extends Component {
   };
 
   validateMessage = messageValue => {
+    const textarea = window.document.querySelector(".supposedTextArea");
+    textarea.style.height = 0;
+    textarea.style.height = textarea.scrollHeight + "px";
     this.setState({ messageValue }, () => {
       this.handleFieldValue(new Validation().message(messageValue));
     });
@@ -81,7 +84,7 @@ class Messages extends Component {
       };
       ref.set(yourData, () => {
         if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
-        const textarea = window.document.querySelector("textarea");
+        const textarea = window.document.querySelector(".supposedTextArea");
         textarea.style.height = '1.5em';
       });
     }

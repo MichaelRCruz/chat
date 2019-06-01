@@ -84,4 +84,7 @@
   .parentFlex {
     height: 470px;
   }
+  .registrationFieldset {
+    margin-bottom: 43px;
+  }
 };

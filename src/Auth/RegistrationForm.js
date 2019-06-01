@@ -1,5 +1,7 @@
 import React from 'react';
 import Validation from '../validation.js';
+import { debounce } from '../utils.js';
+
 import './RegistrationForm.css';
 
 class RegistrationForm extends React.Component {
@@ -15,6 +17,13 @@ class RegistrationForm extends React.Component {
       passwordError: '',
       retypePasswordError: ''
     }
+    this.debounceDisplayname = debounce(async fieldValue => {
+      try {
+        this.handleFieldValue(new Validation().displayname(fieldValue));
+      } catch (error) {
+        console.log(error);
+      }
+    }, 500);
   };
 
   formValidated = () => {
@@ -44,7 +53,7 @@ class RegistrationForm extends React.Component {
 
   validateDisplayname = fieldValue => {
     this.setState({ displaynameValue: fieldValue }, () => {
-      this.handleFieldValue(new Validation().displayname(fieldValue));
+      this.debounceDisplayname(fieldValue);
     });
   };
 

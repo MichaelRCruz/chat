@@ -86,4 +86,7 @@
   .parentFlex {
     height: 470px;
   }
+  .signInFieldset {
+    margin-bottom: 43px;
+  }
 };

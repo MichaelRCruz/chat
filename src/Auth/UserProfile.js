@@ -1,7 +1,7 @@
 import React from 'react';
-
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
+import './UserProfile.css';
 
 class UserProfile extends React.Component {
   constructor(props) {

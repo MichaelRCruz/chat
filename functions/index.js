@@ -154,3 +154,21 @@ exports.handleSignOut = functions.https.onRequest((req, res) => {
     .then(() => res.send(true));
   });
 });
+
+
+// https://us-central1-chat-asdf.cloudfunctions.net/verifyDisplayname
+exports.verifyDisplayname = functions.https.onRequest((req, res) => {
+  return cors(req, res, async () => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const displayname = req.query.displayname;
+    displaynameRef = admin.database().ref(`users`);
+    await displaynameRef.orderByChild('createdAt').once("value", async snap => {
+      snap.forEach(user => {
+        if (user.val().displayName === displayname) {
+          res.send(false);
+        }
+      });
+    });
+    res.send(true);
+  });
+});

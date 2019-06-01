@@ -1,6 +1,6 @@
 export default class Validation {
 
-  realFetch = (uri, inputOptions) => {
+  goFetch = (uri, inputOptions) => {
     const { headers, ...extraOpts } = inputOptions || {};
     const options = {
       headers: {
@@ -12,34 +12,42 @@ export default class Validation {
       ...extraOpts
     }
     return fetch(uri, options)
-      .then(response => {
-        if (!response.ok) {
-          const err = new Error(response.statusText);
-          err.res = response;
-          throw err;
-        } else {
-          return response.json();
-        }
-      })
-      .catch(err => {
-        console.log('from fetch', err);
-      })
+    .then(response => {
+      if (!response.ok) {
+        const err = new Error(response.statusText);
+        err.res = response;
+        throw err;
+      } else {
+        return response.json();
+      }
+    })
+    .catch(err => {
+      console.log('from fetch', err);
+    });
   };
 
-  displayname = fieldValue => {
-    const claimedDisplaynames = ['relrod', 'mkb', 'danopia', 'ep', 'nb', 'mykey'];
+  checkAvailability = async fieldValue => {
+    const uri = `https://us-central1-chat-asdf.cloudfunctions.net/verifyDisplayname?displayname=${fieldValue}`;
+    const inputOptions = {
+      method: "GET"
+    };
+    const response = await this.goFetch(uri, inputOptions);
+    console.log(response);
+    return response;
+  };
+
+  displayname = async fieldValue => {
     fieldValue = fieldValue.trim();
-    let displaynameError = '';
     if (fieldValue.length === 0) {
-      displaynameError = 'please provide a unique display name';
+      return ['displaynameError', 'please choose a unique display name'];
     } else {
       if (fieldValue.length < 2) {
-        displaynameError = 'display name must be at least 2 characters long';
-      } else if (claimedDisplaynames.includes(fieldValue)) {
-        displaynameError = 'displayname already in use';
+        return ['displaynameError', 'display name must be at least 2 characters long'];
+      } else {
+        const isAvailable = this.checkAvailability(fieldValue);
+        return ['displaynameError', isAvailable];
       }
     }
-    return ['displaynameError', displaynameError];
   };
 
   email = fieldValue => {

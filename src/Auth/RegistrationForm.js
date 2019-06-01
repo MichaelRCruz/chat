@@ -19,7 +19,7 @@ class RegistrationForm extends React.Component {
     }
     this.debounceDisplayname = debounce(async fieldValue => {
       try {
-        this.handleFieldValue(new Validation().displayname(fieldValue));
+        this.handleFieldValue(await new Validation().displayname(fieldValue));
       } catch (error) {
         console.log(error);
       }
@@ -38,10 +38,11 @@ class RegistrationForm extends React.Component {
       retypePasswordError
     } = this.state;
     const hasErrors = displaynameError.length || emailError.length
-                     || passwordError.length || retypePasswordError.length
-                     ? true : false;
-    const hasValues = displaynameValue.length || emailValue.length
-                     || passwordValue.length || retypePasswordValue.length;
+                    || passwordError.length || retypePasswordError.length
+                    ? true : false;
+    const hasValues = displaynameValue.length && emailValue.length
+                    && passwordValue.length && retypePasswordValue.length
+                    ? true : false;
     this.setState({ formValidated: !hasErrors && hasValues });
   };
 

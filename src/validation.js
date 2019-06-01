@@ -38,15 +38,18 @@ export default class Validation {
 
   displayname = async fieldValue => {
     fieldValue = fieldValue.trim();
+    let displaynameError = '';
     if (fieldValue.length === 0) {
-      return ['displaynameError', 'please choose a unique display name'];
+      displaynameError = 'please choose a unique display name';
+      return ['displaynameError', displaynameError];
     } else {
       if (fieldValue.length < 2) {
-        return ['displaynameError', 'display name must be at least 2 characters long'];
+        displaynameError = 'display name must be at least 2 characters long';
       } else {
-        const isAvailable = this.checkAvailability(fieldValue);
-        return ['displaynameError', isAvailable];
+        const isAvailable = await this.checkAvailability(fieldValue);
+        displaynameError = isAvailable ? '' : 'displayname unavailable';
       }
+      return ['displaynameError', displaynameError];
     }
   };
 

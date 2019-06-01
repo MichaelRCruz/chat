@@ -8,8 +8,6 @@ import RoomList from './RoomList/RoomList';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 import Splash from './Splash/Splash';
 
-import {reduxForm, focus} from 'redux-form';
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -229,10 +227,4 @@ class App extends React.Component {
   }
 }
 
-// export default App;
-
-export default reduxForm({
-    form: 'contact',
-    onSubmitFail: (errors, dispatch) =>
-        dispatch(focus('contact', Object.keys(errors)[0]))
-})(App);
+export default App;

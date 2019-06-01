@@ -1,10 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
 import App from "./App";
-import store from "./store";
 import * as firebase from 'firebase';
-import './index.css';
 
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
@@ -29,10 +26,4 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   });
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App firebase={firebase}
-    />
-  </Provider>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App firebase={firebase} />, document.getElementById("root"));

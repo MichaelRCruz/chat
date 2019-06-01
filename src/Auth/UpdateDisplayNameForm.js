@@ -1,4 +1,5 @@
 import React from 'react';
+import { debounce } from '../utils.js';
 import Validation from '../validation.js';
 
 class ChangeDisplaynameForm extends React.Component {
@@ -8,12 +9,19 @@ class ChangeDisplaynameForm extends React.Component {
       displaynameValue: '',
       displaynameError: ''
     }
+    this.debounceDisplayname = debounce(async fieldValue => {
+      try {
+        this.handleFieldValue(await new Validation().displayname(fieldValue));
+      } catch (error) {
+        console.log(error);
+      }
+    }, 250);
   };
 
   formValidated = () => {
     const { displaynameValue, displaynameError } = this.state;
     const hasErrors = displaynameError.length ? true : false;
-    const hasValues = displaynameValue.length;
+    const hasValues = displaynameValue.length ? true : false;
     this.setState({ formValidated: !hasErrors && hasValues });
   };
 
@@ -25,7 +33,7 @@ class ChangeDisplaynameForm extends React.Component {
 
   validateDisplayname = fieldValue => {
     this.setState({ displaynameValue: fieldValue }, () => {
-      this.handleFieldValue(new Validation().displayname(fieldValue));
+      this.debounceDisplayname(fieldValue);
     });
   };
 

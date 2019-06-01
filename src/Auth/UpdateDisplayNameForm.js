@@ -7,7 +7,8 @@ class ChangeDisplaynameForm extends React.Component {
     super(props);
     this.state = {
       displaynameValue: '',
-      displaynameError: ''
+      displaynameError: '',
+      isValidated: false
     }
     this.debounceDisplayname = debounce(async fieldValue => {
       try {
@@ -22,7 +23,7 @@ class ChangeDisplaynameForm extends React.Component {
     const { displaynameValue, displaynameError } = this.state;
     const hasErrors = displaynameError.length ? true : false;
     const hasValues = displaynameValue.length ? true : false;
-    this.setState({ formValidated: !hasErrors && hasValues });
+    this.setState({ isValidated: !hasErrors && hasValues });
   };
 
   handleFieldValue = validationResponse => {
@@ -64,7 +65,7 @@ class ChangeDisplaynameForm extends React.Component {
               <button
                 className="changeDisplaynameButton"
                 type="submit"
-                disabled={!this.state.formValidated}>
+                disabled={!this.state.isValidated}>
                 change displayname
               </button>
             </div>

@@ -18,7 +18,7 @@
   min-height: 1em;
   margin: auto 0 auto 0;
   padding-left: 10px;
-  width: 88%;
+  width: 100%;
 }
 
 .footerContainer {
@@ -34,6 +34,8 @@
   background-color: #fff;
   border-radius: 7px;
   padding: 5px 0 5px 0;
+  max-width: 1120px;
+  width: 100%;
 }
 
 .sendButton {
@@ -43,9 +45,11 @@
   flex-shrink: 0;
   background: none;
   border: 0;
-  position: absolute;
-  bottom: 15px;
-  right: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-direction: column-reverse;
+  /* padding is currently influenced by unknown external css style */
+  padding: 0 10px 0 0;
 }
 
 .send {
@@ -56,7 +60,7 @@
   .footerContainer {
     margin-left: 300px;
   }
-  .textarea {
-    width: 96%;
-  }
+  /* .textarea {
+    width: calc(100% - 12px);
+  } */
 };

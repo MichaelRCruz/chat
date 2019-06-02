@@ -33,7 +33,7 @@ p, h1, h2, h3, h4, h5, h6 {
   width: 40px;
   height: 40px;
   margin-right: 5px;
-  margin-left: 10px;
+  margin-left: 15px;
   flex-shrink: 0;
 }
 
@@ -50,7 +50,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .message-list:last-child {
-  margin-bottom: 100px;
+  margin-bottom: 60px;
 }
 
 .message-list:first-child {
@@ -62,13 +62,7 @@ p, h1, h2, h3, h4, h5, h6 {
   overflow-x: auto;
 }
 
-.nameMessageContainer {
-}
-
 @media only screen and (min-device-width: 868px) {
-  /* .marginTop {
-    margin-top: 60px !important;
-  } */
   .firstChild {
     margin-top: calc(100vh - 100px);
   }

@@ -10,12 +10,14 @@
 .textarea {
   outline: none;
   border-radius: 7px;
+  border: 0;
   resize: none;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   height: 1.5em;
   min-height: 1em;
-  padding: 5px;
+  margin: auto 0 auto 0;
+  padding-left: 10px;
   width: 100%;
 }
 
@@ -24,24 +26,29 @@
 }
 
 .formButtonWrapper {
+  outline: none;
   display: flex;
   justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 7px;
+  padding: 5px 0 5px 0;
 }
 
 .sendButton {
   cursor: pointer;
-  background-color: #fd5523;
-  width: 37px;
-  height: 37px;
-  border-radius: 12%;
-  margin-right: 10px;
-  margin-left: 10px;
-  margin-bottom: 10px;
+  width: auto;
+  height: auto;
+  /* margin: 5px 5px 5px 0; */
   flex-shrink: 0;
+  background: none;
+  border: 0;
+  position: absolute;
+  bottom: 15px;
+  right: 10px;
 }
 
 .send {
-  color: #cfecd8;
+  color: blue;
 }
 
 @media only screen and (min-device-width: 812px) {

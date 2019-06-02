@@ -36,7 +36,7 @@ class Messages extends Component {
       ref.set(yourData, () => {
         if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
         const textarea = window.document.querySelector(".textarea");
-        textarea.style.height = '1.4em';
+        textarea.style.height = '1.5em';
         this.setState({ messageValue: '', messageError: '', isValidated: false });
       });
     }
@@ -111,8 +111,8 @@ class Messages extends Component {
                 onChange={e => this.validateMessage(e.target.value)}
               />
               <button
-                onClick={(e) => this.submitMessage(e)}
                 className="sendButton"
+                onClick={(e) => this.submitMessage(e)}
                 type="submit"
                 disabled={!this.state.isValidated}>
                 <i className="send material-icons">send</i>

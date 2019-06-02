@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import Validation from '../validation.js';
-// import {reduxForm, Field, reset} from 'redux-form';
-// import Textarea from '../Input/Textarea';
-// import {required, nonEmpty, mdTitle, mdBullet, codeBlock, otherThing} from '../validators';
 
 import './SubmitMessage.css';
 
@@ -11,10 +8,46 @@ class Messages extends Component {
     super(props)
     this.state = {
       messageValue: '',
+      messageError: '',
       isValidated: false
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
-  }
+  };
+
+  submitMessage = event => {
+    event.preventDefault();
+    const { messageValue } = this.state;
+    if (!this.props.activeRoom) {
+      return;
+    } else {
+      const ref = this.messagesRef.push();
+      const yourData = {
+        key: ref.key,
+        content: messageValue,
+        sentAt: Date.now(),
+        roomId: this.props.activeRoom.key,
+        creator: {
+          uid: this.props.user.uid,
+          email: this.props.user.email,
+          displayName: this.props.user.displayName,
+          photoURL: this.props.user.photoURL
+        }
+      };
+      ref.set(yourData, () => {
+        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
+        const textarea = window.document.querySelector(".textarea");
+        textarea.style.height = '1.4em';
+        this.setState({ messageValue: '', messageError: '', isValidated: false });
+      });
+    }
+  };
+
+  handleKeyDown = (event) => {
+    if (event.key === 'Enter' && event.shiftKey === false) {
+      event.preventDefault();
+      this.submitMessage(event);
+    }
+  };
 
   detectUserAndSendMessage = message => {
     const words = message.split(' ');
@@ -23,13 +56,11 @@ class Messages extends Component {
     words.forEach(word => {
       let user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
       user = user.replace(/@/g,'');
-      console.log(user, roomSubscribers);
       if (word.startsWith('@') && roomSubscribers.includes(user)) {
         usersToMessage.push(user);
       }
     });
     if (usersToMessage.length) {
-      console.log('usersToMessage: ', usersToMessage);
       return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
         method: 'POST',
         body: JSON.stringify({ displayNames: usersToMessage, message })
@@ -55,46 +86,12 @@ class Messages extends Component {
   };
 
   validateMessage = messageValue => {
-    const textarea = window.document.querySelector(".supposedTextArea");
+    const textarea = window.document.querySelector(".textarea");
     textarea.style.height = 0;
     textarea.style.height = textarea.scrollHeight + "px";
     this.setState({ messageValue }, () => {
       this.handleFieldValue(new Validation().message(messageValue));
     });
-  };
-
-  submitMessage = event => {
-    event.preventDefault();
-    const { messageValue } = this.state;
-    if (!this.props.activeRoom) {
-      return;
-    } else {
-      const ref = this.messagesRef.push();
-      const yourData = {
-        key: ref.key,
-        content: messageValue,
-        sentAt: Date.now(),
-        roomId: this.props.activeRoom.key,
-        creator: {
-          uid: this.props.user.uid,
-          email: this.props.user.email,
-          displayName: this.props.user.displayName,
-          photoURL: this.props.user.photoURL
-        }
-      };
-      ref.set(yourData, () => {
-        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
-        const textarea = window.document.querySelector(".supposedTextArea");
-        textarea.style.height = '1.5em';
-      });
-    }
-  };
-
-  handleKeyDown = (event) => {
-    if (event.key === 'Enter' && event.shiftKey === false) {
-      event.preventDefault();
-      this.submitMessage(event);
-    }
   };
 
   render() {
@@ -103,17 +100,14 @@ class Messages extends Component {
         <form
           className=""
           onSubmit={e => this.submitMessage(e)}
-          onKeyDown={e => this.handleKeyDown(e)}
-        >
-          <fieldset className="supposedFiledset">
-          <legend>submit message</legend>
+          onKeyDown={e => this.handleKeyDown(e)}>
             <div className="formButtonWrapper" tabIndex="0">
               <textarea
-                className="supposedTextArea"
+                className="textarea"
                 name="message"
-                id="message"
                 type="textarea"
-                name="message"
+                placeholder='message'
+                value={this.state.messageValue}
                 onChange={e => this.validateMessage(e.target.value)}
               />
               <button
@@ -124,7 +118,6 @@ class Messages extends Component {
                 <i className="send material-icons">send</i>
               </button>
             </div>
-          </fieldset>
         </form>
       </div>
     );

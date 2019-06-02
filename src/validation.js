@@ -1,5 +1,13 @@
 export default class Validation {
 
+  constructor(input) {
+    this.input = input ? this.washValue(input) : null;
+  }
+
+  washValue = input => {
+    return input.trim();
+  }
+
   goFetch = (uri, inputOptions) => {
     const { headers, ...extraOpts } = inputOptions || {};
     const options = {
@@ -32,7 +40,6 @@ export default class Validation {
       method: "GET"
     };
     const response = await this.goFetch(uri, inputOptions);
-    console.log(response);
     return response;
   };
 
@@ -88,8 +95,20 @@ export default class Validation {
     }
   };
 
-  message = message => {
-    return ['messageError', ''];
+  message = input => {
+    let messageError = '';
+    input = input.trim();
+    const codeBody = input.replace(/`/g, '').trim();
+    if (input.startsWith('#')) {
+      messageError = 'no markdown titles, please.';
+    } else if (input.startsWith('*')) {
+      messageError = 'no bullets, please.';
+    } else if (input.startsWith('_``_')) {
+      messageError = 'please reformat';
+    } else if (!codeBody.length) {
+      messageError = 'no empty code blocks, please';
+    }
+    return ['messageError', messageError];
   }
 
 }

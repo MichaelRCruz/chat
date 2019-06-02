@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-ul {
-  padding-left: 0;
-}
-
+/* temporary selectors until proper markdown validation is acheived */
 p, h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
@@ -49,12 +46,13 @@ p, h1, h2, h3, h4, h5, h6 {
   font-size: 12px;
 }
 
-.message-list:last-child {
-  margin-bottom: 60px;
+.messageList {
+  padding-left: 0;
+  margin-bottom: 80px;
 }
 
-.message-list:first-child {
-  margin-top: calc(100vh - 100px);
+.messageList:last-child {
+  margin-top: calc(100vh - 120px);
 }
 
 .imageMessageContainer {

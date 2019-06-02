@@ -149,7 +149,7 @@ class Messages extends Component {
     )
     return (
       <div className="messages-component">
-        <ul className="message-list">
+        <ul className="messageList">
           {this.props.user ? messages : []}
           <div ref={thisDiv => this.bottomOfMessages = thisDiv}></div>
         </ul>

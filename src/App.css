@@ -27,6 +27,7 @@ body {
   position: fixed;
   bottom: 0vh;
   width: 100%;
+  background-color: #fff;
 }
 
 .logo {

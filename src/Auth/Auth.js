@@ -18,7 +18,6 @@ class Auth extends React.Component {
   signInWithEmail = (email, password) => {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
     .then(res => {
-      console.log('user signed In: ', res);
       this.props.toggleModal();
     })
     .catch(function(error) {

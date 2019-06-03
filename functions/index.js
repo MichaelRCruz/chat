@@ -11,7 +11,6 @@ adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
 exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
-
   return cors(req, res, () => {
     res.set('Access-Control-Allow-Origin', '*');
     const {uid, displayName} = JSON.parse(req.body);
@@ -42,7 +41,6 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       });
     });
   });
-
 });
 
 // https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic

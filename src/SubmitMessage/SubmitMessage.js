@@ -57,6 +57,7 @@ class Messages extends Component {
       let user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
       user = user.replace(/@/g,'');
       if (word.startsWith('@') && roomSubscribers.includes(user)) {
+        console.log(user);
         usersToMessage.push(user);
       }
     });

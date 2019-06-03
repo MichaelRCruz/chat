@@ -17,7 +17,7 @@ class App extends React.Component {
       isLoading: true,
       onlineUsers: [],
       show: false,
-      showMenu: true,
+      showRooms: true,
       user: null,
       userConfig: null
     }
@@ -27,10 +27,8 @@ class App extends React.Component {
     console.log('0.016');
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        console.log('new user: ', user);
         this.handleConnection(user.uid);
         let {userConfig, activeRoom} = await this.getUserConfig(user);
-        // const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         if (this.props.firebase.messaging.isSupported()) {
           const messaging = this.props.firebase.messaging();
           const currentFcmToken = await messaging.getToken();
@@ -43,7 +41,7 @@ class App extends React.Component {
         }
         await this.setState({ user, userConfig, activeRoom, isLoading: false });
       } else {
-        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showMenu: false, onlineUsers: [] });
+        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, onlineUsers: [] });
       }
     });
   };
@@ -58,25 +56,12 @@ class App extends React.Component {
       return response.json();
     })
     .then(function(response) {
-      console.log(response);
       return response;
     })
     .catch(error => {
       console.log(error);
     });
   };
-
-  // getUserConfig = uid => {
-  //   return new Promise((resolve, reject) => {
-  //     const userConfigRef = this.props.firebase.database().ref(`users/${uid}`);
-  //     if (!userConfigRef) {
-  //       reject(new Error('config does not exist for user'), null);
-  //     }
-  //     userConfigRef.on('value', snapshot => {
-  //       resolve(snapshot.val());
-  //     });
-  //   });
-  // };
 
   handleConnection = uid => {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
@@ -135,20 +120,6 @@ class App extends React.Component {
     console.log('fcmToken: ', fcmToken);
   };
 
-  // getLastVisitedRoom = lastRoomId => {
-  //   return new Promise((resolve, reject) => {
-  //     const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
-  //     if (!lastVisitedRoomRef) {
-  //       reject(new Error('room does not exist for user'), null);
-  //     }
-  //     lastVisitedRoomRef.once('value', snapshot => {
-  //       const lastVisitedRoom = snapshot.val();
-  //       lastVisitedRoom.key = snapshot.key;
-  //       resolve(lastVisitedRoom);
-  //     });
-  //   });
-  // };
-
   setActiveRoom = activeRoom => {
     this.setState({ activeRoom });
   };
@@ -163,27 +134,27 @@ class App extends React.Component {
     });
   };
 
-  toggleMenu = () => {
+  toggleRooms = () => {
     this.setState({
-      showMenu: !this.state.showMenu
+      showRooms: !this.state.showRooms
     });
   };
 
   render() {
-    const {activeRoom, user, userConfig, showMenu, show, isLoading, currentFcmToken} = this.state;
+    const {activeRoom, user, userConfig, showRooms, show, isLoading, currentFcmToken} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
           <img
             className="logo" src={require("./assets/images/potato2.svg")}
             alt="potato logo"
-            onClick={this.toggleMenu}
+            onClick={this.toggleRooms}
           />
           <p className="app-name">Potato</p>
           <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
 
         </header>
-        <aside className={showMenu ? "sidebar" : "displayUnset"}>
+        <aside className={showRooms ? "sidebar" : "displayUnset"}>
           <RoomList
             className="lightContainer"
             firebase={this.props.firebase}
@@ -193,7 +164,7 @@ class App extends React.Component {
             setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
-        <main className={!showMenu ? "main" : "main overflowHidden"}>
+        <main className={!showRooms ? "main" : "main overflowHidden"}>
           <Messages
             firebase={this.props.firebase}
             activeRoom={activeRoom}

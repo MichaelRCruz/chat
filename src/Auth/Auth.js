@@ -54,6 +54,7 @@ class Auth extends React.Component {
       this.setState({isRegistrationMode: true, user: res.user}, () => {
         _self.props.firebase.auth().currentUser.updateProfile({ displayName });
         _self.props.toggleModal();
+        // _self.props.toggleRegistrationMode(false);
       });
     })
     .catch(error => {

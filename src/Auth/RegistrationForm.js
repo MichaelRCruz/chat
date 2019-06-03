@@ -79,8 +79,8 @@ class RegistrationForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { emailValue, passwordValue } = this.state;
-    this.props.signInWithEmail(emailValue, passwordValue);
+    const { displaynameValue, emailValue, passwordValue } = this.state;
+    this.props.registerUser(displaynameValue, emailValue, passwordValue);
   };
 
   signInWithGoogle = () => {

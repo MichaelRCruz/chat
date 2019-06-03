@@ -24,7 +24,7 @@ class Messages extends Component {
     this.getMessages().then(messages => {
       this.setState({
         displayedMessages: messages,
-        cursor: messages[0].key,
+        cursor: messages[0] ? messages[0].key : null,
         messageCount: messages.length
       }, () => {
         this.bottomOfMessages.scrollIntoView();

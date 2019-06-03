@@ -10,23 +10,39 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
-exports.createRoomAndUserConfig = functions.auth.user().onCreate(user => {
-  console.log('user: ', user)
-  const roomRef = admin.database().ref('/rooms');
-  const userRef = admin.database().ref('/users');
-  return roomRef.child(`uid-${user.uid}`).set({
-    active: false,
-    creator: user.uid,
-    dscription: `${user.displayName}'s first Potato. Welcome!`,
-    moderators: [user.uid],
-    name: `${user.displayName}'s Potato`
-  }).then(res => {
-    return userRef.child(user.uid).set({
-      displayName: user.displayName,
-      lastVisited: `uid-${user.uid}`,
-      rooms: [`uid-${user.uid}`, '-Ld7mZCDqAEcMSGxJt-x']
+exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
+
+  return cors(req, res, () => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const {uid, displayName} = JSON.parse(req.body);
+    const userRef = admin.database().ref('/users');
+    const roomRef = admin.database().ref('/rooms');
+    const userConfig = {
+      displayName,
+      lastVisited: `uid-${uid}`,
+      rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
+      activity: {
+        isOnline: true,
+        lastChanged: Math.floor(Date.now() / 1000)
+      }
+    }
+    const room = {
+      active: true,
+      creator: uid,
+      dscription: `${displayName}'s first Potato. Welcome!`,
+      moderators: [uid],
+      name: `${displayName}'s Potato`,
+      key: `uid-${uid}`
+    }
+    return userRef.child(uid).set(userConfig)
+    .then(() => {
+      return roomRef.child(`uid-${uid}`).set(room)
+      .then(() => {
+        res.json({ userConfig, activeRoom: room });
+      });
     });
   });
+
 });
 
 // https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic

@@ -27,9 +27,10 @@ class App extends React.Component {
     console.log('0.016');
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
+        console.log('new user: ', user);
         this.handleConnection(user.uid);
-        let userConfig = await this.getUserConfig(user.uid);
-        const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
+        let {userConfig, activeRoom} = await this.getUserConfig(user);
+        // const lastVisitedRoom = await this.getLastVisitedRoom(userConfig.lastVisited);
         if (this.props.firebase.messaging.isSupported()) {
           const messaging = this.props.firebase.messaging();
           const currentFcmToken = await messaging.getToken();
@@ -40,12 +41,42 @@ class App extends React.Component {
             this.requestNotifPermission(user.uid);
           });
         }
-        await this.setState({ user, userConfig, activeRoom: lastVisitedRoom, isLoading: false });
+        await this.setState({ user, userConfig, activeRoom, isLoading: false });
       } else {
         this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showMenu: false, onlineUsers: [] });
       }
     });
   };
+
+  getUserConfig = user => {
+    const { uid, displayName } = user;
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/createRoomAndUserConfig`, {
+      method: 'POST',
+      body: JSON.stringify({ uid, displayName })
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      console.log(response);
+      return response;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  };
+
+  // getUserConfig = uid => {
+  //   return new Promise((resolve, reject) => {
+  //     const userConfigRef = this.props.firebase.database().ref(`users/${uid}`);
+  //     if (!userConfigRef) {
+  //       reject(new Error('config does not exist for user'), null);
+  //     }
+  //     userConfigRef.on('value', snapshot => {
+  //       resolve(snapshot.val());
+  //     });
+  //   });
+  // };
 
   handleConnection = uid => {
     // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
@@ -104,31 +135,19 @@ class App extends React.Component {
     console.log('fcmToken: ', fcmToken);
   };
 
-  getUserConfig = uid => {
-    return new Promise((resolve, reject) => {
-      const userConfigRef = this.props.firebase.database().ref(`users/${uid}`);
-      if (!userConfigRef) {
-        reject(new Error('config does not exist for user'), null);
-      }
-      userConfigRef.on('value', snapshot => {
-        resolve(snapshot.val());
-      });
-    });
-  };
-
-  getLastVisitedRoom = lastRoomId => {
-    return new Promise((resolve, reject) => {
-      const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
-      if (!lastVisitedRoomRef) {
-        reject(new Error('room does not exist for user'), null);
-      }
-      lastVisitedRoomRef.once('value', snapshot => {
-        const lastVisitedRoom = snapshot.val();
-        lastVisitedRoom.key = snapshot.key;
-        resolve(lastVisitedRoom);
-      });
-    });
-  };
+  // getLastVisitedRoom = lastRoomId => {
+  //   return new Promise((resolve, reject) => {
+  //     const lastVisitedRoomRef = this.props.firebase.database().ref(`rooms/${lastRoomId}`);
+  //     if (!lastVisitedRoomRef) {
+  //       reject(new Error('room does not exist for user'), null);
+  //     }
+  //     lastVisitedRoomRef.once('value', snapshot => {
+  //       const lastVisitedRoom = snapshot.val();
+  //       lastVisitedRoom.key = snapshot.key;
+  //       resolve(lastVisitedRoom);
+  //     });
+  //   });
+  // };
 
   setActiveRoom = activeRoom => {
     this.setState({ activeRoom });

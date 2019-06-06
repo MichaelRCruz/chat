@@ -10,6 +10,9 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
+const db = admin.database();
+const ref =
+
 exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -26,16 +29,16 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       }
     }
     const room = {
-      active: true,
+      active: false,
       creator: uid,
       dscription: `${displayName}'s first Potato. Welcome!`,
       moderators: [uid],
       name: `${displayName}'s Potato`,
       key: `uid-${uid}`
     }
-    return userRef.child(uid).set(userConfig)
+    return userRef.child(uid).update(userConfig)
     .then(() => {
-      return roomRef.child(`uid-${uid}`).set(room)
+      return roomRef.child(`uid-${uid}`).update(room)
       .then(() => {
         res.json({ userConfig, activeRoom: room });
       });

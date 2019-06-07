@@ -15,9 +15,9 @@ class App extends React.Component {
       activeRoom: null,
       currentFcmToken: null,
       isLoading: true,
-      onlineUsers: [],
       show: false,
       showRooms: true,
+      subscribedRooms: null,
       user: null,
       userConfig: null
     }
@@ -28,7 +28,7 @@ class App extends React.Component {
     this.props.firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.handleConnection(user.uid);
-        let {userConfig, activeRoom} = await this.getUserConfig(user);
+        let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
         if (this.props.firebase.messaging.isSupported()) {
           const messaging = this.props.firebase.messaging();
           const currentFcmToken = await messaging.getToken();
@@ -39,9 +39,9 @@ class App extends React.Component {
             this.requestNotifPermission(user.uid);
           });
         }
-        await this.setState({ user, userConfig, activeRoom, isLoading: false });
+        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms });
       } else {
-        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, onlineUsers: [] });
+        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
       }
     });
   };
@@ -141,7 +141,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {activeRoom, user, userConfig, showRooms, show, isLoading, currentFcmToken} = this.state;
+    const {activeRoom, user, userConfig, showRooms, show, isLoading, currentFcmToken, subscribedRooms} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -161,6 +161,7 @@ class App extends React.Component {
             activeRoom={activeRoom}
             user={user}
             userConfig={userConfig}
+            subscribedRooms={subscribedRooms}
             setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>

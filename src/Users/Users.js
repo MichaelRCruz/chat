@@ -1,5 +1,6 @@
 import React from 'react';
 import {throttling} from '../utils.js';
+import './Users.css';
 
 class Users extends React.Component {
   constructor (props) {
@@ -31,18 +32,27 @@ class Users extends React.Component {
     });
   };
 
+  inspectUser = (key, index) => {
+    console.log(key, index);
+  };
+
   render() {
     const onlineUsers = this.state.onlineUsers.map((user, index) => {
       return (
-        <li key={index}>
-          <h1>{user.displayName}</h1>
+        <li className="onlineUser" key={index}>
+          <button className="inspectUserButton" onClick={() => this.inspectUser(user.key, index)}>
+            { user.displayName }
+          </button>
         </li>
       );
     });
     return (
-      <ul>
-        {onlineUsers}
-      </ul>
+      <section className="onlineUsersComponent">
+        <h1>online users</h1>
+        <ul>
+          {onlineUsers}
+        </ul>
+      </section>
     );
   };
 }

@@ -99,6 +99,7 @@ class RegistrationForm extends React.Component {
           <legend className="registrationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             <div className="formGroup registrationFormGroup">
+              <p className="errorMessage">{displaynameError}</p>
               <input
                 className="input displaynameInput"
                 type="text"
@@ -106,9 +107,9 @@ class RegistrationForm extends React.Component {
                 placeholder="e.g., mykey_42"
                 onChange={e => this.validateDisplayname(e.target.value)}
               />
-              <p className="errorMessage">{displaynameError}</p>
             </div>
             <div className="formGroup emailFormGroup">
+              <p className="errorMessage">{emailError}</p>
               <input
                 className="input emailInput"
                 type="email"
@@ -116,9 +117,9 @@ class RegistrationForm extends React.Component {
                 placeholder="email"
                 onChange={e => this.validateEmail(e.target.value)}
               />
-              <p className="errorMessage">{emailError}</p>
             </div>
             <div className="formGroup passwordFormGroup">
+              <p className="errorMessage">{passwordError}</p>
               <input
                 className="input passwordInput"
                 type="password"
@@ -126,9 +127,9 @@ class RegistrationForm extends React.Component {
                 placeholder="password"
                 onChange={e => this.validatePassword(e.target.value)}
               />
-              <p className="errorMessage">{passwordError}</p>
             </div>
             <div className="formGroup retypePasswordFormGroup">
+              <p className="errorMessage">{retypePasswordError}</p>
               <input
                 className="input passwordInput"
                 type="password"
@@ -136,7 +137,6 @@ class RegistrationForm extends React.Component {
                 placeholder="password"
                 onChange={e => this.validateRetypePassword(e.target.value)}
               />
-              <p className="errorMessage">{retypePasswordError}</p>
             </div>
             <button
               className="registrationButton"

@@ -10,10 +10,10 @@ class Rooms extends React.Component {
 
   render() {
     const { subscribedRooms } = this.props;
-    const rooms = subscribedRooms.map(subscribedRoom => {
+    const rooms = subscribedRooms.map((subscribedRoom, index) => {
       return (
-        <li className="roomNameContainer" key={subscribedRoom.key}>
-          <button className="roomName" onClick={() => {
+        <li className="subscribedRoom" key={subscribedRoom.key}>
+          <button className="roomNameButton" onClick={() => {
             this.props.setActiveRoom(subscribedRoom)
           }}>
             { subscribedRoom.name }
@@ -22,7 +22,8 @@ class Rooms extends React.Component {
       );
     });
     return (
-      <section className="roomComponent">
+      <section className="roomsComponent">
+        <h1>rooms</h1>
         <ul>
           {rooms}
         </ul>

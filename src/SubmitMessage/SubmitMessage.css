@@ -47,8 +47,6 @@
   display: flex;
   flex-direction: column;
   flex-direction: column-reverse;
-  /* padding is currently influenced by unknown external css style */
-  padding: 0 10px 0 0;
 }
 
 .send {
@@ -59,7 +57,4 @@
   .footerContainer {
     margin-left: 250px;
   }
-  /* .textarea {
-    width: calc(100% - 12px);
-  } */
 };

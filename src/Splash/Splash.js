@@ -24,7 +24,7 @@ class Splash extends React.Component  {
                 <img className="splashLogo" src={require("../assets/images/potato2.svg")}
                      alt="potato logo"
                 />
-                <p className="appName">Potato</p>
+                <p className="splashAppName">Potato</p>
               </div>
             </a>
             <i onClick={this.toggleModal} className="material-icons menuIcon">menu</i>

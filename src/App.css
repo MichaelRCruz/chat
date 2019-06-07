@@ -1,26 +1,52 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
 body {
-  max-width: 1440px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .header {
   position: fixed;
   top: 0vh;
-  height: 50px;
+  height: auto;
   width: 100%;
-  background-color: #043d30;
+  background-color: black;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1440px;
+  /* max-width: 1440px; */
   z-index: 999;
 }
 
-.user-display-name {
+.menuIconContainer, .appNameContainer, .headerIconContainer {
   display: flex;
-  align-items: center;
+  width: 33.3%;
+}
+
+.menuIconContainer {
+  flex-direction: row;
+}
+
+.appNameContainer {
+  justify-content: center;
+}
+
+.headerIconContainer {
+  flex-direction: flex-end;
+}
+
+.headerAppName {
+  font-family: 'Pacifico', cursive;
+  color: #cfecd8;
+  font-size: 23px;
+}
+
+.headerIconContainer {
+  justify-content: flex-end;
+}
+
+.personIcon, .menuIcon {
+  color: #fff;
+  margin: 0 15px 0 15px;
 }
 
 .footer {
@@ -28,34 +54,6 @@ body {
   bottom: 0vh;
   width: 100%;
   background-color: #fff;
-}
-
-.logo {
-  width: 40px;
-  height: 40px;
-  border-radius: 5px;
-}
-
-.on-off-button {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  margin-right: 2%;
-  color: #fff;
-
-}
-
-.app-name {
-  font-family: 'Pacifico', cursive;
-  color: #cfecd8;
-  font-size: 30px;
-  margin-left: 2%;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  margin-left: 10px;
 }
 
 .add-room {
@@ -86,14 +84,6 @@ body {
 }
 
 @media only screen and (min-device-width: 812px) {
-  .sidebar {
-    display: unset;
-    position: absolute;
-    z-index: 999;
-    grid-area: sidebar;
-    background-color: #E1E2E1;
-  }
-
   .appComponent {
     display: grid;
     grid-template-columns: 300px auto;
@@ -101,6 +91,14 @@ body {
       "header header"
       "sidebar main"
       "sidebar footer";
+  }
+
+  .sidebar {
+    display: unset;
+    position: absolute;
+    z-index: 999;
+    grid-area: sidebar;
+    background-color: #E1E2E1;
   }
 
   .header {

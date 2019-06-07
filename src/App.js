@@ -145,14 +145,19 @@ class App extends React.Component {
     const app = (
       <div className="appComponent">
         <header className="header">
-          <img
-            className="logo" src={require("./assets/images/potato2.svg")}
-            alt="potato logo"
-            onClick={this.toggleRooms}
-          />
-          <p className="app-name">Potato</p>
-          <i className="material-icons" onClick={this.toggleModal}>more_vert</i>
-
+          <div className="menuIconContainer">
+            <i className="material-icons menuIcon"
+               onClick={this.toggleModal}>sort</i>
+          </div>
+          <div className="appNameContainer">
+            <a href="https://michaelcruz.io/chat">
+              <p className="headerAppName">Potato</p>
+            </a>
+          </div>
+          <div className="headerIconContainer">
+            <i className="material-icons personIcon"
+               onClick={this.toggleModal}>person</i>
+          </div>
         </header>
         <aside className={showRooms ? "sidebar" : "displayUnset"}>
           <RoomList

@@ -10,10 +10,18 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
-const db = admin.database();
-const ref =
-
 exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
+  function getRooms(roomIds) {
+    return new Promise((resolve, reject) => {
+      let rooms = [];
+      roomIds.forEach(room => {
+        const roomRef = admin.database().ref(`rooms/${room}`);
+        let promise = roomRef.once('value');
+        rooms.push(promise);
+      });
+      resolve(Promise.all(rooms));
+    });
+  }
   return cors(req, res, () => {
     res.set('Access-Control-Allow-Origin', '*');
     const {uid, displayName} = JSON.parse(req.body);
@@ -34,15 +42,27 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       dscription: `${displayName}'s first Potato. Welcome!`,
       moderators: [uid],
       name: `${displayName}'s Potato`,
-      key: `uid-${uid}`
+      key: `uid-${uid}`,
+      users: { [uid]: displayName }
     }
-    return userRef.child(uid).update(userConfig)
-    .then(() => {
-      return roomRef.child(`uid-${uid}`).update(room)
-      .then(() => {
-        res.json({ userConfig, activeRoom: room });
-      });
-    });
+    return userRef.child(uid).once("value", async snapshot => {
+      if (!snapshot.exists()) {
+        return userRef.child(uid).update(userConfig)
+        .then(snapshot => {
+          return roomRef.child(`uid-${uid}`).update(room)
+          .then(async () => {
+            const subscribedRooms = await getRooms(userConfig.rooms);
+            res.json({ userConfig, activeRoom: room, subscribedRooms });
+          });
+        });
+      } else {
+        const currentUserConfig = await snapshot.val();
+        const currentLastVisited = currentUserConfig.lastVisited;
+        const currentSubscribedRooms = await getRooms(currentUserConfig.rooms);
+        const currentActiveRoom = await getRooms([currentLastVisited]);
+        res.json({ userConfig: currentUserConfig, activeRoom: currentActiveRoom[0], subscribedRooms: currentSubscribedRooms });
+      }
+    })
   });
 });
 

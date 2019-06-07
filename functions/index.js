@@ -11,31 +11,27 @@ adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
 exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
-  function getRooms(roomIds) {
-    return new Promise((resolve, reject) => {
-      let rooms = [];
-      roomIds.forEach(room => {
-        const roomRef = admin.database().ref(`rooms/${room}`);
-        let promise = roomRef.once('value');
-        rooms.push(promise);
-      });
-      resolve(Promise.all(rooms));
-    });
-  }
+  async function getRooms(roomIds) {
+    return Promise.all(roomIds.map(room => {
+      const roomRef = admin.database().ref(`rooms/${room}`);
+      return roomRef.once('value');
+    }));
+  };
   return cors(req, res, () => {
     res.set('Access-Control-Allow-Origin', '*');
     const {uid, displayName} = JSON.parse(req.body);
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const userConfig = {
+      key: uid,
       displayName,
-      lastVisited: `uid-${uid}`,
+      lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
       rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
       activity: {
         isOnline: true,
         lastChanged: Math.floor(Date.now() / 1000)
       }
-    }
+    };
     const room = {
       active: false,
       creator: uid,
@@ -44,7 +40,7 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       name: `${displayName}'s Potato`,
       key: `uid-${uid}`,
       users: { [uid]: displayName }
-    }
+    };
     return userRef.child(uid).once("value", async snapshot => {
       if (!snapshot.exists()) {
         return userRef.child(uid).update(userConfig)
@@ -62,7 +58,7 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
         const currentActiveRoom = await getRooms([currentLastVisited]);
         res.json({ userConfig: currentUserConfig, activeRoom: currentActiveRoom[0], subscribedRooms: currentSubscribedRooms });
       }
-    })
+    });
   });
 });
 

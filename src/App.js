@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.css';
-import Auth from './Auth/Auth';
-import Modal from './Modal/Modal';
 
+import Auth from './Auth/Auth';
+import Dashboard from './Dashboard/Dashboard';
+import Modal from './Modal/Modal';
 import Messages from './Messages/Messages';
 import Menu from './Menu/Menu';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
@@ -15,8 +16,8 @@ class App extends React.Component {
       activeRoom: null,
       currentFcmToken: null,
       isLoading: true,
-      show: false,
-      showRooms: true,
+      showAuthModal: false,
+      showDashboardModal: false,
       subscribedRooms: null,
       user: null,
       userConfig: null
@@ -116,38 +117,30 @@ class App extends React.Component {
     });
   };
 
-  setFcmToken = fcmToken => {
-    console.log('fcmToken: ', fcmToken);
-  };
-
   setActiveRoom = activeRoom => {
     this.setState({ activeRoom });
   };
 
-  createName = (values) => {
-    console.log('email form wired up and validated: ', values);
-  };
-
-  toggleModal = () => {
+  toggleAuthModal = () => {
     this.setState({
-      show: !this.state.show
+      showAuthModal: !this.state.showAuthModal
     });
   };
 
-  toggleRooms = () => {
+  toggleDashboardModal = () => {
     this.setState({
-      showRooms: !this.state.showRooms
+      showDashboardModal: !this.state.showDashboardModal
     });
   };
 
   render() {
-    const {activeRoom, user, userConfig, showRooms, show, isLoading, currentFcmToken, subscribedRooms} = this.state;
+    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
           <div className="menuIconContainer">
             <i className="material-icons menuIcon"
-               onClick={this.toggleModal}>sort</i>
+               onClick={this.toggleDashboardModal}>sort</i>
           </div>
           <div className="appNameContainer">
             <a href="https://michaelcruz.io/chat">
@@ -156,10 +149,10 @@ class App extends React.Component {
           </div>
           <div className="headerIconContainer">
             <i className="material-icons personIcon"
-               onClick={this.toggleModal}>person</i>
+               onClick={this.toggleAuthModal}>person</i>
           </div>
         </header>
-        <aside className={showRooms ? "sidebar" : "displayUnset"}>
+        <aside className="sidebar">
           <Menu
             firebase={this.props.firebase}
             activeRoom={activeRoom}
@@ -169,7 +162,7 @@ class App extends React.Component {
             setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
-        <main className={!showRooms ? "main" : "main overflowHidden"}>
+        <main className="main">
           <Messages
             firebase={this.props.firebase}
             activeRoom={activeRoom}
@@ -193,19 +186,37 @@ class App extends React.Component {
         userConfig={userConfig}
         user={user}
         currentFcmToken={currentFcmToken}
-        toggleModal={this.toggleModal.bind(this)}
+        toggleModal={this.toggleAuthModal.bind(this)}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
         handleFcmToken={this.handleFcmToken.bind(this)}
       />
     );
-    const splash = (
-      <Splash toggleModal={this.toggleModal.bind(this)} />
+    const dashboard = (
+      <Dashboard
+        firebase={this.props.firebase}
+        activeRoom={activeRoom}
+        user={user}
+        userConfig={userConfig}
+        subscribedRooms={subscribedRooms}
+        toggleModal={this.toggleDashboardModal.bind(this)}
+        setActiveRoom={this.setActiveRoom.bind(this)}
+      />
     );
-    const modal = (
+    const splash = (
+      <Splash toggleModal={this.toggleAuthModal.bind(this)} />
+    );
+    const authModal = (
       <Modal
-        show={show}
+        show={showAuthModal}
         children={auth}
-        handleClose={this.toggleModal.bind(this)}>
+        handleClose={this.toggleAuthModal.bind(this)}>
+      </Modal>
+    );
+    const dashboardModal = (
+      <Modal
+        show={showDashboardModal}
+        children={dashboard}
+        handleClose={this.toggleDashboardModal.bind(this)}>
       </Modal>
     );
     const loadingAnimation = (
@@ -216,7 +227,8 @@ class App extends React.Component {
         {user ? app : null}
         {!user && !isLoading ? splash : null}
         {!user && isLoading ? loadingAnimation : null}
-        {show ? modal : null}
+        {showAuthModal ? authModal : null}
+        {showDashboardModal ? dashboardModal : null}
       </div>
     );
   }

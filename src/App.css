@@ -30,6 +30,11 @@ body {
   justify-content: center;
 }
 
+.appNameContainer > a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .headerIconContainer {
   flex-direction: flex-end;
 }
@@ -47,6 +52,11 @@ body {
 .personIcon, .menuIcon {
   color: #fff;
   margin: 0 15px 0 15px;
+  cursor: pointer;
+}
+
+.sidebar {
+  display: none;
 }
 
 .footer {
@@ -56,37 +66,10 @@ body {
   background-color: #fff;
 }
 
-.add-room {
-  color: #cfecd8;
-  margin-left: 10px;
-}
-
-.sidebar {
-  display: none;
-}
-
-.displayUnset {
-  display: unset;
-}
-
-.overflowHidden {
-  overflow: hidden;
-  height: 0;
-}
-
-.oauthContainer {
-  display: flex;
-  align-items: center;
-}
-
-.submitNameTextInput {
-  border: 1px solid black;
-}
-
 @media only screen and (min-device-width: 812px) {
   .appComponent {
     display: grid;
-    grid-template-columns: 300px auto;
+    grid-template-columns: 250px auto;
     grid-template-areas:
       "header header"
       "sidebar main"

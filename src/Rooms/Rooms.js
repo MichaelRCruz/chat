@@ -1,5 +1,4 @@
 import React from 'react';
-import {throttling} from '../utils.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {

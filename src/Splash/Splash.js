@@ -2,9 +2,9 @@ import React from 'react';
 import './Splash.css';
 
 class Splash extends React.Component  {
-  constructor (props) {
-    super(props);
-  }
+  // constructor (props) {
+  //   super(props);
+  // }
 
   componentDidMount() {
     // window.scrollTo(0, 1);

@@ -57,7 +57,7 @@
 
 @media only screen and (min-device-width: 812px) {
   .footerContainer {
-    margin-left: 300px;
+    margin-left: 250px;
   }
   /* .textarea {
     width: calc(100% - 12px);

@@ -4,7 +4,7 @@ import Auth from './Auth/Auth';
 import Modal from './Modal/Modal';
 
 import Messages from './Messages/Messages';
-import RoomList from './RoomList/RoomList';
+import Menu from './Menu/Menu';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 import Splash from './Splash/Splash';
 
@@ -160,8 +160,7 @@ class App extends React.Component {
           </div>
         </header>
         <aside className={showRooms ? "sidebar" : "displayUnset"}>
-          <RoomList
-            className="lightContainer"
+          <Menu
             firebase={this.props.firebase}
             activeRoom={activeRoom}
             user={user}

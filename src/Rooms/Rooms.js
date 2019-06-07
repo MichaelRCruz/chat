@@ -1,22 +1,13 @@
 import React from 'react';
-import Users from '../Users/Users.js';
 import {throttling} from '../utils.js';
-import './RoomList.css';
+import './Rooms.css';
 
-class RoomList extends React.Component {
+class Rooms extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      subscribedRooms: []
     }
-    this.subscribedRoomsRef = this.props.firebase.database().ref('rooms');
   };
-
-  componentDidMount() {
-
-  };
-
-  
 
   render() {
     const { subscribedRooms } = this.props;
@@ -33,15 +24,12 @@ class RoomList extends React.Component {
     });
     return (
       <section className="roomComponent">
-        <div className="listContainer">
-          <ul>
-            {rooms}
-          </ul>
-        </div>
-        <Users firebase={this.props.firebase} />
+        <ul>
+          {rooms}
+        </ul>
       </section>
     );
   }
 }
 
-export default RoomList;
+export default Rooms;

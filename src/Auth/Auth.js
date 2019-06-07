@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
 // import ChangePasswordForm from './ChangePasswordForm';

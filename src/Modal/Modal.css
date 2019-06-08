@@ -18,6 +18,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 0 20px 0 20px;
 }
 
 .display-block {
@@ -33,15 +34,16 @@
 	cursor: pointer;
 	outline: none;
   background: none;
+  padding: 0;
 }
 
-.modalTitle {
+.modalHeader {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
-  height: 28px;
+  justify-content: space-between;
+  padding: 20px 20px 20px 20px;
 }
-
 .modalMain {
   display: flex;
   justify-content: center;
@@ -53,4 +55,8 @@
     height: auto;
     border-radius: 8px;
   }
+  .modalHeader {
+    padding: 10px 0px 10px 0px;
+  }
+
 };

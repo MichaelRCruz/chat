@@ -207,6 +207,7 @@ class App extends React.Component {
     );
     const authModal = (
       <Modal
+        title="profile"
         show={showAuthModal}
         children={auth}
         handleClose={this.toggleAuthModal.bind(this)}>
@@ -214,6 +215,7 @@ class App extends React.Component {
     );
     const dashboardModal = (
       <Modal
+        title="dashboard"
         show={showDashboardModal}
         children={dashboard}
         handleClose={this.toggleDashboardModal.bind(this)}>

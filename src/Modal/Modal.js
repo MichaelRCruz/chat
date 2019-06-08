@@ -22,14 +22,15 @@ class Modal extends React.Component {
   };
 
   render() {
-    const { show, handleClose, children  } = this.props;
+    const { show, handleClose, title, children  } = this.props;
     const modalCssClass = show ? 'modal display-block' : 'modal display-none';
     return (
       <aside className={modalCssClass}>
         <div className='modalBody'>
-          <header className="modalTitle">
+          <header className="modalHeader">
+            <h1 className="modalTitle">{title}</h1>
             <button className="exitButton" onClick={handleClose}>
-              <i className="material-icons">clear</i>
+              <i className="material-icons clearIcon">clear</i>
             </button>
           </header>
           <main className="modalMain">

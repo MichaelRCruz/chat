@@ -103,6 +103,13 @@ class Messages extends Component {
           onSubmit={e => this.submitMessage(e)}
           onKeyDown={e => this.handleKeyDown(e)}>
             <div className="formButtonWrapper" tabIndex="0">
+              <button
+                className="sendButton"
+                onClick={(e) => this.submitMessage(e)}
+                type="submit"
+                disabled={!this.state.isValidated}>
+                <i className="notification material-icons">chat_bubble_outline</i>
+              </button>
               <textarea
                 className="textarea"
                 name="message"

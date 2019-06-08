@@ -14,15 +14,25 @@ class Menu extends React.Component {
     const {firebase, activeRoom, user, userConfig, subscribedRooms, setActiveRoom} = this.props;
     return (
       <section className="menuComponent">
-        <h1>rooms</h1>
-        <Rooms
-          firebase={firebase}
-          activeRoom={activeRoom}
-          user={user}
-          userConfig={userConfig}
-          subscribedRooms={subscribedRooms}
-          setActiveRoom={setActiveRoom}
-        />
+        <div className="userAvatarContainer">
+          <img
+            className="userAvatar"
+            alt="user"
+            src={user.photoURL}
+           />
+          <p className="menuDisplayName">{ user.displayName }</p>
+        </div>
+        <div className="menuRoomListContainer">
+          <h1>rooms</h1>
+          <Rooms
+            firebase={firebase}
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
+            subscribedRooms={subscribedRooms}
+            setActiveRoom={setActiveRoom}
+          />
+        </div>
         <h1>users</h1>
         <Users firebase={firebase} />
       </section>

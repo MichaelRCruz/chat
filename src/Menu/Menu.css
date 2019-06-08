@@ -12,3 +12,25 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
+.userAvatarContainer {
+  background-color: lightblue;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.userAvatar {
+  height: 29px;
+  width: 29px;
+  border-radius: 50%;
+}
+
+.menuRoomListContainer {
+  margin-bottom: 40px;
+}
+
+.notification {
+  color: green;
+}

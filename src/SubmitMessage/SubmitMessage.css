@@ -43,14 +43,22 @@
   height: auto;
   flex-shrink: 0;
   background: none;
-  border: 0;
+  border: none;
   display: flex;
   flex-direction: column;
   flex-direction: column-reverse;
 }
 
+.sendButton:focus {
+  outline: none;
+}
+
 .send {
   color: blue;
+}
+
+.notification {
+  color: green;
 }
 
 @media only screen and (min-device-width: 812px) {

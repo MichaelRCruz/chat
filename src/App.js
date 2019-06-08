@@ -135,6 +135,14 @@ class App extends React.Component {
 
   render() {
     const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms} = this.state;
+    const messages = (
+      <Messages
+        firebase={this.props.firebase}
+        activeRoom={activeRoom}
+        user={user}
+        userConfig={userConfig}
+      />
+    );
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -163,12 +171,7 @@ class App extends React.Component {
           />
         </aside>
         <main className="main">
-          <Messages
-            firebase={this.props.firebase}
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-          />
+          { messages }
         </main>
         <footer className="footer">
           <SubmitMessage

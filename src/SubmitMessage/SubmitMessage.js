@@ -95,6 +95,11 @@ class Messages extends Component {
     });
   };
 
+  toggleNotifications = event => {
+    event.preventDefault();
+    console.log('notifications function toggled');
+  }
+
   render() {
     return (
       <div className="footerContainer">
@@ -105,10 +110,8 @@ class Messages extends Component {
             <div className="formButtonWrapper" tabIndex="0">
               <button
                 className="sendButton"
-                onClick={(e) => this.submitMessage(e)}
-                type="submit"
-                disabled={!this.state.isValidated}>
-                <i className="notification material-icons">chat_bubble_outline</i>
+                onClick={this.toggleNotifications}>
+                <i className="notification material-icons">chat</i>
               </button>
               <textarea
                 className="textarea"

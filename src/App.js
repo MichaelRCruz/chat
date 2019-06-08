@@ -118,7 +118,7 @@ class App extends React.Component {
   };
 
   setActiveRoom = activeRoom => {
-    this.setState({ activeRoom });
+    this.setState({ activeRoom, showDashboardModal: false });
   };
 
   toggleAuthModal = () => {
@@ -194,11 +194,7 @@ class App extends React.Component {
     const dashboard = (
       <Dashboard
         firebase={this.props.firebase}
-        activeRoom={activeRoom}
-        user={user}
-        userConfig={userConfig}
         subscribedRooms={subscribedRooms}
-        toggleModal={this.toggleDashboardModal.bind(this)}
         setActiveRoom={this.setActiveRoom.bind(this)}
       />
     );
@@ -207,7 +203,7 @@ class App extends React.Component {
     );
     const authModal = (
       <Modal
-        title="profile"
+        title=""
         show={showAuthModal}
         children={auth}
         handleClose={this.toggleAuthModal.bind(this)}>
@@ -215,7 +211,7 @@ class App extends React.Component {
     );
     const dashboardModal = (
       <Modal
-        title="dashboard"
+        title="channels"
         show={showDashboardModal}
         children={dashboard}
         handleClose={this.toggleDashboardModal.bind(this)}>

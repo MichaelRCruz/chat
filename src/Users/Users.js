@@ -48,7 +48,6 @@ class Users extends React.Component {
     });
     return (
       <section className="onlineUsersComponent">
-        <h1>online users</h1>
         <ul>
           {onlineUsers}
         </ul>

@@ -14,6 +14,7 @@ class Menu extends React.Component {
     const {firebase, activeRoom, user, userConfig, subscribedRooms, setActiveRoom} = this.props;
     return (
       <section className="menuComponent">
+        <h1>rooms</h1>
         <Rooms
           firebase={firebase}
           activeRoom={activeRoom}
@@ -22,6 +23,7 @@ class Menu extends React.Component {
           subscribedRooms={subscribedRooms}
           setActiveRoom={setActiveRoom}
         />
+        <h1>users</h1>
         <Users firebase={firebase} />
       </section>
     );

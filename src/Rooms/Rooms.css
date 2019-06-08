@@ -2,20 +2,47 @@
 
 .roomsComponent {
 	width: 100%;
-	background-color: lightgreen;
 }
 
 .roomsComponent > ul {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+	/* width: 100%; */
+}
+
+.subscribedRoom {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .roomNameButton {
-	border: 1px solid black;
+	/* border-top: 1px solid black; */
 	font-family: 'Roboto', sans-serif;
 	cursor: pointer;
 	outline: none;
-  border-radius: 3px;
+  /* border-radius: 3px; */
+	height: 75px;
+	text-align: left;
 	background: none;
+	width: 100%;
+	border-style:none;
+	border: 1px solid black;
+	margin-top: 10px;
+	border-radius: 4px;
+	padding: 0;
+	margin: 0;
 }
+
+@media screen and (min-width: 450px) {
+  .subscribedRoom {
+		height: 35px;
+	}
+
+	.roomNameButton {
+		height: 25px;
+		border-radius: 0px;
+		border: 0;
+	}
+};

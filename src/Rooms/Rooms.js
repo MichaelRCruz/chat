@@ -16,7 +16,10 @@ class Rooms extends React.Component {
           <button className="roomNameButton" onClick={() => {
             setActiveRoom(subscribedRoom)
           }}>
-            { subscribedRoom.name }
+            <div>
+              <i className="material-icons people">people</i>
+              <p className="roomName">{ subscribedRoom.name }</p>
+            </div>
           </button>
         </li>
       );
@@ -24,27 +27,6 @@ class Rooms extends React.Component {
     return (
       <section className="roomsComponent">
         <ul>
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
-          {rooms}
           {rooms}
         </ul>
       </section>

@@ -2,7 +2,6 @@
 
 .onlineUsersComponent {
   width: 100%;
-  background-color: lightblue;
 }
 
 .onlineUsersComponent > ul {
@@ -12,10 +11,41 @@
 }
 
 .inspectUserButton {
-	border: 1px solid black;
 	font-family: 'Roboto', sans-serif;
 	cursor: pointer;
 	outline: none;
   border-radius: 3px;
   background: none;
+}
+
+.inspectUserButton {
+	cursor: pointer;
+	outline: none;
+	height: 55px;
+	text-align: left;
+	background: none;
+	width: 100%;
+	border-style: none;
+	margin-top: 10px;
+	border-radius: 4px;
+	padding: 0;
+	margin: 0;
+	font-size: unset;
+}
+
+.inspectUserButton > div {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.userMenuImage {
+  height: 25px;
+  width: 25px;
+}
+
+.menuDisplayName {
+  font-family: 'Roboto', sans-serif;
+	margin-left: 10px;
+	font-size: 17px;
 }

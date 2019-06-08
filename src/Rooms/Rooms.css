@@ -8,31 +8,40 @@
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
-	/* width: 100%; */
 }
 
 .subscribedRoom {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	margin-top: 10px;
 }
 
 .roomNameButton {
-	/* border-top: 1px solid black; */
-	font-family: 'Roboto', sans-serif;
 	cursor: pointer;
 	outline: none;
-  /* border-radius: 3px; */
-	height: 75px;
+	height: 55px;
 	text-align: left;
 	background: none;
 	width: 100%;
-	border-style:none;
-	border: 1px solid black;
+	border-style: none;
 	margin-top: 10px;
 	border-radius: 4px;
 	padding: 0;
 	margin: 0;
+	font-size: unset;
+}
+
+.roomNameButton > div {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.roomName {
+	font-family: 'Roboto', sans-serif;
+	margin-left: 10px;
+	font-size: 20px;
 }
 
 @media screen and (min-width: 450px) {
@@ -44,5 +53,12 @@
 		height: 25px;
 		border-radius: 0px;
 		border: 0;
+	}
+
+	.roomName {
+		font-family: 'Roboto', sans-serif;
+		margin-left: 10px;
+		font-size: 15px;
+		font-weight: bold;
 	}
 };

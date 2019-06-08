@@ -203,7 +203,7 @@ class App extends React.Component {
     );
     const authModal = (
       <Modal
-        title=""
+        title="settings"
         show={showAuthModal}
         children={auth}
         handleClose={this.toggleAuthModal.bind(this)}>

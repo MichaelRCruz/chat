@@ -1,5 +1,6 @@
 import React from 'react';
 import {throttling} from '../utils.js';
+import defaultUserImage from './../assets/images/peaceful_potato.png';
 import './Users.css';
 
 class Users extends React.Component {
@@ -41,7 +42,14 @@ class Users extends React.Component {
       return (
         <li className="onlineUser" key={index}>
           <button className="inspectUserButton" onClick={() => this.inspectUser(user.key, index)}>
-            { user.displayName }
+            <div>
+              <img
+                className="userMenuImage"
+                alt="user"
+                src={defaultUserImage}
+               />
+              <p className="menuDisplayName">{ user.displayName }</p>
+            </div>
           </button>
         </li>
       );

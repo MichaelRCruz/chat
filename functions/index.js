@@ -142,14 +142,19 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
       });
       if (targetedUser) {
         const payload = {
-          data: { title: 'Approachable is better than simple.', message}
+          notification: {
+            title: `new mention from ${message.creator.displayName}`,
+            body: message.content
+          },
+          data: {
+            message: JSON.stringify(message)
+          }
         };
         admin.messaging().sendToDevice(multiCastTokens, payload)
         .then((response) => {
           res.send(response);
         })
         .catch((error) => {
-          console.log('catch from admin.messaging: ', error);
           res.send(error);
         });
       } else {

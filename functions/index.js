@@ -193,7 +193,7 @@ exports.getMessages = functions.https.onRequest((req, res) => {
           directs.push(messageWithKey);
         }
       });
-      res.set('Access-Control-Allow-Origin', '*');
+      // res.set('Access-Control-Allow-Origin', '*');
       res.send({messages, mentions, directs});
     });
   });

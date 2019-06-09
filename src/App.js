@@ -17,7 +17,7 @@ class App extends React.Component {
       currentFcmToken: null,
       isLoading: true,
       showAuthModal: false,
-      messageMode: 'messages',
+      messageMode: 'directs',
       showDashboardModal: false,
       subscribedRooms: null,
       user: null,
@@ -134,17 +134,16 @@ class App extends React.Component {
     });
   };
 
-  toggleMessageMode = () => {
-    let messageMode = this.state.messageMode;
+  toggleMessageMode = messageMode => {
     switch (messageMode) {
-      case 'messages':
+      case 'mentions':
         messageMode = 'directs';
         break;
       case 'directs':
-        messageMode = 'mentions';
-        break;
-      case 'mentions':
         messageMode = 'messages';
+        break;
+      case 'messages':
+        messageMode = 'mentions';
         break;
     }
     this.setState({ messageMode });
@@ -194,6 +193,7 @@ class App extends React.Component {
             activeRoom={activeRoom}
             user={user}
             userConfig={userConfig}
+            messageMode={messageMode}
             toggleMessageMode={this.toggleMessageMode.bind(this)}
           />
         </footer>

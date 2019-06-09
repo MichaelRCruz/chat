@@ -107,7 +107,7 @@ class Messages extends Component {
                 className="sendButton"
                 onClick={(e) => {
                   e.preventDefault();
-                  this.props.toggleMessageMode();
+                  this.props.toggleMessageMode(this.props.messageMode);
                 }}>
                 <i className="notification material-icons">chat</i>
               </button>

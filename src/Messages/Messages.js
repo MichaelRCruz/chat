@@ -14,6 +14,7 @@ class Messages extends Component {
       userConfig: null,
       displayedMessages: [],
       messageCount: 0,
+      messages: [],
       mentions: [],
       directs: [],
       cursor: null
@@ -24,15 +25,9 @@ class Messages extends Component {
   async componentDidMount() {
     this.registerListeners();
     const { messages, mentions, directs } = await this.getMessages(null, null, this.props.user.uid);
-    const displayedMessages = await this.getMessageMode(messages, mentions, directs);
-    this.setState({
-      displayedMessages: displayedMessages || [],
-      messages: messages || [],
-      mentions: mentions || [],
-      directs: directs || [],
-      cursor: messages[0] ? messages[0].key : null,
-      messageCount: messages.length
-    }, () => {
+    const displayedMessages = await this.getMessageMode(messages, mentions, directs, this.props.messageMode);
+    const cursor = messages[0] ? messages[0].key : null;
+    this.setState({ displayedMessages, messages, mentions, directs, cursor, messageCount: messages.length }, () => {
       this.bottomOfMessages.scrollIntoView();
       this.setScrollListener();
     });
@@ -42,25 +37,24 @@ class Messages extends Component {
     window.onscroll = null;
   }
 
-  getMessageMode = (messages, mentions, directs) => {
+  getMessageMode = (messages, mentions, directs, messageMode) => {
     let displayedMessages;
-    const messageMode = this.props.messageMode;
-    switch (messageMode) {
+    switch (messageMode || 'directs') {
       case 'messages':
-        displayedMessages = mentions;
+        displayedMessages = mentions ? mentions : [];
         break;
       case 'mentions':
-        displayedMessages = directs;
+        displayedMessages = directs ? directs : [];
         break;
       case 'directs':
-        displayedMessages = messages;
+        displayedMessages = messages ? messages : [];
         break;
     }
     return displayedMessages;
   }
 
 
-  setScrollListener = () => {
+  setScrollListener = moveOn => {
     const uid = this.props.user.uid;
     window.onscroll = async () => {
       // const cursorPosition = _self.cursorRef.getBoundingClientRect().bottom);
@@ -68,15 +62,10 @@ class Messages extends Component {
       if (Math.round(window.pageYOffset) === 0) {
         if (this.cursorRef) originalCursorRef = this.cursorRef;
         const { messages, mentions, directs } = await this.getMessages(null, this.state.messageCount + 100, uid);
-        const displayedMessages = this.getMessageMode(messages, mentions, directs);
-        this.setState({
-          displayedMessages: displayedMessages || [],
-          messages: messages || [],
-          mentions: mentions || [],
-          directs: directs || [],
-          cursor: messages[0] ? messages[0].key : null,
-          messageCount: messages.length
-        }, () => {
+        const displayedMessages = this.getMessageMode(messages, mentions, directs, this.props.messageMode);
+        const cursor = displayedMessages[0] ? displayedMessages[0].key : null;
+        const messageCount = displayedMessages.length;
+        await this.setState({displayedMessages, messages, mentions, directs, cursor, messageCount }, () => {
           if (originalCursorRef) originalCursorRef.scrollIntoView();
         });
       }
@@ -90,8 +79,9 @@ class Messages extends Component {
     if (!messageCount) {
       messageCount = 100;
     }
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}&uid=${uid}`, {
-    }).then(res => {
+    console.log('werfe');
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}&uid=${uid}`)
+    .then(res => {
       return res.json();
     }).catch(error => {
       console.log(error);
@@ -100,19 +90,30 @@ class Messages extends Component {
 
   async componentWillReceiveProps(prevProps, nextProps) {
     if (this.props !== nextProps) {
-      const { messages, mentions, directs } = await this.getMessages(prevProps.activeRoom.key, null, this.props.user.uid);
-      const displayedMessages = await this.getMessageMode(messages, mentions, directs);
-      await this.setState({
-        displayedMessages: displayedMessages || [],
-        messages: messages || [],
-        mentions: mentions || [],
-        directs: directs || [],
-        cursor: messages[0] ? messages[0].key : null,
-        messageCount: messages.length
-      }, () => {
-        this.bottomOfMessages.scrollIntoView();
-        this.setScrollListener();
-      });
+      if (this.props.messageMode != prevProps.messageMode) {
+        const { messages, mentions, directs } = this.state;
+        const displayedMessages = this.getMessageMode(messages, mentions, directs, prevProps.messageMode);
+        const cursor = displayedMessages[0] ? displayedMessages[0].key : null;
+        const messageCount = displayedMessages.length;
+        this.setState({ displayedMessages, messages, mentions, directs, cursor, messageCount }, () => {
+          this.bottomOfMessages.scrollIntoView();
+          this.setScrollListener();
+        });
+      } else if (this.props.activeRoom.key != prevProps.activeRoom.key) {
+        const { messages, mentions, directs } = await this.getMessages(prevProps.activeRoom.key, null, this.props.user.uid);
+        const displayedMessages = this.getMessageMode(messages, mentions, directs, this.props.messageMode);
+        this.setState({
+          displayedMessages,
+          messages,
+          mentions,
+          directs,
+          cursor: messages[0] ? messages[0].key : null,
+          messageCount: messages.length
+        }, () => {
+          this.bottomOfMessages.scrollIntoView();
+          this.setScrollListener();
+        });
+      }
     }
   }
 

@@ -14,22 +14,27 @@ class Messages extends Component {
       userConfig: null,
       displayedMessages: [],
       messageCount: 0,
+      mentions: [],
+      directs: [],
       cursor: null
     }
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.registerListeners();
-    this.getMessages().then(messages => {
-      this.setState({
-        displayedMessages: messages,
-        cursor: messages[0] ? messages[0].key : null,
-        messageCount: messages.length
-      }, () => {
-        this.bottomOfMessages.scrollIntoView();
-        this.setScrollListener();
-      });
+    const { messages, mentions, directs } = await this.getMessages(null, null, this.props.user.uid);
+    const displayedMessages = await this.getMessageMode(messages, mentions, directs);
+    this.setState({
+      displayedMessages: displayedMessages || [],
+      messages: messages || [],
+      mentions: mentions || [],
+      directs: directs || [],
+      cursor: messages[0] ? messages[0].key : null,
+      messageCount: messages.length
+    }, () => {
+      this.bottomOfMessages.scrollIntoView();
+      this.setScrollListener();
     });
   }
 
@@ -37,34 +42,55 @@ class Messages extends Component {
     window.onscroll = null;
   }
 
+  getMessageMode = (messages, mentions, directs) => {
+    let displayedMessages;
+    const messageMode = this.props.messageMode;
+    switch (messageMode) {
+      case 'messages':
+        displayedMessages = mentions;
+        break;
+      case 'mentions':
+        displayedMessages = directs;
+        break;
+      case 'directs':
+        displayedMessages = messages;
+        break;
+    }
+    return displayedMessages;
+  }
+
+
   setScrollListener = () => {
-    const _self = this;
-    window.onscroll = function() {
+    const uid = this.props.user.uid;
+    window.onscroll = async () => {
       // const cursorPosition = _self.cursorRef.getBoundingClientRect().bottom);
       let originalCursorRef;
       if (Math.round(window.pageYOffset) === 0) {
-        if (_self.cursorRef) originalCursorRef = _self.cursorRef;
-        _self.getMessages(null, _self.state.messageCount + 100).then(messages => {
-          return _self.setState({
-            displayedMessages: messages,
-            cursor: messages[0] ? messages[0].key : null,
-            messageCount: messages.length
-          }, () => {
-            if (originalCursorRef) originalCursorRef.scrollIntoView();
-          });
+        if (this.cursorRef) originalCursorRef = this.cursorRef;
+        const { messages, mentions, directs } = await this.getMessages(null, this.state.messageCount + 100, uid);
+        const displayedMessages = this.getMessageMode(messages, mentions, directs);
+        this.setState({
+          displayedMessages: displayedMessages || [],
+          messages: messages || [],
+          mentions: mentions || [],
+          directs: directs || [],
+          cursor: messages[0] ? messages[0].key : null,
+          messageCount: messages.length
+        }, () => {
+          if (originalCursorRef) originalCursorRef.scrollIntoView();
         });
       }
     };
   }
 
-  getMessages = (roomId, messageCount) => {
+  getMessages = (roomId, messageCount, uid) => {
     if (!roomId) {
       roomId = this.state.activeRoom.key;
     }
     if (!messageCount) {
       messageCount = 100;
     }
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}`, {
+    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages?roomId=${roomId}&messageCount=${messageCount}&uid=${uid}`, {
     }).then(res => {
       return res.json();
     }).catch(error => {
@@ -72,19 +98,20 @@ class Messages extends Component {
     });
   }
 
-  componentWillReceiveProps(prevProps, nextProps) {
+  async componentWillReceiveProps(prevProps, nextProps) {
     if (this.props !== nextProps) {
-      this.getMessages(prevProps.activeRoom.key).then(messages => {
-        if (!messages) {
-          messages = [];
-        }
-        this.setState({
-          displayedMessages: messages,
-          activeRoom: prevProps.activeRoom,
-          cursor: messages[0] ? messages[0].key : null,
-        }, () => {
-          this.bottomOfMessages.scrollIntoView();
-        });
+      const { messages, mentions, directs } = await this.getMessages(prevProps.activeRoom.key, null, this.props.user.uid);
+      const displayedMessages = await this.getMessageMode(messages, mentions, directs);
+      await this.setState({
+        displayedMessages: displayedMessages || [],
+        messages: messages || [],
+        mentions: mentions || [],
+        directs: directs || [],
+        cursor: messages[0] ? messages[0].key : null,
+        messageCount: messages.length
+      }, () => {
+        this.bottomOfMessages.scrollIntoView();
+        this.setScrollListener();
       });
     }
   }
@@ -92,16 +119,16 @@ class Messages extends Component {
   registerListeners = () => {
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_added', async snapshot => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
-        const messages = await this.getMessages();
-        this.setState({displayedMessages: messages}, () => {
+        const response = await this.getMessages(null, null, this.props.user.uid);
+        this.setState({displayedMessages: response.messages}, () => {
           this.bottomOfMessages.scrollIntoView();
         });
       }
     });
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_removed', async snapshot  => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
-        const messages = await this.getMessages();
-        this.setState({displayedMessages: messages});
+        const response = await this.getMessages(null, null, this.props.user.uid);
+        this.setState({displayedMessages: response.messages});
       }
     });
   }

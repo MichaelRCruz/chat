@@ -125,14 +125,16 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
 // https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser
 exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    res.set('Access-Control-Allow-Origin', '*');
     const {displayNames, message} = JSON.parse(req.body);
     const usersRef = admin.database().ref('users');
+    const userTargetsRef = admin.database().ref(`messages/${message.key}/mentions`);
     let targetedUser = false;
     usersRef.once("value", snap => {
       let multiCastTokens = [];
+      let mentions = {};
       snap.forEach(user => {
         const isIncluded = displayNames.includes(user.val().displayName);
+        if (isIncluded) mentions[user.key] = false;
         const hasFcmTokens = user.val().fcmTokens;
         if (isIncluded && hasFcmTokens) {
           targetedUser = true;
@@ -141,6 +143,7 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
         }
       });
       if (targetedUser) {
+        userTargetsRef.set(mentions);
         const payload = {
           notification: {
             title: `new mention from ${message.creator.displayName}`,
@@ -165,20 +168,33 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
 });
 
 exports.getMessages = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
+  return cors(req, res, async () => {
     const roomId = req.query.roomId;
     const messageCount = parseInt(req.query.messageCount, 10);
-    const messagesRef = admin.database().ref(`messages`);
-    messagesRef.orderByChild('sentAt').limitToLast(messageCount).once("value", snap => {
+    const uid = req.query.uid;
+    const messagesRef = await admin.database().ref(`messages`);
+    await messagesRef.orderByChild('sentAt').limitToLast(messageCount).once("value", async snap => {
       const messages = [];
+      const mentions = [];
+      const directs = [];
       snap.forEach(message => {
-        if (message.val().roomId === roomId) {
-          const messageWithKey = Object.assign({}, message.val(), {key: message.key});
+        const messageWithKey = Object.assign({}, message.val(), {key: message.key});
+        const isMentioned = Object.keys(messageWithKey.mentions || {}).includes(uid);
+        const isDirect = Object.keys(messageWithKey.directs || {}).includes(uid);
+        const belongsToRoom = messageWithKey.roomId === roomId;
+        if (belongsToRoom) {
           messages.push(messageWithKey);
+        }
+        if (isMentioned) {
+          console.log(isMentioned);
+          mentions.push(messageWithKey);
+        }
+        if (isDirect) {
+          directs.push(messageWithKey);
         }
       });
       res.set('Access-Control-Allow-Origin', '*');
-      res.send(messages);
+      res.send({messages, mentions, directs});
     });
   });
 });

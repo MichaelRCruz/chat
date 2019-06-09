@@ -51,7 +51,7 @@ class Messages extends Component {
 
   detectUserAndSendMessage = yourData => {
     const words = yourData.content.split(' ');
-    const roomSubscribers = Object.values(this.props.activeRoom.users || {});
+    const roomSubscribers = Object.values(this.props.activeRoom.users || {})
     const usersToMessage = [];
     words.forEach(word => {
       let user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>{}[]\\\/]/gi, '');
@@ -95,11 +95,6 @@ class Messages extends Component {
     });
   };
 
-  toggleNotifications = event => {
-    event.preventDefault();
-    console.log('notifications function toggled');
-  }
-
   render() {
     return (
       <div className="footerContainer">
@@ -110,7 +105,10 @@ class Messages extends Component {
             <div className="formButtonWrapper" tabIndex="0">
               <button
                 className="sendButton"
-                onClick={this.toggleNotifications}>
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.props.toggleMessageMode();
+                }}>
                 <i className="notification material-icons">chat</i>
               </button>
               <textarea

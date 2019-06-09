@@ -17,6 +17,7 @@ class App extends React.Component {
       currentFcmToken: null,
       isLoading: true,
       showAuthModal: false,
+      messageMode: 'messages',
       showDashboardModal: false,
       subscribedRooms: null,
       user: null,
@@ -133,16 +134,24 @@ class App extends React.Component {
     });
   };
 
+  toggleMessageMode = () => {
+    let messageMode = this.state.messageMode;
+    switch (messageMode) {
+      case 'messages':
+        messageMode = 'directs';
+        break;
+      case 'directs':
+        messageMode = 'mentions';
+        break;
+      case 'mentions':
+        messageMode = 'messages';
+        break;
+    }
+    this.setState({ messageMode });
+  }
+
   render() {
-    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms} = this.state;
-    const messages = (
-      <Messages
-        firebase={this.props.firebase}
-        activeRoom={activeRoom}
-        user={user}
-        userConfig={userConfig}
-      />
-    );
+    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -171,7 +180,13 @@ class App extends React.Component {
           />
         </aside>
         <main className="main">
-          { messages }
+          <Messages
+            firebase={this.props.firebase}
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
+            messageMode={messageMode}
+          />
         </main>
         <footer className="footer">
           <SubmitMessage
@@ -179,6 +194,7 @@ class App extends React.Component {
             activeRoom={activeRoom}
             user={user}
             userConfig={userConfig}
+            toggleMessageMode={this.toggleMessageMode.bind(this)}
           />
         </footer>
       </div>

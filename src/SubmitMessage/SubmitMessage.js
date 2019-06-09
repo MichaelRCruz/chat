@@ -34,7 +34,7 @@ class Messages extends Component {
         }
       };
       ref.set(yourData, () => {
-        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(messageValue);
+        if (this.props.firebase.messaging.isSupported()) this.detectUserAndSendMessage(yourData);
         const textarea = window.document.querySelector(".textarea");
         textarea.style.height = '1.5em';
         this.setState({ messageValue: '', messageError: '', isValidated: false });
@@ -49,8 +49,8 @@ class Messages extends Component {
     }
   };
 
-  detectUserAndSendMessage = message => {
-    const words = message.split(' ');
+  detectUserAndSendMessage = yourData => {
+    const words = yourData.content.split(' ');
     const roomSubscribers = Object.values(this.props.activeRoom.users || {});
     const usersToMessage = [];
     words.forEach(word => {
@@ -64,7 +64,7 @@ class Messages extends Component {
     if (usersToMessage.length) {
       return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
         method: 'POST',
-        body: JSON.stringify({ displayNames: usersToMessage, message })
+        body: JSON.stringify({ displayNames: usersToMessage, message: yourData })
       }).then(response => {
         return response;
       }).catch(error => {

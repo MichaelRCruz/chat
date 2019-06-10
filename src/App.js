@@ -41,7 +41,7 @@ class App extends React.Component {
             this.requestNotifPermission(user.uid);
           });
         }
-        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms });
+        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'directs' });
       } else {
         this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
       }
@@ -119,6 +119,7 @@ class App extends React.Component {
   };
 
   setActiveRoom = activeRoom => {
+    console.log(activeRoom.key)
     this.setState({ activeRoom, showDashboardModal: false });
   };
 
@@ -185,6 +186,7 @@ class App extends React.Component {
             user={user}
             userConfig={userConfig}
             messageMode={messageMode}
+            openModals={showAuthModal || showDashboardModal}
           />
         </main>
         <footer className="footer">

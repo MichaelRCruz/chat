@@ -22,9 +22,10 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     const {uid, displayName} = JSON.parse(req.body);
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
+    const generatedName = displayName.replace(/\s/g,'');
     const userConfig = {
       key: uid,
-      displayName,
+      displayName: generatedName,
       lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
       rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
       activity: {
@@ -35,11 +36,11 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     const room = {
       active: false,
       creator: uid,
-      dscription: `${displayName}'s first Potato. Welcome!`,
+      dscription: `${generatedName}'s first room. Welcome!`,
       moderators: [uid],
-      name: `${displayName}'s Potato`,
+      name: `${generatedName}'s room`,
       key: `uid-${uid}`,
-      users: { [uid]: displayName }
+      users: { [uid]: generatedName }
     };
     return userRef.child(uid).once("value", async snapshot => {
       if (!snapshot.exists()) {
@@ -47,7 +48,7 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
         .then(async snapshot => {
           return roomRef.child(`uid-${uid}`).update(room)
           .then(async () => {
-            const subscribedRooms = await getRooms(userConfig.rooms);
+            const subscribedRooms = await getRooms([`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x']);
             res.json({ userConfig, activeRoom: room, subscribedRooms });
           });
         });

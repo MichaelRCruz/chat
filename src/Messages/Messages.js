@@ -29,8 +29,8 @@ class Messages extends Component {
     this.registerListeners();
     const { messages, notifications } = await this.getMessages(this.props.activeRoom.key, null);
     const displayedMessages = await this.getMessageMode(messages, notifications, this.props.messageMode);
-    const cursor = messages[0] ? messages[0].key : null;
-    this.setState({ displayedMessages, messages, notifications, cursor, messageCount: messages.length }, () => {
+    // const cursor = displayedMessages[0] ? displayedMessages[0].key : null;
+    this.setState({ displayedMessages, messages, notifications }, () => {
       this.bottomOfMessages.scrollIntoView();
       this.setScrollListener();
     });
@@ -109,9 +109,7 @@ class Messages extends Component {
         this.setState({
           displayedMessages,
           messages,
-          notifications,
-          cursor: messages[0] ? messages[0].key : null,
-          messageCount: messages.length
+          notifications
         }, () => {
           this.bottomOfMessages.scrollIntoView();
           this.setScrollListener();

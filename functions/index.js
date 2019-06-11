@@ -22,7 +22,10 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     const {uid, displayName} = JSON.parse(req.body);
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
-    const generatedName = displayName.replace(/\s/g,'');
+    const messagesRef = admin.database().ref('/messages');
+    const messageKey = messagesRef.push();
+    const randomString = Math.random().toString(36).substr(2, 3);
+    const generatedName = displayName.replace(/\s/g,'') + '_' + randomString;
     const userConfig = {
       key: uid,
       displayName: generatedName,
@@ -42,18 +45,28 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       key: `uid-${uid}`,
       users: { [uid]: generatedName }
     };
+    const message = {
+      content: 'Welcome to your new app!',
+      creator: {
+        displayName: 'mykey',
+        email: 'potato@michaelcruz.io',
+        photoURL: 'https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg',
+        uid: 'buaySW4zINZ4cWsdykHgmyYqWDy2'
+      },
+      key: messageKey,
+      read: false,
+      roomId: `uid-${uid}`,
+      sentAt: Math.floor(Date.now() / 1000)
+    };
     return userRef.child(uid).once("value", async snapshot => {
       if (!snapshot.exists()) {
-        return userRef.child(uid).update(userConfig)
-        .then(async snapshot => {
-          return roomRef.child(`uid-${uid}`).update(room)
-          .then(async () => {
-            const subscribedRooms = await getRooms([`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x']);
-            res.json({ userConfig, activeRoom: room, subscribedRooms });
-          });
-        });
+        await userRef.child(uid).update(userConfig);
+        await messagesRef.child(messageKey).update(message);
+        await roomRef.child(`uid-${uid}`).update(room);
+        const subscribedRooms = await getRooms([`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x']);
+        res.json({ userConfig, activeRoom: room, subscribedRooms });
       } else {
-        const currentUserConfig = await snapshot.val();
+        const currentUserConfig = snapshot.val();
         const currentLastVisited = currentUserConfig.lastVisited;
         const currentSubscribedRooms = await getRooms(currentUserConfig.rooms);
         const currentActiveRoom = await getRooms([currentLastVisited]);

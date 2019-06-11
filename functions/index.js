@@ -184,7 +184,6 @@ exports.getMessages = functions.https.onRequest((req, res) => {
       .limitToLast(messageCount)
       .once("value", async snap => {
         const messages = snap.val();
-
         res.send({ messages, notifications });
       }
     );

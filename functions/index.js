@@ -12,8 +12,8 @@ admin.initializeApp(functions.config().firebase);
 
 exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
   async function getRooms(roomIds) {
-    return Promise.all(roomIds.map(room => {
-      const roomRef = admin.database().ref(`rooms/${room}`);
+    return Promise.all(roomIds.map(async room => {
+      const roomRef = await admin.database().ref(`rooms/${room}`);
       return roomRef.once('value');
     }));
   };
@@ -44,7 +44,7 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     return userRef.child(uid).once("value", async snapshot => {
       if (!snapshot.exists()) {
         return userRef.child(uid).update(userConfig)
-        .then(snapshot => {
+        .then(async snapshot => {
           return roomRef.child(`uid-${uid}`).update(room)
           .then(async () => {
             const subscribedRooms = await getRooms(userConfig.rooms);

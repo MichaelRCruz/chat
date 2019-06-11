@@ -72,7 +72,7 @@ class Messages extends Component {
   }
 
   getMessages = (roomId, messageCount) => {
-    const messageKeys = Object.keys(this.props.userConfig.notifications);
+    const messageKeys = Object.keys(this.props.userConfig.notifications || {});
     if (!roomId) {
       roomId = this.props.activeRoom.key;
     }

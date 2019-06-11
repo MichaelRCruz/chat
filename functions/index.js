@@ -168,34 +168,26 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
 });
 
 exports.getMessages = functions.https.onRequest((req, res) => {
+  async function getNotifications(messageKeys) {
+    return Promise.all(messageKeys.map(messageKey => {
+      const messageRef = admin.database().ref(`messages/${messageKey}`);
+      return messageRef.once('value');
+    }));
+  };
   return cors(req, res, async () => {
-    const roomId = req.query.roomId;
-    const messageCount = parseInt(req.query.messageCount, 10);
-    const uid = req.query.uid;
+    const { roomId, messageCount, messageKeys } = JSON.parse(req.body);
     const messagesRef = await admin.database().ref(`messages`);
-    await messagesRef.orderByChild('sentAt').limitToLast(messageCount).once("value", async snap => {
-      const messages = [];
-      const mentions = [];
-      const directs = [];
-      snap.forEach(message => {
-        const messageWithKey = Object.assign({}, message.val(), {key: message.key});
-        const isMentioned = Object.keys(messageWithKey.mentions || {}).includes(uid);
-        const isDirect = Object.keys(messageWithKey.directs || {}).includes(uid);
-        const belongsToRoom = messageWithKey.roomId === roomId;
-        if (belongsToRoom) {
-          messages.push(messageWithKey);
-        }
-        if (isMentioned) {
-          console.log(isMentioned);
-          mentions.push(messageWithKey);
-        }
-        if (isDirect) {
-          directs.push(messageWithKey);
-        }
-      });
-      // res.set('Access-Control-Allow-Origin', '*');
-      res.send({messages, mentions, directs});
-    });
+    const notifications = await getNotifications(messageKeys);
+    await messagesRef
+      .orderByChild('roomId')
+      .equalTo(roomId)
+      .limitToLast(messageCount)
+      .once("value", async snap => {
+        const messages = snap.val();
+
+        res.send({ messages, notifications });
+      }
+    );
   });
 });
 

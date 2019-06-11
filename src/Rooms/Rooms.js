@@ -8,8 +8,22 @@ class Rooms extends React.Component {
     }
   };
 
+  componentDidMount() {
+    // let obj = {};
+    // let result = [];
+    // for (let i = 0; i < this.props.notifications; i++) {
+    //   if (obj[arr[i]]) {
+    //     obj[arr[i]]++;
+    //   } else {
+    //     obj[arr[i]] = 1;
+    //     result.push(arr[i]);
+    //   }
+    // }
+    // this.setState({ notifications: result });
+  }
+
   render() {
-    const { subscribedRooms, setActiveRoom } = this.props;
+    const { subscribedRooms, setActiveRoom, userConfig } = this.props;
     const rooms = subscribedRooms.map((subscribedRoom, index) => {
       return (
         <li className="subscribedRoom" key={subscribedRoom.key}>

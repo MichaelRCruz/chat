@@ -17,7 +17,7 @@ class App extends React.Component {
       currentFcmToken: null,
       isLoading: true,
       showAuthModal: false,
-      messageMode: 'directs',
+      messageMode: 'notifications',
       showDashboardModal: false,
       subscribedRooms: null,
       user: null,
@@ -41,7 +41,7 @@ class App extends React.Component {
             this.requestNotifPermission(user.uid);
           });
         }
-        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'directs' });
+        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
       } else {
         this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
       }
@@ -136,21 +136,18 @@ class App extends React.Component {
 
   toggleMessageMode = messageMode => {
     switch (messageMode) {
-      case 'mentions':
-        messageMode = 'directs';
-        break;
-      case 'directs':
-        messageMode = 'messages';
-        break;
       case 'messages':
-        messageMode = 'mentions';
+        messageMode = 'notifications';
+        break;
+      case 'notifications':
+        messageMode = 'messages';
         break;
     }
     this.setState({ messageMode });
   };
 
   render() {
-    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, isVisible} = this.state;
+    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, notifications} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">

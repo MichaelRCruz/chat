@@ -4,7 +4,7 @@ import './Messages.css';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-class Message extends React.Component {
+class Mention extends React.Component {
   constructor (props) {
     super(props);
   }
@@ -37,4 +37,4 @@ class Message extends React.Component {
   }
 }
 
-export default Message;
+export default Mention;

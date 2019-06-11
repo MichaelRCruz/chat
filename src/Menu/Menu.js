@@ -11,7 +11,7 @@ class Menu extends React.Component {
   };
 
   render() {
-    const {firebase, activeRoom, user, userConfig, subscribedRooms, setActiveRoom} = this.props;
+    const {firebase, activeRoom, user, userConfig, subscribedRooms, setActiveRoom } = this.props;
     return (
       <section className="menuComponent">
         <div className="userAvatarContainer">

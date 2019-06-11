@@ -11,6 +11,10 @@ class Message extends Component {
     super(props);
   }
 
+  removeMessage(message) {
+    this.messagesRef.child(message.key).remove();
+  }
+
   render() {
     const { message, user, prevUid } = this.props;
     return (

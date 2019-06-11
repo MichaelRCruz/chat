@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './Messages.css';
 
+import Message from './Message.js';
+import Mention from './Mention.js';
+import Direct from './Direct.js';
 import Timeago from './../timeago/timeago.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 
@@ -122,7 +125,8 @@ class Messages extends Component {
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_added', async snapshot => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
         const { messages, mentions, directs } = await this.getMessages(null, null, this.props.user.uid);
-        this.setState({displayedMessages: messages, mentions, directs }, () => {
+        const displayedMessages = await this.getMessageMode(messages, mentions, directs, this.props.messageMode);
+        this.setState({ displayedMessages, messages, mentions, directs }, () => {
           this.bottomOfMessages.scrollIntoView();
         });
       }
@@ -130,7 +134,8 @@ class Messages extends Component {
     this.messagesRef.orderByChild('sentAt').limitToLast(1).on('child_removed', async snapshot  => {
       if (snapshot.val().roomId === this.state.activeRoom.key) {
         const { messages, mentions, directs } = await this.getMessages(null, null, this.props.user.uid);
-        this.setState({displayedMessages: messages, mentions, directs }, () => {
+        const displayedMessages = await this.getMessageMode(messages, mentions, directs, this.props.messageMode);
+        this.setState({ displayedMessages, messages, mentions, directs }, () => {
           this.bottomOfMessages.scrollIntoView();
         });
       }
@@ -142,46 +147,29 @@ class Messages extends Component {
   }
 
   render() {
-    const messages = this.state.displayedMessages.map((message, i, messages) => {
+    const messages = this.state.messages.map((message, i, messages) => {
       const prevMessage = messages[i - 1];
       const prevUid = prevMessage ? prevMessage.creator.uid : '';
       return (
-        <li
-          key={message.key}
-          className="message"
-          ref={message.key === this.state.cursor ? el => this.cursorRef = el : null}
-        >
-          <div className="imageMessageContainer">
-            <img
-              className={"messageImage " + (prevUid !== message.creator.uid ? '' : 'visibilityHidden')}
-              alt="user"
-              src={message.creator && message.creator.photoURL
-              ? message.creator.photoURL : defaultUserImage}
-             />
-            <div className="nameMessageContainer">
-              <div className="display-name">
-                {message.creator.displayName}
-                {message.creator && this.props.user && message.creator.email === this.props.user.email &&
-                  <button
-                    onClick={ () => this.removeMessage(message) }
-                    className="remove-message-button">
-                    &times;
-                  </button>
-                }
-              </div>
-              <div className="content">
-                <ReactMarkdown escapeHtml={false} source={message.content} />
-              </div>
-            </div>
-          </div>
-          <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
-        </li>
-      )}
-    )
+        <Message message={message} prevId={prevUid} user={this.props.user} />
+      );
+    });
+    const mentions = this.state.mentions.map((mention, i, mentions) => {
+      return (
+        <Mention mention={mention} user={this.props.user} />
+      );
+    });
+    const directs = this.state.directs.map((direct, i, directs) => {
+      return (
+        <Direct direct={direct} user={this.props.user} />
+      );
+    });
     return (
       <div className="messages-component">
         <ul className="messageList">
-          {this.props.user ? messages : []}
+          {this.props.messageMode === 'directs' ? messages : []}
+          {this.props.messageMode === 'messages' ? mentions : []}
+          {this.props.messageMode === 'mentions' ? directs : []}
           <div ref={thisDiv => this.bottomOfMessages = thisDiv}></div>
         </ul>
       </div>

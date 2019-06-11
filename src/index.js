@@ -24,6 +24,6 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   messaging.onMessage(function(payload) {
     console.log('onMessage', payload);
   });
-}
+};
 
 ReactDOM.render(<App firebase={firebase} />, document.getElementById("root"));

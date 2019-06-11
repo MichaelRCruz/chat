@@ -26,6 +26,7 @@ class Messages extends Component {
         content: messageValue,
         sentAt: Date.now(),
         roomId: this.props.activeRoom.key,
+        read: false,
         creator: {
           uid: this.props.user.uid,
           email: this.props.user.email,

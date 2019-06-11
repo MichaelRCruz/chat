@@ -26,13 +26,13 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log('0.016');
-    this.props.firebase.auth().onAuthStateChanged(async user => {
+    const { firebase } = this.props;
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.handleConnection(user.uid);
         let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
-        if (this.props.firebase.messaging.isSupported()) {
-          const messaging = this.props.firebase.messaging();
+        if (firebase.messaging.isSupported()) {
+          const messaging = firebase.messaging();
           const currentFcmToken = await messaging.getToken();
           this.handleFcmToken(currentFcmToken, user.uid, true)
           userConfig = Object.assign({}, userConfig, { currentFcmToken });
@@ -66,7 +66,6 @@ class App extends React.Component {
   };
 
   handleConnection = uid => {
-    // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
     const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
       isOnline: false,
@@ -84,7 +83,7 @@ class App extends React.Component {
         userStatusDatabaseRef.set(isOnlineForDatabase);
       });
     });
-  }
+  };
 
   requestNotifPermission = uid => {
     let _self = this;
@@ -148,10 +147,10 @@ class App extends React.Component {
         break;
     }
     this.setState({ messageMode });
-  }
+  };
 
   render() {
-    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode} = this.state;
+    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, isVisible} = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">

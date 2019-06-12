@@ -47,18 +47,53 @@ class Auth extends React.Component {
   };
 
   registerUser = (displayName, email, password) => {
-    this.props.firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(async res => {
-      await this.props.firebase.auth().currentUser.updateProfile({ displayName });
-      await this.setState({isRegistrationMode: true, user: res.user});
-      await this.props.toggleModal();
-    })
-    .catch(error => {
-      const { code } = error;
-      if (code === "auth/email-already-in-use") {
-        return alert(error.message);
-      }
-    });
+    var actionCodeSettings = {
+      // URL you want to redirect back to. The domain (www.example.com) for this
+      // URL must be whitelisted in the Firebase Console.
+      url: 'http://localhost:3000/',
+      // This must be true.
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.example.ios'
+      },
+      android: {
+        packageName: 'com.example.android',
+        installApp: true,
+        minimumVersion: '12'
+      },
+      dynamicLinkDomain: 'coolpotato.net'
+    };
+
+    this.props.firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+      .then(function() {
+        // The link was successfully sent. Inform the user.
+        // Save the email locally so you don't need to ask the user for it again
+        // if they open the link on the same device.
+        window.localStorage.setItem('emailForSignIn', email);
+      })
+      .catch(function(error) {
+        console.log(error.code);
+      });
+
+
+
+
+
+
+
+
+    // this.props.firebase.auth().createUserWithEmailAndPassword(email, password)
+    // .then(async res => {
+    //   await this.props.firebase.auth().currentUser.updateProfile({ displayName });
+    //   await this.setState({isRegistrationMode: true, user: res.user});
+    //   await this.props.toggleModal();
+    // })
+    // .catch(error => {
+    //   const { code } = error;
+    //   if (code === "auth/email-already-in-use") {
+    //     return alert(error.message);
+    //   }
+    // });
   };
 
   toggleRegistrationMode = isRegistrationMode => {

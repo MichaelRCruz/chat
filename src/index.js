@@ -3,6 +3,10 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as firebase from 'firebase';
 
+var urlParams = new URLSearchParams(window.location.search);
+console.log(urlParams.get('signIn'));
+
+
 const config = {
   apiKey: "AIzaSyAgvoGPD9Rh1p1Pf0TxHTdPGunB_KR9OqQ",
   authDomain: "chat-asdf.firebaseapp.com",

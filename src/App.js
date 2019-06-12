@@ -239,7 +239,7 @@ class App extends React.Component {
     );
     return (
       <div>
-        {user ? app : null}
+        {user && !showAuthModal && !showDashboardModal ? app : null}
         {!user && !isLoading ? splash : null}
         {!user && isLoading ? loadingAnimation : null}
         {showAuthModal ? authModal : null}

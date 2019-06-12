@@ -47,14 +47,11 @@ class Auth extends React.Component {
   };
 
   registerUser = (displayName, email, password) => {
-    let _self = this;
     this.props.firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(res => {
-      this.setState({isRegistrationMode: true, user: res.user}, () => {
-        _self.props.firebase.auth().currentUser.updateProfile({ displayName });
-        _self.props.toggleModal();
-        // _self.props.toggleRegistrationMode(false);
-      });
+    .then(async res => {
+      await this.props.firebase.auth().currentUser.updateProfile({ displayName });
+      await this.setState({isRegistrationMode: true, user: res.user});
+      await this.props.toggleModal();
     })
     .catch(error => {
       const { code } = error;

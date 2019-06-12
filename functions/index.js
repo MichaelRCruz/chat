@@ -23,7 +23,7 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const messagesRef = admin.database().ref('/messages');
-    const messageKey = messagesRef.push();
+    const messageKey = messagesRef.push().key;
     const randomString = Math.random().toString(36).substr(2, 3);
     const generatedName = displayName.replace(/\s/g,'') + '_' + randomString;
     const userConfig = {

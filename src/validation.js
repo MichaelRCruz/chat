@@ -35,7 +35,7 @@ export default class Validation {
   };
 
   checkAvailability = async fieldValue => {
-    const uri = `https://us-central1-chat-asdf.cloudfunctions.net/verifyDisplayname?displayname=${fieldValue}`;
+    const uri = `${process.env.REACT_APP_HTTP_URL}/verifyDisplayname?displayname=${fieldValue}`;
     const inputOptions = {
       method: "GET"
     };

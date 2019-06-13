@@ -111,7 +111,7 @@ class App extends React.Component {
   };
 
   handleFcmToken = (fcmToken, uid, subscription) => {
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic`, {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/addTokenToTopic`, {
       method: 'POST',
       body: JSON.stringify({ fcmToken, uid, subscription})
     })

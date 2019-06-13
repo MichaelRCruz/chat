@@ -78,7 +78,7 @@ class Messages extends Component {
     if (!messageCount) {
       messageCount = 100;
     }
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/getMessages`, {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
       method: 'POST',
       body: JSON.stringify({ roomId, messageCount, messageKeys })
     })

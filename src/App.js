@@ -33,18 +33,17 @@ class App extends React.Component {
     firebase.auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
         this.setState(Object.assign({}, this.baseState, { isLoading: false }));
-      } else {
-        if (isNew) {
-          console.debug(user, credential, displayName, email);
-          this.setState({ isLoading: false, inWaiting: true, showAuthModal: true });
-        } else if (credential) {
-          this.loadApp(user, firebase, credential, displayName, email);
-        } else {
-          this.setState(Object.assign({}, this.baseState, { isLoading: false }));
-          firebase.auth().signOut();
-        }
+        firebase.auth().signOut();
       }
     });
+    if (isNew) {
+      this.setState({ isLoading: false, inWaiting: true, showAuthModal: true });
+    } else if (credential) {
+      this.loadApp(user, firebase, credential, displayName, email);
+    } else {
+      this.setState(Object.assign({}, this.baseState, { isLoading: false }));
+      firebase.auth().signOut();
+    }
   };
 
   loadApp = async (user, firebase, credential, displayName, email) => {

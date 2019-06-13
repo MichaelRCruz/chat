@@ -1,0 +1,11 @@
+Jun 12, 2019 4:33:11 PM io.grpc.netty.NettyServerBuilder buildTransportServers
+WARNING: All of BossEventLoopGroup, WorkerEventLoopGroup and ChannelType should be provided or neither should be, otherwise server may not start. Missing values will use Nio (NioServerSocketChannel, NioEventLoopGroup) for backward compatibility. This will cause an Exception in the future.
+API endpoint: http://localhost:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+*** shutting down gRPC server since JVM is shutting down
+*** server shut down

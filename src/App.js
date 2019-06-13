@@ -8,6 +8,7 @@ import Messages from './Messages/Messages';
 import Menu from './Menu/Menu';
 import SubmitMessage from './SubmitMessage/SubmitMessage';
 import Splash from './Splash/Splash';
+import Waiting from './Waiting/Waiting.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends React.Component {
     this.state = {
       activeRoom: null,
       currentFcmToken: null,
+      inWaiting: false,
       isLoading: true,
       showAuthModal: false,
       messageMode: 'notifications',
@@ -43,14 +45,18 @@ class App extends React.Component {
         }
         await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
       } else {
-        this.setState({ user, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
+        this.setState({ user: false, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
       }
     });
   };
 
+  renderWaitingRoom = () => {
+    this.setState({ inWaiting: !this.state.inWaiting });
+  }
+
   getUserConfig = user => {
     const { uid, displayName } = user;
-    return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/createRoomAndUserConfig`, {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/createRoomAndUserConfig`, {
       method: 'POST',
       body: JSON.stringify({ uid, displayName })
     })
@@ -147,7 +153,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, notifications} = this.state;
+    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, notifications, inWaiting } = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -206,6 +212,7 @@ class App extends React.Component {
         toggleModal={this.toggleAuthModal.bind(this)}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
         handleFcmToken={this.handleFcmToken.bind(this)}
+        renderWaitingRoom={this.renderWaitingRoom.bind(this)}
       />
     );
     const dashboard = (
@@ -228,7 +235,7 @@ class App extends React.Component {
     );
     const dashboardModal = (
       <Modal
-        title="channels"
+        title="dashboard"
         show={showDashboardModal}
         children={dashboard}
         handleClose={this.toggleDashboardModal.bind(this)}>
@@ -237,13 +244,25 @@ class App extends React.Component {
     const loadingAnimation = (
       <div className="loadingAnimation"></div>
     );
+    const waiting = (
+      <Waiting />
+    );
+    const waitingModal = (
+      <Modal
+        title="channels"
+        show={inWaiting}
+        children={waiting}
+        handleClose={this.toggleDashboardModal.bind(this)}>
+      </Modal>
+    );
     return (
       <div>
-        {user && !showAuthModal && !showDashboardModal ? app : null}
-        {!user && !isLoading ? splash : null}
+        {user && !showAuthModal && !inWaiting && !showDashboardModal ? app : null}
+        {!user && !isLoading && !inWaiting ? splash : null}
         {!user && isLoading ? loadingAnimation : null}
-        {showAuthModal ? authModal : null}
-        {showDashboardModal ? dashboardModal : null}
+        {!user && inWaiting ? waitingModal : null}
+        {showAuthModal && !inWaiting ? authModal : null}
+        {showDashboardModal && !inWaiting ? dashboardModal : null}
       </div>
     );
   }

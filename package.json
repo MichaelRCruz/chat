@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",
-    "react-scripts": "1.0.7"
+    "react-scripts": "^1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -26,6 +26,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "pages-deploy": "gh-pages -d build"
   }
 }

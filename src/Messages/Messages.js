@@ -50,7 +50,6 @@ class Messages extends Component {
         displayedMessages = messages ? messages : [];
         break;
     }
-    console.log(displayedMessages)
     return displayedMessages;
   }
 

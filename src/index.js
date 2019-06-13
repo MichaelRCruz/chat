@@ -26,27 +26,6 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   });
 };
 
-firebase.auth()
-  .getRedirectResult()
-  .then(result => {
-    const user = result.user;
-    const token = result.credential ? result.credential.accessToken : null;
-    const isNew = result.additionalUserInfo.isNewUser;
-    const email = user.email ? user.email : null;
-    const providerName = user.providerName ? user.providerName : null;
-    const randomString = Math.random().toString(36).substr(2, 4);
-    const displayName = providerName.replace(/\s/g,'') + '_' + randomString;
-    init({ email, displayName, token, isNew });
-  })
-  .catch(error => {
-    const errorCode = error.code;
-    if (errorCode === 'auth/account-exists-with-different-credential') {
-      alert('You have already signed up with a different auth provider for that email.');
-    }
-    console.error(error);
-    init({ error });
-  });
-
 // Confirm the link is a sign-in with email link.
 if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
   const email = window.localStorage.getItem('asdfChatEmailForSignIn');
@@ -55,19 +34,37 @@ if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
     .then(result => {
       window.localStorage.removeItem('emailForSignIn');
       window.localStorage.removeItem('displayName');
-      const token = result.credential ? result.credential.accessToken : null;
+      const user = result.user;
       const isNew = result.additionalUserInfo.isNewUser;
-      init({ email, displayName, token, isNew });
+      // const credential = result.credential;
+      init({ user, email, displayName, isNew, firebase });
     })
     .catch(error => {
       console.error(error.code);
       init(error);
     });
-};
+} else {
+  firebase.auth()
+    .getRedirectResult()
+    .then(result => {
+      if (result.credential) {
+        const credential = result.credential;
+        const user = result.user;
+        init({ displayName: user.displayName, email: user.email, credential, firebase });
+      } else {
+        init({ firebase });
+      }
+    })
+    .catch(error => {
+      const errorCode = error.code;
+      if (errorCode === 'auth/account-exists-with-different-credential') {
+        alert('You have already signed up with a different auth provider for that email.');
+      }
+      console.error(error);
+      init({ error });
+  });
+}
 
-function init(settings) {
-  const initProps = Object.assign({}, settings, { firebase });
+function init(initProps) {
   ReactDOM.render(<App {...initProps} />, document.getElementById("root"));
 };
-
-init();

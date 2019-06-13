@@ -25,31 +25,36 @@ class App extends React.Component {
       user: null,
       userConfig: null
     }
+    this.baseState = this.state;
   };
 
   componentDidMount() {
-    console.log('version 1.0');
-    const { firebase } = this.props;
-    firebase.auth().onAuthStateChanged(async user => {
-      if (user) {
-        this.handleConnection(user.uid);
-        let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
-        if (firebase.messaging.isSupported()) {
-          const messaging = firebase.messaging();
-          const currentFcmToken = await messaging.getToken();
-          this.handleFcmToken(currentFcmToken, user.uid, true)
-          userConfig = Object.assign({}, userConfig, { currentFcmToken });
-          messaging.onTokenRefresh(function() {
-            console.log('refreshed token');
-            this.requestNotifPermission(user.uid);
-          });
-        }
-        await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
+    const { firebase, credential, displayName, email, error } = this.props;
+    console.log({displayName, email, error});
+    firebase.auth().onAuthStateChanged(async currentUser => {
+      if (!currentUser) {
+        this.setState(Object.assign({}, this.baseState, { isLoading: false }));
       } else {
-        this.setState({ user: false, userConfig: null, activeRoom: null, isLoading: false, show: false, showRooms: false, subscribedRooms: null });
+        await this.loadApp(firebase, currentUser);
       }
     });
   };
+
+  loadApp = async (firebase, currentUser) => {
+    this.handleConnection(currentUser.uid);
+    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(currentUser);
+    if (firebase.messaging.isSupported()) {
+      const messaging = firebase.messaging();
+      const currentFcmToken = await messaging.getToken();
+      this.handleFcmToken(currentFcmToken, currentUser.uid, true)
+      userConfig = Object.assign({}, userConfig, { currentFcmToken });
+      messaging.onTokenRefresh(function() {
+        console.log('refreshed token');
+        this.requestNotifPermission(currentUser.uid);
+      });
+    }
+    this.setState({ user: currentUser, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
+  }
 
   renderWaitingRoom = () => {
     this.setState({ inWaiting: !this.state.inWaiting });

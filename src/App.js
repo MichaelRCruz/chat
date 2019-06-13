@@ -35,13 +35,11 @@ class App extends React.Component {
         this.setState(Object.assign({}, this.baseState, { isLoading: false }));
       } else {
         if (isNew) {
-          console.log('isNew', {user, firebase, credential, displayName, email, error, isNew});
-          this.setState({ isLoading: false, inWaiting: true, showAuthModal: false, user });
+          console.debug(user, credential, displayName, email);
+          this.setState({ isLoading: false, inWaiting: true, showAuthModal: true });
         } else if (credential) {
-          this.setState({ isLoading: false, user, credential });
-          console.log('credential', {user, firebase, credential, displayName, email, error, isNew});
+          this.loadApp(user, firebase, credential, displayName, email);
         } else {
-          console.log('default', {user, firebase, credential, displayName, email, error, isNew});
           this.setState(Object.assign({}, this.baseState, { isLoading: false }));
           firebase.auth().signOut();
         }
@@ -49,20 +47,21 @@ class App extends React.Component {
     });
   };
 
-  loadApp = async (firebase, currentUser, displayName, email) => {
-    this.handleConnection(currentUser.uid);
-    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(currentUser);
-    if (firebase.messaging.isSupported()) {
-      const messaging = firebase.messaging();
-      const currentFcmToken = await messaging.getToken();
-      this.handleFcmToken(currentFcmToken, currentUser.uid, true)
-      userConfig = Object.assign({}, userConfig, { currentFcmToken });
-      messaging.onTokenRefresh(function() {
-        console.log('refreshed token');
-        this.requestNotifPermission(currentUser.uid);
-      });
-    }
-    this.setState({ user: currentUser, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
+  loadApp = async (user, firebase, credential, displayName, email) => {
+    console.debug(user, firebase, credential, displayName, email);
+    // this.handleConnection(user.uid);
+    // let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
+    // if (firebase.messaging.isSupported()) {
+    //   const messaging = firebase.messaging();
+    //   const currentFcmToken = await messaging.getToken();
+    //   this.handleFcmToken(currentFcmToken, user.uid, true)
+    //   userConfig = Object.assign({}, userConfig, { currentFcmToken });
+    //   messaging.onTokenRefresh(function() {
+    //     console.log('refreshed token');
+    //     this.requestNotifPermission(user.uid);
+    //   });
+    // }
+    // this.setState({ user: user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
   }
 
   renderWaitingRoom = () => {
@@ -256,6 +255,14 @@ class App extends React.Component {
         handleClose={this.toggleDashboardModal.bind(this)}>
       </Modal>
     );
+    const signInConfirm = (
+      <Modal
+        title="dashboard"
+        show={showDashboardModal}
+        children={<h1>signInConfirm</h1>}
+        handleClose={this.toggleDashboardModal.bind(this)}>
+      </Modal>
+    );
     const loadingAnimation = (
       <div className="loadingAnimation"></div>
     );
@@ -264,12 +271,16 @@ class App extends React.Component {
     );
     return (
       <div>
-        {user && !showAuthModal && !inWaiting && !showDashboardModal ? app : null}
         {!user && !isLoading && !inWaiting ? splash : null}
-        {!user && isLoading ? loadingAnimation : null}
-        {!user && inWaiting ? waitingModal : null}
-        {showAuthModal && !inWaiting ? authModal : null}
-        {showDashboardModal && !inWaiting ? dashboardModal : null}
+
+        {isLoading ? loadingAnimation : null}
+        {inWaiting ? waitingModal : null}
+        {showAuthModal ? authModal : null}
+        {user && inWaiting && showAuthModal ? signInConfirm : null}
+        {user && showDashboardModal ? dashboardModal : null}
+
+        {user && !isLoading && !inWaiting && !showAuthModal && !showDashboardModal ? app : null}
+
       </div>
     );
   }

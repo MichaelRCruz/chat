@@ -57,29 +57,16 @@ class Auth extends React.Component {
     };
     this.props.firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
       .then(() => {
-        // The link was successfully sent. Inform the user.
-        // Save the email locally so you don't need to ask the user for it again
-        // if they open the link on the same device.
         window.localStorage.setItem('asdfChatEmailForSignIn', email);
         window.localStorage.setItem('asdfChatDisplayName', displayName);
         this.props.renderWaitingRoom();
+        this.props.toggleModal();
       })
       .catch(error => {
         this.props.renderWaitingRoom();
+        this.props.toggleModal();
         console.log(error.code);
       });
-      // this.props.firebase.auth().createUserWithEmailAndPassword(email, password)
-      // .then(async res => {
-      //   await this.props.firebase.auth().currentUser.updateProfile({ displayName });
-      //   await this.setState({isRegistrationMode: true, user: res.user});
-      //   await this.props.toggleModal();
-      // })
-      // .catch(error => {
-      //   const { code } = error;
-      //   if (code === "auth/email-already-in-use") {
-      //     return alert(error.message);
-      //   }
-      // });
   };
 
   toggleRegistrationMode = isRegistrationMode => {

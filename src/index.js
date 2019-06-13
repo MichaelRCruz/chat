@@ -50,7 +50,7 @@ if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
       if (result.credential) {
         const credential = result.credential;
         const user = result.user;
-        init({ displayName: user.displayName, email: user.email, credential, firebase });
+        init({ user, displayName: user.displayName, email: user.email, credential, firebase });
       } else {
         init({ firebase });
       }

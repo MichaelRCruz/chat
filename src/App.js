@@ -29,18 +29,27 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const { firebase, credential, displayName, email, error } = this.props;
-    console.log({displayName, email, error});
-    firebase.auth().onAuthStateChanged(async currentUser => {
+    const { user, firebase, credential, displayName, email, error, isNew } = this.props;
+    firebase.auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
         this.setState(Object.assign({}, this.baseState, { isLoading: false }));
       } else {
-        await this.loadApp(firebase, currentUser);
+        if (isNew) {
+          console.log('isNew', {user, firebase, credential, displayName, email, error, isNew});
+          this.setState({ isLoading: false, inWaiting: true, showAuthModal: false, user });
+        } else if (credential) {
+          this.setState({ isLoading: false, user, credential });
+          console.log('credential', {user, firebase, credential, displayName, email, error, isNew});
+        } else {
+          console.log('default', {user, firebase, credential, displayName, email, error, isNew});
+          this.setState(Object.assign({}, this.baseState, { isLoading: false }));
+          firebase.auth().signOut();
+        }
       }
     });
   };
 
-  loadApp = async (firebase, currentUser) => {
+  loadApp = async (firebase, currentUser, displayName, email) => {
     this.handleConnection(currentUser.uid);
     let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(currentUser);
     if (firebase.messaging.isSupported()) {

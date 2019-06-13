@@ -20,6 +20,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log
+database-debug.log
 
 /src/serviceAccountKey.json
 /functions/serviceAccountKey.json

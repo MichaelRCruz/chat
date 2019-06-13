@@ -28,6 +28,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    console.log('version 1.0');
     const { firebase } = this.props;
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
@@ -244,16 +245,8 @@ class App extends React.Component {
     const loadingAnimation = (
       <div className="loadingAnimation"></div>
     );
-    const waiting = (
-      <Waiting />
-    );
     const waitingModal = (
-      <Modal
-        title="channels"
-        show={inWaiting}
-        children={waiting}
-        handleClose={this.toggleDashboardModal.bind(this)}>
-      </Modal>
+      <Waiting />
     );
     return (
       <div>

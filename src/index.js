@@ -13,36 +13,6 @@ const config = {
 };
 firebase.initializeApp(config);
 
-// Confirm the link is a sign-in with email link.
-if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-  // Additional state parameters can also be passed via URL.
-  // This can be used to continue the user's intended action before triggering
-  // the sign-in operation.
-  // Get the email if available. This should be available if the user completes
-  // the flow on the same device where they started it.
-  var email = window.localStorage.getItem('emailForSignIn');
-  if (!email) {
-    // User opened the link on a different device. To prevent session fixation
-    // attacks, ask the user to provide the associated email again. For example:
-    email = window.prompt('Please provide your email for confirmation');
-  }
-  // The client SDK will parse the code from the link for you.
-  // firebase.auth().signInWithEmailLink(email, window.location.href)
-  //   .then(function(result) {
-  //     // Clear email from storage.
-  //     window.localStorage.removeItem('emailForSignIn');
-  //     // You can access the new user via result.user
-  //     // Additional user info profile not available via:
-  //     // result.additionalUserInfo.profile == null
-  //     // You can check if the user is new or existing:
-  //     // result.additionalUserInfo.isNewUser
-  //   })
-  //   .catch(function(error) {
-  //     // Some error occurred, you can inspect the code: error.code
-  //     // Common errors could be invalid email and invalid or expired OTPs.
-  //   });
-}
-
 if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   const messaging = firebase.messaging();
   navigator.serviceWorker.register('firebase-messaging-sw.js')
@@ -56,4 +26,48 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   });
 };
 
-ReactDOM.render(<App firebase={firebase} />, document.getElementById("root"));
+firebase.auth()
+  .getRedirectResult()
+  .then(result => {
+    const user = result.user;
+    const token = result.credential ? result.credential.accessToken : null;
+    const isNew = result.additionalUserInfo.isNewUser;
+    const email = user.email ? user.email : null;
+    const providerName = user.providerName ? user.providerName : null;
+    const randomString = Math.random().toString(36).substr(2, 4);
+    const displayName = providerName.replace(/\s/g,'') + '_' + randomString;
+    init({ email, displayName, token, isNew });
+  })
+  .catch(error => {
+    const errorCode = error.code;
+    if (errorCode === 'auth/account-exists-with-different-credential') {
+      alert('You have already signed up with a different auth provider for that email.');
+    }
+    console.error(error);
+    init({ error });
+  });
+
+// Confirm the link is a sign-in with email link.
+if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+  const email = window.localStorage.getItem('asdfChatEmailForSignIn');
+  const displayName = window.localStorage.getItem('asdfChatDisplayName');
+  firebase.auth().signInWithEmailLink(email, window.location.href)
+    .then(result => {
+      window.localStorage.removeItem('emailForSignIn');
+      window.localStorage.removeItem('displayName');
+      const token = result.credential ? result.credential.accessToken : null;
+      const isNew = result.additionalUserInfo.isNewUser;
+      init({ email, displayName, token, isNew });
+    })
+    .catch(error => {
+      console.error(error.code);
+      init(error);
+    });
+};
+
+function init(settings) {
+  const initProps = Object.assign({}, settings, { firebase });
+  ReactDOM.render(<App {...initProps} />, document.getElementById("root"));
+};
+
+init();

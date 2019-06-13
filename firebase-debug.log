@@ -1,41 +1,41 @@
-[debug] [2019-06-13T03:00:11.556Z] ----------------------------------------------------------------------
-[debug] [2019-06-13T03:00:11.558Z] Command:       /Users/michael/.nvm/versions/node/v10.16.0/bin/node /usr/local/bin/firebase serve
-[debug] [2019-06-13T03:00:11.559Z] CLI Version:   6.11.0
-[debug] [2019-06-13T03:00:11.559Z] Platform:      darwin
-[debug] [2019-06-13T03:00:11.559Z] Node Version:  v10.16.0
-[debug] [2019-06-13T03:00:11.583Z] Time:          Wed Jun 12 2019 20:00:11 GMT-0700 (Pacific Daylight Time)
-[debug] [2019-06-13T03:00:11.584Z] ----------------------------------------------------------------------
+[debug] [2019-06-13T05:37:30.042Z] ----------------------------------------------------------------------
+[debug] [2019-06-13T05:37:30.044Z] Command:       /Users/michael/.nvm/versions/node/v10.16.0/bin/node /usr/local/bin/firebase serve
+[debug] [2019-06-13T05:37:30.044Z] CLI Version:   6.11.0
+[debug] [2019-06-13T05:37:30.044Z] Platform:      darwin
+[debug] [2019-06-13T05:37:30.044Z] Node Version:  v10.16.0
+[debug] [2019-06-13T05:37:30.045Z] Time:          Wed Jun 12 2019 22:37:30 GMT-0700 (Pacific Daylight Time)
+[debug] [2019-06-13T05:37:30.045Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2019-06-13T03:00:11.597Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2019-06-13T03:00:11.597Z] > authorizing via signed-in user
-[debug] [2019-06-13T03:00:11.597Z] [iam] checking project chat-asdf for permissions ["firebase.projects.get"]
-[debug] [2019-06-13T03:00:11.599Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2019-06-13T03:00:11.599Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+[debug] [2019-06-13T05:37:30.059Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-06-13T05:37:30.059Z] > authorizing via signed-in user
+[debug] [2019-06-13T05:37:30.059Z] [iam] checking project chat-asdf for permissions ["firebase.projects.get"]
+[debug] [2019-06-13T05:37:30.061Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-06-13T05:37:30.061Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
  <request body omitted>
-[debug] [2019-06-13T03:00:11.889Z] <<< HTTP RESPONSE 200
-[debug] [2019-06-13T03:00:11.901Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/chat-asdf:testIamPermissions  
+[debug] [2019-06-13T05:37:30.310Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-13T05:37:30.319Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/chat-asdf:testIamPermissions  
 
-[debug] [2019-06-13T03:00:12.308Z] <<< HTTP RESPONSE 200
-[debug] [2019-06-13T03:00:12.309Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/chat-asdf  
+[debug] [2019-06-13T05:37:30.699Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-13T05:37:30.701Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/chat-asdf  
  
-[debug] [2019-06-13T03:00:12.682Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-13T05:37:31.084Z] <<< HTTP RESPONSE 200
 [info] 
 [info] === Serving from '/Users/michael/code/chat'...
 [info] 
 [info] ✔  functions: Using node@10 from host.
-[debug] [2019-06-13T03:00:12.692Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/145747598382/clients/_:getWebAppConfig  
+[debug] [2019-06-13T05:37:31.097Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/145747598382/clients/_:getWebAppConfig  
  
-[debug] [2019-06-13T03:00:12.693Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/145747598382:getServerAppConfig  
+[debug] [2019-06-13T05:37:31.097Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/145747598382:getServerAppConfig  
  
-[debug] [2019-06-13T03:00:12.970Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-13T05:37:31.398Z] <<< HTTP RESPONSE 200
 [info] ✔  functions: Emulator started at http://localhost:5001
-[debug] [2019-06-13T03:00:13.161Z] <<< HTTP RESPONSE 200
+[debug] [2019-06-13T05:37:31.590Z] <<< HTTP RESPONSE 200
 [info] i  functions: Watching "/Users/michael/code/chat/functions" for Cloud Functions...
 [info] i  hosting: Serving hosting files from: build
 [info] ✔  hosting: Local server: http://localhost:5000
-[debug] [2019-06-13T03:00:13.420Z] Functions runtime initialized.
-[debug] [2019-06-13T03:00:13.421Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:00:14.091Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T05:37:31.846Z] Functions runtime initialized.
+[debug] [2019-06-13T05:37:31.846Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T05:37:32.575Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
 [info] i  functions: HTTP trigger initialized at http://localhost:5001/chat-asdf/us-central1/createRoomAndUserConfig
 [info] i  functions: HTTP trigger initialized at http://localhost:5001/chat-asdf/us-central1/gitHubPushWebHook
@@ -45,206 +45,711 @@
 [info] i  functions: HTTP trigger initialized at http://localhost:5001/chat-asdf/us-central1/getMessages
 [info] i  functions: HTTP trigger initialized at http://localhost:5001/chat-asdf/us-central1/handleSignOut
 [info] i  functions: HTTP trigger initialized at http://localhost:5001/chat-asdf/us-central1/verifyDisplayname
-[debug] [2019-06-13T03:04:10.477Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:04:10.869Z] Functions runtime initialized.
+[debug] [2019-06-13T06:00:22.790Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:00:22.797Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:00:23.268Z] Functions runtime initialized.
+[debug] [2019-06-13T06:00:23.268Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:04:10.871Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:04:11.555Z] firebase-admin has been stubbed.
-[info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:04:11.644Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:04:11.644Z] 
-[debug] [2019-06-13T03:04:11.644Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:04:11.651Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22681.sock"}
-[debug] [2019-06-13T03:04:11.651Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22681.sock"}
-[debug] [2019-06-13T03:04:11.674Z] Ephemeral server used!
-[debug] [2019-06-13T03:04:11.769Z] Ephemeral server survived.
-[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:04:35.851Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:04:36.134Z] Functions runtime initialized.
+[debug] [2019-06-13T06:00:23.270Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
 [info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:04:36.136Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:04:36.791Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:23.270Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:24.231Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:24.231Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:04:36.860Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:04:36.860Z] 
-[debug] [2019-06-13T03:04:36.860Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:04:36.870Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22689.sock"}
-[debug] [2019-06-13T03:04:36.870Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22689.sock"}
-[debug] [2019-06-13T03:04:36.887Z] Ephemeral server used!
-[debug] [2019-06-13T03:04:36.949Z] Ephemeral server survived.
-[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:05:04.004Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:05:04.408Z] Functions runtime initialized.
-[info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:05:04.410Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:05:05.083Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:05:05.172Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:05:05.173Z] 
-[debug] [2019-06-13T03:05:05.173Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:05:05.179Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22702.sock"}
-[debug] [2019-06-13T03:05:05.180Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22702.sock"}
-[debug] [2019-06-13T03:05:05.199Z] Ephemeral server used!
-[debug] [2019-06-13T03:05:05.269Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:24.383Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:24.384Z] 
+[debug] [2019-06-13T06:00:24.384Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:00:24.384Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:24.384Z] 
+[debug] [2019-06-13T06:00:24.384Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:00:24.391Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25676.sock"}
+[debug] [2019-06-13T06:00:24.392Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25676.sock"}
+[debug] [2019-06-13T06:00:24.394Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25677.sock"}
+[debug] [2019-06-13T06:00:24.395Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25677.sock"}
+[debug] [2019-06-13T06:00:24.445Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:24.446Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:24.540Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:24.540Z] Ephemeral server survived.
 [info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:09:38.710Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:09:39.363Z] Functions runtime initialized.
-[info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:09:39.365Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:09:40.098Z] firebase-admin has been stubbed.
-[info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:09:40.255Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:09:40.255Z] 
-[debug] [2019-06-13T03:09:40.255Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:09:40.262Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22814.sock"}
-[debug] [2019-06-13T03:09:40.264Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22814.sock"}
-[debug] [2019-06-13T03:09:40.292Z] Ephemeral server used!
-[debug] [2019-06-13T03:09:40.396Z] Ephemeral server survived.
 [info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:10:32.346Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:10:32.744Z] Functions runtime initialized.
-[info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:10:32.746Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:10:33.506Z] firebase-admin has been stubbed.
-[info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:10:33.604Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:10:33.604Z] 
-[debug] [2019-06-13T03:10:33.604Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:10:33.610Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22827.sock"}
-[debug] [2019-06-13T03:10:33.611Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22827.sock"}
-[debug] [2019-06-13T03:10:33.631Z] Ephemeral server used!
-[debug] [2019-06-13T03:10:33.710Z] Ephemeral server survived.
-[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:10:34.440Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
-[debug] [2019-06-13T03:10:34.916Z] Functions runtime initialized.
+[debug] [2019-06-13T06:00:25.320Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:00:25.344Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:00:25.356Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:00:25.400Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:00:25.803Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:00:25.915Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:00:26.247Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:00:26.249Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:26.253Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "addTokenToTopic"
-[debug] [2019-06-13T03:10:34.917Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:10:35.574Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:26.256Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:26.259Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:00:26.261Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:26.380Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T06:00:26.382Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:26.681Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:00:26.683Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:26.823Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:00:26.829Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:00:27.463Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:27.466Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:27.506Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:27.587Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:10:35.644Z] Trigger "addTokenToTopic" has been found, beginning invocation!
-[debug] [2019-06-13T03:10:35.644Z] 
-[debug] [2019-06-13T03:10:35.644Z] Running addTokenToTopic in mode HTTPS
-[debug] [2019-06-13T03:10:35.654Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22834.sock"}
-[debug] [2019-06-13T03:10:35.654Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22834.sock"}
-[debug] [2019-06-13T03:10:35.681Z] Ephemeral server used!
-[debug] [2019-06-13T03:10:35.857Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:00:27.667Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:27.668Z] 
+[debug] [2019-06-13T06:00:27.668Z] Running getMessages in mode HTTPS
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:00:27.689Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:27.689Z] 
+[debug] [2019-06-13T06:00:27.690Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:00:27.693Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:27.693Z] 
+[debug] [2019-06-13T06:00:27.694Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:00:27.704Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25694.sock"}
+[debug] [2019-06-13T06:00:27.704Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25694.sock"}
+[debug] [2019-06-13T06:00:27.705Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25692.sock"}
+[debug] [2019-06-13T06:00:27.705Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25692.sock"}
+[debug] [2019-06-13T06:00:27.718Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25693.sock"}
+[debug] [2019-06-13T06:00:27.719Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25693.sock"}
+[debug] [2019-06-13T06:00:27.748Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:27.758Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:00:27.781Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:27.791Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:27.791Z] 
+[debug] [2019-06-13T06:00:27.791Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:00:27.800Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25691.sock"}
+[debug] [2019-06-13T06:00:27.801Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25691.sock"}
+[debug] [2019-06-13T06:00:27.855Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:00:27.882Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:27.952Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:27.983Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:28.045Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:00:28.073Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:28.073Z] 
+[debug] [2019-06-13T06:00:28.073Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:00:28.084Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25695.sock"}
+[debug] [2019-06-13T06:00:28.084Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25695.sock"}
+[debug] [2019-06-13T06:00:28.141Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:28.142Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:00:28.178Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:28.183Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:00:28.183Z] 
+[debug] [2019-06-13T06:00:28.183Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:00:28.200Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25696.sock"}
+[debug] [2019-06-13T06:00:28.201Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25696.sock"}
+[debug] [2019-06-13T06:00:28.219Z] Ephemeral server used!
+[debug] [2019-06-13T06:00:28.223Z] Ephemeral server survived.
+[debug] [2019-06-13T06:00:28.286Z] Ephemeral server survived.
+[info] >  [2019-06-13T06:00:29.011Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:00:29.021Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "getMessages" in ~1s
 [info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
 [info] i  functions: Finished "addTokenToTopic" in ~1s
-[debug] [2019-06-13T03:11:05.572Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:11:05.957Z] Functions runtime initialized.
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T06:00:29.169Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:00:29.382Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[debug] [2019-06-13T06:06:10.823Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:06:10.832Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:06:11.472Z] Functions runtime initialized.
+[debug] [2019-06-13T06:06:11.472Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:11:05.958Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:11:06.625Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:11.475Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T06:06:11.475Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:12.391Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:12.391Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:11:06.714Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:11:06.714Z] 
-[debug] [2019-06-13T03:11:06.714Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:11:06.720Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22850.sock"}
-[debug] [2019-06-13T03:11:06.720Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22850.sock"}
-[debug] [2019-06-13T03:11:06.745Z] Ephemeral server used!
-[debug] [2019-06-13T03:11:06.817Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:06:12.524Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:12.524Z] 
+[debug] [2019-06-13T06:06:12.525Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:06:12.525Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:12.525Z] 
+[debug] [2019-06-13T06:06:12.525Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:06:12.531Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25829.sock"}
+[debug] [2019-06-13T06:06:12.532Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25829.sock"}
+[debug] [2019-06-13T06:06:12.533Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25830.sock"}
+[debug] [2019-06-13T06:06:12.533Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25830.sock"}
+[debug] [2019-06-13T06:06:12.553Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:12.553Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:12.661Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:12.662Z] Ephemeral server survived.
 [info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:11:07.577Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
-[debug] [2019-06-13T03:11:07.598Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
-[debug] [2019-06-13T03:11:08.094Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
-[debug] [2019-06-13T03:11:08.220Z] Functions runtime initialized.
+[debug] [2019-06-13T06:06:13.430Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:06:13.444Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T06:06:13.569Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:06:13.578Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:06:13.776Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:06:13.946Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:06:14.212Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "addTokenToTopic"
-[debug] [2019-06-13T03:11:08.221Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:11:08.243Z] Functions runtime initialized.
+[debug] [2019-06-13T06:06:14.214Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:14.235Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "getMessages"
-[debug] [2019-06-13T03:11:08.245Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:11:08.433Z] Functions runtime initialized.
+[debug] [2019-06-13T06:06:14.238Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:14.450Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T06:06:14.452Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:14.452Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "getMessages"
-[debug] [2019-06-13T03:11:08.436Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:11:08.974Z] firebase-admin has been stubbed.
-[debug] [2019-06-13T03:11:08.976Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:14.454Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:14.585Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:06:14.587Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:14.721Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:06:14.723Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:06:15.510Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:15.567Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:06:15.780Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:15.780Z] 
+[debug] [2019-06-13T06:06:15.780Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:06:15.809Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:06:15.818Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25843.sock"}
+[debug] [2019-06-13T06:06:15.818Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25843.sock"}
+[debug] [2019-06-13T06:06:15.831Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:15.832Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:15.832Z] 
+[debug] [2019-06-13T06:06:15.832Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:06:15.852Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25844.sock"}
+[debug] [2019-06-13T06:06:15.852Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25844.sock"}
+[debug] [2019-06-13T06:06:15.865Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:15.915Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:15.941Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:06:15.954Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:06:15.959Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:15.959Z] 
+[debug] [2019-06-13T06:06:15.959Z] Running getMessages in mode HTTPS
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:06:15.993Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:15.993Z] 
+[debug] [2019-06-13T06:06:15.993Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:06:15.997Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25846.sock"}
+[debug] [2019-06-13T06:06:15.998Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25846.sock"}
+[debug] [2019-06-13T06:06:16.003Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25845.sock"}
+[debug] [2019-06-13T06:06:16.003Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25845.sock"}
+[debug] [2019-06-13T06:06:16.043Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:16.050Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.061Z] Ephemeral server used!
 [info] i  Your code has been provided a "firebase-admin" instance.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:11:09.056Z] Trigger "getMessages" has been found, beginning invocation!
-[debug] [2019-06-13T03:11:09.056Z] 
-[debug] [2019-06-13T03:11:09.056Z] Running getMessages in mode HTTPS
-[debug] [2019-06-13T03:11:09.061Z] Trigger "addTokenToTopic" has been found, beginning invocation!
-[debug] [2019-06-13T03:11:09.061Z] 
-[debug] [2019-06-13T03:11:09.061Z] Running addTokenToTopic in mode HTTPS
-[debug] [2019-06-13T03:11:09.064Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22860.sock"}
-[debug] [2019-06-13T03:11:09.065Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22860.sock"}
-[debug] [2019-06-13T03:11:09.070Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22859.sock"}
-[debug] [2019-06-13T03:11:09.070Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22859.sock"}
-[debug] [2019-06-13T03:11:09.083Z] Ephemeral server used!
-[debug] [2019-06-13T03:11:09.091Z] Ephemeral server used!
-[debug] [2019-06-13T03:11:09.150Z] Ephemeral server survived.
-[debug] [2019-06-13T03:11:09.203Z] firebase-admin has been stubbed.
-[debug] [2019-06-13T03:11:09.205Z] Ephemeral server survived.
-[info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:11:09.265Z] Trigger "getMessages" has been found, beginning invocation!
-[debug] [2019-06-13T03:11:09.265Z] 
-[debug] [2019-06-13T03:11:09.265Z] Running getMessages in mode HTTPS
-[debug] [2019-06-13T03:11:09.271Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22861.sock"}
-[debug] [2019-06-13T03:11:09.271Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22861.sock"}
-[debug] [2019-06-13T03:11:09.286Z] Ephemeral server used!
-[debug] [2019-06-13T03:11:09.333Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.091Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:16.091Z] 
+[debug] [2019-06-13T06:06:16.091Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:06:16.108Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25848.sock"}
+[debug] [2019-06-13T06:06:16.108Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25848.sock"}
+[debug] [2019-06-13T06:06:16.122Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.122Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:06:16.123Z] 
+[debug] [2019-06-13T06:06:16.123Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:06:16.140Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25847.sock"}
+[debug] [2019-06-13T06:06:16.140Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25847.sock"}
+[debug] [2019-06-13T06:06:16.176Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:16.178Z] Ephemeral server used!
+[debug] [2019-06-13T06:06:16.205Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.273Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.297Z] Ephemeral server survived.
+[debug] [2019-06-13T06:06:16.302Z] Ephemeral server survived.
+[info] >  [2019-06-13T06:06:17.089Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
 [info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
-[info] >  [2019-06-13T03:11:10.092Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T06:06:17.352Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:06:17.365Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:06:17.392Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[debug] [2019-06-13T06:13:35.835Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:13:35.876Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T06:13:36.383Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T06:13:36.385Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:36.385Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T06:13:36.386Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:37.148Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:13:37.148Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:37.314Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:37.314Z] 
+[debug] [2019-06-13T06:13:37.314Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:13:37.314Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:37.314Z] 
+[debug] [2019-06-13T06:13:37.314Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T06:13:37.321Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25930.sock"}
+[debug] [2019-06-13T06:13:37.323Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25930.sock"}
+[debug] [2019-06-13T06:13:37.324Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25931.sock"}
+[debug] [2019-06-13T06:13:37.324Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25931.sock"}
+[debug] [2019-06-13T06:13:37.353Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:37.353Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:37.454Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:37.454Z] Ephemeral server survived.
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T06:13:38.244Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:13:38.249Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T06:13:38.262Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:13:38.286Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:13:38.483Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:13:38.613Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T06:13:38.857Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T06:13:38.860Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:38.869Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T06:13:38.870Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:38.934Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:13:38.937Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:38.968Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:13:38.970Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:39.231Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:13:39.233Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:39.376Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T06:13:39.377Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T06:13:39.998Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:13:40.101Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:13:40.187Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:13:40.217Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.245Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.245Z] 
+[debug] [2019-06-13T06:13:40.245Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:13:40.293Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25944.sock"}
+[debug] [2019-06-13T06:13:40.294Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25944.sock"}
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.348Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.348Z] 
+[debug] [2019-06-13T06:13:40.348Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T06:13:40.354Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.359Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25945.sock"}
+[debug] [2019-06-13T06:13:40.359Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25945.sock"}
+[debug] [2019-06-13T06:13:40.378Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.381Z] 
+[debug] [2019-06-13T06:13:40.381Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:13:40.388Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25947.sock"}
+[debug] [2019-06-13T06:13:40.388Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25947.sock"}
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.394Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:40.399Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.399Z] 
+[debug] [2019-06-13T06:13:40.400Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:13:40.442Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:40.445Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25946.sock"}
+[debug] [2019-06-13T06:13:40.446Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25946.sock"}
+[debug] [2019-06-13T06:13:40.449Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T06:13:40.480Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:40.579Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.603Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.603Z] 
+[debug] [2019-06-13T06:13:40.603Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:13:40.614Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:40.616Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:40.619Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25948.sock"}
+[debug] [2019-06-13T06:13:40.619Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25948.sock"}
+[debug] [2019-06-13T06:13:40.652Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:40.657Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:40.675Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T06:13:40.689Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T06:13:40.689Z] 
+[debug] [2019-06-13T06:13:40.689Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T06:13:40.701Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25949.sock"}
+[debug] [2019-06-13T06:13:40.702Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_25949.sock"}
+[debug] [2019-06-13T06:13:40.740Z] Ephemeral server used!
+[debug] [2019-06-13T06:13:40.766Z] Ephemeral server survived.
+[debug] [2019-06-13T06:13:40.807Z] Ephemeral server survived.
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T06:13:41.612Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:13:41.680Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T06:13:41.859Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T06:13:41.931Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[debug] [2019-06-13T07:43:08.934Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T07:43:08.955Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T07:43:09.461Z] Functions runtime initialized.
+[debug] [2019-06-13T07:43:09.461Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T07:43:09.490Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T07:43:09.490Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:10.179Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T07:43:10.180Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:10.296Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:10.296Z] 
+[debug] [2019-06-13T07:43:10.296Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T07:43:10.296Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:10.296Z] 
+[debug] [2019-06-13T07:43:10.297Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T07:43:10.303Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26788.sock"}
+[debug] [2019-06-13T07:43:10.305Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26788.sock"}
+[debug] [2019-06-13T07:43:10.306Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26789.sock"}
+[debug] [2019-06-13T07:43:10.306Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26789.sock"}
+[debug] [2019-06-13T07:43:10.325Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:10.325Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:10.412Z] Ephemeral server survived.
+[debug] [2019-06-13T07:43:10.412Z] Ephemeral server survived.
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T07:43:11.217Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T07:43:11.239Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T07:43:11.270Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T07:43:11.300Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T07:43:11.621Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T07:43:11.805Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T07:43:11.937Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T07:43:11.940Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:11.999Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T07:43:12.004Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:12.056Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T07:43:12.058Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:12.235Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T07:43:12.237Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:12.493Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T07:43:12.495Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:12.692Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T07:43:12.693Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T07:43:13.204Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T07:43:13.326Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T07:43:13.374Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.494Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.494Z] 
+[debug] [2019-06-13T07:43:13.494Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T07:43:13.505Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26803.sock"}
+[debug] [2019-06-13T07:43:13.505Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26803.sock"}
+[debug] [2019-06-13T07:43:13.542Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.554Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.554Z] 
+[debug] [2019-06-13T07:43:13.554Z] Running addTokenToTopic in mode HTTPS
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.611Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26804.sock"}
+[debug] [2019-06-13T07:43:13.612Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26804.sock"}
+[debug] [2019-06-13T07:43:13.613Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T07:43:13.633Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.633Z] 
+[debug] [2019-06-13T07:43:13.633Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T07:43:13.645Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26802.sock"}
+[debug] [2019-06-13T07:43:13.646Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26802.sock"}
+[debug] [2019-06-13T07:43:13.657Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:13.670Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:13.723Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.781Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.781Z] 
+[debug] [2019-06-13T07:43:13.781Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T07:43:13.781Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T07:43:13.790Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26805.sock"}
+[debug] [2019-06-13T07:43:13.790Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26805.sock"}
+[debug] [2019-06-13T07:43:13.845Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:13.906Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.910Z] Ephemeral server survived.
+[debug] [2019-06-13T07:43:13.928Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.928Z] 
+[debug] [2019-06-13T07:43:13.928Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T07:43:13.937Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26806.sock"}
+[debug] [2019-06-13T07:43:13.938Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26806.sock"}
+[debug] [2019-06-13T07:43:13.952Z] Ephemeral server survived.
+[debug] [2019-06-13T07:43:13.973Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:13.975Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T07:43:13.993Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T07:43:13.993Z] 
+[debug] [2019-06-13T07:43:13.993Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T07:43:14.002Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26807.sock"}
+[debug] [2019-06-13T07:43:14.002Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26807.sock"}
+[debug] [2019-06-13T07:43:14.026Z] Ephemeral server used!
+[debug] [2019-06-13T07:43:14.060Z] Ephemeral server survived.
+[debug] [2019-06-13T07:43:14.104Z] Ephemeral server survived.
+[info] >  [2019-06-13T07:43:14.652Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T07:43:14.901Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] >  [2019-06-13T07:43:15.035Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T07:43:15.056Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
 [info] i  functions: Finished "getMessages" in ~1s
 [info] i  functions: Finished "addTokenToTopic" in ~1s
-[info] >  [2019-06-13T03:11:10.220Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
-[info] i  functions: Finished "getMessages" in ~1s
-[debug] [2019-06-13T03:12:12.492Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
-[debug] [2019-06-13T03:12:12.927Z] Functions runtime initialized.
+[debug] [2019-06-13T08:01:16.076Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T08:01:16.084Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T08:01:16.562Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "createRoomAndUserConfig"
-[debug] [2019-06-13T03:12:12.929Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:12:13.647Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:16.564Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:16.564Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T08:01:16.564Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:17.257Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:17.257Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:12:13.792Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
-[debug] [2019-06-13T03:12:13.792Z] 
-[debug] [2019-06-13T03:12:13.792Z] Running createRoomAndUserConfig in mode HTTPS
-[debug] [2019-06-13T03:12:13.798Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22891.sock"}
-[debug] [2019-06-13T03:12:13.799Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22891.sock"}
-[debug] [2019-06-13T03:12:13.823Z] Ephemeral server used!
-[debug] [2019-06-13T03:12:13.900Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:01:17.361Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:17.361Z] 
+[debug] [2019-06-13T08:01:17.361Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T08:01:17.362Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:17.362Z] 
+[debug] [2019-06-13T08:01:17.362Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T08:01:17.371Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26992.sock"}
+[debug] [2019-06-13T08:01:17.372Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26992.sock"}
+[debug] [2019-06-13T08:01:17.376Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26993.sock"}
+[debug] [2019-06-13T08:01:17.377Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_26993.sock"}
+[debug] [2019-06-13T08:01:17.396Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:17.396Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:17.493Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:17.493Z] Ephemeral server survived.
 [info] i  functions: Finished "createRoomAndUserConfig" in ~1s
-[debug] [2019-06-13T03:12:14.603Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
-[debug] [2019-06-13T03:12:14.625Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
-[debug] [2019-06-13T03:12:15.024Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
-[debug] [2019-06-13T03:12:15.148Z] Functions runtime initialized.
+[debug] [2019-06-13T08:01:18.232Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T08:01:18.239Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T08:01:18.260Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T08:01:18.283Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:01:18.596Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:01:18.668Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:01:19.094Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "addTokenToTopic"
-[debug] [2019-06-13T03:12:15.149Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:12:15.172Z] Functions runtime initialized.
+[debug] [2019-06-13T08:01:19.099Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:19.099Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "getMessages"
-[debug] [2019-06-13T03:12:15.173Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:12:15.348Z] Functions runtime initialized.
+[debug] [2019-06-13T08:01:19.099Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:19.146Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T08:01:19.157Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:19.199Z] Functions runtime initialized.
 [info] i  functions: Beginning execution of "getMessages"
-[debug] [2019-06-13T03:12:15.350Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
-[debug] [2019-06-13T03:12:15.863Z] firebase-admin has been stubbed.
-[debug] [2019-06-13T03:12:15.867Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:19.204Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:19.456Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:01:19.458Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:19.473Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:01:19.476Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:01:20.349Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:20.439Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:20.526Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:20.529Z] firebase-admin has been stubbed.
 [info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:01:20.618Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:20.619Z] 
+[debug] [2019-06-13T08:01:20.619Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T08:01:20.640Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27006.sock"}
+[debug] [2019-06-13T08:01:20.641Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27006.sock"}
+[debug] [2019-06-13T08:01:20.673Z] Ephemeral server used!
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:12:15.936Z] Trigger "addTokenToTopic" has been found, beginning invocation!
-[debug] [2019-06-13T03:12:15.937Z] 
-[debug] [2019-06-13T03:12:15.937Z] Running addTokenToTopic in mode HTTPS
-[debug] [2019-06-13T03:12:15.943Z] Trigger "getMessages" has been found, beginning invocation!
-[debug] [2019-06-13T03:12:15.943Z] 
-[debug] [2019-06-13T03:12:15.943Z] Running getMessages in mode HTTPS
-[debug] [2019-06-13T03:12:15.946Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22898.sock"}
-[debug] [2019-06-13T03:12:15.947Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22898.sock"}
-[debug] [2019-06-13T03:12:15.953Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22899.sock"}
-[debug] [2019-06-13T03:12:15.954Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22899.sock"}
-[debug] [2019-06-13T03:12:15.967Z] Ephemeral server used!
-[debug] [2019-06-13T03:12:15.974Z] Ephemeral server used!
-[debug] [2019-06-13T03:12:16.037Z] Ephemeral server survived.
-[debug] [2019-06-13T03:12:16.071Z] Ephemeral server survived.
-[debug] [2019-06-13T03:12:16.091Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:20.701Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:20.701Z] 
+[debug] [2019-06-13T08:01:20.701Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:01:20.735Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27007.sock"}
+[debug] [2019-06-13T08:01:20.736Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27007.sock"}
 [info] i  Your code has been provided a "firebase-admin" instance.
-[debug] [2019-06-13T03:12:16.148Z] Trigger "getMessages" has been found, beginning invocation!
-[debug] [2019-06-13T03:12:16.148Z] 
-[debug] [2019-06-13T03:12:16.148Z] Running getMessages in mode HTTPS
-[debug] [2019-06-13T03:12:16.155Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22900.sock"}
-[debug] [2019-06-13T03:12:16.155Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_22900.sock"}
-[debug] [2019-06-13T03:12:16.171Z] Ephemeral server used!
-[debug] [2019-06-13T03:12:16.220Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:20.761Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:01:20.770Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:20.772Z] 
+[debug] [2019-06-13T08:01:20.772Z] Running getMessages in mode HTTPS
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:01:20.789Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27009.sock"}
+[debug] [2019-06-13T08:01:20.789Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27009.sock"}
+[debug] [2019-06-13T08:01:20.792Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:20.792Z] 
+[debug] [2019-06-13T08:01:20.792Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T08:01:20.798Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:20.802Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27008.sock"}
+[debug] [2019-06-13T08:01:20.803Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27008.sock"}
+[debug] [2019-06-13T08:01:20.849Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:20.852Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:20.898Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:01:20.951Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:20.951Z] 
+[debug] [2019-06-13T08:01:20.951Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:01:20.962Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:20.966Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27011.sock"}
+[debug] [2019-06-13T08:01:20.967Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27011.sock"}
+[debug] [2019-06-13T08:01:20.996Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:21.004Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:21.004Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:01:21.044Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:01:21.044Z] 
+[debug] [2019-06-13T08:01:21.044Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:01:21.070Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27010.sock"}
+[debug] [2019-06-13T08:01:21.070Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27010.sock"}
+[debug] [2019-06-13T08:01:21.089Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:21.107Z] Ephemeral server used!
+[debug] [2019-06-13T08:01:21.145Z] Ephemeral server survived.
+[debug] [2019-06-13T08:01:21.194Z] Ephemeral server survived.
+[info] >  [2019-06-13T08:01:21.998Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T08:01:22.020Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
 [info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
-[info] >  [2019-06-13T03:12:16.953Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T08:01:22.282Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T08:01:22.298Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[debug] [2019-06-13T08:02:41.860Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T08:02:41.869Z] Accepted request POST /chat-asdf/us-central1/createRoomAndUserConfig --> createRoomAndUserConfig
+[debug] [2019-06-13T08:02:42.382Z] Functions runtime initialized.
+[debug] [2019-06-13T08:02:42.382Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T08:02:42.384Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[info] i  functions: Beginning execution of "createRoomAndUserConfig"
+[debug] [2019-06-13T08:02:42.384Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:43.071Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:43.071Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:43.177Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:43.177Z] 
+[debug] [2019-06-13T08:02:43.177Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T08:02:43.177Z] Trigger "createRoomAndUserConfig" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:43.178Z] 
+[debug] [2019-06-13T08:02:43.178Z] Running createRoomAndUserConfig in mode HTTPS
+[debug] [2019-06-13T08:02:43.184Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27057.sock"}
+[debug] [2019-06-13T08:02:43.184Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27057.sock"}
+[debug] [2019-06-13T08:02:43.185Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27058.sock"}
+[debug] [2019-06-13T08:02:43.186Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27058.sock"}
+[debug] [2019-06-13T08:02:43.206Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:43.206Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:43.313Z] Ephemeral server survived.
+[debug] [2019-06-13T08:02:43.313Z] Ephemeral server survived.
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[info] i  functions: Finished "createRoomAndUserConfig" in ~1s
+[debug] [2019-06-13T08:02:44.030Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T08:02:44.035Z] Accepted request POST /chat-asdf/us-central1/addTokenToTopic --> addTokenToTopic
+[debug] [2019-06-13T08:02:44.042Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:02:44.057Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:02:44.336Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:02:44.544Z] Accepted request POST /chat-asdf/us-central1/getMessages --> getMessages
+[debug] [2019-06-13T08:02:44.721Z] Functions runtime initialized.
+[debug] [2019-06-13T08:02:44.722Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[info] i  functions: Beginning execution of "addTokenToTopic"
+[debug] [2019-06-13T08:02:44.723Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:44.723Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:44.844Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:02:44.845Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:44.873Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:02:44.883Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:45.186Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:02:45.186Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:45.533Z] Functions runtime initialized.
+[info] i  functions: Beginning execution of "getMessages"
+[debug] [2019-06-13T08:02:45.536Z] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"protect_env":true,"admin_stubs":true}
+[debug] [2019-06-13T08:02:45.984Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:46.037Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:46.148Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:46.167Z] firebase-admin has been stubbed.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.237Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.237Z] 
+[debug] [2019-06-13T08:02:46.237Z] Running addTokenToTopic in mode HTTPS
+[debug] [2019-06-13T08:02:46.252Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27072.sock"}
+[debug] [2019-06-13T08:02:46.252Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27072.sock"}
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.296Z] Trigger "addTokenToTopic" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.296Z] 
+[debug] [2019-06-13T08:02:46.296Z] Running addTokenToTopic in mode HTTPS
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.324Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.324Z] 
+[debug] [2019-06-13T08:02:46.324Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:02:46.329Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:46.329Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27071.sock"}
+[debug] [2019-06-13T08:02:46.330Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27071.sock"}
+[debug] [2019-06-13T08:02:46.333Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27073.sock"}
+[debug] [2019-06-13T08:02:46.333Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27073.sock"}
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.372Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:46.384Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.384Z] 
+[debug] [2019-06-13T08:02:46.384Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:02:46.418Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27074.sock"}
+[debug] [2019-06-13T08:02:46.419Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27074.sock"}
+[debug] [2019-06-13T08:02:46.448Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:46.477Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:46.572Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:46.651Z] Ephemeral server survived.
+[debug] [2019-06-13T08:02:46.664Z] Ephemeral server survived.
+[debug] [2019-06-13T08:02:46.680Z] Ephemeral server survived.
+[debug] [2019-06-13T08:02:46.696Z] Ephemeral server survived.
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.748Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.748Z] 
+[debug] [2019-06-13T08:02:46.748Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:02:46.762Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27075.sock"}
+[debug] [2019-06-13T08:02:46.763Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27075.sock"}
+[debug] [2019-06-13T08:02:46.782Z] firebase-admin has been stubbed.
+[debug] [2019-06-13T08:02:46.804Z] Ephemeral server used!
+[info] i  Your code has been provided a "firebase-admin" instance.
+[debug] [2019-06-13T08:02:46.864Z] Trigger "getMessages" has been found, beginning invocation!
+[debug] [2019-06-13T08:02:46.864Z] 
+[debug] [2019-06-13T08:02:46.864Z] Running getMessages in mode HTTPS
+[debug] [2019-06-13T08:02:46.892Z] {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27076.sock"}
+[debug] [2019-06-13T08:02:46.893Z] [functions] Runtime ready! Sending request! {"socketPath":"/var/folders/wb/qjc2_79d5jgd6ytwhbq_4rmm0000gn/T/firebase_emulator_invocation_27076.sock"}
+[debug] [2019-06-13T08:02:46.897Z] Ephemeral server survived.
+[debug] [2019-06-13T08:02:46.909Z] Ephemeral server used!
+[debug] [2019-06-13T08:02:46.977Z] Ephemeral server survived.
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] >  [2019-06-13T08:02:47.578Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
 [info] i  functions: Finished "getMessages" in ~1s
 [info] i  functions: Finished "addTokenToTopic" in ~1s
-[info] >  [2019-06-13T03:12:17.172Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] >  Successfully subscribed to topic: { successCount: 1, failureCount: 0, errors: [] }
+[info] >  [2019-06-13T08:02:47.687Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] i  functions: Finished "addTokenToTopic" in ~1s
+[info] >  [2019-06-13T08:02:47.801Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
+[info] i  functions: Finished "getMessages" in ~1s
+[info] >  [2019-06-13T08:02:47.908Z]  @firebase/database: FIREBASE WARNING: Using an unspecified index. Your data will be downloaded and filtered on the client. Consider adding ".indexOn": "roomId" at /messages to your security rules for better performance. 
 [info] i  functions: Finished "getMessages" in ~1s

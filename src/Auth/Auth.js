@@ -1,6 +1,7 @@
 import React from 'react';
 import RegistrationForm from './RegistrationForm';
 import SignInWithEmailForm from './SignInWithEmailForm';
+import VerificationForm from './VerificationForm.js';
 // import ChangePasswordForm from './ChangePasswordForm';
 // import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 import UserProfile from './UserProfile';
@@ -58,7 +59,6 @@ class Auth extends React.Component {
     this.props.firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
       .then(() => {
         window.localStorage.setItem('asdfChatEmailForSignIn', email);
-        window.localStorage.setItem('asdfChatDisplayName', displayName);
         this.props.renderWaitingRoom();
         this.props.toggleModal();
       })
@@ -73,7 +73,25 @@ class Auth extends React.Component {
     this.setState({ isRegistrationMode });
   };
 
+  verifyCredentials = (displayNameValue, emailValue, passwordValue) => {
+    const { email, firebase, isNew, loadApp, user } = this.props;
+    if (displayNameValue !== email && user.email !== displayNameValue) {
+
+    }
+    const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
+    this.props.firebase.auth().currentUser
+      .linkAndRetrieveDataWithCredential(credential)
+      .then(usercred => {
+        let user = usercred.user;
+        console.log("Account linking success", user);
+        loadApp(user, null, displayNameValue, isNew);
+      }, function(error) {
+        console.debug("Account linking error", error);
+      });
+  }
+
   render() {
+    const { isNew } = this.props;
     const registrationForm = (
       <RegistrationForm
         registerUser={this.registerUser.bind(this)}
@@ -88,7 +106,14 @@ class Auth extends React.Component {
         toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
       />
     );
-    if (!this.props.user) {
+    if (isNew) {
+      return (
+        <VerificationForm
+          verifyCredentials={this.verifyCredentials.bind(this)}
+          toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
+        />
+      );
+    } else if (!this.props.user) {
       return (
         this.state.isRegistrationMode ? registrationForm : signInWithEmailForm
       );

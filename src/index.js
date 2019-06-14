@@ -29,19 +29,16 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
 // Confirm the link is a sign-in with email link.
 if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
   const email = window.localStorage.getItem('asdfChatEmailForSignIn');
-  const displayName = window.localStorage.getItem('asdfChatDisplayName');
   firebase.auth().signInWithEmailLink(email, window.location.href)
     .then(result => {
-      window.localStorage.removeItem('emailForSignIn');
-      window.localStorage.removeItem('displayName');
+      window.localStorage.removeItem('asdfChatEmailForSignIn');
       const user = result.user;
       const isNew = result.additionalUserInfo.isNewUser;
-      // const credential = result.credential;
-      init({ user, email, displayName, isNew, firebase });
+      init({ user, email, isNew, firebase });
     })
     .catch(error => {
       console.error(error.code);
-      init(error);
+      init({error});
     });
 } else {
   firebase.auth()
@@ -50,7 +47,9 @@ if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
       if (result.credential) {
         const credential = result.credential;
         const user = result.user;
-        init({ user, displayName: user.displayName, email: user.email, credential, firebase });
+        const isNew = result.additionalUserInfo.isNewUser;
+        init({ user, email: user.email, isNew, firebase, credential });
+        // init({ user, displayName: user.displayName, email: user.email, credential, firebase });
       } else {
         init({ firebase });
       }

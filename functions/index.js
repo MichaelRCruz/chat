@@ -10,7 +10,7 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp(functions.config().firebase);
 
-exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
+exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   async function getRooms(roomIds) {
     return Promise.all(roomIds.map(async room => {
       const roomRef = await admin.database().ref(`rooms/${room}`);
@@ -18,32 +18,46 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
     }));
   };
   return cors(req, res, () => {
-    res.set('Access-Control-Allow-Origin', '*');
-    const {uid, displayName} = JSON.parse(req.body);
+    // res.set('Access-Control-Allow-Origin', '*');
+    const { uid, displayName } = JSON.parse(req.body);
+    const userRef = admin.database().ref('/users');
+    const roomRef = admin.database().ref('/rooms');
+    return userRef.child(uid).once("value", async snapshot => {
+      if (snapshot.exists()) {
+        const subscribedRooms = await getRooms(snapshot.val().rooms);
+        res.json({ userConfig: snapshot.val(), subscribedRooms });
+      } else {
+        res.send('user config does not exist');
+      }
+    });
+  });
+});
+
+exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
+  return cors(req, res, async () => {
+    const { uid, displayName } = JSON.parse(req.body);
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
-    const randomString = Math.random().toString(36).substr(2, 3);
-    const generatedName = displayName.replace(/\s/g,'') + '_' + randomString;
     const userConfig = {
       key: uid,
-      displayName: generatedName,
+      displayName,
       lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
       rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
       activity: {
         isOnline: true,
-        lastChanged: Math.floor(Date.now() / 1000)
+        lastChanged: Math.floor(Date.now() / 1000),
       }
     };
     const room = {
       active: false,
       creator: uid,
-      dscription: `${generatedName}'s first room. Welcome!`,
+      dscription: `${displayName}'s first room. Welcome!`,
       moderators: [uid],
-      name: `${generatedName}'s room`,
+      name: `${displayName}'s room`,
       key: `uid-${uid}`,
-      users: { [uid]: generatedName }
+      users: { [uid]: displayName }
     };
     const message = {
       content: 'Welcome to your new app!',
@@ -56,23 +70,12 @@ exports.createRoomAndUserConfig = functions.https.onRequest((req, res) => {
       key: messageKey,
       read: false,
       roomId: `uid-${uid}`,
-      sentAt: Math.floor(Date.now() / 1000)
+      sentAt: Math.floor(Date.now() / 1000),
     };
-    return userRef.child(uid).once("value", async snapshot => {
-      if (!snapshot.exists()) {
-        await userRef.child(uid).update(userConfig);
-        await messagesRef.child(messageKey).update(message);
-        await roomRef.child(`uid-${uid}`).update(room);
-        const subscribedRooms = await getRooms([`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x']);
-        res.json({ userConfig, activeRoom: room, subscribedRooms });
-      } else {
-        const currentUserConfig = snapshot.val();
-        const currentLastVisited = currentUserConfig.lastVisited;
-        const currentSubscribedRooms = await getRooms(currentUserConfig.rooms);
-        const currentActiveRoom = await getRooms([currentLastVisited]);
-        res.json({ userConfig: currentUserConfig, activeRoom: currentActiveRoom[0], subscribedRooms: currentSubscribedRooms });
-      }
-    });
+    await userRef.child(uid).update(userConfig);
+    await messagesRef.child(messageKey).update(message);
+    await roomRef.child(`uid-${uid}`).update(room);
+    res.json({ userConfig, activeRoom: room, subscribedRooms });
   });
 });
 

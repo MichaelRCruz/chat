@@ -16,8 +16,10 @@ class App extends React.Component {
     this.state = {
       activeRoom: null,
       currentFcmToken: null,
+      email: null,
       inWaiting: false,
       isLoading: true,
+      isNew: null,
       showAuthModal: false,
       messageMode: 'notifications',
       showDashboardModal: false,
@@ -29,7 +31,7 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const { user, firebase, credential, displayName, email, error, isNew } = this.props;
+    const { user, email, isNew, credential, firebase, error } = this.props;
     firebase.auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
         this.setState(Object.assign({}, this.baseState, { isLoading: false }));
@@ -37,39 +39,42 @@ class App extends React.Component {
       }
     });
     if (isNew) {
-      this.setState({ isLoading: false, inWaiting: true, showAuthModal: true });
+      this.setState({
+        isLoading: false, inWaiting: true, showAuthModal: true, isNew, email, user
+      });
     } else if (credential) {
-      this.loadApp(user, firebase, credential, displayName, email);
+      this.loadApp(user, null, credential, firebase, isNew);
     } else {
       this.setState(Object.assign({}, this.baseState, { isLoading: false }));
       firebase.auth().signOut();
     }
   };
 
-  loadApp = async (user, firebase, credential, displayName, email) => {
-    console.debug(user, firebase, credential, displayName, email);
-    // this.handleConnection(user.uid);
-    // let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
-    // if (firebase.messaging.isSupported()) {
-    //   const messaging = firebase.messaging();
-    //   const currentFcmToken = await messaging.getToken();
-    //   this.handleFcmToken(currentFcmToken, user.uid, true)
-    //   userConfig = Object.assign({}, userConfig, { currentFcmToken });
-    //   messaging.onTokenRefresh(function() {
-    //     console.log('refreshed token');
-    //     this.requestNotifPermission(user.uid);
-    //   });
-    // }
-    // this.setState({ user: user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
-  }
+  loadApp = async (user, email, credential, firebase, isNew, displayName) => {
+    const authUser = Object.assign({}, user, { displayName });
+    this.handleConnection(authUser.uid);
+    const controller = isNew ? 'createRoomsAndUserConfig' : 'getRoomsAndUserConfig';
+    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(authUser, controller);
+    if (firebase.messaging.isSupported()) {
+      const messaging = firebase.messaging();
+      const currentFcmToken = await messaging.getToken();
+      this.handleFcmToken(currentFcmToken, authUser.uid, true)
+      userConfig = Object.assign({}, userConfig, { currentFcmToken });
+      messaging.onTokenRefresh(function() {
+        console.log('refreshed token');
+        this.requestNotifPermission(user.uid);
+      });
+    }
+    this.setState({ user, userConfig, activeRoom: subscribedRooms[0], isLoading: false, subscribedRooms, messageMode: 'notifications' });
+  };
 
   renderWaitingRoom = () => {
     this.setState({ inWaiting: !this.state.inWaiting });
   }
 
-  getUserConfig = user => {
+  getUserConfig = (user, controller) => {
     const { uid, displayName } = user;
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/createRoomAndUserConfig`, {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
       method: 'POST',
       body: JSON.stringify({ uid, displayName })
     })
@@ -166,7 +171,11 @@ class App extends React.Component {
   };
 
   render() {
-    const {activeRoom, user, userConfig, showDashboardModal, showAuthModal, isLoading, currentFcmToken, subscribedRooms, messageMode, notifications, inWaiting } = this.state;
+    const {
+      activeRoom, user, userConfig, showDashboardModal, showAuthModal,
+      isLoading, currentFcmToken, subscribedRooms, messageMode, notifications,
+      inWaiting, isNew, email
+    } = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -222,10 +231,13 @@ class App extends React.Component {
         userConfig={userConfig}
         user={user}
         currentFcmToken={currentFcmToken}
+        email={email}
+        isNew={isNew}
         toggleModal={this.toggleAuthModal.bind(this)}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
         handleFcmToken={this.handleFcmToken.bind(this)}
         renderWaitingRoom={this.renderWaitingRoom.bind(this)}
+        loadApp={this.loadApp.bind(this)}
       />
     );
     const dashboard = (
@@ -254,14 +266,6 @@ class App extends React.Component {
         handleClose={this.toggleDashboardModal.bind(this)}>
       </Modal>
     );
-    const signInConfirm = (
-      <Modal
-        title="dashboard"
-        show={showDashboardModal}
-        children={<h1>signInConfirm</h1>}
-        handleClose={this.toggleDashboardModal.bind(this)}>
-      </Modal>
-    );
     const loadingAnimation = (
       <div className="loadingAnimation"></div>
     );
@@ -271,15 +275,11 @@ class App extends React.Component {
     return (
       <div>
         {!user && !isLoading && !inWaiting ? splash : null}
-
         {isLoading ? loadingAnimation : null}
         {inWaiting ? waitingModal : null}
         {showAuthModal ? authModal : null}
-        {user && inWaiting && showAuthModal ? signInConfirm : null}
-        {user && showDashboardModal ? dashboardModal : null}
-
+        {user && showDashboardModal && !authModal ? dashboardModal : null}
         {user && !isLoading && !inWaiting && !showAuthModal && !showDashboardModal ? app : null}
-
       </div>
     );
   }

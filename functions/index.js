@@ -8,7 +8,7 @@ serviceAccount = require('./serviceAccountKey.json');
 
 const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   async function getRooms(roomIds) {
@@ -65,7 +65,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
         displayName: 'mykey',
         email: 'potato@michaelcruz.io',
         photoURL: 'https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg',
-        uid: 'buaySW4zINZ4cWsdykHgmyYqWDy2'
+        uid: 'N4OX2pYK4uSlDsyFmUurr0uuL293'
       },
       key: messageKey,
       read: false,
@@ -75,7 +75,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     await userRef.child(uid).update(userConfig);
     await messagesRef.child(messageKey).update(message);
     await roomRef.child(`uid-${uid}`).update(room);
-    res.json({ userConfig, activeRoom: room, subscribedRooms });
+    res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });
   });
 });
 

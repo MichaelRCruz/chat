@@ -31,49 +31,46 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const { user, email, isNew, credential, firebase, error } = this.props;
+    const { user, credential, isNew, email, stashedEmail, error, firebase } = this.props;
     firebase.auth().onAuthStateChanged(currentUser => {
       if (!currentUser) {
         this.setState(Object.assign({}, this.baseState, { isLoading: false }));
         firebase.auth().signOut();
+      } else if (isNew) {
+        this.setState({ isLoading: false, inWaiting: true, showAuthModal: true, user, isNew, email, stashedEmail});
+      } else {
+        const email = stashedEmail || email;
+        const displayName = user ? displayName : null;
+        this.loadApp(user, credential, isNew, email, firebase. displayName);
       }
     });
-    if (isNew) {
-      this.setState({
-        isLoading: false, inWaiting: true, showAuthModal: true, isNew, email, user
-      });
-    } else if (credential) {
-      this.loadApp(user, null, credential, firebase, isNew);
-    } else {
-      this.setState(Object.assign({}, this.baseState, { isLoading: false }));
-      firebase.auth().signOut();
-    }
   };
 
-  loadApp = async (user, email, credential, firebase, isNew, displayName) => {
-    const authUser = Object.assign({}, user, { displayName });
-    this.handleConnection(authUser.uid);
+  loadApp = async (user, credential, isNew, email, firebase, displayName) => {
+    this.handleConnection(user.uid);
+    console.log('isNew: ', isNew);
     const controller = isNew ? 'createRoomsAndUserConfig' : 'getRoomsAndUserConfig';
-    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(authUser, controller);
+    console.log('controller: ', controller);
+    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user, displayName, controller);
     if (firebase.messaging.isSupported()) {
       const messaging = firebase.messaging();
       const currentFcmToken = await messaging.getToken();
-      this.handleFcmToken(currentFcmToken, authUser.uid, true)
+      this.handleFcmToken(currentFcmToken, user.uid, true);
       userConfig = Object.assign({}, userConfig, { currentFcmToken });
       messaging.onTokenRefresh(function() {
         console.log('refreshed token');
         this.requestNotifPermission(user.uid);
       });
     }
-    this.setState({ user, userConfig, activeRoom: subscribedRooms[0], isLoading: false, subscribedRooms, messageMode: 'notifications' });
+    this.setState({ user, userConfig, activeRoom: subscribedRooms[0], isLoading: false, subscribedRooms, messageMode: 'notifications', credential });
   };
 
   renderWaitingRoom = () => {
     this.setState({ inWaiting: !this.state.inWaiting });
   }
 
-  getUserConfig = (user, controller) => {
-    const { uid, displayName } = user;
+  getUserConfig = (user, displayName, controller) => {
+    const { uid } = user;
     return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
       method: 'POST',
       body: JSON.stringify({ uid, displayName })
@@ -174,7 +171,7 @@ class App extends React.Component {
     const {
       activeRoom, user, userConfig, showDashboardModal, showAuthModal,
       isLoading, currentFcmToken, subscribedRooms, messageMode, notifications,
-      inWaiting, isNew, email
+      inWaiting, isNew, email, stashedEmail
     } = this.state;
     const app = (
       <div className="appComponent">
@@ -230,9 +227,9 @@ class App extends React.Component {
         firebase={this.props.firebase}
         userConfig={userConfig}
         user={user}
-        currentFcmToken={currentFcmToken}
-        email={email}
         isNew={isNew}
+        email={email}
+        currentFcmToken={currentFcmToken}
         toggleModal={this.toggleAuthModal.bind(this)}
         requestNotifPermission={this.requestNotifPermission.bind(this)}
         handleFcmToken={this.handleFcmToken.bind(this)}

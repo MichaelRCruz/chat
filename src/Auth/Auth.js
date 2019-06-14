@@ -74,21 +74,32 @@ class Auth extends React.Component {
   };
 
   verifyCredentials = (displayNameValue, emailValue, passwordValue) => {
-    const { email, firebase, isNew, loadApp, user } = this.props;
-    if (displayNameValue !== email && user.email !== displayNameValue) {
-
+    const { email, loadApp, isNew, firebase } = this.props;
+    if (emailValue !== email) {
+      alert('Incorrect email.');
+    } else {
+      firebase.auth().signInWithEmailLink(email, window.location.href)
+        .then(result => {
+          let user = result.user;
+          const isNew = result.additionalUserInfo.isNewUser;
+          const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
+          firebase.auth().currentUser
+            .linkAndRetrieveDataWithCredential(credential)
+            .then(usercred => {
+              user = usercred.user;
+              console.log("Account linking success", user);
+              loadApp(user, credential, isNew, email, firebase, displayNameValue);
+            }, function(error) {
+              console.log("Account linking error", error);
+              firebase.auth().signOut()
+            });
+        })
+        .catch(error => {
+          console.error(error.code);
+          firebase.auth().signOut();
+        });
     }
-    const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
-    this.props.firebase.auth().currentUser
-      .linkAndRetrieveDataWithCredential(credential)
-      .then(usercred => {
-        let user = usercred.user;
-        console.log("Account linking success", user);
-        loadApp(user, null, displayNameValue, isNew);
-      }, function(error) {
-        console.debug("Account linking error", error);
-      });
-  }
+  };
 
   render() {
     const { isNew } = this.props;

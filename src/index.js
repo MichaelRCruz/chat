@@ -28,30 +28,20 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
 
 // Confirm the link is a sign-in with email link.
 if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-  const email = window.localStorage.getItem('asdfChatEmailForSignIn');
-  firebase.auth().signInWithEmailLink(email, window.location.href)
-    .then(result => {
-      window.localStorage.removeItem('asdfChatEmailForSignIn');
-      const user = result.user;
-      const isNew = result.additionalUserInfo.isNewUser;
-      init({ user, email, isNew, firebase });
-    })
-    .catch(error => {
-      console.error(error.code);
-      init({error});
-    });
+  const urlParams = new URLSearchParams(window.location.search);
+  const apiKey = urlParams.get('apiKey') || null;
+  const stashedEmail = window.localStorage.getItem('asdfChatEmailForSignIn');
+  init({ user: null, credential: apiKey, isNew: true, stashedEmail, error: null });
 } else {
-  firebase.auth()
-    .getRedirectResult()
+  firebase.auth().getRedirectResult()
     .then(result => {
       if (result.credential) {
         const credential = result.credential;
+      } else {
+        const credential = result.credential;
         const user = result.user;
         const isNew = result.additionalUserInfo.isNewUser;
-        init({ user, email: user.email, isNew, firebase, credential });
-        // init({ user, displayName: user.displayName, email: user.email, credential, firebase });
-      } else {
-        init({ firebase });
+        init({ user, credential, isNew, email: user.email, error: null });
       }
     })
     .catch(error => {
@@ -59,11 +49,11 @@ if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
       if (errorCode === 'auth/account-exists-with-different-credential') {
         alert('You have already signed up with a different auth provider for that email.');
       }
-      console.error(error);
+      console.log(error);
       init({ error });
   });
 }
 
 function init(initProps) {
-  ReactDOM.render(<App {...initProps} />, document.getElementById("root"));
+  ReactDOM.render(<App firebase={firebase} {...initProps} />, document.getElementById("root"));
 };

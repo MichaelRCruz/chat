@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import Chat from './Chat/Chat.js';
+import Layout from './Layout/Layout.js';
 import Splash from './Splash/Splash.js';
 import SignIn from './SignIn/SignIn.js';
+import UserProfile from './UserProfile/UserProfile.js';
 import SessionContext from './SessionContext.js';
 
 class App extends Component {
@@ -107,9 +108,7 @@ class App extends Component {
           this.firebase.auth().signOut();
           this.updateSession({ onAuthStateChangedError: true });
         } else {
-          const roomsAndUserConfig = await this.getRoomsAndUserConfig(user);
-          const { userConfig, subscribedRooms } = roomsAndUserConfig;
-          this.updateSession({ user, userConfig, subscribedRooms, activeRoom: subscribedRooms[0] });
+          this.updateSession({ user });
         }
       });
     this.firebase.auth()
@@ -160,11 +159,15 @@ class App extends Component {
           />
           <Route
             path='/chat'
-            render={() => <Chat firebase={this.firebase} />}
+            render={() => <Layout firebase={this.firebase} />}
           />
           <Route
             path='/signIn'
             render={() => <SignIn firebase={this.firebase} />}
+          />
+          <Route
+            path='/profile'
+            render={() => <UserProfile firebase={this.firebase} />}
           />
         </SessionContext.Provider>
       </main>

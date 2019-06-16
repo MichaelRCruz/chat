@@ -6,7 +6,6 @@ import VerificationForm from './VerificationForm.js';
 // import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 import Modal from '../Modal/Modal.js';
 import SessionContext from '../SessionContext.js';
-import UserProfile from './UserProfile';
 import './Auth.css';
 
 class Auth extends React.Component {
@@ -137,7 +136,7 @@ class Auth extends React.Component {
 
   render() {
     const { user } = this.context;
-    console.log(this.context);
+
     const registrationForm = (
       <RegistrationForm
         registerUser={this.registerUser.bind(this)}
@@ -161,12 +160,13 @@ class Auth extends React.Component {
       </Modal>
     );
   };
+
 }
 
-// export default Auth;
+export default Auth;
 
-export default React.forwardRef((props, ref) => (
-  <SessionContext.Consumer>
-    {session => <Auth {...props} theme={session} ref={ref} />}
-  </SessionContext.Consumer>
-));
+// export default React.forwardRef((props, ref) => (
+//   <SessionContext.Consumer>
+//     {session => <Auth {...props} theme={session} ref={ref} />}
+//   </SessionContext.Consumer>
+// ));

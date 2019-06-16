@@ -43,4 +43,30 @@ export function debounce(func, wait, immediate) {
 		timeout = setTimeout(later, wait);
 		if (callNow) func.apply(context, args);
   };
-}
+};
+
+export function goFetch(uri, inputOptions) {
+	const { headers, ...extraOpts } = inputOptions || {};
+	const options = {
+		headers: {
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+			...(headers || {})
+		},
+		mode: "cors",
+		...extraOpts
+	}
+	return fetch(uri, options)
+	.then(response => {
+		if (!response.ok) {
+			const err = new Error(response.statusText);
+			err.res = response;
+			throw err;
+		} else {
+			return response.json();
+		}
+	})
+	.catch(err => {
+		return err;
+	});
+};

@@ -1,13 +1,17 @@
 import React from 'react';
-import SessionContext from '../SessionContext.js';
+import ResourceContext from '../ResourceContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
 
-  static contextType = SessionContext;
+  static contextType = ResourceContext;
+  static defaultProps = {
+    rooms: [],
+    updateActiveRoom: () => {}
+  };
 
   updateActiveRoom = activeRoom => {
-    this.context.updateSession({ activeRoom });
+    this.context.updateActiveRoom({ activeRoom });
   }
 
   render() {
@@ -18,7 +22,7 @@ class Rooms extends React.Component {
           <button
             className="roomNameButton"
             onClick={() => {
-                this.updateActiveRoom(subscribedRoom)}
+                this.updateRoom(subscribedRoom)}
             }>
             <div>
               <i className="material-icons people">people</i>

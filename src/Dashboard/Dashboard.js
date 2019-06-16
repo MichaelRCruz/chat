@@ -1,5 +1,6 @@
 import React from 'react';
 import Rooms from '../Rooms/Rooms';
+import Modal from '../Modal/Modal.js'
 import './Dashboard.css';
 
 class Dashboard extends React.Component {

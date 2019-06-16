@@ -33,6 +33,35 @@ exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   });
 });
 
+exports.getUserConfig = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    const { uid } = JSON.parse(req.body);
+    const userRef = admin.database().ref(`users`);
+    return userRef.child(uid).once("value", async snapshot => {
+      if (snapshot.exists()) {
+        const userConfig = snapshot.val();
+        res.json({ userConfig: snapshot.val() });
+      } else {
+        res.json({ error: 'userConfig does not exist for this user' });
+      }
+    });
+  });
+});
+
+exports.getRooms = functions.https.onRequest((req, res) => {
+  return cors(req, res, async () => {
+    const { roomIds } = JSON.parse(req.body);
+    async function getRooms(roomIds) {
+      return Promise.all(roomIds.map(async room => {
+        const roomRef = await admin.database().ref(`rooms/${room}`);
+        return roomRef.once('value');
+      }));
+    };
+    const subscribedRooms = await getRooms(roomIds);
+    res.json({ subscribedRooms });
+  });
+});
+
 exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { uid, displayName } = JSON.parse(req.body);

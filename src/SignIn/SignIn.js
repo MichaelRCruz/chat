@@ -3,7 +3,7 @@ import Auth from '../Auth/Auth.js';
 import SessionContext from '../SessionContext.js';
 import './SignIn.css';
 
-class Waiting extends React.Component  {
+class SignIn extends React.Component  {
 
   static defaultProps = {
     session: {}
@@ -18,12 +18,8 @@ class Waiting extends React.Component  {
     this.setState({ showAuthModal: !this.state.showAuthModal });
   };
 
-  componentDidMount() {
-
-  };
-
   render() {
-    const { inWaiting } = this.context;
+    const { inWaiting, updateSession } = this.context;
     const auth = (
       <Auth
           firebase={this.props.firebase}
@@ -39,4 +35,4 @@ class Waiting extends React.Component  {
   };
 };
 
-export default Waiting;
+export default SignIn;

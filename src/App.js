@@ -8,9 +8,8 @@ import SessionContext from './SessionContext.js';
 class App extends Component {
   state = {
     user: {},
-    isNew: null,
-    inWaiting: false,
-    updateSession: this.updateSession
+    isNewUser: null,
+    inWaiting: null
   };
 
   updateSession = options => {
@@ -86,7 +85,22 @@ class App extends Component {
     });
   };
 
+  // this.handleConnection(user.uid);
+  // let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
+  // if (firebase.messaging.isSupported()) {
+  //   const messaging = firebase.messaging();
+  //   const currentFcmToken = await messaging.getToken();
+  //   this.handleFcmToken(currentFcmToken, user.uid, true)
+  //   userConfig = Object.assign({}, userConfig, { currentFcmToken });
+  //   messaging.onTokenRefresh(function() {
+  //     console.log('refreshed token');
+  //     this.requestNotifPermission(user.uid);
+  //   });
+  // }
+  // await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
+
   componentDidMount() {
+    // this.props.firebase.auth().signOut();
     const { firebase } = this.props;
     firebase.auth().onAuthStateChanged(async user => {
       if (!user) {
@@ -109,7 +123,7 @@ class App extends Component {
           .then(function(result) {
             window.localStorage.removeItem('emailForSignIn');
             const { credential, user } = result;
-            const isNewUser = result ? result.additionalUserInfo.isNewUser : false;
+            const isNewUser = result.additionalUserInfo.isNewUser;
             this.updateSession({user, credential, isNewUser, inWaiting: true});
           })
           .catch(function(error) {
@@ -123,9 +137,15 @@ class App extends Component {
 
   render() {
     const { firebase } = this.props;
+    const sessionValue = {
+      user: this.state.user,
+      isNewUser: this.state.isNew,
+      inWaiting: this.state.inWaiting,
+      updateSession: this.updateSession
+    }
     return (
       <main className='App'>
-        <SessionContext.Provider value={this.state}>
+        <SessionContext.Provider value={sessionValue}>
           <Route
             exact
             path='/'

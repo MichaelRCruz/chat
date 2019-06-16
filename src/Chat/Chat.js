@@ -13,9 +13,7 @@ import Splash from '../Splash/Splash.js';
 class Chat extends React.Component {
   static contextType = SessionContext;
   static defaultProps = {
-    session: {
-      user: {}
-    }
+    session: {}
   }
   state = {
     activeRoom: null,
@@ -64,6 +62,7 @@ class Chat extends React.Component {
 
   render() {
     const { user, isNew, inWaitng } = this.context;
+    console.log();
     const {
       activeRoom, userConfig, showDashboardModal, showAuthModal,
       isLoading, currentFcmToken, subscribedRooms, messageMode, notifications

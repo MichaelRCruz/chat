@@ -12,7 +12,8 @@ import './Auth.css';
 class Auth extends React.Component {
 
   static defaultProps = {
-    session: {}
+    session: {},
+    updateSession: () => {}
   };
   static contextType = SessionContext;
 
@@ -26,14 +27,16 @@ class Auth extends React.Component {
   }
 
   signInWithEmail = (email, password) => {
-    this.props.firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(res => {
-      this.props.toggleModal();
-    })
-    .catch(function(error) {
-      console.log('error at signIn(): ', error);
-      alert(error.message)
-    });
+    // this.props.firebase.auth().signInWithEmailAndPassword(email, password)
+    // .then(res => {
+    //   this.props.toggleModal();
+    // })
+    // .catch(function(error) {
+    //   console.log('error at signIn(): ', error);
+    //   alert(error.message)
+    // });
+    console.log('kwjekdj');
+    this.context.updateSession({user: 'mykey'})
   };
 
   signInWithGoogle = () => {

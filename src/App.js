@@ -110,47 +110,45 @@ class App extends Component {
   async componentDidMount() {
     let onDynamicLink;
     let authSession;
-    await this.firebase.auth().signOut();
-    const onRefresh = await this.firebase.auth()
+    this.firebase.auth()
       .onAuthStateChanged(user => {
         if (!user) {
           this.firebase.auth().signOut();
-          return { onAuthStateChangedError: true }
+          this.updateSession({ onAuthStateChangedError: true });
         } else {
-          return { user };
+          this.updateSession({ user });
         }
       });
-    const onRedirect = await this.firebase.auth()
+    this.firebase.auth()
       .getRedirectResult()
       .then(result => {
         if (result.credential) {
           const { credential } = result;
           const isNewUser = result.additionalUserInfo.isNewUser;
-          return { user: result.user, credential, isNewUser };
+          this.updateSession({ user: result.user, credential, isNewUser });
         }
       })
       .catch(error => {
-        return { error, onGetRedirectResultError: true };
+        this.updateSession({ error, onGetRedirectResultError: true });
       });
     if (this.firebase.auth().isSignInWithEmailLink(window.location.href)) {
       const stashedEmail = window.localStorage.getItem('emailForSignIn');
-      const onDynamicLink = await this.firebase.auth()
+      this.firebase.auth()
         .signInWithEmailLink(stashedEmail, window.location.href)
         .then(result => {
           if (result.credential) {
             window.localStorage.removeItem('emailForSignIn');
             const { credential, user } = result;
             const isNewUser = result.additionalUserInfo.isNewUser;
-            return { user: result.user, credential, isNewUser };
+            this.updateSession({ user: result.user, credential, isNewUser });
           }
         })
         .catch(error => {
-          return { error, onSignInWithEmailLinkError: true };
+          this.updateSession({ error, onSignInWithEmailLinkError: true });
         });
-    } else { const onDynamicLink = {} };
-    authSession = Object.assign({}, onRefresh, onRedirect, onDynamicLink);
-    const roomsAndUserConfig = await this.getRoomsAndUserConfig({ user: authSession.user });
-    this.updateSession(Object.assign({}, authSession, roomsAndUserConfig));
+    }
+    // const roomsAndUserConfig = await this.getRoomsAndUserConfig({ user: authSession.user });
+    // this.updateSession(Object.assign({}, authSession, roomsAndUserConfig));
   };
 
   render() {

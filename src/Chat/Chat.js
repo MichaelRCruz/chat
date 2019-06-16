@@ -9,9 +9,14 @@ import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 import Splash from '../Splash/Splash.js';
-import Waiting from '../Waiting/Waiting.js';
 
 class Chat extends React.Component {
+  static contextType = SessionContext;
+  static defaultProps = {
+    session: {
+      user: {}
+    }
+  }
   state = {
     activeRoom: null,
     currentFcmToken: null,
@@ -23,12 +28,6 @@ class Chat extends React.Component {
     userConfig: null
   }
   baseState = this.state;
-
-  static defaultProps = {
-    session: {}
-  };
-
-  static contextType = SessionContext;
 
   renderWaitingRoom = () => {
     this.setState({ inWaiting: !this.state.inWaiting });
@@ -64,7 +63,7 @@ class Chat extends React.Component {
   };
 
   render() {
-    const { user } = this.context;
+    const { user, isNew, inWaitng } = this.context;
     const {
       activeRoom, userConfig, showDashboardModal, showAuthModal,
       isLoading, currentFcmToken, subscribedRooms, messageMode, notifications

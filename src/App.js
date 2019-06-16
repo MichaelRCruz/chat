@@ -6,10 +6,14 @@ import SignIn from './SignIn/SignIn.js';
 import SessionContext from './SessionContext.js';
 
 class App extends Component {
+  firebase = this.props.firebase;
   state = {
-    user: {},
+    credential: null,
+    error: null,
+    failedStashAuth: null,
     isNewUser: null,
-    inWaiting: null
+    inWaiting: null,
+    user: null
   };
 
   updateSession = options => {
@@ -17,16 +21,16 @@ class App extends Component {
   };
 
   handleConnection = uid => {
-    const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
+    const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
       isOnline: false,
-      lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
     };
     const isOnlineForDatabase = {
       isOnline: true,
-      lastChanged: this.props.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
     };
-    this.props.firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    this.firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
         return;
       };
@@ -36,28 +40,10 @@ class App extends Component {
     });
   };
 
-  getUserConfig = (user, displayName, controller) => {
-    const { uid } = user;
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
-      method: 'POST',
-      body: JSON.stringify({ uid, displayName })
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(response) {
-      return response;
-    })
-    .catch(error => {
-      console.log(error);
-    });
-  };
-
-  requestNotifPermission = uid => {
-    let _self = this;
-    return this.messaging.requestPermission()
-    .then(function() {
-      return _self.messaging.getToken();
+  requestNotifPermission = (uid, messaging) => {
+    return messaging.requestPermission()
+    .then(() => {
+      return messaging.getToken();
     })
     .then(token => {
       console.log(token);
@@ -85,63 +71,97 @@ class App extends Component {
     });
   };
 
-  // this.handleConnection(user.uid);
-  // let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user);
-  // if (firebase.messaging.isSupported()) {
-  //   const messaging = firebase.messaging();
-  //   const currentFcmToken = await messaging.getToken();
-  //   this.handleFcmToken(currentFcmToken, user.uid, true)
-  //   userConfig = Object.assign({}, userConfig, { currentFcmToken });
-  //   messaging.onTokenRefresh(function() {
-  //     console.log('refreshed token');
-  //     this.requestNotifPermission(user.uid);
-  //   });
-  // }
-  // await this.setState({ user, userConfig, activeRoom, isLoading: false, subscribedRooms, messageMode: 'notifications' });
+  initNotifications = async user => {
+    if (this.firebase.messaging.isSupported()) {
+      const messaging = this.firebase.messaging();
+      const currentFcmToken = await messaging.getToken();
+      this.handleFcmToken(currentFcmToken, user.uid, true);
+      messaging.onTokenRefresh(function() {
+        console.log('refreshed token');
+        this.requestNotifPermission(user.uid, messaging);
+      });
+    }
+  };
 
-  componentDidMount() {
-    // this.props.firebase.auth().signOut();
-    const { firebase } = this.props;
-    firebase.auth().onAuthStateChanged(async user => {
-      if (!user) {
-        return this.props.firebase.auth().signOut();
-      } else {
-        firebase.auth().getRedirectResult()
-          .then(result => {
-            if (result.credential) {
-              const { credential, user } = result;
-              const isNewUser = result.additionalUserInfo.isNewUser;
-              this.updateSession({user, credential, isNewUser});
-            }
-          });
+  getRoomsAndUserConfig = (user) => {
+    // const { uid } = user;
+    // return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
+    //   method: 'POST',
+    //   body: JSON.stringify({ uid, displayName })
+    // })
+    // .then(function(response) {
+    //   return response.json();
+    // })
+    // .then(function(response) {
+    //   return response;
+    // })
+    // .catch(error => {
+    //   console.log(error);
+    // });
+    return {
+      user,
+      rooms: [1, 2, 3],
+      userConfig: {
+        zen: 'Approachability is prefered over simplicity.'
       }
-    });
-    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+    }
+  };
+
+  async componentDidMount() {
+    let onDynamicLink;
+    let authSession;
+    await this.firebase.auth().signOut();
+    const onRefresh = await this.firebase.auth()
+      .onAuthStateChanged(user => {
+        if (!user) {
+          this.firebase.auth().signOut();
+          return { onAuthStateChangedError: true }
+        } else {
+          return { user };
+        }
+      });
+    const onRedirect = await this.firebase.auth()
+      .getRedirectResult()
+      .then(result => {
+        if (result.credential) {
+          const { credential } = result;
+          const isNewUser = result.additionalUserInfo.isNewUser;
+          return { user: result.user, credential, isNewUser };
+        }
+      })
+      .catch(error => {
+        return { error, onGetRedirectResultError: true };
+      });
+    if (this.firebase.auth().isSignInWithEmailLink(window.location.href)) {
       const stashedEmail = window.localStorage.getItem('emailForSignIn');
-      if (stashedEmail) {
-        firebase.auth().signInWithEmailLink(stashedEmail, window.location.href)
-          .then(function(result) {
+      const onDynamicLink = await this.firebase.auth()
+        .signInWithEmailLink(stashedEmail, window.location.href)
+        .then(result => {
+          if (result.credential) {
             window.localStorage.removeItem('emailForSignIn');
             const { credential, user } = result;
             const isNewUser = result.additionalUserInfo.isNewUser;
-            this.updateSession({user, credential, isNewUser, inWaiting: true});
-          })
-          .catch(function(error) {
-            console.log('error');
-          });
-      } else {
-        this.updateSession({user: null, credential: null, inWaiting: true });
-      }
-    };
+            return { user: result.user, credential, isNewUser };
+          }
+        })
+        .catch(error => {
+          return { error, onSignInWithEmailLinkError: true };
+        });
+    } else { const onDynamicLink = {} };
+    authSession = Object.assign({}, onRefresh, onRedirect, onDynamicLink);
+    const roomsAndUserConfig = await this.getRoomsAndUserConfig({ user: authSession.user });
+    this.updateSession(Object.assign({}, authSession, roomsAndUserConfig));
   };
 
   render() {
-    const { firebase } = this.props;
     const sessionValue = {
-      user: this.state.user,
+      credential: this.state.credential,
+      error: this.state.error,
+      failedStashAuth: this.state.failedStashAuth,
       isNewUser: this.state.isNew,
       inWaiting: this.state.inWaiting,
-      updateSession: this.updateSession
+      updateSession: this.updateSession,
+      user: this.state.user,
     }
     return (
       <main className='App'>
@@ -153,11 +173,11 @@ class App extends Component {
           />
           <Route
             path='/chat'
-            render={() => <Chat firebase={firebase} />}
+            render={() => <Chat firebase={this.firebase} />}
           />
           <Route
             path='/signIn'
-            render={() => <SignIn firebase={firebase} />}
+            render={() => <SignIn firebase={this.firebase} />}
           />
         </SessionContext.Provider>
       </main>

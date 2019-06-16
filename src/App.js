@@ -84,37 +84,39 @@ class App extends Component {
   };
 
   getRoomsAndUserConfig = (user) => {
-    // const { uid } = user;
-    // return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
-    //   method: 'POST',
-    //   body: JSON.stringify({ uid, displayName })
-    // })
-    // .then(function(response) {
-    //   return response.json();
-    // })
-    // .then(function(response) {
-    //   return response;
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // });
-    return {
-      user,
-      rooms: [1, 2, 3],
-      userConfig: {
-        zen: 'Approachability is prefered over simplicity.'
-      }
-    }
+    const { uid } = user;
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getRoomsAndUserConfig`, {
+      method: 'POST',
+      body: JSON.stringify({ uid })
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      return response;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    // return {
+    //   user,
+    //   rooms: [1, 2, 3],
+    //   userConfig: {
+    //     zen: 'Approachability is prefered over simplicity.'
+    //   }
+    // }
   };
 
   async componentDidMount() {
     this.firebase.auth()
-      .onAuthStateChanged(user => {
+      .onAuthStateChanged(async user => {
         if (!user) {
           this.firebase.auth().signOut();
           this.updateSession({ onAuthStateChangedError: true });
         } else {
-          this.updateSession({ user });
+          const roomsAndUserConfig = await this.getRoomsAndUserConfig(user);
+          const { userConfig, subscribedRooms } = roomsAndUserConfig;
+          this.updateSession({ user, userConfig, subscribedRooms, activeRoom: subscribedRooms[0] });
         }
       });
     this.firebase.auth()
@@ -145,18 +147,14 @@ class App extends Component {
           this.updateSession({ error, onSignInWithEmailLinkError: true });
         });
     }
-    // const roomsAndUserConfig = await this.getRoomsAndUserConfig({ user: authSession.user });
-    // this.updateSession(Object.assign({}, authSession, roomsAndUserConfig));
   };
 
   render() {
     const sessionValue = {
-      credential: this.state.credential,
-      error: this.state.error,
-      failedStashAuth: this.state.failedStashAuth,
-      isNewUser: this.state.isNew,
-      inWaiting: this.state.inWaiting,
       updateSession: this.updateSession,
+      userConfig: this.state.userConfig,
+      subscribedRooms: this.state.subscribedRooms,
+      activeRoom: this.state.activeRoom,
       user: this.state.user,
     }
     return (

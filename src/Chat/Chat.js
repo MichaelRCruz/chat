@@ -16,14 +16,8 @@ class Chat extends React.Component {
     session: {}
   }
   state = {
-    activeRoom: null,
-    currentFcmToken: null,
     isLoading: true,
-    showAuthModal: false,
-    messageMode: 'notifications',
-    showDashboardModal: false,
-    subscribedRooms: null,
-    userConfig: null
+    messageMode: 'notifications'
   }
   baseState = this.state;
 
@@ -60,13 +54,13 @@ class Chat extends React.Component {
     this.setState({ messageMode });
   };
 
+  componentDidMount() {
+    this.setState({ isLoading: false,  });
+  }
+
   render() {
-    const { user, isNew, inWaitng } = this.context;
-    console.log();
-    const {
-      activeRoom, userConfig, showDashboardModal, showAuthModal,
-      isLoading, currentFcmToken, subscribedRooms, messageMode, notifications
-    } = this.state;
+    const { user, isNew, inWaitng, userConfig, subscribedRooms, activeRoom } = this.context;
+    const { showDashboardModal, showAuthModal, isLoading, messageMode } = this.state;
     const app = (
       <div className="appComponent">
         <header className="header">
@@ -121,7 +115,6 @@ class Chat extends React.Component {
         user={user}
         firebase={this.props.firebase}
         userConfig={userConfig}
-        currentFcmToken={currentFcmToken}
         toggleModal={this.toggleAuthModal.bind(this)}
         renderWaitingRoom={this.renderWaitingRoom.bind(this)}
       />
@@ -132,9 +125,6 @@ class Chat extends React.Component {
         subscribedRooms={subscribedRooms}
         setActiveRoom={this.setActiveRoom.bind(this)}
       />
-    );
-    const splash = (
-      <Splash toggleModal={this.toggleAuthModal.bind(this)} />
     );
     const authModal = (
       <Modal
@@ -160,7 +150,7 @@ class Chat extends React.Component {
         {isLoading ? loadingAnimation : null}
         {showAuthModal ? authModal : null}
         {showDashboardModal ? dashboardModal : null}
-
+        {user ? app : null}
       </div>
     );
   }

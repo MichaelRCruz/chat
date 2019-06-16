@@ -8,12 +8,12 @@ import SessionContext from './SessionContext.js';
 class App extends Component {
   firebase = this.props.firebase;
   state = {
-    credential: null,
-    error: null,
-    failedStashAuth: null,
-    isNewUser: null,
-    inWaiting: null,
-    user: null
+    // credential: null,
+    // error: null,
+    // failedStashAuth: null,
+    // isNewUser: null,
+    // inWaiting: null,
+    // user: null
   };
 
   updateSession = options => {
@@ -108,8 +108,6 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    let onDynamicLink;
-    let authSession;
     this.firebase.auth()
       .onAuthStateChanged(user => {
         if (!user) {
@@ -125,7 +123,7 @@ class App extends Component {
         if (result.credential) {
           const { credential } = result;
           const isNewUser = result.additionalUserInfo.isNewUser;
-          this.updateSession({ user: result.user, credential, isNewUser });
+          this.updateSession({ credential, isNewUser });
         }
       })
       .catch(error => {
@@ -140,7 +138,7 @@ class App extends Component {
             window.localStorage.removeItem('emailForSignIn');
             const { credential, user } = result;
             const isNewUser = result.additionalUserInfo.isNewUser;
-            this.updateSession({ user: result.user, credential, isNewUser });
+            this.updateSession({ credential, isNewUser });
           }
         })
         .catch(error => {

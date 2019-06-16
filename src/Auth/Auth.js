@@ -135,10 +135,6 @@ class Auth extends React.Component {
   //   }
   // };
 
-  componentDidMount() {
-    console.log('session from auth: ', this.context.session);
-  };
-
   render() {
     const { user } = this.context;
     console.log(this.context);
@@ -167,4 +163,10 @@ class Auth extends React.Component {
   };
 }
 
-export default Auth;
+// export default Auth;
+
+export default React.forwardRef((props, ref) => (
+  <SessionContext.Consumer>
+    {session => <Auth {...props} theme={session} ref={ref} />}
+  </SessionContext.Consumer>
+));

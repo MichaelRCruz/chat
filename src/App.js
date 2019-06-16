@@ -1,89 +1,20 @@
-import React from 'react';
-import './App.css';
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import Chat from './Chat/Chat.js';
+import Splash from './Splash/Splash.js';
+import SignIn from './SignIn/SignIn.js';
+import SessionContext from './SessionContext.js';
 
-import Auth from './Auth/Auth';
-import Dashboard from './Dashboard/Dashboard';
-import Modal from './Modal/Modal';
-import Messages from './Messages/Messages';
-import Menu from './Menu/Menu';
-import SubmitMessage from './SubmitMessage/SubmitMessage';
-import Splash from './Splash/Splash';
-import Waiting from './Waiting/Waiting.js';
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeRoom: null,
-      currentFcmToken: null,
-      email: null,
-      inWaiting: false,
-      isLoading: true,
-      isNew: null,
-      showAuthModal: false,
-      messageMode: 'notifications',
-      showDashboardModal: false,
-      subscribedRooms: null,
-      user: null,
-      userConfig: null
-    }
-    this.baseState = this.state;
+class App extends Component {
+  state = {
+    user: {},
+    isNew: null,
+    inWaiting: false,
+    updateSession: this.updateSession
   };
 
-  componentDidMount() {
-    const { user, credential, isNew, email, stashedEmail, error, firebase } = this.props;
-    firebase.auth().onAuthStateChanged(currentUser => {
-      if (!currentUser) {
-        this.setState(Object.assign({}, this.baseState, { isLoading: false }));
-        firebase.auth().signOut();
-      } else if (isNew) {
-        this.setState({ isLoading: false, inWaiting: true, showAuthModal: true, user, isNew, email, stashedEmail});
-      } else {
-        const email = stashedEmail || email;
-        const displayName = user ? displayName : null;
-        this.loadApp(user, credential, isNew, email, firebase. displayName);
-      }
-    });
-  };
-
-  loadApp = async (user, credential, isNew, email, firebase, displayName) => {
-    this.handleConnection(user.uid);
-    console.log('isNew: ', isNew);
-    const controller = isNew ? 'createRoomsAndUserConfig' : 'getRoomsAndUserConfig';
-    console.log('controller: ', controller);
-    let {userConfig, activeRoom, subscribedRooms} = await this.getUserConfig(user, displayName, controller);
-    if (firebase.messaging.isSupported()) {
-      const messaging = firebase.messaging();
-      const currentFcmToken = await messaging.getToken();
-      this.handleFcmToken(currentFcmToken, user.uid, true);
-      userConfig = Object.assign({}, userConfig, { currentFcmToken });
-      messaging.onTokenRefresh(function() {
-        console.log('refreshed token');
-        this.requestNotifPermission(user.uid);
-      });
-    }
-    this.setState({ user, userConfig, activeRoom: subscribedRooms[0], isLoading: false, subscribedRooms, messageMode: 'notifications', credential });
-  };
-
-  renderWaitingRoom = () => {
-    this.setState({ inWaiting: !this.state.inWaiting });
-  }
-
-  getUserConfig = (user, displayName, controller) => {
-    const { uid } = user;
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
-      method: 'POST',
-      body: JSON.stringify({ uid, displayName })
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(response) {
-      return response;
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  updateSession = options => {
+    this.setState(options);
   };
 
   handleConnection = uid => {
@@ -103,6 +34,23 @@ class App extends React.Component {
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
         userStatusDatabaseRef.set(isOnlineForDatabase);
       });
+    });
+  };
+
+  getUserConfig = (user, displayName, controller) => {
+    const { uid } = user;
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/${controller}`, {
+      method: 'POST',
+      body: JSON.stringify({ uid, displayName })
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(response) {
+      return response;
+    })
+    .catch(error => {
+      console.log(error);
     });
   };
 
@@ -138,148 +86,64 @@ class App extends React.Component {
     });
   };
 
-  setActiveRoom = activeRoom => {
-    console.log(activeRoom.key)
-    this.setState({ activeRoom, showDashboardModal: false });
-  };
-
-  toggleAuthModal = () => {
-    this.setState({
-      showAuthModal: !this.state.showAuthModal
+  componentDidMount() {
+    const { firebase } = this.props;
+    firebase.auth().onAuthStateChanged(async user => {
+      if (!user) {
+        return this.props.firebase.auth().signOut();
+      } else {
+        firebase.auth().getRedirectResult()
+          .then(result => {
+            if (result.credential) {
+              const { credential, user } = result;
+              const isNewUser = result.additionalUserInfo.isNewUser;
+              this.updateSession({user, credential, isNewUser});
+            }
+          });
+      }
     });
-  };
-
-  toggleDashboardModal = () => {
-    this.setState({
-      showDashboardModal: !this.state.showDashboardModal
-    });
-  };
-
-  toggleMessageMode = messageMode => {
-    switch (messageMode) {
-      case 'messages':
-        messageMode = 'notifications';
-        break;
-      case 'notifications':
-        messageMode = 'messages';
-        break;
-    }
-    this.setState({ messageMode });
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+      const stashedEmail = window.localStorage.getItem('emailForSignIn');
+      if (stashedEmail) {
+        firebase.auth().signInWithEmailLink(stashedEmail, window.location.href)
+          .then(function(result) {
+            window.localStorage.removeItem('emailForSignIn');
+            const { credential, user } = result;
+            const isNewUser = result ? result.additionalUserInfo.isNewUser : false;
+            this.updateSession({user, credential, isNewUser, inWaiting: true});
+          })
+          .catch(function(error) {
+            console.log('error');
+          });
+      } else {
+        this.updateSession({user: null, credential: null, inWaiting: true });
+      }
+    };
   };
 
   render() {
-    const {
-      activeRoom, user, userConfig, showDashboardModal, showAuthModal,
-      isLoading, currentFcmToken, subscribedRooms, messageMode, notifications,
-      inWaiting, isNew, email, stashedEmail
-    } = this.state;
-    const app = (
-      <div className="appComponent">
-        <header className="header">
-          <div className="menuIconContainer">
-            <i className="material-icons menuIcon"
-               onClick={this.toggleDashboardModal}>sort</i>
-          </div>
-          <div className="appNameContainer">
-            <a href="https://michaelcruz.io/chat">
-              <p className="headerAppName">Potato</p>
-            </a>
-          </div>
-          <div className="headerIconContainer">
-            <i className="material-icons personIcon"
-               onClick={this.toggleAuthModal}>person</i>
-          </div>
-        </header>
-        <aside className="sidebar">
-          <Menu
-            firebase={this.props.firebase}
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-            subscribedRooms={subscribedRooms}
-            setActiveRoom={this.setActiveRoom.bind(this)}
-          />
-        </aside>
-        <main className="main">
-          <Messages
-            firebase={this.props.firebase}
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-            messageMode={messageMode}
-            openModals={showAuthModal || showDashboardModal}
-          />
-        </main>
-        <footer className="footer">
-          <SubmitMessage
-            firebase={this.props.firebase}
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-            messageMode={messageMode}
-            toggleMessageMode={this.toggleMessageMode.bind(this)}
-          />
-        </footer>
-      </div>
-    );
-    const auth = (
-      <Auth
-        firebase={this.props.firebase}
-        userConfig={userConfig}
-        user={user}
-        isNew={isNew}
-        email={email}
-        currentFcmToken={currentFcmToken}
-        toggleModal={this.toggleAuthModal.bind(this)}
-        requestNotifPermission={this.requestNotifPermission.bind(this)}
-        handleFcmToken={this.handleFcmToken.bind(this)}
-        renderWaitingRoom={this.renderWaitingRoom.bind(this)}
-        loadApp={this.loadApp.bind(this)}
-      />
-    );
-    const dashboard = (
-      <Dashboard
-        firebase={this.props.firebase}
-        subscribedRooms={subscribedRooms}
-        setActiveRoom={this.setActiveRoom.bind(this)}
-      />
-    );
-    const splash = (
-      <Splash toggleModal={this.toggleAuthModal.bind(this)} />
-    );
-    const authModal = (
-      <Modal
-        title="settings"
-        show={showAuthModal}
-        children={auth}
-        handleClose={this.toggleAuthModal.bind(this)}>
-      </Modal>
-    );
-    const dashboardModal = (
-      <Modal
-        title="dashboard"
-        show={showDashboardModal}
-        children={dashboard}
-        handleClose={this.toggleDashboardModal.bind(this)}>
-      </Modal>
-    );
-    const loadingAnimation = (
-      <div className="loadingAnimation"></div>
-    );
-    const waitingModal = (
-      <Waiting />
-    );
+    const { firebase } = this.props;
     return (
-      <div>
-        {!user && !isLoading && !inWaiting ? splash : null}
-        {isLoading ? loadingAnimation : null}
-        {inWaiting ? waitingModal : null}
-        {showAuthModal ? authModal : null}
-        {user && showDashboardModal && !authModal ? dashboardModal : null}
-        {user && !isLoading && !inWaiting && !showAuthModal && !showDashboardModal ? app : null}
-      </div>
+      <main className='App'>
+        <SessionContext.Provider value={this.state}>
+          <Route
+            exact
+            path='/'
+            component={Splash}
+          />
+          <Route
+            path='/chat'
+            render={() => <Chat firebase={firebase} />}
+          />
+          <Route
+            path='/signIn'
+            render={() => <SignIn firebase={firebase} />}
+          />
+        </SessionContext.Provider>
+      </main>
     );
-  }
+  };
+
 }
 
 export default App;

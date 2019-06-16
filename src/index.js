@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import { BrowserRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
+import App from "./App.js";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -26,34 +27,9 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
   });
 };
 
-// Confirm the link is a sign-in with email link.
-if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const apiKey = urlParams.get('apiKey') || null;
-  const stashedEmail = window.localStorage.getItem('asdfChatEmailForSignIn');
-  init({ user: null, credential: apiKey, isNew: true, stashedEmail, error: null });
-} else {
-  firebase.auth().getRedirectResult()
-    .then(result => {
-      if (result.credential) {
-        const credential = result.credential;
-      } else {
-        const credential = result.credential;
-        const user = result.user;
-        const isNew = result.additionalUserInfo.isNewUser;
-        init({ user, credential, isNew, email: user.email, error: null });
-      }
-    })
-    .catch(error => {
-      const errorCode = error.code;
-      if (errorCode === 'auth/account-exists-with-different-credential') {
-        alert('You have already signed up with a different auth provider for that email.');
-      }
-      console.log(error);
-      init({ error });
-  });
-}
-
-function init(initProps) {
-  ReactDOM.render(<App firebase={firebase} {...initProps} />, document.getElementById("root"));
-};
+ReactDOM.render(
+  <BrowserRouter>
+    <App firebase={firebase} />
+  </BrowserRouter>,
+  document.getElementById("root")
+);

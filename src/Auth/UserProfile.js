@@ -70,10 +70,6 @@ class UserProfile extends React.Component {
     });
   };
 
-  requestNotifPermission = () => {
-    this.props.requestNotifPermission(this.props.user.uid);
-  };
-
   render () {
     return (
       <section className="userProfileComponent">

@@ -2,17 +2,14 @@ import React from 'react';
 import './Splash.css';
 
 class Splash extends React.Component  {
-  // constructor (props) {
-  //   super(props);
-  // }
+
+  redirectToSignIn = () => {
+    this.props.history.push('/signIn');
+  }
 
   componentDidMount() {
     // window.scrollTo(0, 1);
   };
-
-  toggleModal = () => {
-    this.props.toggleModal();
-  }
 
   render() {
     return (
@@ -27,7 +24,7 @@ class Splash extends React.Component  {
                 <p className="splashAppName">Potato</p>
               </div>
             </a>
-            <i onClick={this.toggleModal} className="material-icons menuIcon">menu</i>
+            <i onClick={this.redirectToSignIn} className="material-icons menuIcon">menu</i>
           </div>
         </header>
         <main className="splashMain">
@@ -38,7 +35,7 @@ class Splash extends React.Component  {
             <p className="appDescription">
               Welcome to your new live chat application! Share your thoughts and ideas with anybody, anywhere. Click the link below to get started.
             </p>
-            <button className="getStartedButton" onClick={this.toggleModal}>GET STARTED</button>
+            <button className="getStartedButton" onClick={this.redirectToSignIn}>GET STARTED</button>
           </div>
           <div className="companyImagesContainer">
             <img className="firebaseLogo" alt="" src={require("../assets/Built_with_Firebase_Logo_Light.svg")} />

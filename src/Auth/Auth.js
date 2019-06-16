@@ -4,17 +4,26 @@ import SignInWithEmailForm from './SignInWithEmailForm';
 import VerificationForm from './VerificationForm.js';
 // import ChangePasswordForm from './ChangePasswordForm';
 // import UpdateDisplayNameForm from './UpdateDisplayNameForm';
+import Modal from '../Modal/Modal.js';
+import SessionContext from '../SessionContext.js';
 import UserProfile from './UserProfile';
 import './Auth.css';
 
 class Auth extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: null,
-      isRegistrationMode: false,
-    }
+
+  static defaultProps = {
+    session: {}
   };
+  static contextType = SessionContext;
+
+  state = {
+    user: null,
+    isRegistrationMode: false
+  }
+
+  toggleAuthModal = () => {
+    this.props.toggleAuthModal();
+  }
 
   signInWithEmail = (email, password) => {
     this.props.firebase.auth().signInWithEmailAndPassword(email, password)
@@ -47,6 +56,28 @@ class Auth extends React.Component {
     });
   };
 
+  // firebase.auth().currentUser
+  //   .linkAndRetrieveDataWithCredential(credential)
+  //   .then(usercred => {
+  //     user = usercred.user;
+  //     console.log("Account linking success", user);
+  //     loadApp(user, credential, isNew, email, firebase, displayNameValue);
+  //   }, function(error) {
+  //     console.log("Account linking error", error);
+  //     firebase.auth().signOut()
+  //   });
+  //
+  // firebase.auth().signInWithEmailLink(email, window.location.href)
+  //   .then(result => {
+  //     const user = result.user;
+  //     const isNew = result.additionalUserInfo.isNewUser;
+  //     const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
+  //     this.setAuthSession({ user, credential, isNew, apiLKey, stashedEmail });
+  //   })
+  //   .catch(error => {
+  //     this.setError({ error });
+  //   });
+
   registerUser = (displayName, email, password) => {
     var actionCodeSettings = {
       // URL you want to redirect back to. The domain (www.example.com) for this
@@ -73,36 +104,41 @@ class Auth extends React.Component {
     this.setState({ isRegistrationMode });
   };
 
-  verifyCredentials = (displayNameValue, emailValue, passwordValue) => {
-    const { email, loadApp, isNew, firebase } = this.props;
-    if (emailValue !== email) {
-      alert('Incorrect email.');
-    } else {
-      firebase.auth().signInWithEmailLink(email, window.location.href)
-        .then(result => {
-          let user = result.user;
-          const isNew = result.additionalUserInfo.isNewUser;
-          const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
-          firebase.auth().currentUser
-            .linkAndRetrieveDataWithCredential(credential)
-            .then(usercred => {
-              user = usercred.user;
-              console.log("Account linking success", user);
-              loadApp(user, credential, isNew, email, firebase, displayNameValue);
-            }, function(error) {
-              console.log("Account linking error", error);
-              firebase.auth().signOut()
-            });
-        })
-        .catch(error => {
-          console.error(error.code);
-          firebase.auth().signOut();
-        });
-    }
+  // verifyCredentials = (displayNameValue, emailValue, passwordValue) => {
+  //   const { email, loadApp, isNew, firebase } = this.props;
+  //   if (emailValue !== email) {
+  //     alert('Incorrect email.');
+  //   } else {
+  //     firebase.auth().signInWithEmailLink(email, window.location.href)
+  //       .then(result => {
+  //         let user = result.user;
+  //         const isNew = result.additionalUserInfo.isNewUser;
+  //         const credential = firebase.auth.EmailAuthProvider.credential(email, passwordValue);
+  //         firebase.auth().currentUser
+  //           .linkAndRetrieveDataWithCredential(credential)
+  //           .then(usercred => {
+  //             user = usercred.user;
+  //             console.log("Account linking success", user);
+  //             loadApp(user, credential, isNew, email, firebase, displayNameValue);
+  //           }, function(error) {
+  //             console.log("Account linking error", error);
+  //             firebase.auth().signOut()
+  //           });
+  //       })
+  //       .catch(error => {
+  //         console.error(error.code);
+  //         firebase.auth().signOut();
+  //       });
+  //   }
+  // };
+
+  componentDidMount() {
+    console.log('session from auth: ', this.context.session);
   };
 
   render() {
-    const { isNew } = this.props;
+    const { user } = this.context;
+    console.log(this.context);
     const registrationForm = (
       <RegistrationForm
         registerUser={this.registerUser.bind(this)}
@@ -117,28 +153,15 @@ class Auth extends React.Component {
         toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
       />
     );
-    if (isNew) {
-      return (
-        <VerificationForm
-          verifyCredentials={this.verifyCredentials.bind(this)}
-          toggleRegistrationMode={this.toggleRegistrationMode.bind(this)}
-        />
-      );
-    } else if (!this.props.user) {
-      return (
-        this.state.isRegistrationMode ? registrationForm : signInWithEmailForm
-      );
-    } else {
-      return (
-        <UserProfile
-          firebase={this.props.firebase}
-          toggleModal={this.props.toggleModal}
-          handleFcmToken={this.props.handleFcmToken}
-          userConfig={this.props.userConfig}
-        />
-      );
-    }
-  }
+    return (
+      <Modal
+        title="settings"
+        show={true}
+        children={this.state.isRegistrationMode ? registrationForm : signInWithEmailForm}
+        handleClose={this.toggleAuthModal.bind(this)}>
+      </Modal>
+    );
+  };
 }
 
 export default Auth;

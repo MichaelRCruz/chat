@@ -12,23 +12,14 @@ import Splash from '../Splash/Splash.js';
 
 class Chat extends React.Component {
   static contextType = SessionContext;
-  static defaultProps = {
-    session: {}
-  }
+  // static defaultProps = {
+    // session: {}
+  // }
   state = {
     isLoading: true,
     messageMode: 'notifications'
   }
   baseState = this.state;
-
-  renderWaitingRoom = () => {
-    this.setState({ inWaiting: !this.state.inWaiting });
-  };
-
-  setActiveRoom = activeRoom => {
-    console.log(activeRoom.key)
-    this.setState({ activeRoom, showDashboardModal: false });
-  };
 
   toggleAuthModal = () => {
     this.setState({
@@ -85,7 +76,6 @@ class Chat extends React.Component {
             activeRoom={activeRoom}
             userConfig={userConfig}
             subscribedRooms={subscribedRooms}
-            setActiveRoom={this.setActiveRoom.bind(this)}
           />
         </aside>
         <main className="main">
@@ -110,44 +100,33 @@ class Chat extends React.Component {
         </footer>
       </div>
     );
-    const auth = (
-      <Auth
-        user={user}
-        firebase={this.props.firebase}
-        userConfig={userConfig}
-        toggleModal={this.toggleAuthModal.bind(this)}
-        renderWaitingRoom={this.renderWaitingRoom.bind(this)}
-      />
-    );
-    const dashboard = (
-      <Dashboard
-        firebase={this.props.firebase}
-        subscribedRooms={subscribedRooms}
-        setActiveRoom={this.setActiveRoom.bind(this)}
-      />
-    );
     const authModal = (
       <Modal
         title="settings"
         show={showAuthModal}
-        children={auth}
         handleClose={this.toggleAuthModal.bind(this)}>
+        <Auth
+          user={user}
+          firebase={this.props.firebase}
+          userConfig={userConfig}
+          toggleModal={this.toggleAuthModal.bind(this)}
+        />
       </Modal>
     );
     const dashboardModal = (
       <Modal
         title="dashboard"
         show={showDashboardModal}
-        children={dashboard}
         handleClose={this.toggleDashboardModal.bind(this)}>
+        <Dashboard
+          firebase={this.props.firebase}
+          subscribedRooms={subscribedRooms}
+        />
       </Modal>
-    );
-    const loadingAnimation = (
-      <div className="loadingAnimation"></div>
     );
     return (
       <div>
-        {isLoading ? loadingAnimation : null}
+        {isLoading ? <div className="loadingAnimation"></div> : null}
         {showAuthModal ? authModal : null}
         {showDashboardModal ? dashboardModal : null}
         {user ? app : null}

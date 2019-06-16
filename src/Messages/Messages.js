@@ -29,7 +29,6 @@ class Messages extends Component {
     this.registerListeners();
     const { messages, notifications } = await this.getMessages(this.props.activeRoom.key, null);
     const displayedMessages = await this.getMessageMode(messages, notifications, this.props.messageMode);
-    // const cursor = displayedMessages[0] ? displayedMessages[0].key : null;
     this.setState({ displayedMessages, messages, notifications }, () => {
       this.bottomOfMessages.scrollIntoView();
       this.setScrollListener();

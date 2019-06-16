@@ -8,12 +8,11 @@ import SessionContext from './SessionContext.js';
 class App extends Component {
   firebase = this.props.firebase;
   state = {
-    // credential: null,
-    // error: null,
-    // failedStashAuth: null,
-    // isNewUser: null,
-    // inWaiting: null,
-    // user: null
+    // updateSession: () => {},
+    // userConfig: {},
+    // subscribedRooms: [],
+    // activeRoom: {},
+    // user: {},
   };
 
   updateSession = options => {
@@ -98,16 +97,10 @@ class App extends Component {
     .catch(error => {
       console.log(error);
     });
-    // return {
-    //   user,
-    //   rooms: [1, 2, 3],
-    //   userConfig: {
-    //     zen: 'Approachability is prefered over simplicity.'
-    //   }
-    // }
   };
 
   async componentDidMount() {
+    this.handleConnection();
     this.firebase.auth()
       .onAuthStateChanged(async user => {
         if (!user) {

@@ -35,12 +35,12 @@ exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
 
 exports.getUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const { uid } = JSON.parse(req.body);
+    const { uid } = req.body;
     const userRef = admin.database().ref(`users`);
     return userRef.child(uid).once("value", async snapshot => {
       if (snapshot.exists()) {
         const userConfig = snapshot.val();
-        res.json({ userConfig: snapshot.val() });
+        res.json({ userConfig });
       } else {
         res.json({ error: 'userConfig does not exist for this user' });
       }
@@ -50,7 +50,7 @@ exports.getUserConfig = functions.https.onRequest((req, res) => {
 
 exports.getRooms = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
-    const { roomIds } = JSON.parse(req.body);
+    const { roomIds } = req.body;
     async function getRooms(roomIds) {
       return Promise.all(roomIds.map(async room => {
         const roomRef = await admin.database().ref(`rooms/${room}`);
@@ -214,18 +214,17 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
 });
 
 exports.getMessages = functions.https.onRequest((req, res) => {
-  async function getNotifications(messageKeys) {
-    return Promise.all(messageKeys.map(messageKey => {
-      const messageRef = admin.database().ref(`messages/${messageKey}`);
-      return messageRef.once('value');
-    }));
-  };
+  // async function getNotifications(messageKeys) {
+  //   return Promise.all(messageKeys.map(messageKey => {
+  //     const messageRef = admin.database().ref(`messages/${messageKey}`);
+  //     return messageRef.once('value');
+  //   }));
+  // };
   return cors(req, res, async () => {
-    const { roomId, messageCount, messageKeys } = JSON.parse(req.body);
+    const { roomId, messageCount } = JSON.parse(req.body);
     const messagesRef = await admin.database().ref(`messages`);
-    const notifications = await getNotifications(messageKeys);
     await messagesRef
-      .orderByChild('roomId')
+      .orderByChild('sentAt')
       .equalTo(roomId)
       .limitToLast(messageCount)
       .once("value", async snap => {

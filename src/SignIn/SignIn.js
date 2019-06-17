@@ -1,14 +1,8 @@
 import React, {Fragment} from 'react';
 import Auth from '../Auth/Auth.js';
-import SessionContext from '../SessionContext.js';
 import './SignIn.css';
 
 class SignIn extends React.Component  {
-
-  static defaultProps = {
-    session: {}
-  };
-  static contextType = SessionContext;
 
   state = {
     showAuthModal: true

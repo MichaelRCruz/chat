@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from 'react-router-dom';
-import * as firebase from 'firebase';
 import App from "./App.js";
 
+import * as firebase from 'firebase';
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,

@@ -1,9 +1,10 @@
-import React from 'react';
+ import React from 'react';
 import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
-import ResourceContext from '../ResourceContext.js';
+import SessionContext from '../SessionContext.js';
+// import ResourceContext from '../ResourceContext.js';
 
 class Chat extends React.Component {
   state = {
@@ -11,13 +12,9 @@ class Chat extends React.Component {
     // messageMode: 'notifications'
   }
 
-  static contextType = ResourceContext;
+  static contextType = SessionContext;
   static defaultProps = {
-    user: {},
-    users: [],
-    subscribedRooms: [],
-    activeRoom: {},
-    messages: {}
+    session: {}
   };
 
   toggleDashboard = () => {
@@ -28,14 +25,9 @@ class Chat extends React.Component {
     this.props.toggleUserProfile();
   };
 
-  componentDidMount() {
-    const { resourcce } = this.props;
-    console.log('are we reaching: ', resourcce);
-  }
-
   render() {
-    const { users, subscribedRooms=[], activeRoom, messages } = this.context;
-    const { user } = this.props;
+    // const { activeRoom={} } = this.context;
+    console.log(this.context);
     return (
       <div className="appComponent">
         <header className="header">
@@ -53,24 +45,16 @@ class Chat extends React.Component {
                onClick={this.toggleUserProfile}>person</i>
           </div>
         </header>
-        <aside className="sidebar">
-          <Menu user={user} subscribedRooms={subscribedRooms} />
-        </aside>
-        <main className="main">
-          <Messages activeRoom={activeRoom} messages={messages} />
-        </main>
-        <footer className="footer">
-          <SubmitMessage activeRoom={activeRoom} />
-        </footer>
+
       </div>
-    );
+    )
   }
 }
 
+export default Chat;
+
 // export default React.forwardRef((props, ref) => (
 //   <ResourceContext.Consumer>
-//     {resource => <Chat {...props} theme={resource} ref={ref} />}
+//     {resource => <Chat {...props} resource={resource} ref={ref} />}
 //   </ResourceContext.Consumer>
 // ));
-
-export default Chat;

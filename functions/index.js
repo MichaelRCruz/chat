@@ -51,13 +51,13 @@ exports.getUserConfig = functions.https.onRequest((req, res) => {
 exports.getRooms = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { roomIds } = req.body;
-    async function getRooms(roomIds) {
+    async function getRoomsByKeys(roomIds) {
       return Promise.all(roomIds.map(async room => {
         const roomRef = await admin.database().ref(`rooms/${room}`);
         return roomRef.once('value');
       }));
     };
-    const subscribedRooms = await getRooms(roomIds);
+    const subscribedRooms = await getRoomsByKeys(roomIds);
     res.json({ subscribedRooms });
   });
 });
@@ -222,14 +222,15 @@ exports.getMessages = functions.https.onRequest((req, res) => {
   // };
   return cors(req, res, async () => {
     const { roomId, messageCount } = JSON.parse(req.body);
+    console.log(roomId, messageCount, 'asnclksmdlkc');
     const messagesRef = await admin.database().ref(`messages`);
     await messagesRef
-      .orderByChild('sentAt')
+      .orderByChild('messages/roomId')
       .equalTo(roomId)
       .limitToLast(messageCount)
       .once("value", async snap => {
         const messages = snap.val();
-        res.send({ messages, notifications });
+        res.send({ messages });
       }
     );
   });

@@ -1,7 +1,11 @@
 import React from 'react'
 
 export const SessionContext = React.createContext({
-  session: {},
+  activeRoom: {},
+  requestNotifPermission: () => {},
+  user: {},
+  userConfig: {},
+  fcmToken: '',
   updateSession: () => {}
 });
 

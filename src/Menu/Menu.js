@@ -1,40 +1,41 @@
 import React from 'react';
 import Rooms from '../Rooms/Rooms';
 import Users from '../Users/Users';
+import ResourceContext from '../ResourceContext.js';
 import './Menu.css';
 
 class Menu extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
+
+  static contextType = ResourceContext;
+  static defaultProps = {
+    acrtiveRoom: {},
+    subscribedRooms: [],
+    updateActiveRoom: () => {},
+    users: {}
   };
 
   render() {
-    const {firebase, activeRoom, user, userConfig, subscribedRooms, setActiveRoom } = this.props;
+    const {activeRoom, subscribedRooms, updateActiveRoom, users } = this.props;
+    const { user } = this.props;
+
     return (
       <section className="menuComponent">
         <div className="userAvatarContainer">
           <img
             className="userAvatar"
             alt="user"
-            src={user.photoURL}
+            src={this.props.user.photoURL || ''}
            />
-          <p className="menuDisplayName">{ user.displayName }</p>
+          <p className="menuDisplayName">{ this.props.user.displayName }</p>
         </div>
         <div className="menuRoomListContainer">
           <h1>rooms</h1>
           <Rooms
-            firebase={firebase}
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
             subscribedRooms={subscribedRooms}
-            setActiveRoom={setActiveRoom}
           />
         </div>
         <h1>users</h1>
-        <Users firebase={firebase} />
+        <Users users={users} />
       </section>
     );
   }

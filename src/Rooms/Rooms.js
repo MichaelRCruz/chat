@@ -6,7 +6,7 @@ class Rooms extends React.Component {
 
   static contextType = ResourceContext;
   static defaultProps = {
-    rooms: [],
+    subscribedRooms: [],
     updateActiveRoom: () => {}
   };
 
@@ -15,7 +15,8 @@ class Rooms extends React.Component {
   }
 
   render() {
-    const { subscribedRooms } = this.context;
+    const { subscribedRooms } = this.props;
+    const fallbackRooms = subscribedRooms ? subscribedRooms : [];
     const rooms = subscribedRooms.map((subscribedRoom, index) => {
       return (
         <li className="subscribedRoom" key={subscribedRoom.key}>

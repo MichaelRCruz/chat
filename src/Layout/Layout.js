@@ -1,6 +1,6 @@
 import React from 'react';
 import './Layout.css';
-import { goFetch } from '../utils.js';
+import { goFetch, throttling } from '../utils.js';
 import SessionContext from '../SessionContext.js';
 import ResourceContext from '../ResourceContext.js';
 
@@ -12,37 +12,10 @@ import UserProfile from '../UserProfile/UserProfile.js';
 class Layout extends React.Component {
 
   static contextType = SessionContext;
-  static defaultProps = {
-    subscribedRooms: [],
-    activeRoom: {}
-  };
 
-  state = {
-    isLoading: true,
-    showProfile: false,
-    showDashboard: false,
-    subscribedRooms: [],
-    createRoom: () => {},
-    updateActiveRoom: this.updateActiveRoom,
-    destroyRoom: () => {}
-  };
-
-  updateActiveRoom = activeRoom => {
-    this.setState({ activeRoom });
-  };
-
-  getAndSetSubscribedRooms = async roomIds => {
-    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
-    const subscribedRooms = await goFetch(url, {
-      body: JSON.parse({ roomIds })
-    });
-    const activeRoom =  subscribedRooms ? subscribedRooms[0] : {};
-    this.setSubscribedRooms(subscribedRooms, activeRoom);
-  };
-
-  setSubscribedRooms = (subscribedRooms, activeRoom) => {
-    this.setState({ subscribedRooms, activeRoom });
-  };
+  firebase = this.props.firebase;
+  onlineUsersRef = this.firebase.database().ref(`users`);
+  messagesRef = this.props.firebase.database().ref(`messages`);
 
   toggleUserProfileModal = () => {
     this.setState({
@@ -56,36 +29,99 @@ class Layout extends React.Component {
     });
   };
 
-  async componentDidMount() {
-    const { userConfig, user } = this.context;
-    const subscribedRoomIds = userConfig.rooms;
-    const response = await this.getAndSetSubscribedRooms(subscribedRoomIds);
-  }
+  state = {
+    isLoading: false,
+    showDashboard: false,
+    showProfile: false,
+    messages: {},
+    subscribedRooms: [],
+    users: []
+  };
+
+  updateActiveRoom = activeRoom => {
+    this.setState({ activeRoom }, () => {
+      this.setMessagesListeners(activeRoom.key);
+    });
+  };
+
+  updateMessages = messages => {
+    this.setState({
+      messages: this.state.messages.concat(messages)
+    });
+  };
+
+  setListeners(activeRoomKey) {
+      const onlineUsers = [];
+      const userThrottler = throttling(() => {
+        this.setState({ onlineUsers: onlineUsers.slice(0) });
+      }, 100);
+      this.onlineUsersRef
+        .on('child_added', snapshot => {
+        const onlineUser = Object.assign(snapshot.val(), {key: snapshot.key});
+        if (onlineUser.activity.isOnline) {
+          onlineUsers.push(onlineUser);
+        }
+        userThrottler();
+      });
+      this.messagesRef
+        .orderByChild('roomId')
+        .equalTo(activeRoomKey)
+        .limitToLast(1)
+        .on('child_added', snapshot => {
+          if (snapshot.val().roomId === activeRoomKey) {
+            this.updateMessages(snapshot.val());
+          }
+      });
+      this.messagesRef
+        .orderByChild('roomId')
+        .equalTo(activeRoomKey)
+        .limitToLast(1)
+        .on('child_removed', snapshot  => {
+          if (snapshot.val().roomId === this.state.activeRoom.key) {
+            this.updateMessages(snapshot.val());
+          }
+      });
+  };
+
+  getRooms = async rooms => {
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const roomIds = rooms ? rooms : [];
+    const subscribedRooms = await goFetch(url, {
+      body: JSON.stringify({ roomIds })
+    });
+    const activeRoom =  subscribedRooms ? subscribedRooms[0] : {};
+    this.setState({ subscribedRooms, subscribedRoomIds: roomIds });
+  };
+
+  getMessages = (roomId, messageCount) => {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
+      method: 'POST',
+      body: JSON.stringify({ roomId, messageCount })
+    })
+    .then(res => {
+      return res.json();
+    }).catch(error => {
+      console.log(error);
+    });
+  };
 
   render() {
     const { isLoading, showProfile, showDashboard } = this.state;
-    const { user, userConfig } = this.context;
+    const sessionProps = this.props.session;
 
-    const sessionValue = {
+    const resourceValue = {
       messages: this.state.messages,
       subscribedRooms: this.state.subscribedRooms,
       users: this.state.users,
-      createMessage: this.state.createMessage,
-      updateMessage: this.state.updateMessage,
-      destroyMessage: this.state.destroyMessage,
-      createRoom: this.state.createRoom,
-      updateRoom: this.state.updateRoom,
-      destroyRoom: this.state.destroyRoom,
-      updateUser: this.state.updateUser,
-      destrotyUser: this.state.destroyUser
     }
+
     return (
       <main className='Layout'>
-        <ResourceContext.Provider value={sessionValue}>
+        <ResourceContext.Provider value={resourceValue}>
           {isLoading ? <div className="loadingAnimation"></div> : null}
-          {showProfile ? <UserProfile userConfig={userConfig} user={user} /> : null}
-          {showDashboard ? <Dashboard userConfig={userConfig} user={user} /> : null}
-          {user ? <Chat userConfig={userConfig} user={user}  /> : null}
+          {showProfile ? <UserProfile {...sessionProps} /> : null}
+          {showDashboard ? <Dashboard {...sessionProps} /> : null}
+          {!isLoading ? <Chat {...sessionProps} /> : null}
         </ResourceContext.Provider>
       </main>
     );
@@ -94,4 +130,10 @@ class Layout extends React.Component {
 
 }
 
-export default Layout;
+// export default Layout;
+
+export default React.forwardRef((props, ref) => (
+  <SessionContext.Consumer>
+    {session => <Layout {...props} session={session} ref={ref} />}
+  </SessionContext.Consumer>
+));

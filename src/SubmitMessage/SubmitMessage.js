@@ -11,7 +11,6 @@ class Messages extends Component {
       messageError: '',
       isValidated: false
     }
-    this.messagesRef = this.props.firebase.database().ref('messages');
   };
 
   submitMessage = event => {

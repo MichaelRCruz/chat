@@ -4,12 +4,7 @@ import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 import './UserProfile.css';
 
 class UserProfile extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
 
-    }
-  };
 
   signOut = async () => {
     const { firebase, userConfig } = this.props;

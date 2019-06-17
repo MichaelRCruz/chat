@@ -5,15 +5,16 @@ import Splash from './Splash/Splash.js';
 import SignIn from './SignIn/SignIn.js';
 import UserProfile from './UserProfile/UserProfile.js';
 import SessionContext from './SessionContext.js';
+import { goFetch, debouncer } from './utils.js';
 
 class App extends Component {
   firebase = this.props.firebase;
   state = {
-    // updateSession: () => {},
-    // userConfig: {},
-    // subscribedRooms: [],
-    // activeRoom: {},
-    // user: {},
+    activeRoom: {},
+    fcmToken: '',
+    updateSession: () => {},
+    user: {},
+    userConfig: {}
   };
 
   updateSession = options => {
@@ -43,7 +44,8 @@ class App extends Component {
   requestNotifPermission = (uid, messaging) => {
     return messaging.requestPermission()
     .then(() => {
-      return messaging.getToken();
+      const fcmToken = messaging.getToken();
+      return fcmToken;
     })
     .then(token => {
       console.log(token);
@@ -52,9 +54,9 @@ class App extends Component {
         return token;
       });
     })
-    .catch(function(err) {
-      console.log('error occured from requestNotifPermission()', err);
-      return null;
+    .catch(error => {
+      console.log('error occured from requestNotifPermission()', error);
+      return error;
     });
   };
 
@@ -76,31 +78,37 @@ class App extends Component {
       const messaging = this.firebase.messaging();
       const currentFcmToken = await messaging.getToken();
       this.handleFcmToken(currentFcmToken, user.uid, true);
-      messaging.onTokenRefresh(function() {
+      messaging.onTokenRefresh(async () => {
         console.log('refreshed token');
-        this.requestNotifPermission(user.uid, messaging);
+        const fcmToken = await this.requestNotifPermission(user.uid, messaging);
+        return fcmToken;
       });
+    } else {
+      return false;
     }
   };
 
-  getRoomsAndUserConfig = (user) => {
-    const { uid } = user;
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/getRoomsAndUserConfig`, {
+  getUserConfig = async uid => {
+    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
+    const userConfig = await goFetch(url, {
       method: 'POST',
       body: JSON.stringify({ uid })
-    })
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(response) {
-      return response;
-    })
-    .catch(error => {
-      console.log(error);
     });
+    return userConfig;
   };
 
-  async componentDidMount() {
+  getActiveRoom = async roomId => {
+    const payload = [roomId];
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const response = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds: payload })
+    });
+    return response.subscribedRooms[0];
+    // return activeRoom;
+  }
+
+  componentDidMount() {
     this.handleConnection();
     this.firebase.auth()
       .onAuthStateChanged(async user => {
@@ -108,7 +116,10 @@ class App extends Component {
           this.firebase.auth().signOut();
           this.updateSession({ onAuthStateChangedError: true });
         } else {
-          this.updateSession({ user });
+          const fcmToken = await this.initNotifications(user);
+          const {userConfig} = await this.getUserConfig(user.uid);
+          const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
+          this.updateSession({ userConfig, activeRoom, user, fcmToken });
         }
       });
     this.firebase.auth()
@@ -143,11 +154,11 @@ class App extends Component {
 
   render() {
     const sessionValue = {
-      updateSession: this.updateSession,
-      userConfig: this.state.userConfig,
-      subscribedRooms: this.state.subscribedRooms,
       activeRoom: this.state.activeRoom,
+      requestNotifPermission: this.requestNotifPermission,
       user: this.state.user,
+      userConfig: this.state.userConfig,
+      fcmToken: this.state.fcmToken
     }
     return (
       <main className='App'>

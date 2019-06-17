@@ -3,12 +3,22 @@ import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
+import ResourceContext from '../ResourceContext.js';
 
-class Layout extends React.Component {
+class Chat extends React.Component {
   state = {
     // isLoading: true,
     // messageMode: 'notifications'
   }
+
+  static contextType = ResourceContext;
+  static defaultProps = {
+    user: {},
+    users: [],
+    subscribedRooms: [],
+    activeRoom: {},
+    messages: {}
+  };
 
   toggleDashboard = () => {
     this.props.toggleDashboard();
@@ -18,8 +28,14 @@ class Layout extends React.Component {
     this.props.toggleUserProfile();
   };
 
+  componentDidMount() {
+    const { resourcce } = this.props;
+    console.log('are we reaching: ', resourcce);
+  }
+
   render() {
-    // const { users, rooms, messages } = this.context;
+    const { users, subscribedRooms=[], activeRoom, messages } = this.context;
+    const { user } = this.props;
     return (
       <div className="appComponent">
         <header className="header">
@@ -38,17 +54,23 @@ class Layout extends React.Component {
           </div>
         </header>
         <aside className="sidebar">
-          <Menu />
+          <Menu user={user} subscribedRooms={subscribedRooms} />
         </aside>
         <main className="main">
-          <Messages />
+          <Messages activeRoom={activeRoom} messages={messages} />
         </main>
         <footer className="footer">
-          <SubmitMessage />
+          <SubmitMessage activeRoom={activeRoom} />
         </footer>
       </div>
     );
   }
 }
 
-export default Layout;
+// export default React.forwardRef((props, ref) => (
+//   <ResourceContext.Consumer>
+//     {resource => <Chat {...props} theme={resource} ref={ref} />}
+//   </ResourceContext.Consumer>
+// ));
+
+export default Chat;

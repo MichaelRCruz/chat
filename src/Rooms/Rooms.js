@@ -1,23 +1,23 @@
 import React from 'react';
-import ResourceContext from '../ResourceContext.js';
+import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
-
   updateSession = activeRoom => {
     this.context.updateSession({ activeRoom });
   }
 
+  static contextType = SessionContext;
   render() {
-    const { subscribedRooms } = this.props;
-    console.log(subscribedRooms);
+    const { subscribedRooms=[] } = this.context.state || {};
     const rooms = subscribedRooms.map((subscribedRoom, index) => {
       return (
         <li className="subscribedRoom" key={subscribedRoom.key}>
           <button
             className="roomNameButton"
             onClick={() => {
-                this.updateRoom(subscribedRoom)}
+                this.updateRoom(subscribedRoom)
+              }
             }>
             <div>
               <i className="material-icons people">people</i>

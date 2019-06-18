@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
@@ -12,8 +12,6 @@ class Chat extends React.Component {
     // messageMode: 'notifications'
   }
 
-  static contextType = SessionContext;
-
   toggleDashboard = () => {
     this.props.toggleDashboard();
   };
@@ -22,6 +20,7 @@ class Chat extends React.Component {
     this.props.toggleUserProfile();
   };
 
+  static contextType = SessionContext;
   render() {
     const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context.state || {};
     console.log(this.context);

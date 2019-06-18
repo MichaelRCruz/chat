@@ -11,38 +11,38 @@ class Message extends Component {
     super(props);
   }
 
-  removeMessage(message) {
-    this.messagesRef.child(message.key).remove();
-  }
+  // removeMessage(message) {
+  //   this.messagesRef.child(message.key).remove();
+  // }
 
   render() {
-    const { message, user, prevUid } = this.props;
+    const { msg, user, prevUid } = this.props;
     return (
-      <li key={message.key} className="message">
+      <li key={msg.key} className="message">
         <div className="imageMessageContainer">
           <img
-            className={"messageImage " + (prevUid !== message.creator.uid ? '' : 'visibilityHidden')}
+            className={"messageImage " + (prevUid !== msg.creator.uid ? '' : 'visibilityHidden')}
             alt="user"
-            src={message.creator && message.creator.photoURL
-            ? message.creator.photoURL : defaultUserImage}
+            src={msg.creator && msg.creator.photoURL
+            ? msg.creator.photoURL : defaultUserImage}
            />
           <div className="nameMessageContainer">
             <div className="display-name">
-              {message.creator.displayName}
-              {message.creator && this.props.user && message.creator.email === this.props.user.email &&
+              {msg.creator.displayName}
+              {msg.creator && user && msg.creator.email === user.email &&
                 <button
-                  onClick={ () => this.removeMessage(message) }
+                  onClick={ () => this.removeMessage(msg) }
                   className="remove-message-button">
                   &times;
                 </button>
               }
             </div>
             <div className="content">
-              <ReactMarkdown escapeHtml={false} source={message.content} />
+              <ReactMarkdown escapeHtml={false} source={msg.content} />
             </div>
           </div>
         </div>
-        <Timeago className="timeago" timestamp={ message.sentAt || 'sometime' } />
+        <Timeago className="timeago" timestamp={ msg.sentAt || 'sometime' } />
       </li>
     )
   }

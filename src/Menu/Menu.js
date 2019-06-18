@@ -5,33 +5,21 @@ import ResourceContext from '../ResourceContext.js';
 import './Menu.css';
 
 class Menu extends React.Component {
-
-  static contextType = ResourceContext;
-  static defaultProps = {
-    acrtiveRoom: {},
-    subscribedRooms: [],
-    updateActiveRoom: () => {},
-    users: {}
-  };
-
   render() {
-    const {activeRoom, subscribedRooms, updateActiveRoom, users } = this.props;
-    const { user } = this.props;
-
+    const {subscribedRooms, users, user } = this.props;
     return (
       <section className="menuComponent">
         <div className="userAvatarContainer">
           <img
             className="userAvatar"
             alt="user"
-            src={this.props.user.photoURL || ''}
+            src={user ? user.photoURL : ''}
            />
-          <p className="menuDisplayName">{ this.props.user.displayName }</p>
+          <p className="menuDisplayName">{ user.displayName }</p>
         </div>
         <div className="menuRoomListContainer">
           <h1>rooms</h1>
-          <Rooms
-            subscribedRooms={subscribedRooms}
+          <Rooms subscribedRooms={this.subscribedRooms}
           />
         </div>
         <h1>users</h1>

@@ -23,11 +23,8 @@ class Chat extends React.Component {
   };
 
   render() {
-    const { user, activeRoom, subscribedRooms, messages } = this.context || {};
+    const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context || {};
     console.log(this.context);
-    // const { subscribedRooms=[], messages={} } = this.props.resource;
-    // console.log(this.context);
-    // console.log(this.props);
     return (
       <div className="appComponent">
         <header className="header">
@@ -45,7 +42,28 @@ class Chat extends React.Component {
                onClick={this.toggleUserProfile}>person</i>
           </div>
         </header>
-
+        <aside className="sidebar">
+          <Menu
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
+            subscribedRooms={subscribedRooms}
+          />
+        </aside>
+        <main className="main">
+          <Messages
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
+          />
+        </main>
+        <footer className="footer">
+          <SubmitMessage
+            activeRoom={activeRoom}
+            user={user}
+            userConfig={userConfig}
+          />
+        </footer>
       </div>
     )
   }

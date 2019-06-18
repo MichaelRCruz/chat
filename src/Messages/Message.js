@@ -18,7 +18,7 @@ class Message extends Component {
   render() {
     const { msg, user, prevUid } = this.props;
     return (
-      <li key={msg.key} className="message">
+      <li className="message">
         <div className="imageMessageContainer">
           <img
             className={"messageImage " + (prevUid !== msg.creator.uid ? '' : 'visibilityHidden')}

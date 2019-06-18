@@ -1,10 +1,5 @@
 import React from 'react';
 
-const SessionContext = React.createContext({
-  activeRoom: {},
-  fcmToken: '',
-  user: {},
-  userConfig: {}
-});
+const SessionContext = React.createContext();
 
 export default SessionContext;

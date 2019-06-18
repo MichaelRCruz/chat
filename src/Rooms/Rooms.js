@@ -3,10 +3,12 @@ import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
-  updateSession = activeRoom => {
-    this.context.updateSession({ activeRoom });
+  handleSessionChange = activeRoom => {
+    this.context.updateSession(activeRoom);
   }
-
+  static defaultProps ={
+    onUpdateRoom: () => {},
+  }
   static contextType = SessionContext;
   render() {
     const { subscribedRooms=[] } = this.context.state || {};
@@ -15,10 +17,7 @@ class Rooms extends React.Component {
         <li className="subscribedRoom" key={subscribedRoom.key}>
           <button
             className="roomNameButton"
-            onClick={() => {
-                this.updateRoom(subscribedRoom)
-              }
-            }>
+            onClick={this.handleSessionChange.bind(this, subscribedRoom)}>
             <div>
               <i className="material-icons people">people</i>
               <p className="roomName">{ subscribedRoom.name }</p>

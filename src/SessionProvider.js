@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import SessionContext from './SessionContext.js';
 
-class SessionProvider extends React.Component {
+class SessionProvider extends React.PureComponent {
   firebase = this.props.firebase;
   onlineUsersRef = this.firebase.database().ref(`users`);
   messagesRef = this.firebase.database().ref(`messages`);
@@ -226,7 +226,8 @@ class SessionProvider extends React.Component {
       <SessionContext.Provider value={{
         state: this.state,
         updateSession: resource => {
-          this.setState({ resource })
+          console.log('are we reaching: ');
+          // this.setState({resource})
         }
       }}>
         {this.props.children}

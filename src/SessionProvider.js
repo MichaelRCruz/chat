@@ -1,20 +1,24 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
-import { goFetch, debouncer } from './utils.js';
+import { goFetch, debouncer, throttling } from './utils.js';
 import SessionContext from './SessionContext.js';
 
-class SessionProvider extends PureComponent {
+class SessionProvider extends React.Component {
   firebase = this.props.firebase;
+  onlineUsersRef = this.firebase.database().ref(`users`);
+  messagesRef = this.firebase.database().ref(`messages`);
   state = {
     activeRoom: {},
     fcmToken: '',
     user: {},
-    userConfig: {}
+    userConfig: {},
+    messages: {},
+    subscribedRooms: [],
+    users: []
   };
-
-  updateSession = options => {
-    this.setState(options);
-  };
+  // updateSession = options => {
+  //   this.setState(options);
+  // };
 
   handleConnection = uid => {
     const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
@@ -83,6 +87,65 @@ class SessionProvider extends PureComponent {
     }
   };
 
+  setListeners(activeRoomKey) {
+    const onlineUsers = [];
+    const userThrottler = throttling(() => {
+      this.setState({ onlineUsers: onlineUsers.slice(0) });
+    }, 100);
+    this.onlineUsersRef
+      .on('child_added', snapshot => {
+      const onlineUser = Object.assign(snapshot.val(), {key: snapshot.key});
+      if (onlineUser.activity.isOnline) {
+        onlineUsers.push(onlineUser);
+      }
+      userThrottler();
+    });
+    this.messagesRef
+      .orderByChild('roomId')
+      .equalTo(activeRoomKey)
+      .limitToLast(1)
+      .on('child_added', snapshot => {
+        if (snapshot.val().roomId === activeRoomKey) {
+          const message = Object.assign({}, snapshot.val(), { key: snapshot.key });
+          this.updateMessages(message);
+        }
+    });
+    this.messagesRef
+      .orderByChild('roomId')
+      .equalTo(activeRoomKey)
+      .limitToLast(1)
+      .on('child_removed', snapshot  => {
+        if (snapshot.val().roomId === activeRoomKey) {
+          const message = Object.assign({}, snapshot.val(), { key: snapshot.key });
+          this.updateMessages(message);
+        }
+    });
+  };
+
+  getRooms = async rooms => {
+    console.log(this.props.session);
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const roomIds = rooms ? rooms : [];
+    const subscribedRooms = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds })
+    });
+    return subscribedRooms ? subscribedRooms : {};
+  };
+
+  getMessages = (roomId, messageCount) => {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
+      method: 'POST',
+      body: JSON.stringify({ roomId, messageCount })
+    })
+    .then(res => {
+      return res.json();
+    }).catch(error => {
+      console.log(error);
+    });
+
+  };
+
   getUserConfig = async uid => {
     const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
     const userConfig = await goFetch(url, {
@@ -103,16 +166,6 @@ class SessionProvider extends PureComponent {
     // return activeRoom;
   };
 
-  // shouldComponentUpdate(nextProps, nextState, nextContext) {
-  //   const nextUser = nextProps.session.state.user.displayName || '';
-  //   const currentUser = this.session.state.user.displayName || '';
-  //   if (nextUser !== currentUser) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
-
   componentDidMount() {
     // this.firebase.auth().signOut();
     this.handleConnection();
@@ -125,7 +178,9 @@ class SessionProvider extends PureComponent {
           const fcmToken = await this.initNotifications(user);
           const {userConfig} = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
-          this.updateSession({ userConfig, activeRoom, user, fcmToken });
+          const subscribedRooms = await this.getRooms(userConfig.rooms);
+          const messages = await this.getMessages(activeRoom.key, 100);
+          this.setState({ userConfig, activeRoom, user, fcmToken, messages, subscribedRooms });
         }
       });
     this.firebase.auth()
@@ -169,8 +224,8 @@ class SessionProvider extends PureComponent {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        updateSession: thing => {
-          this.setState({ thing })
+        updateSession: resource => {
+          this.setState({ resource })
         }
       }}>
         {this.props.children}

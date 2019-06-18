@@ -23,8 +23,9 @@ class Chat extends React.Component {
   };
 
   render() {
-    const { user, activeRoom } = this.context || {};
-    const { subscribedRooms=[], messages={} } = this.props.resource;
+    const { user, activeRoom, subscribedRooms, messages } = this.context || {};
+    console.log(this.context);
+    // const { subscribedRooms=[], messages={} } = this.props.resource;
     // console.log(this.context);
     // console.log(this.props);
     return (
@@ -50,10 +51,4 @@ class Chat extends React.Component {
   }
 }
 
-// export default Chat;
-
-export default React.forwardRef((props, ref) => (
-  <ResourceContext.Consumer>
-    {resource => <Chat {...props} resource={resource} ref={ref} />}
-  </ResourceContext.Consumer>
-));
+export default Chat;

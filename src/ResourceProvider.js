@@ -9,18 +9,6 @@ class ResourceProvider extends React.PureComponent {
   onlineUsersRef = this.firebase.database().ref(`users`);
   messagesRef = this.firebase.database().ref(`messages`);
 
-  toggleUserProfileModal = () => {
-    this.setState({
-      showProfile: !this.state.showProfile
-    });
-  };
-
-  toggleDashboardModal = () => {
-    this.setState({
-      showDashboard: !this.state.showDashboard
-    });
-  };
-
   updateResource = options => {
     this.setState(options);
   };
@@ -89,19 +77,19 @@ class ResourceProvider extends React.PureComponent {
 
   };
 
-  async shouldComponentUpdate(nextProps, nextState, nextContext) {
-    // console.log(nextProps);
-    // const muhProps = nextProps ? nextProps.session.state : {};
-    // const { user, userConfig, activeRoom } = muhProps;
-    // if (activeRoom.key) {
-    //   await this.setListeners(activeRoom.key);
-    //   const messages = this.getMessages(activeRoom.key, 100);
-    //   const subscribedRooms = this.getRooms(userConfig.rooms);
-    //   await this.updateResource(messages, subscribedRooms);
-    //   return true;
-    // }
-    console.log(nextProps);
-  };
+  // async shouldComponentUpdate(nextProps, nextState, nextContext) {
+  //   // console.log(nextProps);
+  //   // const muhProps = nextProps ? nextProps.session.state : {};
+  //   // const { user, userConfig, activeRoom } = muhProps;
+  //   // if (activeRoom.key) {
+  //   //   await this.setListeners(activeRoom.key);
+  //   //   const messages = this.getMessages(activeRoom.key, 100);
+  //   //   const subscribedRooms = this.getRooms(userConfig.rooms);
+  //   //   await this.updateResource(messages, subscribedRooms);
+  //   //   return true;
+  //   // }
+  //   console.log(nextProps);
+  // };
 
   render() {
     console.log('rendering ResourceProvider');

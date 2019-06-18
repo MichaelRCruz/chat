@@ -225,7 +225,7 @@ exports.getMessages = functions.https.onRequest((req, res) => {
     console.log(roomId, messageCount, 'asnclksmdlkc');
     const messagesRef = await admin.database().ref(`messages`);
     await messagesRef
-      .orderByChild('messages/roomId')
+      .orderByChild('roomId')
       .equalTo(roomId)
       .limitToLast(messageCount)
       .once("value", async snap => {

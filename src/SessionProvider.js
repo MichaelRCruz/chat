@@ -168,18 +168,19 @@ class SessionProvider extends React.Component {
 
   componentDidMount() {
     // this.firebase.auth().signOut();
+    // debugger;
     this.handleConnection();
     this.firebase.auth()
       .onAuthStateChanged(async user => {
         if (!user) {
-          this.updateSession({ onAuthStateChangedError: true });
+          this.setState({ onAuthStateChangedError: true });
           this.firebase.auth().signOut();
         } else {
           const fcmToken = await this.initNotifications(user);
           const {userConfig} = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
-          const subscribedRooms = await this.getRooms(userConfig.rooms);
-          const messages = await this.getMessages(activeRoom.key, 100);
+          const {subscribedRooms} = await this.getRooms(userConfig.rooms);
+          const {messages} = await this.getMessages(activeRoom.key, 100);
           this.setState({ userConfig, activeRoom, user, fcmToken, messages, subscribedRooms });
         }
       });
@@ -189,11 +190,11 @@ class SessionProvider extends React.Component {
         if (result.credential) {
           const { credential } = result;
           const isNewUser = result.additionalUserInfo.isNewUser;
-          this.updateSession({ credential, isNewUser });
+          this.setState({ credential, isNewUser });
         }
       })
       .catch(error => {
-        this.updateSession({ error, onGetRedirectResultError: true });
+        this.setState({ error, onGetRedirectResultError: true });
       });
     if (this.firebase.auth().isSignInWithEmailLink(window.location.href)) {
       const stashedEmail = window.localStorage.getItem('emailForSignIn');
@@ -204,11 +205,11 @@ class SessionProvider extends React.Component {
             window.localStorage.removeItem('emailForSignIn');
             const { credential, user } = result;
             const isNewUser = result.additionalUserInfo.isNewUser;
-            this.updateSession({ credential, isNewUser });
+            this.setState({ credential, isNewUser });
           }
         })
         .catch(error => {
-          this.updateSession({ error, onSignInWithEmailLinkError: true });
+          this.setState({ error, onSignInWithEmailLinkError: true });
         });
     }
   };

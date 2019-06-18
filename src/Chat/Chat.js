@@ -23,7 +23,7 @@ class Chat extends React.Component {
   };
 
   render() {
-    const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context || {};
+    const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context.state || {};
     console.log(this.context);
     return (
       <div className="appComponent">

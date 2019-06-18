@@ -4,19 +4,13 @@ import './Rooms.css';
 
 class Rooms extends React.Component {
 
-  static contextType = ResourceContext;
-  static defaultProps = {
-    subscribedRooms: [],
-    updateActiveRoom: () => {}
-  };
-
-  updateActiveRoom = activeRoom => {
-    this.context.updateActiveRoom({ activeRoom });
+  updateSession = activeRoom => {
+    this.context.updateSession({ activeRoom });
   }
 
   render() {
     const { subscribedRooms } = this.props;
-    const fallbackRooms = subscribedRooms ? subscribedRooms : [];
+    console.log(subscribedRooms);
     const rooms = subscribedRooms.map((subscribedRoom, index) => {
       return (
         <li className="subscribedRoom" key={subscribedRoom.key}>

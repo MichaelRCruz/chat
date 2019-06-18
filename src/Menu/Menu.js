@@ -6,7 +6,8 @@ import './Menu.css';
 
 class Menu extends React.Component {
   render() {
-    const {subscribedRooms, users, user } = this.props;
+    const { subscribedRooms, users, user } = this.props;
+    // console.log(this.context.state);
     return (
       <section className="menuComponent">
         <div className="userAvatarContainer">
@@ -19,7 +20,7 @@ class Menu extends React.Component {
         </div>
         <div className="menuRoomListContainer">
           <h1>rooms</h1>
-          <Rooms subscribedRooms={this.subscribedRooms}
+          <Rooms subscribedRooms={subscribedRooms}
           />
         </div>
         <h1>users</h1>

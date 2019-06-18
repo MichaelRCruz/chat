@@ -2,13 +2,8 @@ import React from 'react';
 import { goFetch, throttling } from './utils.js';
 import ResourceContext from './ResourceContext.js';
 import SessionContext from './SessionContext.js';
-import Auth from './Auth/Auth.js';
-import Dashboard from './Dashboard/Dashboard.js';
-import Chat from './Chat/Chat.js';
-import UserProfile from './UserProfile/UserProfile.js';
 
-class ResourceProvider extends React.Component {
-  // static contextType = SessionContext;
+class ResourceProvider extends React.PureComponent {
 
   firebase = this.props.firebase;
   onlineUsersRef = this.firebase.database().ref(`users`);
@@ -26,17 +21,14 @@ class ResourceProvider extends React.Component {
     });
   };
 
+  updateResource = options => {
+    this.setState(options);
+  };
+
   state = {
-    isLoading: false,
-    showDashboard: false,
-    showProfile: false,
     messages: {},
     subscribedRooms: [],
     users: []
-  };
-
-  updateResource = options => {
-    this.setState(options);
   };
 
   setListeners(activeRoomKey) {
@@ -54,7 +46,7 @@ class ResourceProvider extends React.Component {
     });
     this.messagesRef
       .orderByChild('roomId')
-      .equalTo(`${activeRoomKey}`)
+      .equalTo(activeRoomKey)
       .limitToLast(1)
       .on('child_added', snapshot => {
         if (snapshot.val().roomId === activeRoomKey) {
@@ -64,7 +56,7 @@ class ResourceProvider extends React.Component {
     });
     this.messagesRef
       .orderByChild('roomId')
-      .equalTo(`${activeRoomKey}`)
+      .equalTo(activeRoomKey)
       .limitToLast(1)
       .on('child_removed', snapshot  => {
         if (snapshot.val().roomId === activeRoomKey) {
@@ -97,7 +89,22 @@ class ResourceProvider extends React.Component {
 
   };
 
+  async shouldComponentUpdate(nextProps, nextState, nextContext) {
+    // console.log(nextProps);
+    // const muhProps = nextProps ? nextProps.session.state : {};
+    // const { user, userConfig, activeRoom } = muhProps;
+    // if (activeRoom.key) {
+    //   await this.setListeners(activeRoom.key);
+    //   const messages = this.getMessages(activeRoom.key, 100);
+    //   const subscribedRooms = this.getRooms(userConfig.rooms);
+    //   await this.updateResource(messages, subscribedRooms);
+    //   return true;
+    // }
+    console.log(nextProps);
+  };
+
   render() {
+    console.log('rendering ResourceProvider');
     const { isLoading, showProfile, showDashboard } = this.state;
     const resourceValue = {
       messages: this.state.messages,
@@ -115,4 +122,10 @@ class ResourceProvider extends React.Component {
 
 }
 
-export default ResourceProvider;
+export default React.forwardRef((props, ref) => (
+  <SessionContext.Consumer>
+    {session => <ResourceProvider {...props} session={session} ref={ref} />}
+  </SessionContext.Consumer>
+));
+
+// export default ResourceProvider;

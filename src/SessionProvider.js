@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer } from './utils.js';
 import SessionContext from './SessionContext.js';
 
-class SessionProvider extends Component {
+class SessionProvider extends PureComponent {
   firebase = this.props.firebase;
   state = {
     activeRoom: {},
@@ -101,7 +101,17 @@ class SessionProvider extends Component {
     });
     return response.subscribedRooms[0];
     // return activeRoom;
-  }
+  };
+
+  // shouldComponentUpdate(nextProps, nextState, nextContext) {
+  //   const nextUser = nextProps.session.state.user.displayName || '';
+  //   const currentUser = this.session.state.user.displayName || '';
+  //   if (nextUser !== currentUser) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   componentDidMount() {
     // this.firebase.auth().signOut();

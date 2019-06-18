@@ -4,18 +4,15 @@ import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 import SessionContext from '../SessionContext.js';
-// import ResourceContext from '../ResourceContext.js';
+import ResourceContext from '../ResourceContext.js';
 
 class Chat extends React.Component {
   state = {
-    // isLoading: true,
+    isLoading: true
     // messageMode: 'notifications'
   }
 
   static contextType = SessionContext;
-  static defaultProps = {
-    session: {}
-  };
 
   toggleDashboard = () => {
     this.props.toggleDashboard();
@@ -26,8 +23,10 @@ class Chat extends React.Component {
   };
 
   render() {
-    // const { activeRoom={} } = this.context;
-    console.log(this.context);
+    const { user, activeRoom } = this.context || {};
+    const { subscribedRooms=[], messages={} } = this.props.resource;
+    // console.log(this.context);
+    // console.log(this.props);
     return (
       <div className="appComponent">
         <header className="header">
@@ -51,10 +50,10 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat;
+// export default Chat;
 
-// export default React.forwardRef((props, ref) => (
-//   <ResourceContext.Consumer>
-//     {resource => <Chat {...props} resource={resource} ref={ref} />}
-//   </ResourceContext.Consumer>
-// ));
+export default React.forwardRef((props, ref) => (
+  <ResourceContext.Consumer>
+    {resource => <Chat {...props} resource={resource} ref={ref} />}
+  </ResourceContext.Consumer>
+));

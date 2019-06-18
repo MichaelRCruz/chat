@@ -122,50 +122,6 @@ class SessionProvider extends React.PureComponent {
     });
   };
 
-  getRooms = async rooms => {
-    console.log(this.props.session);
-    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
-    const roomIds = rooms ? rooms : [];
-    const subscribedRooms = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ roomIds })
-    });
-    return subscribedRooms ? subscribedRooms : {};
-  };
-
-  getMessages = (roomId, messageCount) => {
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
-      method: 'POST',
-      body: JSON.stringify({ roomId, messageCount })
-    })
-    .then(res => {
-      return res.json();
-    }).catch(error => {
-      console.log(error);
-    });
-
-  };
-
-  getUserConfig = async uid => {
-    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
-    const userConfig = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ uid })
-    });
-    return userConfig;
-  };
-
-  getActiveRoom = async roomId => {
-    const payload = [roomId];
-    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
-    const response = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ roomIds: payload })
-    });
-    return response.subscribedRooms[0];
-    // return activeRoom;
-  };
-
   componentDidMount() {
     // this.firebase.auth().signOut();
     // debugger;
@@ -214,6 +170,60 @@ class SessionProvider extends React.PureComponent {
     }
   };
 
+  getRooms = async rooms => {
+    console.log(this.props.session);
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const roomIds = rooms ? rooms : [];
+    const subscribedRooms = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds })
+    });
+    return subscribedRooms ? subscribedRooms : {};
+  };
+
+  getMessages = (roomId, messageCount) => {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
+      method: 'POST',
+      body: JSON.stringify({ roomId, messageCount })
+    })
+    .then(res => {
+      return res.json();
+    }).catch(error => {
+      console.log(error);
+    });
+  };
+
+  getUserConfig = async uid => {
+    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
+    const userConfig = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ uid })
+    });
+    return userConfig;
+  };
+
+  getActiveRoom = async roomId => {
+    const payload = [roomId];
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const response = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds: payload })
+    });
+    return response.subscribedRooms[0];
+    // return activeRoom;
+  };
+
+  handleRoomChange = async roomId => {
+    const isCurrent = this.state.activeRoom.key === roomId;
+    if (true) {
+      const { messages } = await this.getMessages(roomId, 100);
+      const { subscribedRooms } = await this.getRooms([roomId]);
+      this.setState({ messages, activeRoom: subscribedRooms[0] });
+    } else {
+      console.log('failed to switch room');
+    }
+  };
+
   render() {
     // const sessionValue = {
     //   activeRoom: this.state.activeRoom,
@@ -225,9 +235,8 @@ class SessionProvider extends React.PureComponent {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        updateSession: resource => {
-          console.log('are we reaching: ');
-          // this.setState({resource})
+        updateRoom: roomId => {
+          this.handleRoomChange(roomId);
         }
       }}>
         {this.props.children}

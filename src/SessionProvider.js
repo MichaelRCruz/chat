@@ -157,18 +157,6 @@ class SessionProvider extends React.PureComponent {
     }
   };
 
-  onlineUsersRef = this.firebase.database().ref(`users`);
-  messagesRef = this.firebase.database().ref(`messages`);
-  state = {
-    activeRoom: {},
-    fcmToken: '',
-    user: {},
-    userConfig: {},
-    messages: {},
-    subscribedRooms: [],
-    users: []
-  };
-
   getRooms = async rooms => {
     console.log(this.props.session);
     const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
@@ -190,7 +178,6 @@ class SessionProvider extends React.PureComponent {
     }).catch(error => {
       console.log(error);
     });
-
   };
 
   getUserConfig = async uid => {
@@ -213,17 +200,54 @@ class SessionProvider extends React.PureComponent {
     // return activeRoom;
   };
 
-  updateActiveRoom = async roomId => {
-    const { messages } = await this.getMessages(roomId, 100);
-    await this.setState({ messages });
-  }
+  updateActiveRoom = async lastVisited => {
+    const { messages } = await this.getMessages(lastVisited, 100);
+    const uid = this.state.user.uid;
+    const updateLastVisitedRef = this.firebase.database().ref(`users/${uid}`);
+    await this.setState({ messages }, () => {
+      updateLastVisitedRef.update({ lastVisited }, error => {
+        this.setState({ warning: {firebase: error} });
+      });
+    });
+  };
+
+  // var adaRef = firebase.database().ref('users/ada');
+  // adaRef.transaction(function(currentData) {
+  //   if (currentData === null) {
+  //     return { name: { first: 'Ada', last: 'Lovelace' } };
+  //   } else {
+  //     console.log('User ada already exists.');
+  //     return; // Abort the transaction.
+  //   }
+  // }, function(error, committed, snapshot) {
+  //   if (error) {
+  //     console.log('Transaction failed abnormally!', error);
+  //   } else if (!committed) {
+  //     console.log('We aborted the transaction (because ada already exists).');
+  //   } else {
+  //     console.log('User ada added!');
+  //   }
+  //   console.log("Ada's data: ", snapshot.val());
+  // });
+
+  onlineUsersRef = this.firebase.database().ref(`users`);
+  messagesRef = this.firebase.database().ref(`messages`);
+  state = {
+    activeRoom: {},
+    fcmToken: '',
+    user: {},
+    userConfig: {},
+    messages: {},
+    subscribedRooms: [],
+    users: []
+  };
 
   render() {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        updateActiveRoom: roomId => {
-          this.updateActiveRoom(roomId);
+        updateActiveRoom: lastVisited => {
+          this.updateActiveRoom(lastVisited);
         }
       }}>
         {this.props.children}

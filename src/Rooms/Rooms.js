@@ -3,8 +3,8 @@ import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
-  updateActiveRoom = activeRoom => {
-    this.context.updateActiveRoom(activeRoom);
+  updateActiveRoom = key => {
+    this.context.updateActiveRoom(key);
   }
   static defaultProps = {
     onUpdateRoom: () => {},
@@ -12,15 +12,16 @@ class Rooms extends React.Component {
   static contextType = SessionContext;
   render() {
     const { subscribedRooms=[] } = this.context.state || {};
-    const rooms = subscribedRooms.map((room, index) => {
+    const rooms = subscribedRooms.map((room, i) => {
+      const { key, name } = room;
       return (
-        <li className="subscribedRoom" key={room.key}>
+        <li className="subscribedRoom" key={key}>
           <button
             className="roomNameButton"
-            onClick={this.updateActiveRoom.bind(this, room.key)}>
+            onClick={this.updateActiveRoom.bind(this, key)}>
             <div>
               <i className="material-icons people">people</i>
-              <p className="roomName">{ room.name }</p>
+              <p className="roomName">{ name }</p>
             </div>
           </button>
         </li>

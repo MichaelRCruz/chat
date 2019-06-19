@@ -4,21 +4,8 @@ import { goFetch, debouncer, throttling } from './utils.js';
 import SessionContext from './SessionContext.js';
 
 class SessionProvider extends React.PureComponent {
+
   firebase = this.props.firebase;
-  onlineUsersRef = this.firebase.database().ref(`users`);
-  messagesRef = this.firebase.database().ref(`messages`);
-  state = {
-    activeRoom: {},
-    fcmToken: '',
-    user: {},
-    userConfig: {},
-    messages: {},
-    subscribedRooms: [],
-    users: []
-  };
-  // updateSession = options => {
-  //   this.setState(options);
-  // };
 
   handleConnection = uid => {
     const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
@@ -122,50 +109,6 @@ class SessionProvider extends React.PureComponent {
     });
   };
 
-  getRooms = async rooms => {
-    console.log(this.props.session);
-    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
-    const roomIds = rooms ? rooms : [];
-    const subscribedRooms = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ roomIds })
-    });
-    return subscribedRooms ? subscribedRooms : {};
-  };
-
-  getMessages = (roomId, messageCount) => {
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
-      method: 'POST',
-      body: JSON.stringify({ roomId, messageCount })
-    })
-    .then(res => {
-      return res.json();
-    }).catch(error => {
-      console.log(error);
-    });
-
-  };
-
-  getUserConfig = async uid => {
-    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
-    const userConfig = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ uid })
-    });
-    return userConfig;
-  };
-
-  getActiveRoom = async roomId => {
-    const payload = [roomId];
-    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
-    const response = await goFetch(url, {
-      method: 'POST',
-      body: JSON.stringify({ roomIds: payload })
-    });
-    return response.subscribedRooms[0];
-    // return activeRoom;
-  };
-
   componentDidMount() {
     // this.firebase.auth().signOut();
     // debugger;
@@ -214,20 +157,73 @@ class SessionProvider extends React.PureComponent {
     }
   };
 
+  onlineUsersRef = this.firebase.database().ref(`users`);
+  messagesRef = this.firebase.database().ref(`messages`);
+  state = {
+    activeRoom: {},
+    fcmToken: '',
+    user: {},
+    userConfig: {},
+    messages: {},
+    subscribedRooms: [],
+    users: []
+  };
+
+  getRooms = async rooms => {
+    console.log(this.props.session);
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const roomIds = rooms ? rooms : [];
+    const subscribedRooms = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds })
+    });
+    return subscribedRooms ? subscribedRooms : {};
+  };
+
+  getMessages = (roomId, messageCount) => {
+    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
+      method: 'POST',
+      body: JSON.stringify({ roomId, messageCount })
+    })
+    .then(res => {
+      return res.json();
+    }).catch(error => {
+      console.log(error);
+    });
+
+  };
+
+  getUserConfig = async uid => {
+    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
+    const userConfig = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ uid })
+    });
+    return userConfig;
+  };
+
+  getActiveRoom = async roomId => {
+    const payload = [roomId];
+    const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
+    const response = await goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ roomIds: payload })
+    });
+    return response.subscribedRooms[0];
+    // return activeRoom;
+  };
+
+  updateActiveRoom = async roomId => {
+    const { messages } = await this.getMessages(roomId, 100);
+    await this.setState({ messages });
+  }
+
   render() {
-    // const sessionValue = {
-    //   activeRoom: this.state.activeRoom,
-    //   fcmToken: this.state.fcmToken,
-    //   user: this.state.user,
-    //   userConfig: this.state.userConfig,
-    //   updateSession: this.state.updateSession
-    // }
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        updateSession: resource => {
-          console.log('are we reaching: ');
-          // this.setState({resource})
+        updateActiveRoom: roomId => {
+          this.updateActiveRoom(roomId);
         }
       }}>
         {this.props.children}

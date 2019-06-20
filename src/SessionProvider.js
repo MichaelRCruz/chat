@@ -4,7 +4,11 @@ import { goFetch, debouncer, throttling } from './utils.js';
 import SessionContext from './SessionContext.js';
 
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
+// const faker = require('faker');
+
 const faker = require('faker');
+const fs = require('fs');
+const firebase = require('firebase');
 
 class SessionProvider extends React.PureComponent {
 
@@ -115,27 +119,26 @@ class SessionProvider extends React.PureComponent {
   getFakeMessages = () => {
     let messages = {};
     const ref = this.firebase.database().ref().child(`messages`);
-    for (let id = 1; id <= 100; id++) {
-      let messageKey = ref.push().key;
-      const creators = [
-        {
+    for (let i = 10; i < 7; i++) {
+      const messageKey = ref.push().key;
+      const message = {
+        "content" : faker.hacker.phrase(),
+        "creator" : {
           "displayName" : faker.internet.userName(),
           "email" : faker.internet.email(),
           "photoURL" : faker.internet.avatar(),
           "uid" : faker.random.alphaNumeric()
-        }
-      ]
-      const message = {
-        "content" : faker.lorem.text(),
-        "creator" : creators.sort(() => 0.5 - Math.random())[0],
+        },
         "key": messageKey,
-        "read" : faker.hacker.phrase(),
+        "read" : true,
         "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
-        "sentAt" : faker.date.past(),
+        "sentAt" : 1558661840808,
       }
+      ref.push(message);
       messages[messageKey] = message;
     }
-    // ref.off();
+    ref.off();
+    // fs.writeFileSync('/Users/michael/code/chat/src/assets/staticState/staticMessages.js', JSON.stringify(messages, null, '\t'));
     return messages;
   }
 
@@ -149,13 +152,13 @@ class SessionProvider extends React.PureComponent {
           this.setState({ onAuthStateChangedError: true });
           this.firebase.auth().signOut();
         } else {
-          // const fakers = await this.getFakeMessages();
+          // const messages = await this.getFakeMessages();
           const fcmToken = await this.initNotifications(user);
           const {userConfig} = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
           const {subscribedRooms} = await this.getRooms(userConfig.rooms);
           const {messages} = await this.getMessages(activeRoom.key, 100);
-          this.setState({ userConfig, activeRoom, user, fcmToken, messages, subscribedRooms });
+          this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
         }
       });
     this.firebase.auth()
@@ -233,6 +236,7 @@ class SessionProvider extends React.PureComponent {
 
   updateActiveRoom = async lastVisited => {
     const { messages } = await this.getMessages(lastVisited, 100);
+    console.log(lastVisited, messages);
     const uid = this.state.user.uid;
     const updateLastVisitedRef = this.firebase.database().ref(`users/${uid}`);
     await this.setState({ messages }, () => {

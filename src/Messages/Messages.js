@@ -13,7 +13,7 @@ const ReactMarkdown = require('react-markdown/with-html');
 class Messages extends Component {
   static contextType = SessionContext;
   render() {
-    const { messages={}, user={} } = this.context.state;
+    const { messages, user } = this.context.state;
     const messagesValues = Object.values(messages);
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
       const prevMessage = msgs[i - 1];

@@ -14,27 +14,21 @@ firebase.initializeApp(config);
 let messages = [];
 function generateMessages() {
   let messages = {};
-  const ref = firebase.database().ref().child(`messages`);
-  for (let i = 10; i < 100; i++) {
+  const ref = this.firebase.database().ref().child(`messages`);
+  for (let i = 10; i < 10; i++) {
     const messageKey = ref.push().key;
-    // const creator = [{
-    //   "displayName" : this.faker.internet.userName(),
-    //   "email" : this.faker.internet.email(),
-    //   "photoURL" : this.faker.internet.avatar(),
-    //   "uid" : this.faker.random.alphaNumeric()
-    // }]
     const message = {
-      "content" : faker.lorem.text(),
+      "content" : faker.hacker.phrase(),
       "creator" : {
-        "displayName" : this.faker.internet.userName(),
-        "email" : this.faker.internet.email(),
-        "photoURL" : this.faker.internet.avatar(),
-        "uid" : this.faker.random.alphaNumeric()
+        "displayName" : faker.internet.userName(),
+        "email" : faker.internet.email(),
+        "photoURL" : faker.internet.avatar(),
+        "uid" : faker.random.alphaNumeric()
       },
       "key": messageKey,
-      "read" : faker.hacker.phrase(),
-      "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
-      "sentAt" : faker.date.past(),
+      "read" : true,
+      "roomId" : "uid-N4OX2pYK4uSlDsyFmUurr0uuL293",
+      "sentAt" : 1558661840808,
     }
     messages[messageKey] = message;
   }

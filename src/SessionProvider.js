@@ -3,6 +3,9 @@ import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import SessionContext from './SessionContext.js';
 
+import { staticMessages, staticUsers, staticRooms } from './staticState.js'
+const faker = require('faker');
+
 class SessionProvider extends React.PureComponent {
 
   firebase = this.props.firebase;
@@ -109,16 +112,44 @@ class SessionProvider extends React.PureComponent {
     });
   };
 
+  getFakeMessages = () => {
+    let messages = {};
+    const ref = this.firebase.database().ref().child(`messages`);
+    for (let id = 1; id <= 100; id++) {
+      let messageKey = ref.push().key;
+      const creators = [
+        {
+          "displayName" : faker.internet.userName(),
+          "email" : faker.internet.email(),
+          "photoURL" : faker.internet.avatar(),
+          "uid" : faker.random.alphaNumeric()
+        }
+      ]
+      const message = {
+        "content" : faker.lorem.text(),
+        "creator" : creators.sort(() => 0.5 - Math.random())[0],
+        "key": messageKey,
+        "read" : faker.hacker.phrase(),
+        "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
+        "sentAt" : faker.date.past(),
+      }
+      messages[messageKey] = message;
+    }
+    // ref.off();
+    return messages;
+  }
+
   componentDidMount() {
     // this.firebase.auth().signOut();
     // debugger;
-    this.handleConnection();
+    // this.handleConnection();
     this.firebase.auth()
       .onAuthStateChanged(async user => {
         if (!user) {
           this.setState({ onAuthStateChangedError: true });
           this.firebase.auth().signOut();
         } else {
+          // const fakers = await this.getFakeMessages();
           const fcmToken = await this.initNotifications(user);
           const {userConfig} = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
@@ -237,11 +268,10 @@ class SessionProvider extends React.PureComponent {
     fcmToken: '',
     user: {},
     userConfig: {},
-    messages: {},
+    messages: staticMessages,
     subscribedRooms: [],
     users: []
   };
-
   render() {
     return (
       <SessionContext.Provider value={{

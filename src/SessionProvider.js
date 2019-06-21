@@ -274,7 +274,7 @@ class SessionProvider extends React.PureComponent {
         state: this.state,
         changeRoom: async lastVisited => {
           const activeRoom = await this.getActiveRoom(lastVisited);
-          const messages = await this.getMessages(lastVisited, 100);
+          const {messages} = await this.getMessages(lastVisited, 100);
           this.setState({ activeRoom, messages });
         },
         createMessage: (content, creator) => {

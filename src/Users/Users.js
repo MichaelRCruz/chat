@@ -1,50 +1,25 @@
 import React from 'react';
+import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import './Users.css';
 
 class Users extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      onlineUsers: []
-    }
-    // this.subscribedUsersRef = this.props.firebase.database().ref('users');
-  };
 
-  // componentDidMount() {
-  //   this.setOnlineUsers();
-  //   this.subscribedUsersRef.on('child_changed', snapshot  => {
-  //     this.setOnlineUsers();
-  //   });
-  // };
 
-  // setOnlineUsers() {
-  //   const users = [];
-  //   const userThrottler = throttling(() => {
-  //     this.setState({onlineUsers: users.slice(0)});
-  //   }, 100);
-  //   this.subscribedUsersRef.on('child_added', snapshot => {
-  //     const user = Object.assign(snapshot.val(), {key: snapshot.key});
-  //     if (user.activity.isOnline) {
-  //       users.push(user);
-  //     }
-  //     userThrottler();
-  //   });
-  // };
-
+  static contextType = SessionContext;
   render() {
-    const users = this.context.users ? this.context.users : [];
-    const onlineUsers = users.map((user, index) => {
+    const { users } = this.context.state;
+    const onlineUsers = users.map((usr, i) => {
       return (
-        <li className="onlineUser" key={index}>
+        <li className="onlineUser" key={usr.uid}>
           <button className="inspectUserButton">
             <div>
               <img
                 className="userMenuImage"
                 alt="user"
-                src={user.photoURL || defaultUserImage}
+                src={usr.photoURL || defaultUserImage}
                />
-              <p className="menuDisplayName">{ user.displayName }</p>
+              <p className="menuDisplayName">{ usr.displayName }</p>
             </div>
           </button>
         </li>

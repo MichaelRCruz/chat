@@ -10,6 +10,7 @@ class Message extends Component {
 
   render() {
     const { msg, user } = this.props;
+    // const { bar: baz = 'michaelcruz.io' } = foo;
     return (
       <li className="message">
         <div className="imageMessageContainer">

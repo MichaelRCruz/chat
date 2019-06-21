@@ -82,21 +82,14 @@ class SessionProvider extends React.PureComponent {
   };
 
   setListeners(key) {
-    // const onlineUsers = [];
-    // const userThrottler = throttling(() => {
-    //   this.setState({ onlineUsers: onlineUsers.slice(0) });
-    // }, 100);
-    // this.onlineUsersRef
-    //   .orderByChild('roomId')
-    //   .equalTo(key)
-    //   .limitToLast(1)
-    //   .on('child_added', snapshot => {
-    //   const onlineUser = Object.assign({}, snapshot.val(), { key });
-    //   if (onlineUser.activity.isOnline) {
-    //     onlineUsers.push(onlineUser);
-    //   }
-    //   userThrottler();
-    // });
+    this.onlineUsersRef
+      .orderByChild('lastVisited')
+      .equalTo(key)
+      .limitToLast(1)
+      .on('child_added', snap => {
+        const oldUsers = this.state.users;
+        this.setState({ users: oldUsers.concat(snap.val()) });
+    });
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -109,6 +102,9 @@ class SessionProvider extends React.PureComponent {
         }
     });
     this.messagesRef
+    .orderByChild('roomId')
+    .equalTo(key)
+    .limitToLast(1)
       .on('child_removed', snapshot  => {
         if (snapshot.val().roomId === key) {
           const deletedKey = snapshot.key;
@@ -161,7 +157,7 @@ class SessionProvider extends React.PureComponent {
         } else {
           // const messages = await this.getFakeMessages();
           const fcmToken = await this.initNotifications(user);
-          const {userConfig} = await this.getUserConfig(user.uid);
+          const { userConfig } = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
           await this.setListeners(activeRoom.key);
           const { subscribedRooms } = await this.getRooms(userConfig.rooms);

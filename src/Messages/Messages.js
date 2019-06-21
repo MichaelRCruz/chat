@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Message from './Message.js';
+import ErrorBoundary from '../ErrorBoundary.js';
 import Mention from './Mention.js';
 import Direct from './Direct.js';
 import Timeago from './../timeago/timeago.js';
@@ -19,7 +20,9 @@ class Messages extends Component {
       const prevMessage = msgs[i - 1];
       const prevUid = prevMessage ? prevMessage.creator.uid : null;
       return (
-        <Message key={i} msg={msg} prevId={prevUid} user={user} />
+        <ErrorBoundary>
+          <Message key={i} msg={msg} prevId={prevUid} user={user} />
+        </ErrorBoundary>
       );
     });
     return (

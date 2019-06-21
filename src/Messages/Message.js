@@ -7,9 +7,6 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 const ReactMarkdown = require('react-markdown/with-html');
 
 class Message extends Component {
-  constructor (props) {
-    super(props);
-  }
 
   // removeMessage(message) {
   //   this.messagesRef.child(message.key).remove();

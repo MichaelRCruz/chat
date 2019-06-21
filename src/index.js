@@ -14,24 +14,24 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 firebase.initializeApp(config);
-
-if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
-  const messaging = firebase.messaging();
-  navigator.serviceWorker.register('firebase-messaging-sw.js')
-  .then(function(registration) {
-    messaging.useServiceWorker(registration);
-  }).catch(function(err) {
-    console.log('Service worker registration failed, error:', err);
-  });
-  messaging.onMessage(function(payload) {
-    console.log('onMessage', payload);
-  });
-};
+//
+// if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
+//   const messaging = firebase.messaging();
+//   navigator.serviceWorker.register('firebase-messaging-sw.js')
+//   .then(function(registration) {
+//     messaging.useServiceWorker(registration);
+//   }).catch(function(err) {
+//     console.log('Service worker registration failed, error:', err);
+//   });
+//   messaging.onMessage(function(payload) {
+//     console.log('onMessage', payload);
+//   });
+// };
 
 ReactDOM.render(
   <BrowserRouter>
       <Switch>
-        <Route path='/chat/:roomId/:message' render={routeProps => {
+        <Route sensitive path='/chat/:roomId/:message' render={routeProps => {
           return (
             <SessionProvider {...routeProps} firebase={firebase}>
               <App />

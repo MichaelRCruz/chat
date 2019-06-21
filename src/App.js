@@ -9,19 +9,17 @@ class App extends Component {
   render() {
     const { match, firebase } = this.props;
     return (
-
-        <Switch>
-          <Route exact path='/'
-            component={Splash}
-          />
-          <Route path='/chat/:roomId/:message'
-            component={Layout}
-          />
-          <Route path='/auth'
-            component={Auth}
-          />
-        </Switch>
-
+      <Switch>
+        <Route exact path='/'
+          component={Splash}
+        />
+        <Route exact path='/auth'
+          component={Auth}
+        />
+        <Route path='/'
+          component={Layout}
+        />
+      </Switch>
     );
   }
 };

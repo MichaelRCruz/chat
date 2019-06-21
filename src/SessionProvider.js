@@ -157,13 +157,14 @@ class SessionProvider extends React.Component {
           this.firebase.auth().signOut();
         } else {
           // const messages = await this.getFakeMessages();
-          console.log(this.props.match);
+          const roomIdParam = this.props.match.params.roomId;
+          const messageIdParam = this.props.match.params.messageId;
           const fcmToken = await this.initNotifications(user);
           const { userConfig } = await this.getUserConfig(user.uid);
-          const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
-          await this.setListeners(activeRoom.key);
+          const activeRoom = await this.getActiveRoom(roomIdParam);
+          await this.setListeners(roomIdParam);
           const { subscribedRooms } = await this.getRooms(userConfig.rooms);
-          const { messages } = await this.getMessages(activeRoom.key, 100);
+          const { messages } = await this.getMessages(roomIdParam, 100);
           this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
         }
       });

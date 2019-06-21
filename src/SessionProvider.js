@@ -236,22 +236,30 @@ class SessionProvider extends React.PureComponent {
     return response.subscribedRooms[0];
   };
 
-  createMessage = (content, creator) => {
-    const messagesRef = this.firebase.admin.database().ref(`messages`);
-    const key = messagesRef.push().key;
+  changeRoom = async roomId => {
+    const activeRoom = await this.getActiveRoom(roomId);
+    const { messages } = await this.getMessages(roomId, 100);
+    this.setState({ activeRoom, messages });
+  }
+
+  submitMessage = content => {
+    const { displayName, email, photoURL, uid } = this.state.user;
+    const messagesRef = this.firebase.database().ref(`messages`);
+    const newMessageRef = messagesRef.push();
+    let messages = this.state.messages;
     const message = {
       content,
-      creator,
-      key,
+      "creator": { displayName, email, photoURL, uid },
+      "key": newMessageRef.key,
       "read" : false,
-      "roomId" : this.state.activeRoon.key,
+      "roomId" : this.state.activeRoom.key,
       "sentAt" : Date.now()
     }
-    messagesRef.child(key).update(message, error => {
+    newMessageRef.set(message, error => {
       if (error) {
         this.setState({ error });
       } else {
-        const messages = this.state.messages.concat([message]);
+        messages = Object.assign({}, messages, { [newMessageRef.key]: message });
         this.setState({ messages });
       }
     });
@@ -272,13 +280,11 @@ class SessionProvider extends React.PureComponent {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        changeRoom: async lastVisited => {
-          const activeRoom = await this.getActiveRoom(lastVisited);
-          const {messages} = await this.getMessages(lastVisited, 100);
-          this.setState({ activeRoom, messages });
+        changeRoom: roomId => {
+          this.changeRoom(roomId);
         },
-        createMessage: (content, creator) => {
-          this.createMessage(content, creator);
+        submitMessage: content => {
+          this.submitMessage(content);
         }
       }}>
         {this.props.children}

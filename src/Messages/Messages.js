@@ -20,8 +20,8 @@ class Messages extends Component {
       const prevMessage = msgs[i - 1];
       const prevUid = prevMessage ? prevMessage.creator.uid : null;
       return (
-        <ErrorBoundary>
-          <Message key={i} msg={msg} prevId={prevUid} user={user} />
+        <ErrorBoundary key={i}>
+          <Message msg={msg} prevId={prevUid} user={user} />
         </ErrorBoundary>
       );
     });

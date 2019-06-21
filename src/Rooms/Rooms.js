@@ -6,12 +6,9 @@ class Rooms extends React.Component {
   changeRoom = key => {
     this.context.changeRoom(key);
   }
-  static defaultProps = {
-    onUpdateRoom: () => {},
-  }
   static contextType = SessionContext;
   render() {
-    const { subscribedRooms } = this.context.state || {};
+    const { subscribedRooms } = this.context.state;
     const rooms = subscribedRooms.map((room, i) => {
       const { key, name } = room;
       return (

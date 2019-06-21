@@ -3,32 +3,15 @@ import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
-import SessionContext from '../SessionContext.js';
-import ResourceContext from '../ResourceContext.js';
 
 class Chat extends React.Component {
-  state = {
-    isLoading: true
-    // messageMode: 'notifications'
-  }
-
-  toggleDashboard = () => {
-    this.props.toggleDashboard();
-  };
-
-  toggleUserProfile = () => {
-    this.props.toggleUserProfile();
-  };
-
-  static contextType = SessionContext;
   render() {
-    const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context.state || {};
     return (
       <div className="appComponent">
         <header className="header">
           <div className="menuIconContainer">
             <i className="material-icons menuIcon"
-               onClick={this.toggleDashboard}>sort</i>
+               onClick={null}>sort</i>
           </div>
           <div className="appNameContainer">
             <a href="https://michaelcruz.io/chat">
@@ -36,31 +19,19 @@ class Chat extends React.Component {
             </a>
           </div>
           <div className="headerIconContainer">
-            <i className="material-icons personIcon"
-               onClick={this.toggleUserProfile}>person</i>
+            <i className="material-icons personIcon">
+              person
+            </i>
           </div>
         </header>
         <aside className="sidebar">
-          <Menu
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-            subscribedRooms={subscribedRooms}
-          />
+          <Menu />
         </aside>
         <main className="main">
-          <Messages
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-          />
+          <Messages />
         </main>
         <footer className="footer">
-          <SubmitMessage
-            activeRoom={activeRoom}
-            user={user}
-            userConfig={userConfig}
-          />
+          <SubmitMessage />
         </footer>
       </div>
     )

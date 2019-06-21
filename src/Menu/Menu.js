@@ -1,13 +1,13 @@
 import React from 'react';
 import Rooms from '../Rooms/Rooms';
 import Users from '../Users/Users';
-import ResourceContext from '../ResourceContext.js';
+import SessionContext from '../SessionContext.js';
 import './Menu.css';
 
 class Menu extends React.Component {
+  static contextType = SessionContext;
   render() {
-    const { subscribedRooms, users, user } = this.props;
-    // console.log(this.context.state);
+    const { user } = this.context.state;
     return (
       <section className="menuComponent">
         <div className="userAvatarContainer">
@@ -20,11 +20,10 @@ class Menu extends React.Component {
         </div>
         <div className="menuRoomListContainer">
           <h1>rooms</h1>
-          <Rooms subscribedRooms={subscribedRooms}
-          />
+          <Rooms />
         </div>
         <h1>users</h1>
-        <Users users={users} />
+        <Users />
       </section>
     );
   }

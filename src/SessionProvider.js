@@ -118,9 +118,9 @@ class SessionProvider extends React.PureComponent {
 
   getFakeMessages = () => {
     let messages = {};
-    const ref = this.firebase.database().ref().child(`messages`);
-    for (let i = 10; i < 7; i++) {
-      const messageKey = ref.push().key;
+    const messagesRef = this.firebase.database().ref(`messages`);
+    for (let i = 0; i < 10; i++) {
+      const newMessageRef = messagesRef.push();
       const message = {
         "content" : faker.hacker.phrase(),
         "creator" : {
@@ -129,16 +129,20 @@ class SessionProvider extends React.PureComponent {
           "photoURL" : faker.internet.avatar(),
           "uid" : faker.random.alphaNumeric()
         },
-        "key": messageKey,
+        key: newMessageRef.key,
         "read" : true,
         "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
         "sentAt" : 1558661840808,
       }
-      ref.push(message);
-      messages[messageKey] = message;
+      newMessageRef.set(message, error => {
+        if (error) {
+          console.log(error);
+        } else {
+
+        }
+      });
+      messages[newMessageRef.key] = message;
     }
-    ref.off();
-    // fs.writeFileSync('/Users/michael/code/chat/src/assets/staticState/staticMessages.js', JSON.stringify(messages, null, '\t'));
     return messages;
   }
 
@@ -192,7 +196,6 @@ class SessionProvider extends React.PureComponent {
   };
 
   getRooms = async rooms => {
-    console.log(this.props.session);
     const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
     const roomIds = rooms ? rooms : [];
     const subscribedRooms = await goFetch(url, {
@@ -231,39 +234,28 @@ class SessionProvider extends React.PureComponent {
       body: JSON.stringify({ roomIds: payload })
     });
     return response.subscribedRooms[0];
-    // return activeRoom;
   };
 
-  updateActiveRoom = async lastVisited => {
-    const { messages } = await this.getMessages(lastVisited, 100);
-    console.log(lastVisited, messages);
-    const uid = this.state.user.uid;
-    const updateLastVisitedRef = this.firebase.database().ref(`users/${uid}`);
-    await this.setState({ messages }, () => {
-      updateLastVisitedRef.update({ lastVisited }, error => {
-        this.setState({ warning: {firebase: error} });
-      });
+  createMessage = (content, creator) => {
+    const messagesRef = this.firebase.admin.database().ref(`messages`);
+    const key = messagesRef.push().key;
+    const message = {
+      content,
+      creator,
+      key,
+      "read" : false,
+      "roomId" : this.state.activeRoon.key,
+      "sentAt" : Date.now()
+    }
+    messagesRef.child(key).update(message, error => {
+      if (error) {
+        this.setState({ error });
+      } else {
+        const messages = this.state.messages.concat([message]);
+        this.setState({ messages });
+      }
     });
   };
-
-  // var adaRef = firebase.database().ref('users/ada');
-  // adaRef.transaction(function(currentData) {
-  //   if (currentData === null) {
-  //     return { name: { first: 'Ada', last: 'Lovelace' } };
-  //   } else {
-  //     console.log('User ada already exists.');
-  //     return; // Abort the transaction.
-  //   }
-  // }, function(error, committed, snapshot) {
-  //   if (error) {
-  //     console.log('Transaction failed abnormally!', error);
-  //   } else if (!committed) {
-  //     console.log('We aborted the transaction (because ada already exists).');
-  //   } else {
-  //     console.log('User ada added!');
-  //   }
-  //   console.log("Ada's data: ", snapshot.val());
-  // });
 
   onlineUsersRef = this.firebase.database().ref(`users`);
   messagesRef = this.firebase.database().ref(`messages`);
@@ -280,8 +272,13 @@ class SessionProvider extends React.PureComponent {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        updateActiveRoom: lastVisited => {
-          this.updateActiveRoom(lastVisited);
+        changeRoom: async lastVisited => {
+          const activeRoom = await this.getActiveRoom(lastVisited);
+          const messages = await this.getMessages(lastVisited, 100);
+          this.setState({ activeRoom, messages });
+        },
+        createMessage: (content, creator) => {
+          this.createMessage(content, creator);
         }
       }}>
         {this.props.children}

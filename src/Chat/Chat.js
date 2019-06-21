@@ -23,7 +23,6 @@ class Chat extends React.Component {
   static contextType = SessionContext;
   render() {
     const { user={}, activeRoom={}, subscribedRooms=[], messages={}, userConfig={} } = this.context.state || {};
-    console.log(this.context);
     return (
       <div className="appComponent">
         <header className="header">

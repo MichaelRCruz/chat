@@ -3,22 +3,22 @@ import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
-  updateActiveRoom = key => {
-    this.context.updateActiveRoom(key);
+  changeRoom = key => {
+    this.context.changeRoom(key);
   }
   static defaultProps = {
     onUpdateRoom: () => {},
   }
   static contextType = SessionContext;
   render() {
-    const { subscribedRooms=[] } = this.context.state || {};
+    const { subscribedRooms } = this.context.state || {};
     const rooms = subscribedRooms.map((room, i) => {
       const { key, name } = room;
       return (
         <li className="subscribedRoom" key={key}>
           <button
             className="roomNameButton"
-            onClick={this.updateActiveRoom.bind(this, key)}>
+            onClick={this.changeRoom.bind(this, key)}>
             <div>
               <i className="material-icons people">people</i>
               <p className="roomName">{ name }</p>

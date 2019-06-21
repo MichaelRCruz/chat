@@ -17,7 +17,7 @@ class Messages extends Component {
     const messagesValues = Object.values(messages);
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
       const prevMessage = msgs[i - 1];
-      const prevUid = prevMessage ? prevMessage.creator.uid : '';
+      const prevUid = prevMessage ? prevMessage.creator.uid : null;
       return (
         <Message key={i} msg={msg} prevId={prevUid} user={user} />
       );

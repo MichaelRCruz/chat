@@ -81,37 +81,40 @@ class SessionProvider extends React.PureComponent {
     }
   };
 
-  setListeners(activeRoomKey) {
-    const onlineUsers = [];
-    const userThrottler = throttling(() => {
-      this.setState({ onlineUsers: onlineUsers.slice(0) });
-    }, 100);
-    this.onlineUsersRef
-      .on('child_added', snapshot => {
-      const onlineUser = Object.assign(snapshot.val(), {key: snapshot.key});
-      if (onlineUser.activity.isOnline) {
-        onlineUsers.push(onlineUser);
-      }
-      userThrottler();
-    });
+  setListeners(key) {
+    // const onlineUsers = [];
+    // const userThrottler = throttling(() => {
+    //   this.setState({ onlineUsers: onlineUsers.slice(0) });
+    // }, 100);
+    // this.onlineUsersRef
+    //   .orderByChild('roomId')
+    //   .equalTo(key)
+    //   .limitToLast(1)
+    //   .on('child_added', snapshot => {
+    //   const onlineUser = Object.assign({}, snapshot.val(), { key });
+    //   if (onlineUser.activity.isOnline) {
+    //     onlineUsers.push(onlineUser);
+    //   }
+    //   userThrottler();
+    // });
     this.messagesRef
       .orderByChild('roomId')
-      .equalTo(activeRoomKey)
+      .equalTo(key)
       .limitToLast(1)
       .on('child_added', snapshot => {
-        if (snapshot.val().roomId === activeRoomKey) {
-          const message = Object.assign({}, snapshot.val(), { key: snapshot.key });
-          this.updateMessages(message);
+        if (snapshot.val().roomId === key) {
+          const messages = this.state.messages;
+          const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
+          this.setState({ messages: newMessages });
         }
     });
     this.messagesRef
-      .orderByChild('roomId')
-      .equalTo(activeRoomKey)
-      .limitToLast(1)
       .on('child_removed', snapshot  => {
-        if (snapshot.val().roomId === activeRoomKey) {
-          const message = Object.assign({}, snapshot.val(), { key: snapshot.key });
-          this.updateMessages(message);
+        if (snapshot.val().roomId === key) {
+          const deletedKey = snapshot.key;
+          const { [deletedKey]: something, ...rest } = this.state.messages;
+          const newMessages = Object.assign({}, rest);
+          this.setState({ messages: newMessages });
         }
     });
   };
@@ -160,8 +163,9 @@ class SessionProvider extends React.PureComponent {
           const fcmToken = await this.initNotifications(user);
           const {userConfig} = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
-          const {subscribedRooms} = await this.getRooms(userConfig.rooms);
-          const {messages} = await this.getMessages(activeRoom.key, 100);
+          await this.setListeners(activeRoom.key);
+          const { subscribedRooms } = await this.getRooms(userConfig.rooms);
+          const { messages } = await this.getMessages(activeRoom.key, 100);
           this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
         }
       });
@@ -258,11 +262,13 @@ class SessionProvider extends React.PureComponent {
     newMessageRef.set(message, error => {
       if (error) {
         this.setState({ error });
-      } else {
-        messages = Object.assign({}, messages, { [newMessageRef.key]: message });
-        this.setState({ messages });
       }
     });
+  };
+
+  deleteMessage = msg => {
+    const ref = this.firebase.database().ref(`messages`);
+    ref.child(msg.key).remove();
   };
 
   onlineUsersRef = this.firebase.database().ref(`users`);
@@ -285,6 +291,9 @@ class SessionProvider extends React.PureComponent {
         },
         submitMessage: content => {
           this.submitMessage(content);
+        },
+        deleteMessage: key => {
+          this.deleteMessage(key);
         }
       }}>
         {this.props.children}

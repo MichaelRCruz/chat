@@ -13,14 +13,14 @@ class Messages extends Component {
     event.preventDefault();
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
-    this.setState({ messageValue: '' }, () => {
-      this.context.submitMessage(this.state.messageValue);
-    });
+    this.context.submitMessage(this.state.messageValue);
+    this.setState({ messageValue: '' });
   };
   handleKeyDown = event => {
     if (event.key === 'Enter' && event.shiftKey === false) {
       event.preventDefault();
       this.context.submitMessage(this.state.messageValue);
+      this.setState({ messageValue: '' });
     }
   };
   formValidated = () => {

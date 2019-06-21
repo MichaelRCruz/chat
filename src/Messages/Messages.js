@@ -12,16 +12,21 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 const ReactMarkdown = require('react-markdown/with-html');
 
 class Messages extends Component {
+  deleteMessage = msg => {
+    this.context.deleteMessage(msg);
+  };
   static contextType = SessionContext;
   render() {
     const { messages, user } = this.context.state;
     const messagesValues = Object.values(messages);
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
-      const prevMessage = msgs[i - 1];
-      const prevUid = prevMessage ? prevMessage.creator.uid : null;
       return (
         <ErrorBoundary key={i}>
-          <Message msg={msg} prevId={prevUid} user={user} />
+          <Message
+            msg={msg}
+            user={user}
+            deleteMessage={this.deleteMessage.bind(this)}
+          />
         </ErrorBoundary>
       );
     });
@@ -33,7 +38,7 @@ class Messages extends Component {
         </ul>
       </div>
     );
-  }
-}
+  };
+};
 
 export default Messages;

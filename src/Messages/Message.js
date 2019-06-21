@@ -8,27 +8,22 @@ const ReactMarkdown = require('react-markdown/with-html');
 
 class Message extends Component {
 
-  // removeMessage(message) {
-  //   this.messagesRef.child(message.key).remove();
-  // }
-
   render() {
-    const { msg, user, prevUid } = this.props;
+    const { msg, user } = this.props;
     return (
       <li className="message">
         <div className="imageMessageContainer">
           <img
-            className={"messageImage " + (prevUid !== msg.creator.uid ? '' : 'visibilityHidden')}
+            className="messageImage"
             alt="user"
-            src={msg.creator && msg.creator.photoURL
-            ? msg.creator.photoURL : defaultUserImage}
+            src={msg.creator.photoURL ? msg.creator.photoURL : defaultUserImage}
            />
           <div className="nameMessageContainer">
             <div className="display-name">
               {msg.creator.displayName}
-              {msg.creator && user && msg.creator.email === user.email &&
+              {msg.creator.uid === user.uid &&
                 <button
-                  onClick={ () => this.removeMessage(msg) }
+                  onClick={ () => this.props.deleteMessage(msg) }
                   className="remove-message-button">
                   &times;
                 </button>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
+import { withRouter } from 'react-router-dom';
+// import { matchPath } from 'react-router';
 import SessionContext from './SessionContext.js';
-
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
 // const faker = require('faker');
 
@@ -10,7 +11,7 @@ const faker = require('faker');
 const fs = require('fs');
 const firebase = require('firebase');
 
-class SessionProvider extends React.PureComponent {
+class SessionProvider extends React.Component {
 
   firebase = this.props.firebase;
 
@@ -156,6 +157,7 @@ class SessionProvider extends React.PureComponent {
           this.firebase.auth().signOut();
         } else {
           // const messages = await this.getFakeMessages();
+          console.log(this.props.match);
           const fcmToken = await this.initNotifications(user);
           const { userConfig } = await this.getUserConfig(user.uid);
           const activeRoom = await this.getActiveRoom(userConfig.lastVisited);
@@ -270,6 +272,7 @@ class SessionProvider extends React.PureComponent {
   onlineUsersRef = this.firebase.database().ref(`users`);
   messagesRef = this.firebase.database().ref(`messages`);
   state = {
+    firebase: this.firebase,
     activeRoom: {},
     fcmToken: '',
     user: {},
@@ -299,4 +302,4 @@ class SessionProvider extends React.PureComponent {
 
 }
 
-export default SessionProvider;
+export default withRouter(SessionProvider);

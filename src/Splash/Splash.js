@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Splash.css';
 
 class Splash extends React.Component  {
@@ -24,7 +25,9 @@ class Splash extends React.Component  {
                 <p className="splashAppName">Potato</p>
               </div>
             </a>
-            <i onClick={this.redirectToSignIn} className="material-icons menuIcon">menu</i>
+            <Link to={`/signIn`}>
+              <i className="material-icons menuIcon">menu</i>
+            </Link>
           </div>
         </header>
         <main className="splashMain">

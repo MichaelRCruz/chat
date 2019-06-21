@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from 'react-router-dom';
+import SessionProvider from './SessionProvider.js';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import App from "./App.js";
 
 import * as firebase from 'firebase';
@@ -29,7 +30,15 @@ if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
 
 ReactDOM.render(
   <BrowserRouter>
-    <App firebase={firebase} />
+      <Switch>
+        <Route path='/chat/:roomId/:message' render={routeProps => {
+          return (
+            <SessionProvider {...routeProps} firebase={firebase}>
+              <App />
+            </SessionProvider>
+          );
+        }} />
+      </Switch>
   </BrowserRouter>,
   document.getElementById("root")
 );

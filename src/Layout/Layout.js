@@ -10,14 +10,14 @@ class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       showDashboard: false,
       showProfile: false
     }
   };
 
   componentDidMount() {
-    this.setState({ isLoading: !this.state.isLoading });
+
   }
 
   render() {

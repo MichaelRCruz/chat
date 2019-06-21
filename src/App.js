@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
-import SessionProvider from './SessionProvider.js';
+import { Route, Switch } from 'react-router-dom';
 import Splash from './Splash/Splash.js';
 import Layout from './Layout/Layout.js';
 import SignIn from './SignIn/SignIn.js';
+import Auth from './Auth/Auth.js';
 
 class App extends Component {
   render() {
+    const { match, firebase } = this.props;
     return (
-        <nav>
-        <SessionProvider firebase={this.props.firebase}>
-          <Route exact path='/' render={() => <Splash firebase={this.props.firebase} /> } />
-          <Route path='/chat' render={() => <Layout firebase={this.props.firebase} />} />
-          <Route path='/signIn' render={() => <SignIn firebase={this.props.firebase} />} />
-        </SessionProvider>
-        </nav>
+
+        <Switch>
+          <Route exact path='/'
+            component={Splash}
+          />
+          <Route path='/chat/:roomId/:message'
+            component={Layout}
+          />
+          <Route path='/auth'
+            component={Auth}
+          />
+        </Switch>
+
     );
   }
 };

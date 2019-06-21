@@ -11,7 +11,7 @@ class Users extends React.Component {
     const { users } = this.context.state;
     const onlineUsers = users.map((usr, i) => {
       return (
-        <li className="onlineUser" key={usr.uid}>
+        <li className="onlineUser" key={i}>
           <button className="inspectUserButton">
             <div>
               <img

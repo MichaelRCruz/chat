@@ -3,7 +3,6 @@ import Auth from '../Auth/Auth.js';
 import './SignIn.css';
 
 class SignIn extends React.Component  {
-
   state = {
     showAuthModal: true
   };
@@ -15,10 +14,7 @@ class SignIn extends React.Component  {
   render() {
     const { inWaiting, updateSession } = this.context;
     const auth = (
-      <Auth
-          firebase={this.props.firebase}
-          toggleAuthModal={this.toggleAuthModal.bind(this)}
-        />
+      <Auth toggleAuthModal={this.toggleAuthModal.bind(this)} />
     );
     return (
       <React.Fragment>

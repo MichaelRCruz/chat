@@ -6,6 +6,7 @@ import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 
 class Chat extends React.Component {
   render() {
+    // console.log(this.props.params.roomId);
     return (
       <div className="appComponent">
         <header className="header">

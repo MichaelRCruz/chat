@@ -9,6 +9,7 @@ class Rooms extends React.Component {
   static contextType = SessionContext;
   render() {
     const { subscribedRooms } = this.context.state;
+    const { metch } = this.props;
     const rooms = subscribedRooms.map((room, i) => {
       const { key, name } = room;
       return (

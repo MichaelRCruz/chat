@@ -14,14 +14,14 @@ class Rooms extends React.Component {
       const { key, name } = room;
       return (
         <li className="subscribedRoom" key={key}>
-          <button
+          <Link to={`/chat/rooms/${key}`}
             className="roomNameButton"
             onClick={this.updateActiveRoom.bind(this, key)}>
             <div>
               <i className="material-icons people">people</i>
               <p className="roomName">{ name }</p>
             </div>
-          </button>
+          </Link>
         </li>
       );
     });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
@@ -6,13 +7,13 @@ import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 
 class Chat extends React.Component {
   render() {
-    // console.log(this.props.params.roomId);
     return (
       <div className="appComponent">
         <header className="header">
           <div className="menuIconContainer">
-            <i className="material-icons menuIcon"
-               onClick={null}>sort</i>
+            <Link to={`/chat/dashboard`}>
+              <i className="material-icons menuIcon" onClick={null}>sort</i>
+            </Link>
           </div>
           <div className="appNameContainer">
             <a href="https://michaelcruz.io/chat">
@@ -20,9 +21,9 @@ class Chat extends React.Component {
             </a>
           </div>
           <div className="headerIconContainer">
-            <i className="material-icons personIcon">
-              person
-            </i>
+            <Link to={`/chat/userProfile`}>
+              <i className="material-icons personIcon">person</i>
+            </Link>
           </div>
         </header>
         <aside className="sidebar">
@@ -35,7 +36,7 @@ class Chat extends React.Component {
           <SubmitMessage />
         </footer>
       </div>
-    )
+    );
   }
 }
 

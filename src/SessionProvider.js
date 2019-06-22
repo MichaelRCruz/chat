@@ -156,15 +156,16 @@ class SessionProvider extends React.Component {
           this.setState({ onAuthStateChangedError: true });
           this.firebase.auth().signOut();
         } else {
-          // const messages = await this.getFakeMessages();
-          const roomIdParam = this.props.match.params.roomId;
-          const messageIdParam = this.props.match.params.messageId;
-          const fcmToken = await this.initNotifications(user);
           const { userConfig } = await this.getUserConfig(user.uid);
-          const activeRoom = await this.getActiveRoom(roomIdParam);
-          await this.setListeners(roomIdParam);
+          const { roomId: lastVisited = userConfig.lastVisited } = this.props.match.params;
+          // const messages = await this.getFakeMessages();
+          // const roomIdParam = this.props.match.params.roomId;
+          // const messageIdParam = this.props.match.params.messageId;
+          await this.setListeners(lastVisited);
+          const fcmToken = await this.initNotifications(user);
+          const activeRoom = await this.getActiveRoom(lastVisited);
           const { subscribedRooms } = await this.getRooms(userConfig.rooms);
-          const { messages } = await this.getMessages(roomIdParam, 100);
+          const { messages } = await this.getMessages(lastVisited, 100);
           this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
         }
       });
@@ -239,7 +240,8 @@ class SessionProvider extends React.Component {
     return response.subscribedRooms[0];
   };
 
-  changeRoom = async roomId => {
+  updateActiveRoom = async roomId => {
+    this.props.history.push(`/chat/rooms/${roomId}/?action=externalReference&ref=displayName`);
     const activeRoom = await this.getActiveRoom(roomId);
     const { messages } = await this.getMessages(roomId, 100);
     this.setState({ activeRoom, messages });
@@ -278,7 +280,7 @@ class SessionProvider extends React.Component {
     fcmToken: '',
     user: {},
     userConfig: {},
-    messages: staticMessages,
+    messages: {},
     subscribedRooms: [],
     users: []
   };
@@ -286,8 +288,8 @@ class SessionProvider extends React.Component {
     return (
       <SessionContext.Provider value={{
         state: this.state,
-        changeRoom: roomId => {
-          this.changeRoom(roomId);
+        updateActiveRoom: roomId => {
+          this.updateActiveRoom(roomId);
         },
         submitMessage: content => {
           this.submitMessage(content);

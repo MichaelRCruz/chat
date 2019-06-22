@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
-  changeRoom = key => {
-    this.context.changeRoom(key);
+  updateActiveRoom = key => {
+    this.context.updateActiveRoom(key);
   }
   static contextType = SessionContext;
   render() {
@@ -14,14 +15,14 @@ class Rooms extends React.Component {
       const { key, name } = room;
       return (
         <li className="subscribedRoom" key={key}>
-          <button
+          <Link
             className="roomNameButton"
-            onClick={this.changeRoom.bind(this, key)}>
+            onClick={this.updateActiveRoom.bind(this, key)}>
             <div>
               <i className="material-icons people">people</i>
               <p className="roomName">{ name }</p>
             </div>
-          </button>
+          </Link>
         </li>
       );
     });

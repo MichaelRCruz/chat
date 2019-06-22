@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SessionProvider from './SessionProvider.js';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import App from "./App.js";
 
 import * as firebase from 'firebase';
@@ -29,16 +29,14 @@ firebase.initializeApp(config);
 // };
 
 ReactDOM.render(
-  <BrowserRouter>
-      <Switch>
-        <Route sensitive path='/chat/:roomId/:message' render={routeProps => {
+  <Router>
+        <Route path='/' render={routeProps => {
           return (
             <SessionProvider {...routeProps} firebase={firebase}>
               <App />
             </SessionProvider>
           );
         }} />
-      </Switch>
-  </BrowserRouter>,
+  </Router>,
   document.getElementById("root")
 );

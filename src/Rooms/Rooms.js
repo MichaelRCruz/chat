@@ -10,19 +10,18 @@ class Rooms extends React.Component {
   static contextType = SessionContext;
   render() {
     const { subscribedRooms } = this.context.state;
-    const { metch } = this.props;
     const rooms = subscribedRooms.map((room, i) => {
       const { key, name } = room;
       return (
         <li className="subscribedRoom" key={key}>
-          <Link
+          <button
             className="roomNameButton"
             onClick={this.updateActiveRoom.bind(this, key)}>
             <div>
               <i className="material-icons people">people</i>
               <p className="roomName">{ name }</p>
             </div>
-          </Link>
+          </button>
         </li>
       );
     });

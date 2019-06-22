@@ -2,10 +2,8 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import { withRouter } from 'react-router-dom';
-// import { matchPath } from 'react-router';
 import SessionContext from './SessionContext.js';
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
-// const faker = require('faker');
 
 const faker = require('faker');
 const fs = require('fs');
@@ -157,10 +155,7 @@ class SessionProvider extends React.Component {
           this.firebase.auth().signOut();
         } else {
           const { userConfig } = await this.getUserConfig(user.uid);
-          const { roomId: lastVisited = userConfig.lastVisited } = this.props.match.params;
-          // const messages = await this.getFakeMessages();
-          // const roomIdParam = this.props.match.params.roomId;
-          // const messageIdParam = this.props.match.params.messageId;
+          const lastVisited = userConfig.lastVisited;
           await this.setListeners(lastVisited);
           const fcmToken = await this.initNotifications(user);
           const activeRoom = await this.getActiveRoom(lastVisited);
@@ -241,10 +236,13 @@ class SessionProvider extends React.Component {
   };
 
   updateActiveRoom = async roomId => {
-    this.props.history.push(`/chat/rooms/${roomId}/?action=externalReference&ref=displayName`);
-    const activeRoom = await this.getActiveRoom(roomId);
-    const { messages } = await this.getMessages(roomId, 100);
-    this.setState({ activeRoom, messages });
+    // console.log(this.props.location);
+    this.props.history.push(`/chat/rooms/${roomId}`);
+    // console.log('from updateActiveRoom', this.props.location.pathname);
+    // this.props.history.push(`/chat/rooms/${roomId}/?action=externalReference&ref=displayName`);
+    // const activeRoom = await this.getActiveRoom(roomId);
+    // const { messages } = await this.getMessages(roomId, 100);
+    // this.setState({ activeRoom, messages });
   }
 
   submitMessage = content => {

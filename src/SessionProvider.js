@@ -1,29 +1,27 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
-import { withRouter } from 'react-router-dom';
+import * as firebase from 'firebase';
 import SessionContext from './SessionContext.js';
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
 
 const faker = require('faker');
 const fs = require('fs');
-const firebase = require('firebase');
+// const firebase = require('firebase');
 
 class SessionProvider extends React.Component {
 
-  firebase = this.props.firebase;
-
   handleConnection = uid => {
-    const userStatusDatabaseRef = this.firebase.database().ref(`users/${uid}/activity`);
+    const userStatusDatabaseRef = firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
       isOnline: false,
-      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: firebase.database.ServerValue.TIMESTAMP,
     };
     const isOnlineForDatabase = {
       isOnline: true,
-      lastChanged: this.firebase.database.ServerValue.TIMESTAMP,
+      lastChanged: firebase.database.ServerValue.TIMESTAMP,
     };
-    this.firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
         return;
       };
@@ -66,8 +64,8 @@ class SessionProvider extends React.Component {
   };
 
   initNotifications = async user => {
-    if (this.firebase.messaging.isSupported()) {
-      const messaging = this.firebase.messaging();
+    if (firebase.messaging.isSupported()) {
+      const messaging = firebase.messaging();
       const currentFcmToken = await messaging.getToken();
       this.handleFcmToken(currentFcmToken, user.uid, true);
       messaging.onTokenRefresh(async () => {
@@ -116,7 +114,7 @@ class SessionProvider extends React.Component {
 
   getFakeMessages = () => {
     let messages = {};
-    const messagesRef = this.firebase.database().ref(`messages`);
+    const messagesRef = firebase.database().ref(`messages`);
     for (let i = 0; i < 10; i++) {
       const newMessageRef = messagesRef.push();
       const message = {
@@ -145,14 +143,14 @@ class SessionProvider extends React.Component {
   }
 
   componentDidMount() {
-    // this.firebase.auth().signOut();
+    // firebase.auth().signOut();
     // debugger;
     // this.handleConnection();
-    this.firebase.auth()
+    firebase.auth()
       .onAuthStateChanged(async user => {
         if (!user) {
           this.setState({ onAuthStateChangedError: true });
-          this.firebase.auth().signOut();
+          firebase.auth().signOut();
         } else {
           const { userConfig } = await this.getUserConfig(user.uid);
           const lastVisited = userConfig.lastVisited;
@@ -164,7 +162,7 @@ class SessionProvider extends React.Component {
           this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
         }
       });
-    this.firebase.auth()
+    firebase.auth()
       .getRedirectResult()
       .then(result => {
         if (result.credential) {
@@ -176,9 +174,9 @@ class SessionProvider extends React.Component {
       .catch(error => {
         this.setState({ error, onGetRedirectResultError: true });
       });
-    if (this.firebase.auth().isSignInWithEmailLink(window.location.href)) {
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
       const stashedEmail = window.localStorage.getItem('emailForSignIn');
-      this.firebase.auth()
+      firebase.auth()
         .signInWithEmailLink(stashedEmail, window.location.href)
         .then(result => {
           if (result.credential) {
@@ -237,14 +235,14 @@ class SessionProvider extends React.Component {
 
   updateActiveRoom = async roomId => {
     const { uid, lastVisited } = this.state.user;
-    const ref = this.firebase.database().ref(`users/${uid}/lastVisited`);
+    const ref = firebase.database().ref(`users/${uid}/lastVisited`);
     ref.set(roomId);
     ref.off();
   }
 
   submitMessage = content => {
     const { displayName, email, photoURL, uid } = this.state.user;
-    const messagesRef = this.firebase.database().ref(`messages`);
+    const messagesRef = firebase.database().ref(`messages`);
     const newMessageRef = messagesRef.push();
     let messages = this.state.messages;
     const message = {
@@ -263,14 +261,14 @@ class SessionProvider extends React.Component {
   };
 
   deleteMessage = msg => {
-    const ref = this.firebase.database().ref(`messages`);
+    const ref = firebase.database().ref(`messages`);
     ref.child(msg.key).remove();
   };
 
-  onlineUsersRef = this.firebase.database().ref(`users`);
-  messagesRef = this.firebase.database().ref(`messages`);
+  onlineUsersRef = firebase.database().ref(`users`);
+  messagesRef = firebase.database().ref(`messages`);
   state = {
-    firebase: this.firebase,
+    firebase: firebase,
     activeRoom: {},
     fcmToken: '',
     user: {},
@@ -300,4 +298,4 @@ class SessionProvider extends React.Component {
 
 }
 
-export default withRouter(SessionProvider);
+export default SessionProvider;

@@ -1,10 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SessionProvider from './SessionProvider.js';
 import BrowserRouter from "./BrowserRouter.js";
-import { Route, Switch } from 'react-router-dom';
-import { createLocation } from "history";
 import App from "./App.js";
+
+import SessionProvider from './SessionProvider.js';
 
 import * as firebase from 'firebase';
 const config = {
@@ -30,24 +29,13 @@ firebase.initializeApp(config);
 //   });
 // };
 
-export const resolveToLocation = (to, currentLocation) =>
-  typeof to === "function" ? to(currentLocation) : to;
-
-export const normalizeToLocation = (to, currentLocation) => {
-  return typeof to === "string"
-    ? createLocation(to, null, null, currentLocation)
-    : to;
-};
-
 ReactDOM.render(
-  <BrowserRouter>
-    <Route path='/' render={routeProps => {
-      return (
-        <SessionProvider {...routeProps} firebase={firebase}>
-          <App {...routeProps} />
-        </SessionProvider>
-      );
-    }} />
-  </BrowserRouter>,
+
+  <SessionProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </SessionProvider>,
+
   document.getElementById("root")
 );

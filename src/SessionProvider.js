@@ -28,7 +28,7 @@ class SessionProvider extends React.Component {
         return;
       };
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-        userStatusDatabaseRef.set(isOnlineForDatabase);
+        userStatusDatabaseRef.update(isOnlineForDatabase);
       });
     });
   };
@@ -236,13 +236,10 @@ class SessionProvider extends React.Component {
   };
 
   updateActiveRoom = async roomId => {
-    // console.log(this.props.location);
-    this.props.history.push(`/chat/rooms/${roomId}`);
-    // console.log('from updateActiveRoom', this.props.location.pathname);
-    // this.props.history.push(`/chat/rooms/${roomId}/?action=externalReference&ref=displayName`);
-    // const activeRoom = await this.getActiveRoom(roomId);
-    // const { messages } = await this.getMessages(roomId, 100);
-    // this.setState({ activeRoom, messages });
+    const { uid, lastVisited } = this.state.user;
+    const ref = this.firebase.database().ref(`users/${uid}/lastVisited`);
+    ref.set(roomId);
+    ref.off();
   }
 
   submitMessage = content => {

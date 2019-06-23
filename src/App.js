@@ -12,7 +12,6 @@ import Auth from './Auth/Auth.js';
 class App extends Component {
 
   componentDidMount() {
-    console.log();
     this.props.history.listen((location, action) => {
       console.log(
         `The current URL is ${location.pathname}${location.search}${location.hash}`
@@ -23,16 +22,14 @@ class App extends Component {
 
   render() {
     return (
-      <main>
-        <Switch>
-          <Route exact path='/' component={Splash} />
-          <Route exact path='/auth' component={Auth} />
-          <Route exact path='/chat/dashboard' component={Dashboard} />
-          <Route exact path='/chat/userProfile' component={UserProfile} />
-          <Route path='/chat/rooms/:roomid' component={Layout} />
-          <Route component={Layout} />
-        </Switch>
-      </main>
+      <Switch>
+        <Route exact path='/' component={Splash} />
+        <Route exact path='/auth' component={Auth} />
+        <Route exact path='/chat/dashboard' component={Dashboard} />
+        <Route exact path='/chat/userProfile' component={UserProfile} />
+        <Route path='/chat/rooms/:roomid' component={Layout} />
+        <Route component={Layout} />
+      </Switch>
     );
   }
 };

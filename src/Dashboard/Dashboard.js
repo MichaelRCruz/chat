@@ -12,14 +12,10 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const {firebase, subscribedRooms, setActiveRoom} = this.props;
+    // const {firebase, subscribedRooms, setActiveRoom} = this.props;
     return (
       <section className="dashboardComponent">
-        <Rooms
-          firebase={firebase}
-          subscribedRooms={subscribedRooms}
-          setActiveRoom={setActiveRoom}
-        />
+        <Rooms />
       </section>
     );
   }

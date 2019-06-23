@@ -16,12 +16,12 @@ class Chat extends React.Component {
             </Link>
           </div>
           <div className="appNameContainer">
-            <a href="https://michaelcruz.io/chat">
+            <Link to="/chat/rooms">
               <p className="headerAppName">Potato</p>
-            </a>
+            </Link>
           </div>
           <div className="headerIconContainer">
-            <Link to={`/chat/userProfile`}>
+            <Link to={'/chat/userProfile'}>
               <i className="material-icons personIcon">person</i>
             </Link>
           </div>

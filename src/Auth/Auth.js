@@ -1,19 +1,21 @@
 import React, { useContext } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
 import SessionContext from '../SessionContext.js';
+import OAuth from './OAuth.js';
 import './Auth.css';
 
 const Auth = props => {
-  const muhContext = useContext(SessionContext);
+  const sessionContext = useContext(SessionContext);
   return (
-    <Modal
-      title="settings"
-      show={true}
-      children={RegistrationForm}
-      handleClose={null}>
+    <Modal show={true} handleClose={null}>
+      <Route path='/auth/registration' component={RegistrationForm} />
+      <Route path='/auth/signin' component={SignInWithEmailForm} />
+      <Route path='/auth/verification' component={VerificationForm} />
+      <Route component={RegistrationForm} />
     </Modal>
   );
 };

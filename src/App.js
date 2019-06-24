@@ -17,11 +17,11 @@ const App = props => {
   return (
     <Switch>
       <Route exact path='/' component={Splash} />
-      <Route exact path='/auth' component={Auth} />
+      <Route strict path='/auth/' component={Auth} />
       <Route exact path='/chat/dashboard' component={Dashboard} />
       <Route exact path='/chat/userProfile' component={UserProfile} />
-      <Route path='/chat/rooms/:roomid' component={Layout} />
-      <Route component={Layout} />
+      <Route exact path='/chat/rooms/:roomid' component={Layout} />
+      <Route component={null} />
     </Switch>
   );
 };

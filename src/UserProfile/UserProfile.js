@@ -2,7 +2,7 @@ import React from 'react';
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
 import './UserProfile.css';
-
+// https://developer.chrome.com/extensions/signedInDevices
 class UserProfile extends React.Component {
 
 

@@ -7,7 +7,6 @@ import { staticMessages, staticUsers, staticRooms } from './staticState.js'
 
 const faker = require('faker');
 const fs = require('fs');
-// const firebase = require('firebase');
 
 class SessionProvider extends React.Component {
 
@@ -265,6 +264,8 @@ class SessionProvider extends React.Component {
     ref.child(msg.key).remove();
   };
 
+
+
   onlineUsersRef = firebase.database().ref(`users`);
   messagesRef = firebase.database().ref(`messages`);
   state = {
@@ -289,13 +290,15 @@ class SessionProvider extends React.Component {
         },
         deleteMessage: key => {
           this.deleteMessage(key);
-        }
+        },
+        // signInWithGoogle: () => {
+        //   this.signInWithGoogle();
+        // }    
       }}>
         {this.props.children}
       </SessionContext.Provider>
     );
   };
-
 }
 
 export default SessionProvider;

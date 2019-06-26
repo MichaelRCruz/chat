@@ -142,7 +142,7 @@ class SessionProvider extends React.Component {
   }
 
   componentDidMount() {
-    firebase.auth().signOut();
+    // firebase.auth().signOut();
     // debugger;
     // this.handleConnection();
     firebase.auth()

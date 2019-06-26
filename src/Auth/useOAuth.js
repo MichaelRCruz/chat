@@ -9,7 +9,7 @@ const useOAuth = authSelection => {
 		isDuplicate: null,
 		isError: null,
 		isLoading: false,
-		isNew: true,
+		isNew: null,
 		payload: null,
 		type: null
   });
@@ -23,7 +23,7 @@ const useOAuth = authSelection => {
         if (!didCancel) {
           setMuhState({ type: 'SUCCESS', payload, ...state });
         }
-				// console.log(oAuthRequest);
+				console.log(payload);
       } catch (error) {
         if (!didCancel) {
           setMuhState({ type: 'FAILURE', error, ...state });
@@ -38,11 +38,11 @@ const useOAuth = authSelection => {
 
 const gitHubProvider = new firebase.auth.GithubAuthProvider();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
-const selectionSwitch = selection => {
-	switch (selection) {
-		case 'GOOGLE':
+const selectionSwitch = providerId => {
+	switch (providerId) {
+		case 'GOOGLE_SIGN_IN_METHOD':
 			return new firebase.auth.GoogleAuthProvider();
-		case 'GITHUB':
+		case 'GITHUB_SIGN_IN_METHOD':
 			return new firebase.auth.GithubAuthProvider();
 		default:
 			throw new Error('auth provider selection is not present');

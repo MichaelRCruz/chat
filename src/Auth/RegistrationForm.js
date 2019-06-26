@@ -48,7 +48,7 @@ export const RegistrationForm = () => {
 	            className="googleButton"
 	            src={require('../assets/btn_google_signin_dark_normal_web@2x.png')}
 	            alt=""
-							onClick={() => setOAuthRequest('GOOGLE')}
+							onClick={() => setOAuthRequest('GOOGLE_SIGN_IN_METHOD')}
 	          />
 	          <p className="toggleFormLink">
 	            don't have an account? <span>sign up!</span>

@@ -5,17 +5,31 @@ import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
 import SessionContext from '../SessionContext.js';
+import useOAuth from './useOAuth.js';
+import { withRouter, Redirect } from 'react-router-dom';
 import './Auth.css';
-
+// https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/withRouter.md#important-note
 const Auth = props => {
+
   const sessionContext = useContext(SessionContext);
-  return (
+	const [oAuthRequest, setOAuthRequest, state] = useOAuth();
+
+	console.log(state);
+	if (state.isNew && !state.error) {
+		return (
+			<Redirect to="/auth/verification"/>
+		);
+	} else {
+		// TODO some other condiitonal routing to flesh out forms
+	}
+
+	return (
 		<Fragment>
       <Route path='/auth/registration' component={RegistrationForm} />
       <Route path='/auth/signin' component={SignInWithEmailForm} />
-      <Route path='/auth/verification' component={VerificationForm} />
+      <Route exact path='/auth/verification' component={VerificationForm} />
 		</Fragment>
   );
 };
 
-export default Auth;
+export default withRouter(Auth);

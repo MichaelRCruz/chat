@@ -2,50 +2,38 @@ import React, { useState, useEffect, useReducer } from 'react';
 import * as firebase from 'firebase';
 
 const useOAuth = authSelection => {
-  const [oAuthRequest, setOAuthRequest] = useState(null);
+  const [oAuthRequest, setOAuthRequest] = useState(authSelection);
   const [submitted, setSubmitted] = useState(false);
-  const [state, dispatch] = useReducer(oAuthReducer, {
-    isLoading: false,
-    isError: false,
-    data: null
+  const [state, setMuhState] = useState({
+		authSelection,
+		isDuplicate: null,
+		isError: null,
+		isLoading: false,
+		isNew: true,
+		payload: null,
+		type: null
   });
-	useEffect(authSelection => {
-		let didUnmount = false;
-    const requestAuth = async () => {
-      dispatch({ type: 'INIT' });
+	useEffect(() => {
+		let didCancel = false;
+    async function requestAuth() {
+      setMuhState({ type: 'INIT' });
       try {
-				const authInstance = await selectionSwitch(oAuthRequest);
+				const authInstance = selectionSwitch(oAuthRequest);
         const payload = await firebase.auth().signInWithRedirect(authInstance);
-        if (!didUnmount) {
-          dispatch({ type: 'SUCCESS', payload });
+        if (!didCancel) {
+          setMuhState({ type: 'SUCCESS', payload, ...state });
         }
 				// console.log(oAuthRequest);
       } catch (error) {
-        if (!didUnmount) {
-          dispatch({ type: 'FAILURE', error });
+        if (!didCancel) {
+          setMuhState({ type: 'FAILURE', error, ...state });
         }
       }
     };
-    if (oAuthRequest) requestAuth();
-    return () => {
-      didUnmount = true;
-			setOAuthRequest(null);
-    };
+		requestAuth();
+    return () => { didCancel = true; };
   }, [oAuthRequest, setOAuthRequest]);
-  return [oAuthRequest, setOAuthRequest];
-};
-
-const oAuthReducer = (state, action) => {
-  switch (action.type) {
-    case 'INIT':
-      return { ...state, isLoading: true, isError: false };
-    case 'SUCCESS':
-      return { ...state, isLoading: false, isError: false, data: action.payload };
-    case 'FAILURE':
-      return { ...state, isLoading: false, isError: true, error: action.error };
-    default:
-      throw new Error();
-  };
+  return [oAuthRequest, setOAuthRequest, state];
 };
 
 const gitHubProvider = new firebase.auth.GithubAuthProvider();

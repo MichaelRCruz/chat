@@ -1,17 +1,13 @@
 import React, { Fragment } from 'react';
 // import { useState, useEffect } from 'react';
 import useForm from './useForm.js';
-import useOAuthRequest from './useOAuth.js';
+import useOAuth from './useOAuth.js';
 import './RegistrationForm.css';
 
 export const RegistrationForm = () => {
 
   const { values, errors, handleChange, handleSubmit } = useForm(null);
-  const [oAuthRequest, setOAuthRequest] = useOAuthRequest();
-
-	// if (errors) {
-	//
-	// }
+  const [oAuthRequest, setOAuthRequest] = useOAuth();
 
   return (
 		<Fragment>

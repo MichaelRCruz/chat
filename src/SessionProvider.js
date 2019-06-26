@@ -8,7 +8,7 @@ import { staticMessages, staticUsers, staticRooms } from './staticState.js'
 const faker = require('faker');
 const fs = require('fs');
 
-function SessionProvider() {
+class SessionProvider extends React.Component {
 
   handleConnection = uid => {
     const userStatusDatabaseRef = firebase.database().ref(`users/${uid}/activity`);
@@ -142,7 +142,7 @@ function SessionProvider() {
   }
 
   componentDidMount() {
-    // firebase.auth().signOut();
+    firebase.auth().signOut();
     // debugger;
     // this.handleConnection();
     firebase.auth()

@@ -15,6 +15,9 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 firebase.initializeApp(config);
+// firebase.database.enableLogging(function(message) {
+//   console.log("[FIREBASE]", message);
+// });
 //
 // if (('serviceWorker' in navigator) && firebase.messaging.isSupported()) {
 //   const messaging = firebase.messaging();
@@ -31,7 +34,7 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
 
-  <SessionProvider>
+  <SessionProvider firebase={firebase}>
     <BrowserRouter>
       <App />
     </BrowserRouter>

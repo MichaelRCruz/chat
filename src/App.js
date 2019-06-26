@@ -27,3 +27,20 @@ const App = props => {
 };
 
 export default withRouter(App);
+
+
+// if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+//   const stashedEmail = window.localStorage.getItem('emailForSignIn');
+//   firebase.auth()
+//     .signInWithEmailLink(stashedEmail, window.location.href)
+//     .then(result => {
+//       if (result.credential) {
+//         window.localStorage.removeItem('emailForSignIn');
+//         const { credential, user } = result;
+//         const isNewUser = result.additionalUserInfo.isNewUser;
+//         this.setState({ credential, isNewUser });
+//       }
+//     })
+//     .catch(error => {
+//       this.setState({ error, onSignInWithEmailLinkError: true });
+//     });

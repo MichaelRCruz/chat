@@ -32,7 +32,7 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <App firebase={firebase} />
   </BrowserRouter>,
   document.getElementById("root")
 );

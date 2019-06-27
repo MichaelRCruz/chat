@@ -1,27 +1,31 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Auth from './Auth/Auth.js';
 import Layout from './Layout/Layout.js';
 import Splash from './Splash/Splash.js';
 
-const App = ({ history }) => {
-  history.listen((location, action) => {
-    console.log(
-      `The current URL is ${location.pathname}${location.search}${location.hash}`
+class App extends React.Component {
+  componentDidMount() {
+    this.props.firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        this.props.firebase.auth().signOut();
+        return <Redirect to="/auth/signin"/>;
+      }
+    });
+  };
+  render() {
+    return (
+      <Switch>
+        <Route exact path='/' component={Splash} />
+        <Route strict path='/auth/' component={Auth} />
+        <Route path='/chat' component={Layout} />
+        <Route component={null} />
+      </Switch>
     );
-  });
-  return (
-    <Switch>
-      <Route exact path='/' component={Splash} />
-      <Route strict path='/auth/' component={Auth} />
-      <Route path='/chat' component={Layout} />
-      <Route component={null} />
-    </Switch>
-  );
+  };
 };
 
-export default withRouter(App);
+export default App;
 
 
 // if (firebase.auth().isSignInWithEmailLink(window.location.href)) {

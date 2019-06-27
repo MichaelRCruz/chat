@@ -2,6 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import * as firebase from 'firebase';
+import { withRouter } from 'react-router-dom';
 import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
@@ -173,6 +174,9 @@ class SessionProvider extends React.Component {
 
   componentDidMount() {
     this.initializeApp();
+    this.props.history.listen((location, action) => {
+      console.log(this.props);
+    });
   };
 
   render() {
@@ -195,4 +199,4 @@ class SessionProvider extends React.Component {
   };
 }
 
-export default SessionProvider;
+export default withRouter(SessionProvider);

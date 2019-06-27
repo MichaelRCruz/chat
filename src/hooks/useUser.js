@@ -5,7 +5,7 @@ const useUser = () => {
   const [user, setUser] = useState(null);
   const [uid, setUid] = useState(null);
   useEffect(() => {
-    const unlisten = firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       // console.log(user);
       if (user) {
         this.userId = user.uid;
@@ -16,7 +16,7 @@ const useUser = () => {
       }
     });
     return () => {
-      unlisten();
+      firebase.database().off();
     }
   }, []);
   return uid;

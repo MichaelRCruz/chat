@@ -5,22 +5,33 @@ const useRedirect = () => {
   const [accessToken, setAccessToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [redirectError, setRedirectError] = useState(null);
-  useEffect(() => {
-    const unlisten = firebase.auth().getRedirectResult().then(result => {
-      if (result.credential) {
-        const token = result.credential.accessToken;
-        setAccessToken(token);
-      }
-      const user = result.user;
-      setUserInfo(user);
-    }).catch(error => {
+  const [redirectLoading, setRedirectLoading] = useState(true);
+  const [isNew, setIsNew] = useState(null);
+  async function fetchMethods() {
+    try {
+      await firebase.auth().getRedirectResult().then(result => {
+        if (result.credential) {
+          const isNew = result.additionalUserInfo.isNewUser
+          setIsNew(isNew);
+          setUserInfo(result.user);
+          const token = result.credential.accessToken;
+          setAccessToken(token);
+        }
+      }).catch(error => {
+        setRedirectLoading(false);
+        setRedirectError(error);
+      });
+    } catch (error) {
+      setRedirectLoading(false);
       setRedirectError(error);
-    });
-    return () => {
-      unlisten();
     }
+    setRedirectLoading(false);
+  }
+  useEffect(() => {
+    fetchMethods();
+    return () => firebase.auth().off();
   }, []);
-  return [accessToken, userInfo, redirectError];
+  return { redirectLoading, userInfo, accessToken, redirectError, isNew };
 };
 
 export default useRedirect;

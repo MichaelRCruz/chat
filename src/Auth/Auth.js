@@ -4,7 +4,6 @@ import {RegistrationForm} from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
-import useOAuth from './useOAuth.js';
 import useSignInMethods from '../hooks/useSignInMethods.js';
 import useRedirect from '../hooks/useRedirect.js';
 import useUser from '../hooks/useUser.js';
@@ -12,15 +11,13 @@ import { withRouter, Redirect } from 'react-router-dom';
 import './Auth.css';
 
 const Auth = props => {
-	// const [state, setSelection] = useOAuth();
-	// const uid = useUser();
-  // console.log(uid);
-	const [accessToken, userInfo, redirectError] = useRedirect();
-	console.log(accessToken);
-	// const [email, methods, signInMethodError] = useSignInMethods();
-	// useEffect(() => {
-  //   console.log(accessToken, userInfo, redirectError);
-  // }, [accessToken, userInfo, redirectError]);
+	const {redirectLoading, userInfo, accessToken, redirectError} = useRedirect();
+	const {email, methods, signInMethodError, methodsLoading} = useSignInMethods();
+	useEffect(() => {
+		if (!methodsLoading && !redirectLoading) {
+			console.log(userInfo);
+		}
+  }, [methodsLoading, redirectLoading]);
 	return (
 		<Fragment>
 			<Route path='/auth/registration' component={RegistrationForm} />

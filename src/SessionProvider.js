@@ -2,20 +2,21 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import * as firebase from 'firebase';
-import SessionContext from './SessionContext.js';
-import { staticMessages, staticUsers, staticRooms } from './staticState.js'
+import useUser from './hooks/useUser.js';
+import {useMessages} from './hooks/useMessages.js';
+import SessionContext from './SessionContext.js';1
 
 // import { useDeletedMessage } from './hooks/useDeletedMessage.js';
-import { useFcmToken } from './hooks/useFcmToken.js';
-import { useNewMessage } from './hooks/useNewMessage.js';
-import { useNewUser } from './hooks/useNewUser.js';
-import { usePresence } from './hooks/usePresence.js';
-import useUser from './hooks/useUser.js';
+// import { useFcmToken } from './hooks/useFcmToken.js';
+// import { useNewMessage } from './hooks/useNewMessage.js';
+// import { useNewUser } from './hooks/useNewUser.js';
+// import { usePresence } from './hooks/usePresence.js';
 
 function SessionProvider(props) {
-  const {user, uid} = useUser(props.firebase);
+  const [user, uid] = useUser();
+  const [messages, loading] = useMessages('-Ld7mZCDqAEcMSGxJt-x');
   console.log(uid);
-
+  console.log(loading, messages);
 
   const getRooms = async rooms => {
     const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
@@ -26,17 +27,17 @@ function SessionProvider(props) {
     });
     return subscribedRooms ? subscribedRooms : {};
   };
-  const getMessages = (roomId, messageCount) => {
-    return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
-      method: 'POST',
-      body: JSON.stringify({ roomId, messageCount })
-    })
-    .then(res => {
-      return res.json();
-    }).catch(error => {
-      console.log(error);
-    });
-  };
+  // const getMessages = (roomId, messageCount) => {
+  //   return fetch(`${process.env.REACT_APP_HTTP_URL}/getMessages`, {
+  //     method: 'POST',
+  //     body: JSON.stringify({ roomId, messageCount })
+  //   })
+  //   .then(res => {
+  //     return res.json();
+  //   }).catch(error => {
+  //     console.log(error);
+  //   });
+  // };
   const getUserConfig = async uid => {
     const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfig`;
     const userConfig = await goFetch(url, {
@@ -112,7 +113,7 @@ function SessionProvider(props) {
     fcmToken: '',
     user: {},
     userConfig: {},
-    messages: staticMessages,
+    messages: {},
     subscribedRooms: [],
     users: []
   };

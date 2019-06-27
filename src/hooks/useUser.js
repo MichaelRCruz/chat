@@ -18,7 +18,7 @@ const useUser = () => {
       unlisten();
     }
   }, []);
-  return { user, uid };
+  return [ user, uid ];
 };
 
 export default useUser;

@@ -6,9 +6,6 @@ import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
 
-const faker = require('faker');
-const fs = require('fs');
-
 class SessionProvider extends React.Component {
 
   handleConnection = uid => {
@@ -112,93 +109,12 @@ class SessionProvider extends React.Component {
     });
   };
 
-  getFakeMessages = () => {
-    let messages = {};
-    const messagesRef = firebase.database().ref(`messages`);
-    for (let i = 0; i < 10; i++) {
-      const newMessageRef = messagesRef.push();
-      const message = {
-        "content" : faker.hacker.phrase(),
-        "creator" : {
-          "displayName" : faker.internet.userName(),
-          "email" : faker.internet.email(),
-          "photoURL" : faker.internet.avatar(),
-          "uid" : faker.random.alphaNumeric()
-        },
-        key: newMessageRef.key,
-        "read" : true,
-        "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
-        "sentAt" : 1558661840808,
-      }
-      newMessageRef.set(message, error => {
-        if (error) {
-          console.log(error);
-        } else {
-
-        }
-      });
-      messages[newMessageRef.key] = message;
-    }
-    return messages;
-  }
-
-  componentDidMount() {
-    // firebase.auth().signOut();
-    // debugger;
-    // this.handleConnection();
-    firebase.auth()
-      .onAuthStateChanged(async user => {
-        if (!user) {
-          this.setState({ onAuthStateChangedError: true });
-          firebase.auth().signOut();
-        } else {
-          const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
-          const lastVisited = userConfig.lastVisited;
-          await this.setListeners(lastVisited);
-          const fcmToken = await this.initNotifications(user);
-          const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
-          const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
-          const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
-          // const { messages } = await this.getMessages(lastVisited, 100);
-          this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
-        }
-      });
-    firebase.auth()
-      .getRedirectResult()
-      .then(result => {
-        if (result.credential) {
-          const { credential } = result;
-          const isNewUser = result.additionalUserInfo.isNewUser;
-          this.setState({ credential, isNewUser });
-        }
-      })
-      .catch(error => {
-        this.setState({ error, onGetRedirectResultError: true });
-      });
-    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
-      const stashedEmail = window.localStorage.getItem('emailForSignIn');
-      firebase.auth()
-        .signInWithEmailLink(stashedEmail, window.location.href)
-        .then(result => {
-          if (result.credential) {
-            window.localStorage.removeItem('emailForSignIn');
-            const { credential, user } = result;
-            const isNewUser = result.additionalUserInfo.isNewUser;
-            this.setState({ credential, isNewUser });
-          }
-        })
-        .catch(error => {
-          this.setState({ error, onSignInWithEmailLinkError: true });
-        });
-    }
-  };
-
   updateActiveRoom = async roomId => {
     const { uid, lastVisited } = this.state.user;
     const ref = firebase.database().ref(`users/${uid}/lastVisited`);
     ref.set(roomId);
     ref.off();
-  }
+  };
 
   submitMessage = content => {
     const { displayName, email, photoURL, uid } = this.state.user;
@@ -237,6 +153,28 @@ class SessionProvider extends React.Component {
     subscribedRooms: [],
     users: []
   };
+
+  initializeApp = user => {
+    firebase.auth().onAuthStateChanged(async user => {
+      if (!user) {
+        firebase.auth().signOut();
+      }
+      // this.handleConnection();
+      const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
+      const lastVisited = userConfig.lastVisited;
+      await this.setListeners(lastVisited);
+      const fcmToken = await this.initNotifications(user);
+      const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
+      const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
+      const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
+      this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
+    });
+  };
+
+  componentDidMount() {
+    this.initializeApp();
+  };
+
   render() {
     return (
       <SessionContext.Provider value={{

@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import BrowserRouter from "./BrowserRouter.js";
 import App from "./App.js";
 
-import SessionProvider from './SessionProvider.js';
-
 import * as firebase from 'firebase';
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -33,12 +31,8 @@ firebase.initializeApp(config);
 // };
 
 ReactDOM.render(
-
-  <SessionProvider firebase={firebase}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </SessionProvider>,
-
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById("root")
 );

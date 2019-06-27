@@ -23,7 +23,6 @@ const useOAuth = authSelection => {
         if (!didCancel) {
           setMuhState({ type: 'SUCCESS', payload, ...state });
         }
-				console.log(payload);
       } catch (error) {
         if (!didCancel) {
           setMuhState({ type: 'FAILURE', error, ...state });

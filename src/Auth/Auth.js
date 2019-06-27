@@ -4,15 +4,14 @@ import {RegistrationForm} from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
-import SessionContext from '../SessionContext.js';
 import useOAuth from './useOAuth.js';
 import { withRouter, Redirect } from 'react-router-dom';
 import './Auth.css';
 
 const Auth = props => {
-  const sessionContext = useContext(SessionContext);
 	const [oAuthRequest, setOAuthRequest, state] = useOAuth();
 	const { isDuplicate, isNew, error } = state;
+  console.log(state);
 	if (isNew && !error) {
 		return <Redirect to="/auth/verification"/>;
 	} else if (isDuplicate && !error) {

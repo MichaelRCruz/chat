@@ -4,20 +4,20 @@ import {RegistrationForm} from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
-import useSignInMethods from '../hooks/useSignInMethods.js';
+// import useSignInMethods from '../hooks/useSignInMethods.js';
 import useRedirect from '../hooks/useRedirect.js';
-import useUser from '../hooks/useUser.js';
+// import useUser from '../hooks/useUser.js';
 import { withRouter, Redirect } from 'react-router-dom';
 import './Auth.css';
 
 const Auth = props => {
-	const {redirectLoading, userInfo, accessToken, redirectError} = useRedirect();
-	const {email, methods, signInMethodError, methodsLoading} = useSignInMethods();
+	const {redirectLoading, ...rest} = useRedirect();
+	// const {email, methods, signInMethodError, methodsLoading} = useSignInMethods();
 	useEffect(() => {
-		if (!methodsLoading && !redirectLoading) {
-			console.log(userInfo);
+		if (!redirectLoading) {
+			console.log(rest);
 		}
-  }, [methodsLoading, redirectLoading]);
+  }, [redirectLoading]);
 	return (
 		<Fragment>
 			<Route path='/auth/registration' component={RegistrationForm} />

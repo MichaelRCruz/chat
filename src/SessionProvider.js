@@ -161,6 +161,7 @@ class SessionProvider extends React.Component {
         firebase.auth().signOut();
       }
       // this.handleConnection();
+      console.log(localStorage.getItem('firebaseCred'));
       const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
       const lastVisited = userConfig.lastVisited;
       await this.setListeners(lastVisited);

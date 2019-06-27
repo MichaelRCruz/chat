@@ -6,6 +6,7 @@ const useUser = () => {
   const [uid, setUid] = useState(null);
   useEffect(() => {
     const unlisten = firebase.auth().onAuthStateChanged(user => {
+      // console.log(user);
       if (user) {
         this.userId = user.uid;
         setUid(this.userId);
@@ -18,7 +19,7 @@ const useUser = () => {
       unlisten();
     }
   }, []);
-  return [ user, uid ];
+  return uid;
 };
 
 export default useUser;

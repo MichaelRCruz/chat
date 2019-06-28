@@ -4,8 +4,9 @@ import * as firebase from 'firebase';
 const useAuthLink = inputEmail => {
   const [email, setEmail] = useState(inputEmail);
   const [linkError, setLinkError] = useState(null);
+  const [wasSubmitted, setWasSubmitted] = useState(false);
   const [actionCodeSettings, setActionCodeSettings] = useState({
-    url: `${process.env.REACT_APP_HTTP_URL}/auth/registration`,
+    url: `http://localhost:3000/auth/registration`,
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });
@@ -16,11 +17,14 @@ const useAuthLink = inputEmail => {
         firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
           .then(() => {
             window.localStorage.setItem('potatoEmailForSignIn', email);
+            setWasSubmitted(true);
           })
           .catch(error => {
+            console.log(error);
             setLinkError(error);
           });
       } catch (error) {
+        // setLinkError(error);
         if (!didCancel) {
           setLinkError(error);
         }
@@ -28,10 +32,11 @@ const useAuthLink = inputEmail => {
     };
     fetchData();
     return () => {
+      // setWasSubmitted(true);
       didCancel = true;
     };
   }, [email]);
-  return {email, setEmail, setLinkError};
+  return {email, setEmail, setLinkError, wasSubmitted};
 };
 
 export default useAuthLink;

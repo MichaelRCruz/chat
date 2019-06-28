@@ -8,7 +8,7 @@ import './RegistrationForm.css';
 export const RegistrationForm = () => {
   const { values, errors, handleChange, handleSubmit } = useForm(null);
   const [selection, setSelection] = useOAuth();
-  const [ email, setEmail ] = useAuthLink();
+  const { email, setEmail, setLinkError } = useAuthLink();
   return (
 		<Fragment>
 			<form className="signInFormComponent">

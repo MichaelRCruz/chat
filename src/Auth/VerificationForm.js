@@ -1,4 +1,5 @@
 import React from 'react';
+import * as firebase from 'firebase';
 import Validation from '../validation.js';
 import { debounce } from '../utils.js';
 
@@ -74,6 +75,28 @@ class VerificationForm extends React.Component {
 
   toggleRegistrationMode = () => {
     this.props.toggleRegistrationMode(false);
+  }
+
+  componentDidMount() {
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+      var email = window.localStorage.getItem('potatoEmailForSignIn');
+      if (!email) {
+        email = window.prompt('Please provide your email for confirmation');
+      }
+      firebase.auth().signInWithEmailLink(email, window.location.href)
+        .then(result => {
+          window.localStorage.removeItem('emailForSignIn');
+          console.log(result);
+          // You can access the new user via result.user
+          // Additional user info profile not available via:
+          // result.additionalUserInfo.profile == null
+          // You can check if the user is new or existing:
+          // result.additionalUserInfo.isNewUser
+        })
+        .catch(function(error) {
+          throw new Error(error);
+        });
+    }
   }
 
   render () {

@@ -32,7 +32,7 @@ const useAuthLink = inputEmail => {
     };
     fetchData();
     return () => {
-      // setWasSubmitted(true);
+      setWasSubmitted(false);
       didCancel = true;
     };
   }, [email]);

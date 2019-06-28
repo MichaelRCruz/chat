@@ -155,22 +155,19 @@ class SessionProvider extends React.Component {
     users: []
   };
 
-  initializeApp = user => {
-    firebase.auth().onAuthStateChanged(async user => {
-      if (!user) {
-        firebase.auth().signOut();
-      }
-      // this.handleConnection();
-      console.log(localStorage.getItem('firebaseCred'));
-      const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
+  initializeApp = async newUser => {
+    // this.handleConnection();
+    // console.log(localStorage.getItem('firebaseCred'));
+    if (newUser) {
+      const { userConfig } = await new RealTimeApi().getUserConfig(newUser.uid);
       const lastVisited = userConfig.lastVisited;
       await this.setListeners(lastVisited);
-      const fcmToken = await this.initNotifications(user);
+      const fcmToken = await this.initNotifications(newUser);
       const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
       const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
       const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
-      this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
-    });
+      this.setState({ userConfig, activeRoom, newUser, fcmToken, subscribedRooms, messages });
+    }
   };
 
   componentDidMount() {
@@ -192,6 +189,12 @@ class SessionProvider extends React.Component {
         },
         deleteMessage: key => {
           this.deleteMessage(key);
+        },
+        initializeApp: newUser => {
+          this.initializeApp(newUser);
+        },
+        clearContext: () => {
+          this.clearContext();
         }
       }}>
         {this.props.children}

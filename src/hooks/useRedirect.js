@@ -11,16 +11,19 @@ const useRedirect = () => {
   const [methods, setMethods] = useState(null);
   const [methodsLoading, setMethodsLoading] = useState(true);
   const [methodError, setMethodError] = useState(null);
+  const [uid, setUid] = useState(null);
   async function fetchMethods() {
     try {
       await firebase.auth().getRedirectResult().then(result => {
         if (result.credential) {
           const isNew = result.additionalUserInfo.isNewUser
           const token = result.credential.accessToken;
+          const uid = result.user.uid;
           setIsNew(isNew);
           setUserInfo(result.user);
           setEmail(result.user.email);
           setAccessToken(token);
+          setUid(uid);
         }
       }).catch(error => {
         setRedirectLoading(false);

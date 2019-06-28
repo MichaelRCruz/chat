@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import * as firebase from 'firebase';
 import useForm from './useForm.js';
@@ -11,12 +11,11 @@ const RegistrationForm = () => {
   const { values, errors, handleChange, handleSubmit } = useForm(null);
   const [selection, setSelection] = useOAuth();
   const { email, setEmail, setLinkError, wasSubmitted } = useAuthLink();
-  // useEffect(() => {
-  //   if (email) {
-  //     redirect = true;
-  //     // return <Redirect to="auth/verification"/>;
-  //   }
-  // }, [wasSubmitted]);
+  useEffect(() => {
+    if (wasSubmitted) {
+      console.log('submitted auth request by form');
+    }
+  }, [wasSubmitted]);
   if (wasSubmitted) {
     return <Redirect to="verification"/>;
   } else {

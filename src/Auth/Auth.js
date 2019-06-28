@@ -4,18 +4,18 @@ import RegistrationForm from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import Modal from '../Modal/Modal.js';
-// import useSignInMethods from '../hooks/useSignInMethods.js';
 import useRedirect from '../hooks/useRedirect.js';
 import useAuthLink from '../hooks/useAuthLink.js';
-// import useUser from '../hooks/useUser.js';
 import { withRouter, Redirect } from 'react-router-dom';
+import SessionContext from '../SessionContext.js';
 import './Auth.css';
 
 const Auth = props => {
+	const { updateUser } = useContext
 	const {redirectLoading, ...rest} = useRedirect();
 	useEffect(() => {
 		if (!redirectLoading) {
-			console.log('from Auth.js');
+			console.log(rest.userInfo);
 		}
   }, [redirectLoading]);
 	return (

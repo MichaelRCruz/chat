@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import SessionProvider from './SessionProvider.js';
 import BrowserRouter from "./BrowserRouter.js";
 import App from "./App.js";
 
@@ -32,7 +33,9 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
   <BrowserRouter>
-    <App firebase={firebase} />
+    <SessionProvider firebase={firebase}>
+      <App firebase={firebase} />
+    </SessionProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

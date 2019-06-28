@@ -1,17 +1,17 @@
-import React, { Fragment } from 'react';
-// import { useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import * as firebase from 'firebase';
 import useForm from './useForm.js';
 import useOAuth from './useOAuth.js';
+import useAuthLink from '../hooks/useAuthLink.js';
 import './RegistrationForm.css';
 
 export const RegistrationForm = () => {
-
   const { values, errors, handleChange, handleSubmit } = useForm(null);
   const [selection, setSelection] = useOAuth();
-
+  const [ email, setEmail ] = useAuthLink();
   return (
 		<Fragment>
-			<form className="signInFormComponent" onSubmit={handleSubmit}>
+			<form className="signInFormComponent">
 	      <fieldset className="signInFieldset">
 	        <legend className="signInWithEmailLegend">
 						<p className="appNameAtAuth">Potato</p>
@@ -27,21 +27,16 @@ export const RegistrationForm = () => {
 								onChange={handleChange}
 							/>
 						<p className="errorMessage">{errors.email}</p>
-	            <input
-	              className="input passwordInput"
-	              type="password"
-	              name="password"
-	              placeholder="password"
-								value={values.password || ''}
-								onChange={handleChange}
-	            />
-							<p className="errorMessage">{errors.password}</p>
 	          </div>
 	          <button
 	            className="signInWithEmailButton"
 	            type="submit"
-	            disabled={false}>
-	            register
+	            disabled={false}
+              onClick={(e) => {
+                e.preventDefault();
+                setEmail(values.email);
+              }}>
+	            send dynamic link
 	          </button>
 	          <span className="horizontalRule"> or </span>
 	          <img

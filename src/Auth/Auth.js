@@ -12,10 +12,10 @@ import './Auth.css';
 
 const Auth = props => {
 	const {redirectLoading, ...rest} = useRedirect();
-	// const {email, methods, signInMethodError, methodsLoading} = useSignInMethods();
+	// const { isNew,  }
 	useEffect(() => {
 		if (!redirectLoading) {
-			console.log(rest);
+			console.log('from Auth.js');
 		}
   }, [redirectLoading]);
 	return (

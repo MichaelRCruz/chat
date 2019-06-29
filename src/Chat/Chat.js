@@ -4,20 +4,8 @@ import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
-import SessionContext from '../SessionContext.js';
 
 class Chat extends React.Component {
-  static contextType = SessionContext;
-  componentDidMount() {
-    const { roomid } = this.props.match.params;
-    const { length } = this.props.history;
-    const { updateActiveRoom, state } = this.context;
-    console.log(roomid);
-    // if (state.activeRoom.key !== roomid && length < 2) {
-    updateActiveRoom(roomid);
-    this.props.history.push(`/chat/rooms/${roomid}`);
-    // }
-  }
   render() {
     return (
       <div className="appComponent">

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import Auth from './Auth/Auth.js';
-// import Layout from './Layout/Layout.js';
 import Splash from './Splash/Splash.js';
 import Dashboard from './Dashboard/Dashboard.js';
 import UserProfile from './UserProfile/UserProfile.js';
@@ -12,8 +11,6 @@ class App extends React.Component {
     this.props.firebase.auth().onAuthStateChanged(user => {
       if (!user) {
         this.props.firebase.auth().signOut();
-        // const { clearContext } = this.context;
-        // clearContext();
       }
     });
   };

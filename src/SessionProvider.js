@@ -146,6 +146,20 @@ class SessionProvider extends React.Component {
     ref.child(msg.key).remove();
   };
 
+  handleRoomDeclaration = async (roomId, uid) => {
+    // const user = await firebase.auth().currentUser;
+    // if (user) {
+    //   this.initializeApp(uid, user);
+    // } else {
+    //   this.props.history.push(`/auth/registration`);
+    // }
+    // const {messages} = await new RealTimeApi().getMessages(roomId, 100);
+    // const {rooms} = await new RealTimeApi().getRooms(roomId);
+    // await this.setState(messages, rooms);
+    // const activeRoom = this.updateActiveRoom(roomId);
+    console.log('hi');
+  }
+
   onlineUsersRef = firebase.database().ref(`users`);
   messagesRef = firebase.database().ref(`messages`);
   state = {
@@ -159,7 +173,7 @@ class SessionProvider extends React.Component {
     users: []
   };
 
-  initializeApp = async (uid, user) => {
+  initializeApp = async uid => {
     // this.handleConnection();
     const { userConfig } = await new RealTimeApi().getUserConfig(uid);
     const lastVisited = userConfig.lastVisited;
@@ -168,7 +182,7 @@ class SessionProvider extends React.Component {
     const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
     const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
     const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
-    this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
+    this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, uid });
   };
 
   // componentDidMount() {
@@ -194,9 +208,9 @@ class SessionProvider extends React.Component {
         initializeApp: (uid, user) => {
           this.initializeApp(uid, user);
         },
-        clearContext: () => {
-          this.clearContext();
-        }
+        handleRoomDeclaration: (roomId, uid) => {
+          this.handleRoomDeclaration(roomId, uid);
+        },
       }}>
         {this.props.children}
       </SessionContext.Provider>

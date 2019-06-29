@@ -1,12 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
+import SessionContext from '../SessionContext.js';
 
 class Chat extends React.Component {
+  static contextType = SessionContext;
   render() {
+    const { roomid } = this.props.match.params;
+    const { handleRoomDeclaration, uid } = this.context;
+    handleRoomDeclaration(roomid, uid);
+    console.log(roomid, uid);
     return (
       <div className="appComponent">
         <header className="header">
@@ -40,4 +46,4 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat;
+export default withRouter(Chat);

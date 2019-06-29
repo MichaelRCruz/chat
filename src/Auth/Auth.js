@@ -11,6 +11,7 @@ import SessionContext from '../SessionContext.js';
 import './Auth.css';
 
 const Auth = props => {
+
 	const context = useContext(SessionContext);
 	const { uid, userInfo } = useRedirect();
 	const redirectToChat = () => {
@@ -19,9 +20,11 @@ const Auth = props => {
 			props.history.push(`/chat/rooms/lastVisited`);
 		}
 	}
+
 	useEffect(() => {
 		return redirectToChat();
   }, [uid]);
+	
 	return (
 		<Fragment>
 			<Route path='/auth/registration' component={RegistrationForm} />

@@ -53,7 +53,7 @@ class SessionProvider extends React.Component {
       method: 'POST',
       body: JSON.stringify({ fcmToken, uid, subscription})
     })
-    .then(function(response) {
+    .then(response => {
       return response;
     })
     .catch(error => {
@@ -112,9 +112,13 @@ class SessionProvider extends React.Component {
 
   updateActiveRoom = async roomId => {
     const { uid, lastVisited } = this.state.user;
-    const ref = firebase.database().ref(`users/${uid}/lastVisited`);
-    ref.set(roomId);
-    ref.off();
+    let error = null;
+    const {messages} = await new RealTimeApi().getMessages(roomId, 100);
+    const ref = await firebase.database().ref(`users/${uid}/lastVisited`);
+    await ref.set(roomId, dbError => error = dbError );
+    await this.setState({ messages, lastVisited: roomId, error }, () => {
+      ref.off();
+    });
   };
 
   submitMessage = content => {
@@ -155,27 +159,24 @@ class SessionProvider extends React.Component {
     users: []
   };
 
-  initializeApp = async newUser => {
+  initializeApp = async (uid, user) => {
     // this.handleConnection();
-    // console.log(localStorage.getItem('firebaseCred'));
-    if (newUser) {
-      const { userConfig } = await new RealTimeApi().getUserConfig(newUser.uid);
-      const lastVisited = userConfig.lastVisited;
-      await this.setListeners(lastVisited);
-      const fcmToken = await this.initNotifications(newUser);
-      const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
-      const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
-      const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
-      this.setState({ userConfig, activeRoom, newUser, fcmToken, subscribedRooms, messages });
-    }
+    const { userConfig } = await new RealTimeApi().getUserConfig(uid);
+    const lastVisited = userConfig.lastVisited;
+    await this.setListeners(lastVisited);
+    const fcmToken = await this.initNotifications(uid);
+    const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
+    const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
+    const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
+    this.setState({ userConfig, activeRoom, user, fcmToken, subscribedRooms, messages });
   };
 
-  componentDidMount() {
-    this.initializeApp();
-    this.props.history.listen((location, action) => {
-      console.log(this.props);
-    });
-  };
+  // componentDidMount() {
+  //   // this.initializeApp();
+  //   this.props.history.listen((location, action) => {
+  //     console.log(this.props.history.location);
+  //   });
+  // };
 
   render() {
     return (
@@ -190,8 +191,8 @@ class SessionProvider extends React.Component {
         deleteMessage: key => {
           this.deleteMessage(key);
         },
-        initializeApp: newUser => {
-          this.initializeApp(newUser);
+        initializeApp: (uid, user) => {
+          this.initializeApp(uid, user);
         },
         clearContext: () => {
           this.clearContext();

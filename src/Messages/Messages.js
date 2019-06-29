@@ -5,6 +5,7 @@ import Mention from './Mention.js';
 import Direct from './Direct.js';
 import Timeago from './../timeago/timeago.js';
 import SessionContext from '../SessionContext.js';
+import { staticMessages } from '../staticState.js';
 import './Messages.css';
 
 import defaultUserImage from './../assets/images/peaceful_potato.png';

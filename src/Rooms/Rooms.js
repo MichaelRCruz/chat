@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
+  static contextType = SessionContext;
+
   updateActiveRoom = key => {
     this.context.updateActiveRoom(key);
+    console.log(this.props);
+    this.props.history.push(`/chat/rooms/${key}`);
   }
-  static contextType = SessionContext;
+
   render() {
     const { subscribedRooms } = this.context.state;
     const rooms = subscribedRooms.map((room, i) => {
@@ -33,6 +37,6 @@ class Rooms extends React.Component {
       </section>
     );
   }
-}
+};
 
-export default Rooms;
+export default withRouter(Rooms);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { staticMessages } from '../staticState.js';
 import './Messages.css';
 
 import Timeago from './../timeago/timeago.js';
@@ -10,14 +11,15 @@ class Message extends Component {
 
   render() {
     const { msg, user } = this.props;
-    // const { bar: baz = 'michaelcruz.io' } = foo;
+    // const { msg: baz = 'michaelcruz.io' } = foo;
+    // debugger;
     return (
       <li className="message">
         <div className="imageMessageContainer">
           <img
             className="messageImage"
             alt="user"
-            src={msg.creator.photoURL ? msg.creator.photoURL : defaultUserImage}
+            src={msg ? msg.creator.photoURL : defaultUserImage}
            />
           <div className="nameMessageContainer">
             <div className="display-name">
@@ -40,5 +42,17 @@ class Message extends Component {
     )
   }
 }
+
+// Message.defaultProps = {
+//   "content" : "Wait, what is the symptom?",
+//   "creator" : {
+//     "displayName" : "mykey",
+//     "email" : "michael@michaelcruz.io",
+//     "photoURL" : "https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg",
+//     "uid" : "buaySW4zINZ4cWsdykHgmyYqWDy2"
+//   },
+//   "roomId" : "-Ld7mZCDqAEcMSGxJt-x",
+//   "sentAt" : 1558661960574
+// };
 
 export default Message;

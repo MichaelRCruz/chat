@@ -14,7 +14,7 @@ const useRedirect = () => {
   const [uid, setUid] = useState(null);
   async function fetchMethods() {
     try {
-      await firebase.auth().getRedirectResult().then(result => {
+      const redirect = await firebase.auth().getRedirectResult().then(result => {
         if (result.credential) {
           const isNew = result.additionalUserInfo.isNewUser
           const token = result.credential.accessToken;
@@ -30,7 +30,7 @@ const useRedirect = () => {
         setRedirectError(error);
       });
       if (email) {
-        await firebase.auth().fetchSignInMethodsForEmail(email).then(methods => {
+        const methods = await firebase.auth().fetchSignInMethodsForEmail(email).then(methods => {
           if (methods[0] === 'password') {
             setMethods(methods);
           }
@@ -48,16 +48,17 @@ const useRedirect = () => {
   }
   useEffect(() => {
     fetchMethods();
-  }, [email]);
+  }, []);
   return {
-    redirectLoading,
+    setRedirectLoading,
     userInfo,
     accessToken,
     isNew,
     methods,
     redirectError,
     methodError,
-    email
+    email,
+    uid
   };
 };
 

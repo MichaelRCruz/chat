@@ -16,7 +16,7 @@ const RegistrationForm = () => {
       console.log('submitted auth request by form');
     }
   }, [wasSubmitted]);
-  if (wasSubmitted) {
+  if (false) {
     return <Redirect to="verification"/>;
   } else {
     return (

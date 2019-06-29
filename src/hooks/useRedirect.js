@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// import RealTimeApi from '../RealTimeApi.js';
 import * as firebase from 'firebase';
 
 const useRedirect = () => {
@@ -13,6 +14,7 @@ const useRedirect = () => {
   const [methodError, setMethodError] = useState(null);
   const [uid, setUid] = useState(null);
   async function fetchMethods() {
+    // setRedirectLoading(true);
     try {
       const redirect = await firebase.auth().getRedirectResult().then(result => {
         if (result.credential) {
@@ -35,14 +37,15 @@ const useRedirect = () => {
             setMethods(methods);
           }
         }).catch(error => {
-          setMethodsLoading(false);
           setMethodError(error);
+          setRedirectLoading(false);
+          setMethodsLoading(false);
         });
       }
     } catch (error) {
-      setRedirectLoading(false);
       setRedirectError(error);
       setMethodError(error);
+      setRedirectLoading(false);
     }
     setRedirectLoading(false);
   }
@@ -50,6 +53,7 @@ const useRedirect = () => {
     fetchMethods();
   }, []);
   return {
+    redirectLoading,
     setRedirectLoading,
     userInfo,
     accessToken,

@@ -7,24 +7,51 @@ import Modal from '../Modal/Modal.js';
 import useRedirect from '../hooks/useRedirect.js';
 import useAuthLink from '../hooks/useAuthLink.js';
 import { withRouter, Redirect } from 'react-router-dom';
-import SessionContext from '../SessionContext.js';
+// import SessionContext from '../SessionContext.js';
 import './Auth.css';
 
 const Auth = props => {
+	// const context = useContext(SessionContext);
+	const response = useRedirect();
+	const {
+		redirectLoading,
+    userInfo,
+    accessToken,
+    isNew,
+    methods,
+    redirectError,
+    methodError,
+    uid
+  } = response;
 
-	const context = useContext(SessionContext);
-	const { uid, userInfo } = useRedirect();
-	const redirectToChat = () => {
-		if (uid && userInfo) {
-			context.initializeApp(uid, userInfo);
+	const { email, linkError, wasSubmitted } = useAuthLink(null);
+
+	const isError = redirectError || methodError;
+
+	const redirectAfterAuth = () => {
+		if (isError) {
+			console.log(redirectError, methodError, linkError);
+		} else if (isNew && !isError) {
+			console.log('is new user', response);
+		} else if (uid && !isError) {
+			const jsonStorage = JSON.stringify(response, null, 2);
+			localStorage.setItem('potatoAuth', jsonStorage);
 			props.history.push(`/chat/rooms/lastVisited`);
+		} else if (wasSubmitted) {
+			console.log('is email', email);
+		} else {
+			console.log('some other outcome', response);
 		}
 	}
 
 	useEffect(() => {
-		return redirectToChat();
-  }, [uid]);
-	
+		if (!redirectLoading && uid && !wasSubmitted) redirectAfterAuth();
+		if (wasSubmitted) redirectAfterAuth();
+		return () => {
+			console.log('clean up invoked');
+		}
+  }, [uid, redirectLoading, wasSubmitted]);
+
 	return (
 		<Fragment>
 			<Route path='/auth/registration' component={RegistrationForm} />

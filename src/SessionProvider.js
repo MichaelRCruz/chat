@@ -90,7 +90,7 @@ class SessionProvider extends React.Component {
       .equalTo(key)
       .limitToLast(1)
       .on('child_added', snapshot => {
-        if (snapshot.val().roomId === key) {
+        if (snapshot.val().roomId === this.state.activeRoom.key) {
           const messages = this.state.messages;
           const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
           this.setState({ messages: newMessages });
@@ -101,7 +101,7 @@ class SessionProvider extends React.Component {
     .equalTo(key)
     .limitToLast(1)
       .on('child_removed', snapshot  => {
-        if (snapshot.val().roomId === key) {
+        if (snapshot.val().roomId === this.state.activeRoom.key) {
           const deletedKey = snapshot.key;
           const { [deletedKey]: something, ...rest } = this.state.messages;
           const newMessages = Object.assign({}, rest);
@@ -133,7 +133,7 @@ class SessionProvider extends React.Component {
       "read" : false,
       "roomId" : this.state.activeRoom.key,
       "sentAt" : Date.now()
-    }
+    };
     newMessageRef.set(message, error => {
       if (error) {
         this.setState({ error });
@@ -171,12 +171,11 @@ class SessionProvider extends React.Component {
     this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user });
   };
 
-  // componentDidMount() {
-  //   // this.initializeApp();
-  //   this.props.history.listen((location, action) => {
-  //     console.log(this.props.history.location);
-  //   });
-  // };
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.initializeApp(user);
+    });
+  };
 
   render() {
     return (

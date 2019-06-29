@@ -146,18 +146,9 @@ class SessionProvider extends React.Component {
     ref.child(msg.key).remove();
   };
 
-  handleRoomDeclaration = async (roomId, uid) => {
-    // const user = await firebase.auth().currentUser;
-    // if (user) {
-    //   this.initializeApp(uid, user);
-    // } else {
-    //   this.props.history.push(`/auth/registration`);
-    // }
-    // const {messages} = await new RealTimeApi().getMessages(roomId, 100);
-    // const {rooms} = await new RealTimeApi().getRooms(roomId);
-    // await this.setState(messages, rooms);
-    // const activeRoom = this.updateActiveRoom(roomId);
-    console.log('hi');
+  handleRoomDeclaration = async (roomId) => {
+    const user = await firebase.auth().currentUser;
+    console.log('hi', roomId, user);
   }
 
   onlineUsersRef = firebase.database().ref(`users`);
@@ -208,9 +199,9 @@ class SessionProvider extends React.Component {
         initializeApp: (uid, user) => {
           this.initializeApp(uid, user);
         },
-        handleRoomDeclaration: (roomId, uid) => {
-          this.handleRoomDeclaration(roomId, uid);
-        },
+        handleRoomDeclaration: (roomId) => {
+          this.handleRoomDeclaration(roomId);
+        }
       }}>
         {this.props.children}
       </SessionContext.Provider>

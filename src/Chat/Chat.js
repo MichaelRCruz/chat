@@ -10,9 +10,9 @@ class Chat extends React.Component {
   static contextType = SessionContext;
   render() {
     const { roomid } = this.props.match.params;
-    const { handleRoomDeclaration, uid } = this.context;
-    handleRoomDeclaration(roomid, uid);
-    console.log(roomid, uid);
+    const { handleRoomDeclaration } = this.context;
+    handleRoomDeclaration(roomid);
+    console.log(roomid);
     return (
       <div className="appComponent">
         <header className="header">

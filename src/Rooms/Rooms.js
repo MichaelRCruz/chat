@@ -8,7 +8,7 @@ class Rooms extends React.Component {
 
   updateActiveRoom = key => {
     this.context.updateActiveRoom(key);
-    console.log(this.props);
+    // console.log(this.props);
     this.props.history.push(`/chat/rooms/${key}`);
   }
 

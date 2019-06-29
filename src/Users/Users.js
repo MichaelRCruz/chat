@@ -5,21 +5,26 @@ import './Users.css';
 
 class Users extends React.Component {
 
+  handleClick = user => {
+    console.log(user);
+  }
+
 
   static contextType = SessionContext;
   render() {
     const { users } = this.context.state;
-    const onlineUsers = users.map((usr, i) => {
+    const uids = Object.keys(users);
+    const onlineUsers = uids.map((uid, i) => {
       return (
         <li className="onlineUser" key={i}>
-          <button className="inspectUserButton">
+          <button className="inspectUserButton" onClick={() => this.handleClick(users[uid])}>
             <div>
               <img
                 className="userMenuImage"
                 alt="user"
-                src={usr.photoURL || defaultUserImage}
+                src={users[uid].photoURL || defaultUserImage}
                />
-              <p className="menuDisplayName">{ usr.displayName }</p>
+              <p className="menuDisplayName">{ users[uid].displayName }</p>
             </div>
           </button>
         </li>

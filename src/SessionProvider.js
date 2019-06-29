@@ -77,20 +77,24 @@ class SessionProvider extends React.Component {
   };
 
   setListeners(key) {
+    const users = Object.keys(this.state.activeRoom.users);
     this.onlineUsersRef
       .orderByChild('lastVisited')
-      .equalTo(key)
+      .equalTo(this.state.activeRoom.key)
       .limitToLast(1)
       .on('child_added', snap => {
-        const oldUsers = this.state.users;
-        this.setState({ users: oldUsers.concat(snap.val()) });
+        const isSubscribed = users.includes(snap.key);
+        if (isSubscribed) {
+          users[snap.key] = snap.val();
+        }
+        this.setState({ users });
     });
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
       .limitToLast(1)
       .on('child_added', snapshot => {
-        if (snapshot.val().roomId === this.state.activeRoom.key) {
+        if (snapshot.val().roomId === key) {
           const messages = this.state.messages;
           const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
           this.setState({ messages: newMessages });
@@ -101,7 +105,7 @@ class SessionProvider extends React.Component {
     .equalTo(key)
     .limitToLast(1)
       .on('child_removed', snapshot  => {
-        if (snapshot.val().roomId === this.state.activeRoom.key) {
+        if (snapshot.val().roomId === key) {
           const deletedKey = snapshot.key;
           const { [deletedKey]: something, ...rest } = this.state.messages;
           const newMessages = Object.assign({}, rest);
@@ -112,6 +116,7 @@ class SessionProvider extends React.Component {
 
   updateActiveRoom = async roomId => {
     const { uid, lastVisited } = this.state.user;
+    this.setListeners(roomId);
     let error = null;
     const {messages} = await new RealTimeApi().getMessages(roomId, 100);
     const ref = await firebase.database().ref(`users/${uid}/lastVisited`);
@@ -156,24 +161,33 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
-    users: []
+    users: {}
   };
 
-  initializeApp = async user => {
+  initializeApp = async (user) => {
     // this.handleConnection();
+    // debugger;
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const lastVisited = userConfig.lastVisited;
-    await this.setListeners(lastVisited);
     const fcmToken = await this.initNotifications(user.uid);
     const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
+    const users = activeRoom.users;
+    // await this.setListeners(activeRoom.key);
     const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
     const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
-    this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user });
+    this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
+      this.setListeners(activeRoom.key);
+    });
   };
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      this.initializeApp(user);
+      const potatoAuth = localStorage.getItem('potatoAuth');
+      if (!user) {
+        firebase.auth().signOut();
+      } else {
+        this.initializeApp(user);
+      }
     });
   };
 

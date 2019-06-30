@@ -19,8 +19,7 @@ const Auth = props => {
     methodError,
     uid
   } = response;
-
-	const { email, linkError, wasSubmitted } = useAuthLink(null);
+	const { email, linkError, wasSubmitted, linkRequested } = useAuthLink(null);
 
 	const isError = redirectError || methodError;
 
@@ -34,7 +33,7 @@ const Auth = props => {
 			localStorage.setItem('potatoAuth', jsonStorage);
 			// props.history.push(`/chat`);
 		} else if (wasSubmitted) {
-			console.log('is email', email);
+			console.log('is email', linkRequested);
 		} else if (methods) {
 			console.log('muh methods', methods);
 		} else {
@@ -50,11 +49,16 @@ const Auth = props => {
 		}
   }, [uid, redirectLoading, wasSubmitted]);
 
+	if (redirectLoading) {
+		return <div className="loadingAnimation"></div>;
+	} else if (uid && !isNew && !methods) {
+		props.history.push(`/chat/rooms?rm=lastVisited`);
+	}
 	return (
 		<Fragment>
-			<Route path='/auth/registration' component={RegistrationForm} />
-			<Route path='/auth/signin' component={SignInWithEmailForm} />
-			<Route path='/auth/verification' component={VerificationForm} />
+		<Route path='/auth/registration' component={RegistrationForm} />
+		<Route path='/auth/signin' component={SignInWithEmailForm} />
+		<Route path='/auth/verification' component={VerificationForm} />
 		</Fragment>
 	);
 };

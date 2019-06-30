@@ -120,7 +120,7 @@ class SessionProvider extends React.Component {
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     const ref = await firebase.database().ref(`users/${uid}/lastVisited`);
     await ref.set(roomId, dbError => error = dbError );
-    await this.setState({ messages, lastVisited: roomId, error }, () => {
+    await this.setState({ messages, error }, () => {
       ref.off();
     });
   };
@@ -167,8 +167,6 @@ class SessionProvider extends React.Component {
     // this.handleConnection();
     // debugger;
     const { rm, msg, usr } = foreignState;
-    console.log(rm, msg, usr);
-
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const lastVisited = userConfig.lastVisited;
     const roomId = rm ? rm : lastVisited;
@@ -185,7 +183,6 @@ class SessionProvider extends React.Component {
   componentDidMount() {
     const { foreignState } = this.props;
     firebase.auth().onAuthStateChanged(user => {
-      // const potatoAuth = localStorage.getItem('potatoAuth');
       if (!user) {
         firebase.auth().signOut();
       } else {
@@ -198,42 +195,34 @@ class SessionProvider extends React.Component {
     const { rm: roomId } = props.foreignState;
     if (roomId !== state.prevRoomId) {
       return {
-        prevRoomId: props.foreignState.rm
+        prevRoomId: roomId
       };
     }
-    return null;
-  }
+  };
+
 
   componentDidUpdate(prevProps, prevState) {
+    const user = firebase.auth().currentUser;
+    console.log(user);
     if (this.props.foreignState.rm !== prevState.prevRoomId) {
       this.updateActiveRoom(this.props.foreignState.rm);
     }
   }
 
   render() {
-    if (this.state.externalData === null) {
-      return null;
-    } else {
-      return (
-        <SessionContext.Provider value={{
-          state: this.state,
-          updateActiveRoom: roomId => {
-            this.updateActiveRoom(roomId);
-          },
-          submitMessage: content => {
-            this.submitMessage(content);
-          },
-          deleteMessage: key => {
-            this.deleteMessage(key);
-          },
-          initializeApp: user => {
-            this.initializeApp(user);
-          }
-        }}>
-          {this.props.children}
-        </SessionContext.Provider>
-      );
-    }
+    return (
+      <SessionContext.Provider value={{
+        state: this.state,
+        submitMessage: content => {
+          this.submitMessage(content);
+        },
+        deleteMessage: key => {
+          this.deleteMessage(key);
+        }
+      }}>
+        {this.props.children}
+      </SessionContext.Provider>
+    );
   }
 }
 

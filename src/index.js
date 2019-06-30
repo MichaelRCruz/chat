@@ -41,7 +41,6 @@ ReactDOM.render(
       for (const pair of entries) {
         foreignState[pair[0]] = pair[1];
       }
-      console.log(foreignState);
       return (
         <SessionProvider foreignState={foreignState} firebase={firebase}>
           <App />

@@ -135,9 +135,7 @@ class SessionProvider extends React.Component {
       await this.setState({ messages, activeRoom, warning, error }, () => {
         ref.off();
       });
-    } else {
-      this.props.history.push('/auth/signin');
-    }
+    };
   };
 
   submitMessage = content => {

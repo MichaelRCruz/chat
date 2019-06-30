@@ -113,16 +113,31 @@ class SessionProvider extends React.Component {
     });
   };
 
-  updateActiveRoom = async roomId => {
-    const { uid } = this.state.user;
-    this.setListeners(roomId);
-    let error = null;
-    const { messages } = await new RealTimeApi().getMessages(roomId, 100);
-    const ref = await firebase.database().ref(`users/${uid}/lastVisited`);
-    await ref.set(roomId, dbError => error = dbError );
-    await this.setState({ messages, error }, () => {
-      ref.off();
-    });
+  reconcileActiveRoom = async roomId => {
+    const response = await new RealTimeApi().getActiveRoom(roomId);
+    if (response !== null) {
+      return { response, warning: false };
+    } else {
+      return { response, warning: 'This room does not exist.' }
+    }
+  }
+
+  updateActiveRoom = async (roomId) => {
+    const user = firebase.auth().currentUser;
+    const { response, warning } = await this.reconcileActiveRoom(roomId);
+    if (user && !warning && response) {
+      this.setListeners(roomId);
+      let error = null;
+      const activeRoom = response;
+      const { messages } = await new RealTimeApi().getMessages(roomId, 100);
+      const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
+      await ref.set(roomId, dbError => error = dbError );
+      await this.setState({ messages, activeRoom, warning, error }, () => {
+        ref.off();
+      });
+    } else {
+      this.props.history.push('/auth/signin');
+    }
   };
 
   submitMessage = content => {
@@ -169,9 +184,10 @@ class SessionProvider extends React.Component {
     const { rm, msg, usr } = foreignState;
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const lastVisited = userConfig.lastVisited;
-    const roomId = rm ? rm : lastVisited;
+    const { response, warning } = this.reconcileActiveRoom(rm);
+    const roomId = response ? response.key : lastVisited;
+    const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
-    const activeRoom = await new RealTimeApi().getActiveRoom(roomId);
     const users = activeRoom.users;
     const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
@@ -198,12 +214,11 @@ class SessionProvider extends React.Component {
         prevRoomId: roomId
       };
     }
+    return null;
   };
 
 
   componentDidUpdate(prevProps, prevState) {
-    const user = firebase.auth().currentUser;
-    console.log(user);
     if (this.props.foreignState.rm !== prevState.prevRoomId) {
       this.updateActiveRoom(this.props.foreignState.rm);
     }

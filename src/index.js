@@ -35,11 +35,16 @@ firebase.initializeApp(config);
 ReactDOM.render(
   <Router>
     <Route render={routerProps => {
-      const { location, history } = routerProps;
-      const urlParams = new URLSearchParams(location.search);
+      const foreignState = {};
+      const urlParams = new URLSearchParams(window.location.search);
       const roomId = urlParams.get('key');
+      var entries = urlParams.entries();
+      for (const pair of entries) {
+        foreignState[pair[0]] = pair[1];
+      }
+      console.log(foreignState);
       return (
-        <SessionProvider firebase={firebase}>
+        <SessionProvider foreignState={foreignState} firebase={firebase}>
           <App />
         </SessionProvider>
       );

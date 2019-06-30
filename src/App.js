@@ -16,12 +16,7 @@ class App extends React.Component {
         <Route strict path='/auth/' component={Auth} />
         <Route exact path='/chat/dashboard' component={Dashboard} />
         <Route exact path='/chat/userProfile' component={UserProfile} />
-        <Route path='/chat/rooms' render={routerProps => {
-          // const { location, history } = routerProps;
-          // const urlParams = new URLSearchParams(location.search);
-          // const roomId = urlParams.get('key');
-          return <Chat />;
-        }} />
+        <Route path='/chat/rooms' component={Chat} />
         <Route component={null} />
       </Switch>
     );

@@ -7,7 +7,6 @@ import useAuthLink from '../hooks/useAuthLink.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = () => {
-  let redirect = false;
   const { values, errors, handleChange, handleSubmit } = useForm(null);
   const [selection, setSelection] = useOAuth();
   const { email, setEmail, setLinkError, wasSubmitted } = useAuthLink();
@@ -21,7 +20,7 @@ const RegistrationForm = () => {
   } else {
     return (
   		<Fragment>
-  			<form className="signInFormComponent">
+        <form className="signInFormComponent">
   	      <fieldset className="signInFieldset">
   	        <legend className="signInWithEmailLegend">
   						<p className="appNameAtAuth">Potato</p>

@@ -36,7 +36,7 @@ const Auth = props => {
 		} else if (uid && !isError) {
 			const jsonStorage = JSON.stringify(response, null, 2);
 			localStorage.setItem('potatoAuth', jsonStorage);
-			props.history.push(`/chat`);
+			// props.history.push(`/chat`);
 		} else if (wasSubmitted) {
 			console.log('is email', email);
 		} else {

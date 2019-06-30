@@ -7,16 +7,6 @@ import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 // import SessionContext from '../SessionContext.js';
 
 class Chat extends React.Component {
-  componentDidMount() {
-    // const urlRoom = this.props.match.params.roomid;
-    // const currrentRoom = this.context.state.activeRoom.key;
-    // if (currrentRoom != urlRoom) {
-    //   this.props.history.push(`/chat/rooms/${urlRoom}`);
-    //   this.context.updateActiveRoom(urlRoom);
-    // }
-    // console.log(this.props.match.params.roomid);
-  }
-  // static contextType = SessionContext;
   render() {
     return (
       <div className="appComponent">

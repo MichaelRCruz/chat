@@ -4,12 +4,6 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 import './Users.css';
 
 class Users extends React.Component {
-
-  handleClick = user => {
-    console.log(user);
-  }
-
-
   static contextType = SessionContext;
   render() {
     const { users } = this.context.state;
@@ -17,7 +11,7 @@ class Users extends React.Component {
     const onlineUsers = uids.map((uid, i) => {
       return (
         <li className="onlineUser" key={i}>
-          <button className="inspectUserButton" onClick={() => this.handleClick(users[uid])}>
+          <button className="inspectUserButton">
             <div>
               <img
                 className="userMenuImage"

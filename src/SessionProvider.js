@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { goFetch, debouncer, throttling } from './utils.js';
 import * as firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
+import { browserRouter } from 'react-router';
 import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
 import { staticMessages, staticUsers, staticRooms } from './staticState.js'
@@ -118,7 +119,7 @@ class SessionProvider extends React.Component {
     const { uid, lastVisited } = this.state.user;
     this.setListeners(roomId);
     let error = null;
-    const {messages} = await new RealTimeApi().getMessages(roomId, 100);
+    const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     const ref = await firebase.database().ref(`users/${uid}/lastVisited`);
     await ref.set(roomId, dbError => error = dbError );
     await this.setState({ messages, lastVisited: roomId, error }, () => {
@@ -189,6 +190,21 @@ class SessionProvider extends React.Component {
       }
     });
   };
+
+  // componentDidUpdate(prevProps) {
+  //   const { match, location, history } = this.props;
+  //   const { search } = window.location;
+  //   const activeRoomKey = this.state.activeRoom.key;
+  //   let hashes = search.slice(search.indexOf('?') + 1).split('&')
+  //   let params = {}
+  //   hashes.map(hash => {
+  //     let [key, val] = hash.split('=')
+  //     params[key] = decodeURIComponent(val)
+  //   });
+  //   if (activeRoomKey && activeRoomKey !== params[activeRoomKey]) {
+  //     this.updateActiveRoom(activeRoomKey);
+  //   }
+  // };
 
   render() {
     return (

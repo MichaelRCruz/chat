@@ -5,8 +5,10 @@ import Splash from './Splash/Splash.js';
 import Dashboard from './Dashboard/Dashboard.js';
 import UserProfile from './UserProfile/UserProfile.js';
 import Chat from './Chat/Chat.js';
+import { parseQuery } from './utils.js';
 
 class App extends React.Component {
+  // static contextType = SessionContext;
   render() {
     return (
       <Switch>
@@ -15,7 +17,9 @@ class App extends React.Component {
         <Route exact path='/chat/dashboard' component={Dashboard} />
         <Route exact path='/chat/userProfile' component={UserProfile} />
         <Route path='/chat/rooms' render={routerProps => {
-          console.log(routerProps);
+          // const { location, history } = routerProps;
+          // const urlParams = new URLSearchParams(location.search);
+          // const roomId = urlParams.get('key');
           return <Chat />;
         }} />
         <Route component={null} />

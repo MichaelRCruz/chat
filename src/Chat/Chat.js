@@ -4,7 +4,6 @@ import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
 import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
-// import SessionContext from '../SessionContext.js';
 
 class Chat extends React.Component {
   render() {

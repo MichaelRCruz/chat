@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import SessionProvider from './SessionProvider.js';
 // import BrowserRouter from "./BrowserRouter.js";
-import {BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import App from "./App.js";
 
 import * as firebase from 'firebase';
@@ -34,9 +34,16 @@ firebase.initializeApp(config);
 
 ReactDOM.render(
   <Router>
-    <SessionProvider firebase={firebase}>
-      <App firebase={firebase} />
-    </SessionProvider>
+    <Route render={routerProps => {
+      const { location, history } = routerProps;
+      const urlParams = new URLSearchParams(location.search);
+      const roomId = urlParams.get('key');
+      return (
+        <SessionProvider firebase={firebase}>
+          <App />
+        </SessionProvider>
+      );
+    }} />
   </Router>,
   document.getElementById("root")
 );

@@ -172,7 +172,6 @@ class SessionProvider extends React.Component {
     const fcmToken = await this.initNotifications(user.uid);
     const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
     const users = activeRoom.users;
-    // await this.setListeners(activeRoom.key);
     const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
     const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
     this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {

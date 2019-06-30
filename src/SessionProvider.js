@@ -1,12 +1,10 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
-import { goFetch, debouncer, throttling } from './utils.js';
+// import { goFetch, debouncer, throttling } from './utils.js';
 import * as firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
-import { browserRouter } from 'react-router';
 import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
-import { staticMessages, staticUsers, staticRooms } from './staticState.js'
+// import { staticMessages, staticUsers, staticRooms } from './staticState.js';
 
 class SessionProvider extends React.Component {
 
@@ -116,7 +114,7 @@ class SessionProvider extends React.Component {
   };
 
   updateActiveRoom = async roomId => {
-    const { uid, lastVisited } = this.state.user;
+    const { uid } = this.state.user;
     this.setListeners(roomId);
     let error = null;
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
@@ -131,7 +129,6 @@ class SessionProvider extends React.Component {
     const { displayName, email, photoURL, uid } = this.state.user;
     const messagesRef = firebase.database().ref(`messages`);
     const newMessageRef = messagesRef.push();
-    let messages = this.state.messages;
     const message = {
       content,
       "creator": { displayName, email, photoURL, uid },
@@ -182,7 +179,7 @@ class SessionProvider extends React.Component {
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
-      const potatoAuth = localStorage.getItem('potatoAuth');
+      // const potatoAuth = localStorage.getItem('potatoAuth');
       if (!user) {
         firebase.auth().signOut();
       } else {

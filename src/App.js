@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Auth from './Auth/Auth.js';
 import Splash from './Splash/Splash.js';
 import Dashboard from './Dashboard/Dashboard.js';
@@ -14,13 +14,10 @@ class App extends React.Component {
         <Route strict path='/auth/' component={Auth} />
         <Route exact path='/chat/dashboard' component={Dashboard} />
         <Route exact path='/chat/userProfile' component={UserProfile} />
-        <Route exact path='/chat/rooms/*' {...this.props} render={routerProps => {
-          if (true) {
-            console.log(routerProps);
-            console.log(this.props);
-          }
-          return <Chat {...routerProps} />;
-        }}/>
+        <Route path='/chat/rooms' render={routerProps => {
+          console.log(routerProps);
+          return <Chat />;
+        }} />
         <Route component={null} />
       </Switch>
     );

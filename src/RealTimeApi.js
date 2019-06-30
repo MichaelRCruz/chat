@@ -1,6 +1,4 @@
 export default class RealTimeApi {
-  constructor() {
-  }
 
   goFetch = (uri, inputOptions) => {
     const { headers, ...extraOpts } = inputOptions || {};

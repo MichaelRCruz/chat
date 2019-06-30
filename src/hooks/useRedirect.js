@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 // import RealTimeApi from '../RealTimeApi.js';
 import * as firebase from 'firebase';
 
@@ -60,6 +60,7 @@ const useRedirect = () => {
     isNew,
     methods,
     redirectError,
+    methodsLoading,
     methodError,
     email,
     uid

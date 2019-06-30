@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import Message from './Message.js';
 import ErrorBoundary from '../ErrorBoundary.js';
-import Mention from './Mention.js';
-import Direct from './Direct.js';
-import Timeago from './../timeago/timeago.js';
+// import Timeago from './../timeago/timeago.js';
 import SessionContext from '../SessionContext.js';
-import { staticMessages } from '../staticState.js';
+// import { staticMessages } from '../staticState.js';
 import './Messages.css';
 
-import defaultUserImage from './../assets/images/peaceful_potato.png';
+// import defaultUserImage from './../assets/images/peaceful_potato.png';
 
-const ReactMarkdown = require('react-markdown/with-html');
+// const ReactMarkdown = require('react-markdown/with-html');
 
 class Messages extends Component {
   deleteMessage = msg => {

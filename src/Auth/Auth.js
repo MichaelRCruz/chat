@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, Fragment } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect, Fragment } from 'react';
+import { Route, withRouter } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
 import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
-import Modal from '../Modal/Modal.js';
-import useRedirect from '../hooks/useRedirect.js';
 import useAuthLink from '../hooks/useAuthLink.js';
-import { withRouter, Redirect } from 'react-router-dom';
+import useRedirect from '../hooks/useRedirect.js';
 // import SessionContext from '../SessionContext.js';
 import './Auth.css';
 
@@ -15,8 +13,6 @@ const Auth = props => {
 	const response = useRedirect();
 	const {
 		redirectLoading,
-    userInfo,
-    accessToken,
     isNew,
     methods,
     redirectError,
@@ -39,8 +35,10 @@ const Auth = props => {
 			// props.history.push(`/chat`);
 		} else if (wasSubmitted) {
 			console.log('is email', email);
+		} else if (methods) {
+			console.log('muh methods', methods);
 		} else {
-			console.log('some other outcome', response);
+			console.log('that is all you have?h');
 		}
 	}
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect } from 'react';
 import * as firebase from 'firebase';
 
 const useAuthLink = inputEmail => {
@@ -36,7 +36,7 @@ const useAuthLink = inputEmail => {
       didCancel = true;
     };
   }, [email]);
-  return {email, setEmail, setLinkError, wasSubmitted};
+  return {email, setEmail, linkError, wasSubmitted};
 };
 
 export default useAuthLink;

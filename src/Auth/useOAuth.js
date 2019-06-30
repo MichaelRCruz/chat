@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import * as firebase from 'firebase';
 
 const useOAuth = authSelection => {

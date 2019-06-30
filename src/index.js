@@ -37,7 +37,6 @@ ReactDOM.render(
     <Route render={routerProps => {
       const foreignState = {};
       const urlParams = new URLSearchParams(window.location.search);
-      const roomId = urlParams.get('key');
       var entries = urlParams.entries();
       for (const pair of entries) {
         foreignState[pair[0]] = pair[1];

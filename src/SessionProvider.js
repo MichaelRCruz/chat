@@ -159,70 +159,81 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
-    users: {}
+    users: {},
+    prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 
-  initializeApp = async (user) => {
+  initializeApp = async (user, foreignState) => {
     // this.handleConnection();
     // debugger;
+    const { rm, msg, usr } = foreignState;
+    console.log(rm, msg, usr);
+
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const lastVisited = userConfig.lastVisited;
+    const roomId = rm ? rm : lastVisited;
     const fcmToken = await this.initNotifications(user.uid);
-    const activeRoom = await new RealTimeApi().getActiveRoom(lastVisited);
+    const activeRoom = await new RealTimeApi().getActiveRoom(roomId);
     const users = activeRoom.users;
     const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
-    const { messages } = await new RealTimeApi().getMessages(lastVisited, 100);
+    const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
       this.setListeners(activeRoom.key);
     });
   };
 
   componentDidMount() {
+    const { foreignState } = this.props;
     firebase.auth().onAuthStateChanged(user => {
       // const potatoAuth = localStorage.getItem('potatoAuth');
       if (!user) {
         firebase.auth().signOut();
       } else {
-        this.initializeApp(user);
+        this.initializeApp(user, foreignState);
       }
     });
   };
 
-  // componentDidUpdate(prevProps) {
-  //   const { match, location, history } = this.props;
-  //   const { search } = window.location;
-  //   const activeRoomKey = this.state.activeRoom.key;
-  //   let hashes = search.slice(search.indexOf('?') + 1).split('&')
-  //   let params = {}
-  //   hashes.map(hash => {
-  //     let [key, val] = hash.split('=')
-  //     params[key] = decodeURIComponent(val)
-  //   });
-  //   if (activeRoomKey && activeRoomKey !== params[activeRoomKey]) {
-  //     this.updateActiveRoom(activeRoomKey);
-  //   }
-  // };
+  static getDerivedStateFromProps(props, state) {
+    const { rm: roomId } = props.foreignState;
+    if (roomId !== state.prevRoomId) {
+      return {
+        prevRoomId: props.foreignState.rm
+      };
+    }
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.foreignState.rm !== prevState.prevRoomId) {
+      this.updateActiveRoom(this.props.foreignState.rm);
+    }
+  }
 
   render() {
-    return (
-      <SessionContext.Provider value={{
-        state: this.state,
-        updateActiveRoom: roomId => {
-          this.updateActiveRoom(roomId);
-        },
-        submitMessage: content => {
-          this.submitMessage(content);
-        },
-        deleteMessage: key => {
-          this.deleteMessage(key);
-        },
-        initializeApp: user => {
-          this.initializeApp(user);
-        }
-      }}>
-        {this.props.children}
-      </SessionContext.Provider>
-    );
+    if (this.state.externalData === null) {
+      return null;
+    } else {
+      return (
+        <SessionContext.Provider value={{
+          state: this.state,
+          updateActiveRoom: roomId => {
+            this.updateActiveRoom(roomId);
+          },
+          submitMessage: content => {
+            this.submitMessage(content);
+          },
+          deleteMessage: key => {
+            this.deleteMessage(key);
+          },
+          initializeApp: user => {
+            this.initializeApp(user);
+          }
+        }}>
+          {this.props.children}
+        </SessionContext.Provider>
+      );
+    }
   }
 }
 

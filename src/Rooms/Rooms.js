@@ -12,7 +12,7 @@ class Rooms extends React.Component {
       return (
         <li className="subscribedRoom" key={key}>
           <Link
-            to={`/chat/rooms?key=${key}`}
+            to={`/chat/rooms?rm=${key}`}
             className="roomNameButton">
             <div>
               <i className="material-icons people">people</i>

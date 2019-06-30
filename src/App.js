@@ -8,7 +8,6 @@ import Chat from './Chat/Chat.js';
 import { parseQuery } from './utils.js';
 
 class App extends React.Component {
-  // static contextType = SessionContext;
   render() {
     return (
       <Switch>

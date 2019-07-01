@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Auth from './Auth/Auth.js';
 import Splash from './Splash/Splash.js';
 import Dashboard from './Dashboard/Dashboard.js';
@@ -22,4 +22,4 @@ class App extends React.Component {
   };
 };
 
-export default withRouter(App);
+export default App;

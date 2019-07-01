@@ -6,28 +6,26 @@ import useAuthLink from '../hooks/useAuthLink.js';
 import useRedirect from '../hooks/useRedirect.js';
 import './RegistrationForm.css';
 
-const RegistrationForm = () => {
+const RegistrationForm = props => {
 
-	// const {
-	// 	redirectLoading,
-  //   isNew,
-  //   methods,
-  //   redirectError,
-  //   methodError,
-  //   uid
-  // } = useRedirect();
-
-  const { oAuthError, setSelection, oAuthResponse, setIsOAuthCanceled, redirectResult } = useOAuth();
-	const { email, sendLink, linkError, linkCanceled, setLinkCanceled } = useAuthLink(null);
+  const { emailMethods, oAuthError, setSelection, oAuthResponse, setIsOAuthCanceled } = useOAuth();
+	const { email, sendLink, linkError, setLinkCanceled } = useAuthLink(null);
   const submitLink = muhStuff => {
     sendLink(muhStuff.email);
   }
   const { values, errors, handleChange, handleSubmit } = useForm(submitLink);
+  const hasError = linkError || oAuthError;
+  const isFlushed = setIsOAuthCanceled && setLinkCanceled && !hasError;
+
   useEffect(() => {
-    console.log(oAuthResponse);
-    // if (email) setLinkCanceled(true);
-    // if (oAuthResponse) setIsOAuthCanceled(true);
-  }, [errors, oAuthResponse]);
+    if (oAuthResponse && isFlushed) {
+      props.history.push('/chat/rooms/?rm=lastVisited');
+    } else if ((emailMethods || email) && isFlushed) {
+      props.history.push('/auth/verification');
+    } else if (emailMethods && isFlushed) {
+      props.history.push('/chat/rooms');
+    }
+  }, [errors, oAuthResponse, setIsOAuthCanceled, setLinkCanceled]);
 
   return (
     <Fragment>

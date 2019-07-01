@@ -6,7 +6,6 @@ const useOAuth = () => {
   const [selection, setSelection] = useState(null);
   const [isOAuthCanceled, setIsOAuthCanceled] = useState(false);
   const [oAuthResponse, setOAuthResponse] = useState(null);
-  const [redirectResult, setRedirectResult] = useState(null);
   const [oAuthError, setOAuthError] = useState(null);
   const [emailMethods, setEmailMethods] = useState(null);
 
@@ -52,7 +51,7 @@ const useOAuth = () => {
     if (!isOAuthCanceled) requestOAuth();
   }, [selection]);
 
-  return { oAuthError, oAuthResponse, setSelection, setIsOAuthCanceled, redirectResult };
+  return { oAuthError, oAuthResponse, setSelection, setIsOAuthCanceled, emailMethods };
 };
 
 const gitHubProvider = new firebase.auth.GithubAuthProvider();

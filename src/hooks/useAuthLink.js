@@ -5,7 +5,7 @@ const useAuthLink = () => {
 
   const [email, setEmail] = useState(null);
   const [linkError, setLinkError] = useState(null);
-  const [linkCanceled, setLinkCanceled] = useState(false);
+  const [linkCanceled, setLinkCanceled] = useState(true);
   const [actionCodeSettings, setActionCodeSettings] = useState({
     url: `http://localhost:3000/auth/registration`,
     handleCodeInApp: true,
@@ -17,20 +17,19 @@ const useAuthLink = () => {
       .then(() => {
         window.localStorage.setItem('potatoEmail', email);
         setEmail(null);
-        setLinkCanceled(false);
+        setLinkCanceled(true);
       })
       .catch(error => {
         setLinkError(error);
-        setLinkCanceled(false);
+        setLinkCanceled(true);
       });
   };
 
   useEffect(() => {
     return () => {
       if (!linkCanceled) sendLink();
-      setLinkCanceled(true);
     };
-  }, []);
+  }, [email]);
 
   return { email, sendLink, linkError, linkCanceled, setLinkCanceled };
 };

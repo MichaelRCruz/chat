@@ -65,7 +65,7 @@ export default class Validation {
     if (!fieldValue.length) {
       emailError = 'email is required';
     }
-    return ['emailError', emailError];
+    return { emailError };
   };
 
   password = fieldValue => {

@@ -8,24 +8,17 @@ import './RegistrationForm.css';
 
 const RegistrationForm = props => {
 
-  const { emailMethods, oAuthError, setSelection, oAuthResponse, setIsOAuthCanceled } = useOAuth();
-	const { email, sendLink, linkError, setLinkCanceled } = useAuthLink(null);
-  const submitLink = muhStuff => {
-    sendLink(muhStuff.email);
-  }
-  const { values, errors, handleChange, handleSubmit } = useForm(submitLink);
-  const hasError = linkError || oAuthError;
-  const isFlushed = setIsOAuthCanceled && setLinkCanceled && !hasError;
+  const { setSelection, ...oAuth } = useOAuth();
+	const { sendAuthLink, ...authLink } = useAuthLink(null);
+  // const submitLink = muhStuff => {
+  //   sendLink(muhStuff.email);
+  // }
+  const { authFormValues, authFormErrors, errors, handleChange, handleSubmit } = useForm();
 
   useEffect(() => {
-    if (oAuthResponse && isFlushed) {
-      props.history.push('/chat/rooms/?rm=lastVisited');
-    } else if ((emailMethods || email) && isFlushed) {
-      props.history.push('/auth/verification');
-    } else if (emailMethods && isFlushed) {
-      props.history.push('/chat/rooms');
-    }
-  }, [errors, oAuthResponse, setIsOAuthCanceled, setLinkCanceled]);
+    // console.log('oAuth:', oAuth);
+    // console.log('authLink:', authLink);
+  }, [oAuth, authLink]);
 
   return (
     <Fragment>
@@ -36,15 +29,15 @@ const RegistrationForm = props => {
           </legend>
           <div className="parentFlex">
             <div className="formGroup passwordFormGroup">
+              <p className="errorMessage">{authFormErrors.emailError || ''}</p>
               <input
                 className="input emailInput"
                 type="email"
                 name="email"
                 placeholder="email"
-                value={values.email || ''}
+                value={authFormValues.email || ''}
                 onChange={handleChange}
               />
-            <p className="errorMessage">{errors.email}</p>
             </div>
             <button
               className="signInWithEmailButton"

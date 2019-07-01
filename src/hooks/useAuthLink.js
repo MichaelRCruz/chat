@@ -3,35 +3,35 @@ import * as firebase from 'firebase';
 
 const useAuthLink = () => {
 
-  const [email, setEmail] = useState(null);
-  const [linkError, setLinkError] = useState(null);
-  const [linkCanceled, setLinkCanceled] = useState(true);
+  const [authEmail, setAuthEmail] = useState(null);
+  const [authLinkError, setAuthLinkError] = useState(null);
+  const [isAuthLinkSent, setIsAuthLinkSent] = useState(false);
   const [actionCodeSettings, setActionCodeSettings] = useState({
     url: `http://localhost:3000/auth/registration`,
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });
 
-  const sendLink = muhEmail => {
-    firebase.auth().sendSignInLinkToEmail(muhEmail, actionCodeSettings)
+  const sendAuthLink = emailInput => {
+    try {
+      firebase.auth().sendSignInLinkToEmail(emailInput, actionCodeSettings)
       .then(() => {
-        window.localStorage.setItem('potatoEmail', email);
-        setEmail(null);
-        setLinkCanceled(true);
+        // window.localStorage.setItem('potatoEmail', email);
+        setIsAuthLinkSent(true);
       })
       .catch(error => {
-        setLinkError(error);
-        setLinkCanceled(true);
+        setAuthLinkError(error);
       });
+    } catch(error) {
+      console.log(error);
+    }
   };
 
-  useEffect(() => {
-    return () => {
-      if (!linkCanceled) sendLink();
-    };
-  }, [email]);
+  // useEffect(() => {
+  //   setIsLinkSent(true);
+  // }, [email]);
 
-  return { email, sendLink, linkError, linkCanceled, setLinkCanceled };
+  return { authEmail, setAuthEmail, sendAuthLink, authLinkError, isAuthLinkSent };
 };
 
 export default useAuthLink;

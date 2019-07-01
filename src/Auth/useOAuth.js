@@ -4,54 +4,62 @@ import * as firebase from 'firebase';
 const useOAuth = () => {
 
   const [selection, setSelection] = useState(null);
-  const [isOAuthCanceled, setIsOAuthCanceled] = useState(false);
+  const [isOAuthComplete, setIsOAuthComplete] = useState(false);
   const [oAuthResponse, setOAuthResponse] = useState(null);
   const [oAuthError, setOAuthError] = useState(null);
   const [emailMethods, setEmailMethods] = useState(null);
+  const [oAuthHookError, setOAuthHookError] = useState(null);
 
-  function getEmailMethods(email) {
-    return firebase.auth().fetchSignInMethodsForEmail(email)
-      .then(methods => {
-        if (methods[0] === 'password') {
-          setEmailMethods(methods);
-        }
-      })
-      .catch(error => {
-        setOAuthError(error);
-      });
-  };
-
-  function requestOAuth() {
-    if (selection) {
-      const authInstance = getOAuthProvider(selection);
-      firebase.auth().signInWithRedirect(authInstance)
-        .then(res => {
-          setOAuthResponse(res);
-          setSelection(null);
-        })
-        .catch(error => {
-          if (error.code === 'auth/account-exists-with-different-credential') {
-            setOAuthResponse(error);
-            getEmailMethods(error.email);
+  const getEmailMethods = (email) => {
+    try {
+      firebase.auth().fetchSignInMethodsForEmail(email)
+        .then(methods => {
+          if (methods[0] === 'password') {
+            setEmailMethods(methods);
           }
-          setOAuthError(error);
-        });
-    } else {
-      firebase.auth().getRedirectResult()
-        .then(res => {
-          setOAuthResponse(res);
         })
         .catch(error => {
           setOAuthError(error);
         });
+    } catch(error) {
+      setOAuthHookError(error);
+    }
+  };
+  const requestOAuth = () => {
+    try {
+      if (selection) {
+        const authInstance = getOAuthProvider(selection);
+        firebase.auth().signInWithRedirect(authInstance)
+          .then(res => {
+            setOAuthResponse(res);
+            setSelection(null);
+          })
+          .catch(error => {
+            if (error.code === 'auth/account-exists-with-different-credential') {
+              setOAuthResponse(error);
+              getEmailMethods(error.email);
+            }
+            setOAuthError(error);
+          });
+      } else {
+        firebase.auth().getRedirectResult()
+          .then(res => {
+            setOAuthResponse(res);
+          })
+          .catch(error => {
+            setOAuthError(error);
+          });
+      }
+    } catch (error) {
+      setOAuthHookError(error);
     }
   };
 
   useEffect(() => {
-    if (!isOAuthCanceled) requestOAuth();
+    requestOAuth();
   }, [selection]);
 
-  return { oAuthError, oAuthResponse, setSelection, setIsOAuthCanceled, emailMethods };
+  return { setOAuthHookError, oAuthError, oAuthResponse, setSelection, emailMethods, isOAuthComplete };
 };
 
 const gitHubProvider = new firebase.auth.GithubAuthProvider();

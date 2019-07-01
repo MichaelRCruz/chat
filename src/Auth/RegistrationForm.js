@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Redirect, withRouter } from 'react-router-dom';
 import useForm from './useForm.js';
 import useOAuth from './useOAuth.js';
@@ -7,18 +7,23 @@ import useRedirect from '../hooks/useRedirect.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = props => {
-
-  const { setSelection, ...oAuth } = useOAuth();
-  const { setAuthEmail, isAuthLinkSent, ...authLink } = useAuthLink();
-  const { handleSubmit, handleChange, authFormErrors, authFormValues, ...authFormRest } = useForm();
-
-
+  const { selection, setSelection, isOAuthComplete, setIsOAuthComplete } = useOAuth();
+  const { authEmail, sendAuthLink, isAuthLinkSent, setIsLinkSet, setIsAuthLinkSent } = useAuthLink();
+  const formCallback = (payload) => (sendAuthLink(payload));
+  const { handleSubmit, handleChange, authFormErrors, authFormValues, wasFormSubmitted, setWasFormSubmitted } = useForm(formCallback);
+  const isSettled = isOAuthComplete && wasFormSubmitted;
+  const [settled, setSettled] = useState(isSettled);
 
   useEffect(() => {
-    // console.log('authForm:', authFormRest);
-    console.log('authLink:', authFormRest);
-    // console.log('authLink:', authLink);
-  }, [authFormRest]);
+    if (isAuthLinkSent) {
+      props.history.push('/auth/verification');
+    }
+    console.log('sent:', isAuthLinkSent);
+    return () => {
+      setIsAuthLinkSent(false);
+      setSettled(false);
+    }
+  }, [authFormErrors, isAuthLinkSent]);
 
   return (
     <Fragment>

@@ -177,6 +177,7 @@ class SessionProvider extends React.Component {
   };
 
   initializeApp = async (user, foreignState) => {
+    // firebase.auth().signOut();
     // this.handleConnection();
     // debugger;
     const { rm, msg, usr } = foreignState;

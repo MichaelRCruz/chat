@@ -12,9 +12,9 @@ const useAuthLink = () => {
     dynamicLinkDomain: 'coolpotato.page.link'
   });
 
-  const sendAuthLink = (email) => {
+  const sendAuthLink = payload => {
     try {
-      firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+      firebase.auth().sendSignInLinkToEmail(payload, actionCodeSettings)
       .then(() => {
         // window.localStorage.setItem('potatoEmail', email);
         setIsAuthLinkSent(true);
@@ -23,19 +23,15 @@ const useAuthLink = () => {
         setAuthLinkError(error);
       });
     } catch(error) {
-      console.log(error);
+      setAuthLinkError(error);
     }
   };
 
-  useEffect(() => {
-    if (authEmail) sendAuthLink(authEmail);
-    return () => {
-      setIsAuthLinkSent(false);
-      setAuthEmail(null);
-    }
-  }, [authEmail]);
+  // useEffect(() => {
+  //   setIsLinkSent(true);
+  // }, [email]);
 
-  return { authEmail, setAuthEmail, sendAuthLink, authLinkError, isAuthLinkSent };
+  return { authEmail, setAuthEmail, sendAuthLink, authLinkError, isAuthLinkSent, setIsAuthLinkSent };
 };
 
 export default useAuthLink;

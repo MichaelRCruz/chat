@@ -2,21 +2,20 @@ import { useState, useEffect } from 'react';
 import { validate } from './formValidation.js';
 
 const useForm = callback => {
+
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (Object.keys(errors).length === 0 && isSubmitting) {
+    if (Object.keys(errors).length === 0) {
       console.log('from useForm', values);
     }
   }, [errors]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     if (event) event.preventDefault();
-    setErrors(validate(values));
-    setIsSubmitting(true);
-    setValues({});
+    console.log('from useForm');
+    callback(values);
   };
 
   const handleChange = event => {
@@ -24,8 +23,9 @@ const useForm = callback => {
     const { name, value } = event.target;
     setValues(values => ({ ...values, [name]: value }));
   };
-  // setValues(values => ({ ...values, email: '' }));
+
   return { handleChange, handleSubmit, values, errors };
+
 };
 
 export default useForm;

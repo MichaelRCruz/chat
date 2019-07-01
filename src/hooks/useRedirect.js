@@ -10,9 +10,10 @@ const useRedirect = () => {
   const [email, setEmail] = useState(null);
   const [isNew, setIsNew] = useState(null);
   const [methods, setMethods] = useState(null);
-  const [methodsLoading, setMethodsLoading] = useState(true);
+  const [methodsLoading, setMethodsLoading] = useState(false);
   const [methodError, setMethodError] = useState(null);
   const [uid, setUid] = useState(null);
+
   async function fetchMethods() {
     // setRedirectLoading(true);
     try {
@@ -28,18 +29,21 @@ const useRedirect = () => {
           setUid(uid);
         }
       }).catch(error => {
-        setRedirectLoading(false);
         setRedirectError(error);
+        setRedirectLoading(false);
+        setMethodsLoading(false);
       });
       if (email) {
+        setMethodsLoading(true);
         const methods = await firebase.auth().fetchSignInMethodsForEmail(email).then(methods => {
           if (methods[0] === 'password') {
             setMethods(methods);
+            setMethodsLoading(false);
           }
         }).catch(error => {
           setMethodError(error);
-          setRedirectLoading(false);
           setMethodsLoading(false);
+          setRedirectLoading(false);
         });
       }
     } catch (error) {
@@ -47,20 +51,24 @@ const useRedirect = () => {
       setMethodError(error);
       setRedirectLoading(false);
     }
-    setRedirectLoading(false);
-  }
+  };
+
   useEffect(() => {
     fetchMethods();
+    return () => {
+      setRedirectLoading(false);
+      setMethodsLoading(false);
+    }
   }, []);
   return {
     redirectLoading,
-    setRedirectLoading,
     userInfo,
     accessToken,
     isNew,
     methods,
     redirectError,
     methodsLoading,
+    setMethodsLoading,
     methodError,
     email,
     uid

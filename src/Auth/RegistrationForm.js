@@ -9,20 +9,20 @@ import './RegistrationForm.css';
 const RegistrationForm = props => {
 
   const { setSelection, ...oAuth } = useOAuth();
-	const { sendAuthLink, ...authLink } = useAuthLink(null);
-  // const submitLink = muhStuff => {
-  //   sendLink(muhStuff.email);
-  // }
-  const { authFormValues, authFormErrors, errors, handleChange, handleSubmit } = useForm();
+  const { setAuthEmail, isAuthLinkSent, ...authLink } = useAuthLink();
+  const { handleSubmit, handleChange, authFormErrors, authFormValues, ...authFormRest } = useForm();
+
+
 
   useEffect(() => {
-    // console.log('oAuth:', oAuth);
+    // console.log('authForm:', authFormRest);
+    console.log('authLink:', authFormRest);
     // console.log('authLink:', authLink);
-  }, [oAuth, authLink]);
+  }, [authFormRest]);
 
   return (
     <Fragment>
-      <form className="signInFormComponent">
+      <form className="signInFormComponent" onSubmit={handleSubmit}>
         <fieldset className="signInFieldset">
           <legend className="signInWithEmailLegend">
             <p className="appNameAtAuth">Potato</p>
@@ -42,8 +42,7 @@ const RegistrationForm = props => {
             <button
               className="signInWithEmailButton"
               type="submit"
-              disabled={false}
-              onClick={handleSubmit}>
+              disabled={false}>
               send dynamic link
             </button>
             <span className="horizontalRule"> or </span>

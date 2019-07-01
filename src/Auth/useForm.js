@@ -5,34 +5,31 @@ import Validation from '../validation.js';
 
 
 const useForm = () => {
-  const { sendAuthLink, setAuthEmail } = useAuthLink();
+  const { setAuthEmail } = useAuthLink();
   const [authFormValues, setAuthFormValues] = useState({});
   const [authFormErrors, setAuthFormErrors] = useState({});
-  const [isAuthLinkSent, setIsAuthLinkSent] = useState(false);
+  const [wasAuthLinkSent, setWasAuthLinkSubmitted] = useState(false);
 
   const handleSubmit = event => {
     if (event) event.preventDefault();
     setAuthEmail(authFormValues.email);
-    sendAuthLink('submitted', authFormValues.email);
-    setIsAuthLinkSent(true);
+    setWasAuthLinkSubmitted(true);
    };
 
   const handleChange = event => {
     event.persist();
     const { name, value } = event.target;
     const emailError = new Validation()[name](value);
-    // foo === ["emailError", "Must be a valid email address"]
     setAuthFormErrors(authFormErrors => ({ ...authFormErrors, ...emailError }));
     setAuthFormValues(authFormValues => ({ ...authFormValues, [name]: value }));
-    console.log(authFormErrors);
   };
 
   useEffect(() => {
     if (Object.keys(authFormErrors).length === 0) {
     }
-  }, [isAuthLinkSent]);
+  }, [wasAuthLinkSent]);
 
-  return { isAuthLinkSent, handleChange, handleSubmit, authFormValues, authFormErrors };
+  return { wasAuthLinkSent, handleChange, handleSubmit, authFormValues, authFormErrors };
 };
 
 export default useForm;

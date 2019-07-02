@@ -3,7 +3,7 @@ import * as firebase from 'firebase';
 
 const useAuthLink = () => {
 
-  const [authEmail, setAuthEmail] = useState(null);
+  const [authEmail, setAuthEmail] = useState(false);
   const [authLinkError, setAuthLinkError] = useState(null);
   const [isAuthLinkSent, setIsAuthLinkSent] = useState(false);
   const [actionCodeSettings, setActionCodeSettings] = useState({
@@ -12,24 +12,25 @@ const useAuthLink = () => {
     dynamicLinkDomain: 'coolpotato.page.link'
   });
 
-  const sendAuthLink = payload => {
-    try {
-      firebase.auth().sendSignInLinkToEmail(payload, actionCodeSettings)
-      .then(() => {
-        // window.localStorage.setItem('potatoEmail', email);
-        setIsAuthLinkSent(true);
-      })
-      .catch(error => {
-        setAuthLinkError(error);
-      });
-    } catch(error) {
+  const sendAuthLink = email => {
+    firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+    .then(() => {
+      // window.localStorage.setItem('potatoEmail', email);
+      setAuthEmail(false);
+      setIsAuthLinkSent(true);
+    })
+    .catch(error => {
       setAuthLinkError(error);
-    }
+    });
   };
 
-  // useEffect(() => {
-  //   setIsLinkSent(true);
-  // }, [email]);
+  useEffect(() => {
+    if (authEmail) sendAuthLink(authEmail);
+    setAuthEmail(false);
+    return () => {
+      setAuthEmail(false);
+    }
+  }, [authEmail]);
 
   return { authEmail, setAuthEmail, sendAuthLink, authLinkError, isAuthLinkSent, setIsAuthLinkSent };
 };

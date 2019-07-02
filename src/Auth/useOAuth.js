@@ -2,64 +2,64 @@ import { useState, useEffect, useReducer } from 'react';
 import * as firebase from 'firebase';
 
 const useOAuth = () => {
-
-  const [selection, setSelection] = useState(null);
+  const [selection, setSelection] = useState(false);
   const [isOAuthComplete, setIsOAuthComplete] = useState(false);
   const [oAuthResponse, setOAuthResponse] = useState(null);
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [additionalUserInfo, setAdditionalUserInfo] = useState(false);
   const [oAuthError, setOAuthError] = useState(null);
   const [emailMethods, setEmailMethods] = useState(null);
   const [oAuthHookError, setOAuthHookError] = useState(null);
 
   const getEmailMethods = (email) => {
-    try {
-      firebase.auth().fetchSignInMethodsForEmail(email)
-        .then(methods => {
-          if (methods[0] === 'password') {
-            setEmailMethods(methods);
+    firebase.auth().fetchSignInMethodsForEmail(email)
+      .then(methods => {
+        if (methods[0] === 'password') {
+          setEmailMethods(methods);
+        }
+      })
+      .catch(error => {
+        setOAuthError(error);
+      });
+  };
+  const requestOAuth = () => {
+    if (selection) {
+      const authInstance = getOAuthProvider(selection);
+      firebase.auth().signInWithRedirect(authInstance)
+        .then(res => {
+          setOAuthResponse(res);
+          setSelection(null);
+        })
+        .catch(error => {
+          if (error.code === 'auth/account-exists-with-different-credential') {
+            getEmailMethods(error.email);
+            setOAuthResponse(error);
           }
+          setOAuthError(error);
+        });
+    } else {
+      firebase.auth().getRedirectResult()
+        .then(res => {
+          const { additionalUserInfo } = res;
+          const { isNewUser } = additionalUserInfo;
+          setAdditionalUserInfo(additionalUserInfo);
+          setIsNewUser(isNewUser);
+          setOAuthResponse(res);
         })
         .catch(error => {
           setOAuthError(error);
         });
-    } catch(error) {
-      setOAuthHookError(error);
-    }
-  };
-  const requestOAuth = () => {
-    try {
-      if (selection) {
-        const authInstance = getOAuthProvider(selection);
-        firebase.auth().signInWithRedirect(authInstance)
-          .then(res => {
-            setOAuthResponse(res);
-            setSelection(null);
-          })
-          .catch(error => {
-            if (error.code === 'auth/account-exists-with-different-credential') {
-              setOAuthResponse(error);
-              getEmailMethods(error.email);
-            }
-            setOAuthError(error);
-          });
-      } else {
-        firebase.auth().getRedirectResult()
-          .then(res => {
-            setOAuthResponse(res);
-          })
-          .catch(error => {
-            setOAuthError(error);
-          });
-      }
-    } catch (error) {
-      setOAuthHookError(error);
     }
   };
 
   useEffect(() => {
     requestOAuth();
+    return () => {
+      setSelection(false);
+    }
   }, [selection]);
 
-  return { setOAuthHookError, oAuthError, oAuthResponse, setSelection, emailMethods, isOAuthComplete };
+  return { setOAuthHookError, oAuthError, oAuthResponse, setOAuthResponse, setSelection, emailMethods, isOAuthComplete, setIsNewUser, setAdditionalUserInfo, additionalUserInfo, setEmailMethods };
 };
 
 const gitHubProvider = new firebase.auth.GithubAuthProvider();

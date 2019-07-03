@@ -5,18 +5,10 @@ import './VerificationForm.css';
 
 const VerificationForm = props => {
 
-  // this.debounceDisplayname = debounce(async fieldValue => {
-  //   try {
-  //     this.handleFieldValue(await new Validation().displayname(fieldValue));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, 250);
-
   const { setSelection, setAuthEmail, handleClose } = props;
   // const { submitCreds } = useAuthComplete();
   const formCallback = (payload, clearForm) => {
-    console.log('verification submitted');
+    console.log(payload, 'verification submitted');
     clearForm();
   };
   const {
@@ -26,7 +18,7 @@ const VerificationForm = props => {
     authFormValues
   } = useForm(formCallback);
 
-  const { displayNameValue, emailValue, passwordValue } = authFormValues;
+  const { displayName, email, password } = authFormValues;
   const { displayNameError, emailError, passwordError } = authFormErrors;
 
   return (
@@ -40,9 +32,9 @@ const VerificationForm = props => {
               <input
                 className="input displaynameInput"
                 type="text"
-                name="text"
+                name="displayName"
                 placeholder="e.g., mykey_42"
-                value={displayNameValue || ''}
+                value={displayName || ''}
                 onChange={handleChange}
               />
             </div>
@@ -53,6 +45,7 @@ const VerificationForm = props => {
                 type="email"
                 name="email"
                 placeholder="email"
+                value={email || ''}
                 onChange={handleChange}
               />
             </div>
@@ -63,6 +56,7 @@ const VerificationForm = props => {
                 type="password"
                 name="password"
                 placeholder="password"
+                value={password || ''}
                 onChange={handleChange}
               />
             </div>

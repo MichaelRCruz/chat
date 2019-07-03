@@ -16,16 +16,24 @@ const useForm = (callback) => {
   const handleSubmit = event => {
     if (event) event.preventDefault();
     setWasFormSubmitted(true);
-    callback(authFormValues.email, clearForm);
+    callback(authFormValues, clearForm);
    };
 
   const handleChange = event => {
     event.persist();
     const { name, value } = event.target;
-    const emailError = new Validation()[name](value);
-    setAuthFormErrors(authFormErrors => ({ ...authFormErrors, ...emailError }));
+    const error = new Validation()[name](value);
+    setAuthFormErrors(authFormErrors => ({ ...authFormErrors, ...error }));
     setAuthFormValues(authFormValues => ({ ...authFormValues, [name]: value }));
   };
+
+  // const debounceDisplayname = debounce(async fieldValue => {
+  //   try {
+  //     this.handleFieldValue(await new Validation().displayname(fieldValue));
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, 250);
 
   return { handleChange, handleSubmit, authFormValues, authFormErrors };
 };

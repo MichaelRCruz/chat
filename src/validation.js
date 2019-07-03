@@ -35,35 +35,37 @@ export default class Validation {
   };
 
   checkAvailability = async fieldValue => {
-    const uri = `${process.env.REACT_APP_HTTP_URL}/verifyDisplayname?displayname=${fieldValue}`;
-    const inputOptions = {
-      method: "GET"
-    };
+    const baseUrl = process.env.REACT_APP_HTTP_URL;
+    const uri = `${baseUrl}/verifyDisplayname?displayname=${fieldValue}`;
+    const inputOptions = { method: "GET" };
     const response = await this.goFetch(uri, inputOptions);
     return response;
   };
 
-  displayname = async fieldValue => {
+  displayName = async fieldValue => {
     fieldValue = fieldValue.trim();
-    let displaynameError = '';
+    let displayNameError = '';
     if (fieldValue.length === 0) {
-      displaynameError = 'please choose a unique display name';
-      return ['displaynameError', displaynameError];
+      displayNameError = 'please choose a unique display name';
+      return { displayNameError };
     } else {
       if (fieldValue.length < 2) {
-        displaynameError = 'display name must be at least 2 characters long';
-      } else {
-        const isAvailable = await this.checkAvailability(fieldValue);
-        displaynameError = isAvailable ? '' : 'displayname unavailable';
+        displayNameError = 'must be at least 2 characters long';
       }
-      return ['displaynameError', displaynameError];
+      // else {
+      //   const isAvailable = await this.checkAvailability(fieldValue);
+      //   displayNameError = isAvailable ? '' : 'unavailable';
+      // }
+      return { displayNameError };
     }
   };
 
   email = fieldValue => {
-    let emailError = /^\S+@\S+$/.test(fieldValue) ? false : 'Must be a valid email address';
+    let emailError = /^\S+@\S+$/.test(fieldValue)
+                   ? false
+                   : 'must be a valid email address';
     if (!fieldValue.length) {
-      emailError = 'email is required';
+      emailError = 'required';
     }
     return { emailError };
   };
@@ -72,19 +74,19 @@ export default class Validation {
     let passwordError = '';
     fieldValue = fieldValue.trim();
     if (fieldValue.length === 0) {
-      passwordError = 'password is required';
+      passwordError = 'required';
     } else {
-      if (fieldValue.length < 6 || fieldValue.length > 13) {
-        passwordError = 'password must be 6 to 13 characters long';
+      if (fieldValue.length < 5 || fieldValue.length > 89) {
+        passwordError = 'must be 5 to 89 characters long';
       } else {
         if (!fieldValue.match(new RegExp(/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/))) {
-          passwordError = 'password must contain at least 1 number and 1 letter';
+          passwordError = 'must contain at least 1 number and 1 letter';
         } else {
           passwordError = '';
         }
       }
     }
-    return ['passwordError', passwordError];
+    return { passwordError };
   };
 
   retypePassword = (fieldValuePassword, fieldValueRetypePassword) => {

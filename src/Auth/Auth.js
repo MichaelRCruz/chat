@@ -16,20 +16,26 @@ const Auth = props => {
     setMethods,
     setSelection,
     isOAuthCanceled: dead,
-    setIsOAuthCanceled
+    setIsOAuthCanceled,
+    oAuthStatus,
+    oAuthError
   } = useOAuth();
   const { isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
+      // console.log('oAuthResponse', oAuthResponse);
+      // console.log('methods', methods);
+      // console.log('get busy');
+      // console.log(oAuthStatus);
       props.history.push('/chat/rooms/?rm=lastVisited');
     }
     if (!dead && isAuthLinkSent) {
       props.history.push('verification');
     }
     return () => {
-      console.log('oAuthResponse', oAuthResponse);
-      console.log('methods', methods);
+      // console.log('oAuthResponse', oAuthResponse);
+      // console.log('methods', methods);
       setIsOAuthCanceled(true);
     }
   }, [oAuthResponse, isAuthLinkSent, methods]);
@@ -37,6 +43,7 @@ const Auth = props => {
 	return (
 		<Fragment>
 			<Route path='/auth/registration' render={() => {
+        console.log(oAuthStatus);
         return (
           <RegistrationForm
             handleClose={() => { props.history.push('/') }}

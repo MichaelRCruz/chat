@@ -7,7 +7,7 @@ const RegistrationForm = props => {
 
   const { setSelection, setAuthEmail, handleClose } = props;
   const formCallback = (payload, clearForm) => {
-    setAuthEmail(payload);
+    setAuthEmail(payload.email);
     clearForm();
   };
   const {

@@ -17,7 +17,7 @@ const useAuthLink = () => {
     firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
       .then(() => {
         // window.localStorage.setItem('potatoEmail', email);
-        // setIsAuthLinkSent(true);
+        setIsAuthLinkSent(true);
       })
       .catch(error => {
         setAuthLinkError(error);
@@ -27,7 +27,7 @@ const useAuthLink = () => {
   useEffect(() => {
     if (authEmail) {
       sendAuthLink(authEmail);
-      setIsAuthLinkSent(true);
+      // setIsAuthLinkSent(true);
     }
     return () => {
       console.log('authLinkError: ', authLinkError);

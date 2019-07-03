@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import SessionProvider from './SessionProvider.js';
 import BrowserRouter from "./BrowserRouter.js";
-import {Route} from 'react-router-dom';
-import useForm from './Auth/useForm.js';
-import useOAuth from './Auth/useOAuth.js';
-import useAuthLink from './hooks/useAuthLink.js';
+// import {Route} from 'react-router-dom';
 import App from "./App.js";
 
 import * as firebase from 'firebase';
@@ -34,25 +30,6 @@ firebase.initializeApp(config);
 //     console.log('onMessage', payload);
 //   });
 // };
-
-// ReactDOM.render(
-//   <Router>
-//     <Route render={routerProps => {
-//       const foreignState = {};
-//       const urlParams = new URLSearchParams(window.location.search);
-//       var entries = urlParams.entries();
-//       for (const pair of entries) {
-//         foreignState[pair[0]] = pair[1];
-//       }
-//       return (
-//         <SessionProvider foreignState={foreignState} firebase={firebase}>
-//           <App />
-//         </SessionProvider>
-//       );
-//     }} />
-//   </Router>,
-//   document.getElementById("root")
-// );
 
 ReactDOM.render(
   <BrowserRouter>

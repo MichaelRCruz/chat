@@ -1,52 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Redirect } from 'react-router';
 import useForm from './useForm.js';
-import useOAuth from './useOAuth.js';
-import useAuthLink from '../hooks/useAuthLink.js';
-import useRedirect from '../hooks/useRedirect.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = props => {
-
-  // const { setSelection, oAuthResponse, setOAuthResponse } = useOAuth();
-  // const { isNewUser, emailMethods, setIsNewUser, setEmailMethods } = useOAuth();
-  // const { sendAuthLink, setIsAuthLinkSent, isAuthLinkSent } = useAuthLink();
-  // const formCallback = (payload) => (sendAuthLink(payload));
-  // const { handleSubmit, handleChange, authFormErrors, authFormValues } = useForm(formCallback);
-
-  // useEffect(() => {
-  //   if (isAuthLinkSent || isNewUser || emailMethods) {
-  //     console.log(isAuthLinkSent, isNewUser, emailMethods);
-  //     props.history.push('/auth/verification');
-  //     // return null;
-  //   } else if (oAuthResponse) {
-  //     console.log('oAuthResponse', oAuthResponse);
-  //     props.history.push('/chat/rooms/?rm=lastVisited');
-  //     // return null;
-  //   }
-  //   return () => {
-  //     setIsAuthLinkSent(false);
-  //     setSelection(false);
-  //     setIsNewUser(false);
-  //     setEmailMethods(false);
-  //     setOAuthResponse(false);
-  //   }
-  // }, [oAuthResponse, isAuthLinkSent]);
-
-  // if (isAuthLinkSent || isNewUser || emailMethods) {
-  //   console.log(isAuthLinkSent, isNewUser, emailMethods);
-  //   return <Redirect to="/auth/verification" push={false} />
-  //   // props.history.push('/auth/verification');
-  //   // return null;
-  // } else if (oAuthResponse) {
-  //   console.log('oAuthResponse', oAuthResponse);
-  //   return <Redirect to="/chat/rooms/?rm=lastVisited" push={false} />
-  //   // props.history.push('/chat/rooms/?rm=lastVisited');
-  //   // return null;
-  // }
-
-  // const { setSelection } = useOAuth();
-  // const { setAuthEmail } = useAuthLink();
   const { setSelection, setAuthEmail } = props;
   const formCallback = (payload) => (setAuthEmail(payload));
   const { handleSubmit, handleChange, authFormErrors, authFormValues } = useForm(formCallback);

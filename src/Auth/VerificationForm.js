@@ -6,7 +6,7 @@ import useAuthLink from '../hooks/useAuthLink.js';
 import useRedirect from '../hooks/useRedirect.js';
 import './VerificationForm.css';
 
-const RegistrationForm = props => {
+const VerificationForm = props => {
 
   // this.debounceDisplayname = debounce(async fieldValue => {
   //   try {
@@ -16,66 +16,54 @@ const RegistrationForm = props => {
   //   }
   // }, 250);
 
-  const VerificationForm = props => {
-
-    // const { oAuthResponse } = useOAuth();
-    // const { isNewUser, emailMethods, setIsNewUser, setEmailMethods } = useOAuth();
-    // // const formCallback = (payload) => (sendAuthLink(payload));
-    // const { handleSubmit, handleChange, authFormErrors, authFormValues } = useForm();
-
-    // useEffect(() => {
-    //   return () => {
-    //
-    //   }
-    // }, []);
-
-    // return (
-    //   <form className="verificationFormComponent" onSubmit={handleSubmit}>
-    //     <fieldset className="verificationFieldset">
-    //       <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
-    //       <div className="parentFlex">
-    //         <div className="formGroup verificationFormGroup">
-    //           <p className="errorMessage">{authFormErrors.displayName}</p>
-    //           <input
-    //             className="input displaynameInput"
-    //             type="text"
-    //             name="email"
-    //             placeholder="e.g., mykey_42"
-    //             onChange={handleChange}
-    //           />
-    //         </div>
-    //         <div className="formGroup emailFormGroup">
-    //           <p className="errorMessage">{authFormErrors.email}</p>
-    //           <input
-    //             className="input emailInput"
-    //             type="email"
-    //             name="email"
-    //             placeholder="email"
-    //             onChange={handleChange}
-    //           />
-    //         </div>
-    //         <div className="formGroup passwordFormGroup">
-    //           <p className="errorMessage">{authFormErrors.password}</p>
-    //           <input
-    //             className="input passwordInput"
-    //             type="password"
-    //             name="password"
-    //             placeholder="password"
-    //             onChange={handleChange}
-    //           />
-    //         </div>
-    //         <button
-    //           className="verificationButton"
-    //           type="submit"
-    //           disabled={false}>
-    //           complete registration
-    //         </button>
-    //       </div>
-    //     </fieldset>
-    //   </form>
-    // );
-    return <h1>hello</h1>;
-  }
+  // return (
+  //   <form className="verificationFormComponent" onSubmit={handleSubmit}>
+  //     <fieldset className="verificationFieldset">
+  //       <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
+  //       <div className="parentFlex">
+  //         <div className="formGroup verificationFormGroup">
+  //           <p className="errorMessage">{authFormErrors.displayName}</p>
+  //           <input
+  //             className="input displaynameInput"
+  //             type="text"
+  //             name="email"
+  //             placeholder="e.g., mykey_42"
+  //             onChange={handleChange}
+  //           />
+  //         </div>
+  //         <div className="formGroup emailFormGroup">
+  //           <p className="errorMessage">{authFormErrors.email}</p>
+  //           <input
+  //             className="input emailInput"
+  //             type="email"
+  //             name="email"
+  //             placeholder="email"
+  //             onChange={handleChange}
+  //           />
+  //         </div>
+  //         <div className="formGroup passwordFormGroup">
+  //           <p className="errorMessage">{authFormErrors.password}</p>
+  //           <input
+  //             className="input passwordInput"
+  //             type="password"
+  //             name="password"
+  //             placeholder="password"
+  //             onChange={handleChange}
+  //           />
+  //         </div>
+  //         <button
+  //           className="verificationButton"
+  //           type="submit"
+  //           disabled={false}>
+  //           complete registration
+  //         </button>
+  //       </div>
+  //     </fieldset>
+  //   </form>
+  // );
+  return (
+    <div>hello</div>
+  );
 }
 
-export default withRouter(RegistrationForm);
+export default VerificationForm;

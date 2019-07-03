@@ -3,42 +3,42 @@ import * as firebase from 'firebase';
 
 const useOAuth = () => {
   const [selection, setSelection] = useState(false);
-  const [isOAuthComplete, setIsOAuthComplete] = useState(false);
-  const [oAuthResponse, setOAuthResponse] = useState(null);
+  const [oAuthResponse, setOAuthResponse] = useState(false);
+  const [methods, setMethods] = useState(false);
   const [isNewUser, setIsNewUser] = useState(false);
   const [additionalUserInfo, setAdditionalUserInfo] = useState(false);
-  const [oAuthError, setOAuthError] = useState(null);
-  const [emailMethods, setEmailMethods] = useState(null);
-  const [oAuthHookError, setOAuthHookError] = useState(null);
+  const [oAuthError, setOAuthError] = useState(false);
 
-  const getEmailMethods = (email) => {
-    firebase.auth().fetchSignInMethodsForEmail(email)
+  const getEmailMethods = email => {
+    return firebase.auth().fetchSignInMethodsForEmail(email)
       .then(methods => {
         if (methods[0] === 'password') {
-          setEmailMethods(methods);
+          return methods;
         }
       })
       .catch(error => {
         setOAuthError(error);
       });
   };
-  const requestOAuth = () => {
+
+  const requestOAuth = async () => {
     if (selection) {
-      const authInstance = getOAuthProvider(selection);
-      firebase.auth().signInWithRedirect(authInstance)
+      const authInstance = await getOAuthProvider(selection);
+      await firebase.auth().signInWithRedirect(authInstance)
         .then(res => {
           setOAuthResponse(res);
-          setSelection(null);
+          setSelection(false);
         })
-        .catch(error => {
+        .catch(async error => {
           if (error.code === 'auth/account-exists-with-different-credential') {
-            getEmailMethods(error.email);
+            const methods = await getEmailMethods(error.email);
+            setMethods(methods);
             setOAuthResponse(error);
           }
           setOAuthError(error);
         });
     } else {
-      firebase.auth().getRedirectResult()
+      await firebase.auth().getRedirectResult()
         .then(res => {
           const { additionalUserInfo } = res;
           const { isNewUser } = additionalUserInfo;
@@ -59,11 +59,9 @@ const useOAuth = () => {
     }
   }, [selection]);
 
-  return { setOAuthHookError, oAuthError, oAuthResponse, setOAuthResponse, setSelection, emailMethods, isOAuthComplete, setIsNewUser, setAdditionalUserInfo, additionalUserInfo, setEmailMethods };
+  return { oAuthError, oAuthResponse, setOAuthResponse, setSelection, methods, setIsNewUser, setAdditionalUserInfo, additionalUserInfo, setMethods };
 };
 
-const gitHubProvider = new firebase.auth.GithubAuthProvider();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
 const getOAuthProvider = providerId => {
 	switch (providerId) {
 		case 'GOOGLE_SIGN_IN_METHOD':

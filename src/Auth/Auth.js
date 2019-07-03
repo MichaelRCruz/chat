@@ -1,10 +1,10 @@
 import React, { useEffect, Fragment } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
-// import SignInWithEmailForm from './SignInWithEmailForm.js';
 import VerificationForm from './VerificationForm.js';
 import useOAuth from './useOAuth.js';
 import useAuthLink from '../hooks/useAuthLink.js';
+// merge these stylesheets
 import './Auth.css';
 import './SignInWithEmailForm.css';
 
@@ -35,7 +35,6 @@ const Auth = props => {
           />
         );
       }} />
-
 			<Route path='/auth/verification' component={VerificationForm} />
 		</Fragment>
 	);

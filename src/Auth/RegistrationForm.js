@@ -1,11 +1,17 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment } from 'react';
 import useForm from './useForm.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = props => {
   const { setSelection, setAuthEmail } = props;
   const formCallback = (payload) => (setAuthEmail(payload));
-  const { handleSubmit, handleChange, authFormErrors, authFormValues } = useForm(formCallback);
+
+  const {
+    handleSubmit,
+    handleChange,
+    authFormErrors,
+    authFormValues
+  } = useForm(formCallback);
 
   return (
     <Fragment>
@@ -40,7 +46,7 @@ const RegistrationForm = props => {
               onClick={() => setSelection('GOOGLE_SIGN_IN_METHOD')}
             />
             <p className="toggleFormLink">
-              don't have an account? <span>sign up!</span>
+              We prefer Google. <span>Here's why.</span>
             </p>
           </div>
         </fieldset>

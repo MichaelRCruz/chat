@@ -13,22 +13,26 @@ const useAuthLink = () => {
   });
 
   const sendAuthLink = email => {
+    // setIsAuthLinkSent(true);
     firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-    .then(() => {
-      // window.localStorage.setItem('potatoEmail', email);
-      setAuthEmail(false);
-      setIsAuthLinkSent(true);
-    })
-    .catch(error => {
-      setAuthLinkError(error);
-    });
+      .then(() => {
+        // window.localStorage.setItem('potatoEmail', email);
+        // setIsAuthLinkSent(true);
+      })
+      .catch(error => {
+        setAuthLinkError(error);
+      });
   };
 
   useEffect(() => {
-    if (authEmail) sendAuthLink(authEmail);
-    setAuthEmail(false);
+    if (authEmail) {
+      sendAuthLink(authEmail);
+      setIsAuthLinkSent(true);
+    }
     return () => {
+      console.log('authLinkError: ', authLinkError);
       setAuthEmail(false);
+      setIsAuthLinkSent(false);
     }
   }, [authEmail]);
 

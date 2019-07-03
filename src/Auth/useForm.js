@@ -10,6 +10,7 @@ const useForm = (callback) => {
 
   const handleSubmit = event => {
     if (event) event.preventDefault();
+    setWasFormSubmitted(true);
     callback(authFormValues.email);
    };
 

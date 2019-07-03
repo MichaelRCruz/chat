@@ -45,14 +45,15 @@ const RegistrationForm = props => {
   //   // return null;
   // }
 
-  const { setSelection } = useOAuth();
-  const { setAuthEmail } = useAuthLink();
+  // const { setSelection } = useOAuth();
+  // const { setAuthEmail } = useAuthLink();
+  const { setSelection, setAuthEmail } = props;
   const formCallback = (payload) => (setAuthEmail(payload));
   const { handleSubmit, handleChange, authFormErrors, authFormValues } = useForm(formCallback);
 
   return (
     <Fragment>
-      <form className="signInFormComponent" onSubmit={(e) => handleSubmit(e)}>
+      <form className="signInFormComponent" onSubmit={handleSubmit}>
         <fieldset className="signInFieldset">
           <legend className="signInWithEmailLegend">
             <p className="appNameAtAuth">Potato</p>

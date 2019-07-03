@@ -8,10 +8,15 @@ const useForm = (callback) => {
   const [authFormErrors, setAuthFormErrors] = useState({});
   const [wasFormSubmitted, setWasFormSubmitted] = useState(false);
 
+  const clearForm = () => {
+    setAuthFormValues({});
+    setAuthFormErrors({});
+  }
+
   const handleSubmit = event => {
     if (event) event.preventDefault();
     setWasFormSubmitted(true);
-    callback(authFormValues.email);
+    callback(authFormValues.email, clearForm);
    };
 
   const handleChange = event => {

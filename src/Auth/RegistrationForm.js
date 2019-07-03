@@ -3,8 +3,12 @@ import useForm from './useForm.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = props => {
+
   const { setSelection, setAuthEmail } = props;
-  const formCallback = (payload) => (setAuthEmail(payload));
+  const formCallback = (payload, clearForm) => {
+    setAuthEmail(payload);
+    clearForm();
+  };
 
   const {
     handleSubmit,

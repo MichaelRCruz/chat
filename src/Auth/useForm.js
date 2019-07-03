@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { validate } from './formValidation.js';
+// import { validate } from './formValidation.js';
 import Validation from '../validation.js';
 
 
@@ -11,7 +11,7 @@ const useForm = (callback) => {
   const clearForm = () => {
     setAuthFormValues({});
     setAuthFormErrors({});
-  }
+  };
 
   const handleSubmit = event => {
     if (event) event.preventDefault();

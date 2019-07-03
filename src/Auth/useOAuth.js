@@ -8,6 +8,7 @@ const useOAuth = () => {
   const [isNewUser, setIsNewUser] = useState(false);
   const [additionalUserInfo, setAdditionalUserInfo] = useState(false);
   const [oAuthError, setOAuthError] = useState(false);
+  const [isOAuthCanceled, setIsOAuthCanceled] = useState(false);
 
   const getEmailMethods = email => {
     return firebase.auth().fetchSignInMethodsForEmail(email)
@@ -59,7 +60,19 @@ const useOAuth = () => {
     }
   }, [selection]);
 
-  return { oAuthError, oAuthResponse, setOAuthResponse, setSelection, methods, setIsNewUser, setAdditionalUserInfo, additionalUserInfo, setMethods };
+  return {
+    oAuthError,
+    oAuthResponse,
+    setOAuthResponse,
+    setSelection,
+    methods,
+    setIsNewUser,
+    setAdditionalUserInfo,
+    additionalUserInfo,
+    setMethods,
+    isOAuthCanceled,
+    setIsOAuthCanceled
+  };
 };
 
 const getOAuthProvider = providerId => {

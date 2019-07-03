@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import useForm from './useForm.js';
+import Modal from '../Modal/Modal.js';
 import './RegistrationForm.css';
 
 const RegistrationForm = props => {
 
-  const { setSelection, setAuthEmail } = props;
+  const { setSelection, setAuthEmail, handleClose } = props;
   const formCallback = (payload, clearForm) => {
     setAuthEmail(payload);
     clearForm();
   };
-
   const {
     handleSubmit,
     handleChange,
@@ -18,7 +18,7 @@ const RegistrationForm = props => {
   } = useForm(formCallback);
 
   return (
-    <Fragment>
+    <Modal show={true} handleClose={handleClose}>
       <form className="signInFormComponent" onSubmit={handleSubmit}>
         <fieldset className="signInFieldset">
           <legend className="signInWithEmailLegend">
@@ -55,7 +55,7 @@ const RegistrationForm = props => {
           </div>
         </fieldset>
       </form>
-    </Fragment>
+    </Modal>
   );
 };
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import ChangePasswordForm from './ChangePasswordForm';
 import UpdateDisplayNameForm from './UpdateDisplayNameForm';
+import Modal from '../Modal/Modal.js';
 import './UserProfile.css';
+
 // https://developer.chrome.com/extensions/signedInDevices
 class UserProfile extends React.Component {
-
 
   signOut = async () => {
     const { firebase, userConfig } = this.props;
@@ -67,11 +68,13 @@ class UserProfile extends React.Component {
 
   render () {
     return (
-      <section className="userProfileComponent">
-        <ChangePasswordForm updatePassword={this.updatePassword.bind(this)}/>
-        <UpdateDisplayNameForm updateDisplayName={this.updateDisplayName.bind(this)}/>
-        <button onClick={() => this.signOut()}>click here to sign out</button>
-      </section>
+      <Modal show={true} handleClose={() => { console.log('sup') }}>
+        <section className="userProfileComponent">
+          <ChangePasswordForm />
+          <UpdateDisplayNameForm />
+          <button onClick={() => this.signOut()}>click here to sign out</button>
+        </section>
+      </Modal>
     )
   }
 }

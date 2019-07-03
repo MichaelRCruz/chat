@@ -64,11 +64,11 @@
   font-size: 12px;
 }
 
-/* .toggleFormLink span {
+.toggleFormLink span {
   cursor: pointer;
   text-decoration: underline;
   padding-left: 4px;
-} */
+}
 
 @media screen and (min-width: 450px) {
   .parentFlex {

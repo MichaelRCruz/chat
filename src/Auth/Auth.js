@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
 import VerificationForm from './VerificationForm.js';
 import useOAuth from './useOAuth.js';
@@ -9,33 +9,49 @@ import './Auth.css';
 import './SignInWithEmailForm.css';
 
 const Auth = props => {
-  const { oAuthResponse, setOAuthResponse, setSelection } = useOAuth();
+  const {
+    oAuthResponse,
+    setOAuthResponse,
+    methods,
+    setMethods,
+    setSelection,
+    isOAuthCanceled: dead,
+    setIsOAuthCanceled
+  } = useOAuth();
   const { isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
 
   useEffect(() => {
-    if (oAuthResponse) {
+    if (!dead && oAuthResponse) {
       props.history.push('/chat/rooms/?rm=lastVisited');
     }
-    if (isAuthLinkSent) {
+    if (!dead && isAuthLinkSent) {
       props.history.push('verification');
     }
     return () => {
-      setIsAuthLinkSent(false);
-      setOAuthResponse(false);
+      console.log('oAuthResponse', oAuthResponse);
+      console.log('methods', methods);
+      setIsOAuthCanceled(true);
     }
-  }, [oAuthResponse, isAuthLinkSent]);
+  }, [oAuthResponse, isAuthLinkSent, methods]);
 
 	return (
 		<Fragment>
 			<Route path='/auth/registration' render={() => {
         return (
           <RegistrationForm
+            handleClose={() => { props.history.push('/') }}
             setSelection={setSelection}
             setAuthEmail={setAuthEmail}
           />
         );
       }} />
-			<Route path='/auth/verification' component={VerificationForm} />
+			<Route path='/auth/verification' render={() => {
+        return (
+          <VerificationForm
+            handleClose={() => { props.history.push('/') }}
+          />
+        );
+      }} />
 		</Fragment>
 	);
 };

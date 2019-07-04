@@ -11,6 +11,7 @@ const useAuthLink = () => {
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });
+  const [isAuthLinkCanceled, setIsAuthLinkCanceled] = useState(false);
 
   const sendAuthLink = async email => {
     return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
@@ -36,7 +37,9 @@ const useAuthLink = () => {
     authEmail,
     setAuthEmail,
     isAuthLinkSent,
-    setIsAuthLinkSent
+    setIsAuthLinkSent,
+    isAuthLinkCanceled,
+    setIsAuthLinkCanceled
   };
 };
 

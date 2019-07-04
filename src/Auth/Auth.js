@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Route } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
 import VerificationForm from './VerificationForm.js';
@@ -17,33 +17,29 @@ const Auth = props => {
     setSelection,
     isOAuthCanceled: dead,
     setIsOAuthCanceled,
-    oAuthStatus,
     oAuthError
   } = useOAuth();
   const { isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
 
   useEffect(() => {
-    if (!dead && oAuthResponse) {
-      // console.log('oAuthResponse', oAuthResponse);
-      // console.log('methods', methods);
-      // console.log('get busy');
-      // console.log(oAuthStatus);
-      props.history.push('/chat/rooms/?rm=lastVisited');
-    }
-    if (!dead && isAuthLinkSent) {
-      props.history.push('verification');
+    if (!dead) {
+      if (oAuthResponse) {
+        console.log(oAuthResponse);
+        props.history.push('/chat/rooms/?rm=lastVisited');
+      }
+      if (oAuthResponse.isNew || isAuthLinkSent || methods) {
+        props.history.push('verification');
+      }
     }
     return () => {
-      // console.log('oAuthResponse', oAuthResponse);
-      // console.log('methods', methods);
       setIsOAuthCanceled(true);
     }
-  }, [oAuthResponse, isAuthLinkSent, methods]);
+  }, [oAuthResponse, isAuthLinkSent]);
 
 	return (
 		<Fragment>
-			<Route path='/auth/registration' render={() => {
-        console.log(oAuthStatus);
+			<Route path='/auth/registration' render={muhProps => {
+        // console.log(window.history);
         return (
           <RegistrationForm
             handleClose={() => { props.history.push('/') }}

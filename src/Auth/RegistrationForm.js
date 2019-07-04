@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import useForm from './useForm.js';
 import Modal from '../Modal/Modal.js';
 import './RegistrationForm.css';

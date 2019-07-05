@@ -6,6 +6,7 @@ import useOAuth from './useOAuth.js';
 import useAuthLink from '../hooks/useAuthLink.js';
 // merge these stylesheets
 import './Auth.css';
+// import './RegistrationForm.css';
 import './SignInWithEmailForm.css';
 
 const Auth = props => {
@@ -19,7 +20,7 @@ const Auth = props => {
     setIsOAuthCanceled,
     oAuthError
   } = useOAuth();
-  const { isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
+  const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
 
   useEffect(() => {
     if (!dead) {
@@ -32,9 +33,21 @@ const Auth = props => {
       }
     }
     return () => {
+      setIsAuthLinkSent(false);
       setIsOAuthCanceled(true);
     }
   }, [oAuthResponse, isAuthLinkSent]);
+
+  // const sendAuthLink = async email => {
+  //   return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+  //     .then(() => {
+  //       // localStorage.setItem('potatoEmail', email);
+  //       setIsAuthLinkSent(true);
+  //     })
+  //     .catch(error => {
+  //       setAuthLinkError(error);
+  //     });
+  // };
 
 	return (
 		<Fragment>

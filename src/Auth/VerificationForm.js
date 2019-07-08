@@ -34,10 +34,13 @@ const VerificationForm = props => {
   const [authMethods, setAuthMethods] = useState(false);
   const [verifiedInstance, setVerifiedInstance] = useState(false);
   const [targetInstance, setTargetInstance] = useState(false);
+  const [isRegistration, setIsRegistration] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
-      const { code, ...rest } = oAuthResponse;
+      const { code, additionalUserInfo, ...rest } = oAuthResponse;
+      const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {
         const pendingCred = rest.credential;
@@ -47,7 +50,6 @@ const VerificationForm = props => {
             const newInstance = getOAuthProvider(initProvider);
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
-            console.log(oldInstance, newInstance);
             setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
             setShouldMerge(true);
             return;
@@ -55,18 +57,19 @@ const VerificationForm = props => {
           .catch(error => {
             console.log(error);
           });
-      } else {
-        console.log(code, rest);
+      } else if (isNewUser) {
+        setNewUser(true);
+        setDialog('Welcome! Create a display name and a password for extra security :)');
       }
     }
     if (!dead && isAuthLinkSent) {
       setWaiting(true);
     }
-    if (sessionStorage.getItem('isDuplicate') === "true") {
-      console.log('yeah yiu dd ut');
+    if (!oAuthResponse && !isAuthLinkSent) {
+      setIsRegistration(true);
     }
     return () => {
-      // sessionStorage.setItem('isDuplicate', "false");
+      setIsRegistration(false);
     };
   }, [oAuthResponse, isAuthLinkSent]);
 
@@ -160,14 +163,17 @@ const VerificationForm = props => {
       </li>
     );
   });
-
+  
   const verificationForm = (
     <Modal show={true} handleClose={handleClose}>
       <form className="verificationFormComponent" onSubmit={handleSubmit}>
         <fieldset className="verificationFieldset">
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
-            <ul>{muhButtons}</ul>
+            {authDialog}
+            {isRegistration ? <ul>{muhButtons}</ul> : null}
+            {newUser ? passwordInput : null}
+            {newUser ? displayNameInput : null}
             {shouldMerge ? oAuthButton(verifiedInstance[3]) : null}
             {disclaimerEtc}
           </div>

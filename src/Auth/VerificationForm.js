@@ -8,7 +8,7 @@ import './VerificationForm.css';
 
 const VerificationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, requestOAuth } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider } = props;
   const formCallback = (payload, clearForm) => {
     // console.log(payload.email);
     setAuthEmail(payload.email);
@@ -132,32 +132,16 @@ const VerificationForm = props => {
     </button>
   );
 
-  const Google = (
-    <img
-      className="googleButton"
-      src={require('../assets/btn_google_signin_dark_normal_web@2x.png')}
-      alt=""
-      onClick={() => setSelection(verifiedInstance[0], verifiedInstance[1])}
-    />
-  );
-
-  const GitHub = (
-    <button
-      className="signInWithEmailButton"
-      alt=""
-      onClick={() => setSelection('github.com')}>
-      github
-    </button>
-  );
-
-  const Facebook = (
-    <button
-      className="signInWithEmailButton"
-      alt=""
-      onClick={() => setSelection('facebook.com')}>
-      facebook
-    </button>
-  );
+  const oAuthButton = instance => {
+    return (
+      <button
+        className="signInWithEmailButton"
+        alt=""
+        onClick={() => setSelection(instance)}>
+        <p>{instance}</p>
+      </button>
+    );
+  }
 
   const disclaimerEtc = (
     <p className="toggleFormLink">
@@ -165,17 +149,17 @@ const VerificationForm = props => {
     </p>
   );
 
-  const authProviders = (
-    <Fragment>
-      {GitHub}
-      {Facebook}
-      {Google}
-    </Fragment>
-  );
-
   const authDialog = (
     <p>{dialog}</p>
   );
+
+  const muhButtons = ['google.com', 'facebook.com', 'github.com'].map(authProvider => {
+    return (
+      <li key={authProvider}>
+        {oAuthButton(authProvider)}
+      </li>
+    );
+  });
 
   const verificationForm = (
     <Modal show={true} handleClose={handleClose}>
@@ -183,10 +167,8 @@ const VerificationForm = props => {
         <fieldset className="verificationFieldset">
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
-            {authDialog}
-            {targetInstance[2]}
-            {shouldMerge ? null : null}
-            {authProviders}
+            <ul>{muhButtons}</ul>
+            {shouldMerge ? oAuthButton(verifiedInstance[3]) : null}
             {disclaimerEtc}
           </div>
         </fieldset>

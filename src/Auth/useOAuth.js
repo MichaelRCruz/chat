@@ -31,11 +31,11 @@ const useOAuth = () => {
   const getOAuthProvider = providerId => {
   	switch (providerId) {
   		case 'google.com':
-  			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider(), 'Google'];
+  			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider(), 'Google', 'google.com'];
   		case 'github.com':
-  			return ['signInWithPopup', new firebase.auth.GithubAuthProvider(), 'GitHub'];
+  			return ['signInWithPopup', new firebase.auth.GithubAuthProvider(), 'GitHub', 'github.com'];
       case 'facebook.com':
-  			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider(), 'Facebook'];
+  			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider(), 'Facebook', 'facebook.com'];
   		default:
   		  return 'auth provider selection is not present';
   	}

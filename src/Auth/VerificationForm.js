@@ -6,12 +6,12 @@ import './SignInWithEmailForm.css';
 import './VerificationForm.css';
 
 const VerificationForm = props => {
-  console.log('VerificationForm was mounted');
+  // console.log('VerificationForm was mounted');
 
   const { oAuthResponse } = useOAuth();
   const { setSelection, authEmail, handleClose } = props;
   const formCallback = (payload, clearForm) => {
-    console.log('verification submitted', payload);
+    console.log('verification submitted');
     clearForm();
   };
   const {
@@ -24,14 +24,11 @@ const VerificationForm = props => {
   const { displayNameError, emailError, passwordError } = authFormErrors;
 
   useEffect(() => {
-    console.log(displayName, email, password);
+    // console.log(oAuthResponse);
     return () => {};
   }, [displayName, email, password]);
 
-
-
-
-  console.log('props', setSelection, authEmail, handleClose);
+  // console.log('props', setSelection, authEmail, handleClose);
 
   const displayNameInput = (
     <div className="formGroußp verificationFormGroup">
@@ -102,6 +99,24 @@ const VerificationForm = props => {
     />
   );
 
+  const githubButton = (
+    <button
+      className="signInWithEmailButton"
+      alt=""
+      onClick={() => setSelection('GITHUB_SIGN_IN_METHOD')}>
+      github
+    </button>
+  );
+
+  const facebookButton = (
+    <button
+      className="signInWithEmailButton"
+      alt=""
+      onClick={() => setSelection('FACEBOOK_SIGN_IN_METHOD')}>
+      facebook
+    </button>
+  );
+
   const disclaimerEtc = (
     <p className="toggleFormLink">
       We prefer Google. <span>Here's why.</span>
@@ -119,6 +134,8 @@ const VerificationForm = props => {
             { passwordInput }
             { verificationButton }
             { googleButton }
+            { githubButton }
+            { facebookButton }
           </div>
         </fieldset>
       </form>

@@ -196,13 +196,15 @@ class SessionProvider extends React.Component {
   };
 
   componentDidMount() {
+    // firebase.auth().signOut();
     const { foreignState } = this.props;
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        firebase.auth().signOut();
-      } else {
-        this.initializeApp(user, foreignState);
-      }
+      console.log('user from context: ', user);
+      // if (!user) {
+      //   firebase.auth().signOut();
+      // } else {
+      //   this.initializeApp(user, foreignState);
+      // }
     });
   };
 

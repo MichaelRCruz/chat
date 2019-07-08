@@ -14,12 +14,12 @@ const useOAuth = () => {
   // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
   // const [loading, setLoading] = useState(true);
 
-  const getEmailMethods = email => {
-    return firebase.auth().fetchSignInMethodsForEmail(email)
+  const getEmailMethods = async email => {
+    await firebase.auth().fetchSignInMethodsForEmail(email)
       .then(methods => {
         if (methods[0] === 'password') {
           // setOAuthStatus({ loading: true, status: 'RECOVERING' });
-          return methods;
+          setMethods(methods);
         }
       })
       .catch(error => {
@@ -31,7 +31,7 @@ const useOAuth = () => {
   const requestOAuth = async () => {
     if (selection) {
       const authInstance = await getOAuthProvider(selection);
-      await firebase.auth().signInWithRedirect(authInstance)
+      await firebase.auth()[authInstance[0]](authInstance[1])
         .then(res => {
           // setOAuthStatus({ loading: true, status: 'READY' });
           setOAuthResponse(res);
@@ -40,9 +40,10 @@ const useOAuth = () => {
         .catch(async error => {
           if (error.code === 'auth/account-exists-with-different-credential') {
             // setOAuthStatus({ loading: true, status: 'CONFLICTED' });
-            const methods = await getEmailMethods(error.email);
+            // const cacheRes = JSON.stringify(error);
+            // localStorage.setItem('cacheRes', cacheRes);
+            await getEmailMethods(error.email);
             // setOAuthStatus({ loading: true, status: 'READY' });
-            if (methods) setMethods(methods);
             setOAuthResponse(error);
           }
           // setOAuthStatus({ loading: false, status: 'FAULT' });
@@ -97,9 +98,11 @@ const useOAuth = () => {
 const getOAuthProvider = providerId => {
 	switch (providerId) {
 		case 'GOOGLE_SIGN_IN_METHOD':
-			return new firebase.auth.GoogleAuthProvider();
+			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider()];
 		case 'GITHUB_SIGN_IN_METHOD':
-			return new firebase.auth.GithubAuthProvider();
+			return ['signInWithPopup', new firebase.auth.GithubAuthProvider()];
+    case 'FACEBOOK_SIGN_IN_METHOD':
+			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider()];
 		default:
 		  return 'auth provider selection is not present';
 	}

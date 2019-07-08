@@ -25,46 +25,33 @@ const Auth = props => {
   useEffect(() => {
     if (!dead) {
       if (oAuthResponse) {
+        // const cacheRes = localStorage.getItem('cacheRes');
+        // const parsedRes = JSON.parse(cacheRes);
         console.log(oAuthResponse);
-        props.history.push('/chat/rooms/?rm=lastVisited');
+        console.log(oAuthError);
+        console.log('methods: ', methods);
+        // console.log('parsedRes: ', parsedRes);
+        // props.history.push('/chat/rooms/?rm=lastVisited');
       }
-      if (oAuthResponse.isNew || isAuthLinkSent || methods) {
-        props.history.push('verification');
+      if (isAuthLinkSent) {
+        console.log(isAuthLinkSent);
+        // props.history.push('verification');
       }
     }
     return () => {
       setIsAuthLinkSent(false);
       setIsOAuthCanceled(true);
     }
-  }, [oAuthResponse, isAuthLinkSent]);
-
-  // const sendAuthLink = async email => {
-  //   return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
-  //     .then(() => {
-  //       // localStorage.setItem('potatoEmail', email);
-  //       setIsAuthLinkSent(true);
-  //     })
-  //     .catch(error => {
-  //       setAuthLinkError(error);
-  //     });
-  // };
+  }, [oAuthResponse, isAuthLinkSent, methods]);
 
 	return (
 		<Fragment>
 			<Route path='/auth/registration' render={muhProps => {
-        // console.log(window.history);
-        return (
-          <RegistrationForm
-            handleClose={() => { props.history.push('/') }}
-            setSelection={setSelection}
-            setAuthEmail={setAuthEmail}
-          />
-        );
-      }} />
-			<Route path='/auth/verification' render={() => {
         return (
           <VerificationForm
             handleClose={() => { props.history.push('/') }}
+            setSelection={setSelection}
+            setAuthEmail={setAuthEmail}
           />
         );
       }} />

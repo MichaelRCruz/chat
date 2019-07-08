@@ -23,7 +23,8 @@ const Auth = props => {
     setOAuthError,
     requestOAuth,
     selection,
-    getOAuthProvider
+    getOAuthProvider,
+    linkAccounts
   } = useOAuth();
   const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
 
@@ -71,6 +72,7 @@ const Auth = props => {
             authEmail={authEmail}
             selection={selection}
             getOAuthProvider={getOAuthProvider}
+            linkAccounts={linkAccounts}
           />
         );
       }} />

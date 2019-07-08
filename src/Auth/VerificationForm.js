@@ -8,7 +8,7 @@ import './VerificationForm.css';
 
 const VerificationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts } = props;
   const formCallback = (payload, clearForm) => {
     // console.log(payload.email);
     setAuthEmail(payload.email);
@@ -36,6 +36,7 @@ const VerificationForm = props => {
   const [targetInstance, setTargetInstance] = useState(false);
   const [isRegistration, setIsRegistration] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pendingCred, setPendingCred] = useState(false);
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
@@ -44,6 +45,7 @@ const VerificationForm = props => {
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {
         const pendingCred = rest.credential;
+        setPendingCred(pendingCred)
         firebase.auth().fetchSignInMethodsForEmail(rest.email)
           .then(methods => {
             const oldInstance = getOAuthProvider(methods[0]);
@@ -135,13 +137,13 @@ const VerificationForm = props => {
     </button>
   );
 
-  const oAuthButton = instance => {
+  const oAuthButton = inst => {
     return (
       <button
         className="signInWithEmailButton"
         alt=""
-        onClick={() => setSelection(instance)}>
-        <p>{instance}</p>
+        onClick={() => setSelection(inst)}>
+        <p>{inst}</p>
       </button>
     );
   }
@@ -163,7 +165,16 @@ const VerificationForm = props => {
       </li>
     );
   });
-  
+
+  const linkAccountsButton = (
+    <button
+      className="signInWithEmailButton"
+      alt=""
+      onClick={() => linkAccounts(verifiedInstance, pendingCred)}>
+      link account
+    </button>
+  );
+
   const verificationForm = (
     <Modal show={true} handleClose={handleClose}>
       <form className="verificationFormComponent" onSubmit={handleSubmit}>
@@ -175,6 +186,7 @@ const VerificationForm = props => {
             {newUser ? passwordInput : null}
             {newUser ? displayNameInput : null}
             {shouldMerge ? oAuthButton(verifiedInstance[3]) : null}
+            {shouldMerge ? linkAccountsButton : null}
             {disclaimerEtc}
           </div>
         </fieldset>

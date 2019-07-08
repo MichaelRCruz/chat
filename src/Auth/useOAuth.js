@@ -28,7 +28,7 @@ const useOAuth = () => {
   //     });
   // };
 
-  const requestOAuth = async () => {
+  const requestOAuth = async pendingCred => {
     if (selection) {
       const authInstance = await getOAuthProvider(selection);
       await firebase.auth()[authInstance[0]](authInstance[1])
@@ -36,6 +36,11 @@ const useOAuth = () => {
           // setOAuthStatus({ loading: true, status: 'READY' });
           setOAuthResponse(res);
           setSelection(false);
+          if (pendingCred) res.user.linkAndRetrieveDataWithCredential(pendingCred)
+            .then(function(usercred) {
+              // GitHub account successfully linked to the existing Firebase user.
+              console.log('you did the link', usercred);
+            });
         })
         .catch(async error => {
           if (error.code === 'auth/account-exists-with-different-credential') {
@@ -89,7 +94,8 @@ const useOAuth = () => {
     isOAuthCanceled,
     setIsOAuthCanceled,
     isLoading,
-    setIsLoading
+    setIsLoading,
+    requestOAuth
     // oAuthStatus,
     // setOAuthStatus
   };

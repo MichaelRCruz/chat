@@ -2,16 +2,16 @@ import React, { Fragment, useEffect, useState } from 'react';
 import useForm from './useForm.js';
 import useOAuth from './useOAuth.js';
 import Modal from '../Modal/Modal.js';
+import * as firebase from 'firebase';
 import './SignInWithEmailForm.css';
 import './VerificationForm.css';
 
 const VerificationForm = props => {
-  // console.log('VerificationForm was mounted');
 
-  const { oAuthResponse } = useOAuth();
-  const { setSelection, authEmail, handleClose } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent } = props;
   const formCallback = (payload, clearForm) => {
-    console.log('verification submitted');
+    // console.log(payload.email);
+    setAuthEmail(payload.email);
     clearForm();
   };
   const {
@@ -22,11 +22,33 @@ const VerificationForm = props => {
   } = useForm(formCallback);
   const { displayName, email, password } = authFormValues;
   const { displayNameError, emailError, passwordError } = authFormErrors;
+  const [isWaiting, setIsWaiting] = useState(false);
 
   useEffect(() => {
-    // console.log(oAuthResponse);
+    if (!dead) {
+      if (oAuthResponse) {
+        const { code, ...rest } = oAuthResponse;
+        if (code === 'auth/account-exists-with-different-credential') {
+          const pendingCred = rest.credential;
+          console.log(pendingCred);
+          firebase.auth().fetchSignInMethodsForEmail(rest.email)
+            .then(methods => {
+              console.log(methods);
+              // setFormSignature(reAuth);
+              return;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          console.log(code, rest);
+        }
+      } else if (isAuthLinkSent) {
+        setIsWaiting(true);
+      }
+    }
     return () => {};
-  }, [displayName, email, password]);
+  }, [oAuthResponse, isAuthLinkSent]);
 
   // console.log('props', setSelection, authEmail, handleClose);
 
@@ -129,13 +151,10 @@ const VerificationForm = props => {
         <fieldset className="verificationFieldset">
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
-            { displayNameInput }
+            { isWaiting ? disclaimerEtc : null }
             { emailInput }
             { passwordInput }
-            { verificationButton }
-            { googleButton }
-            { githubButton }
-            { facebookButton }
+            { emailAuthButton }
           </div>
         </fieldset>
       </form>

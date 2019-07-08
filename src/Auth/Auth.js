@@ -4,6 +4,7 @@ import RegistrationForm from './RegistrationForm.js';
 import VerificationForm from './VerificationForm.js';
 import useOAuth from './useOAuth.js';
 import useAuthLink from '../hooks/useAuthLink.js';
+import * as firebase from 'firebase';
 // merge these stylesheets
 import './Auth.css';
 // import './RegistrationForm.css';
@@ -18,24 +19,46 @@ const Auth = props => {
     setSelection,
     isOAuthCanceled: dead,
     setIsOAuthCanceled,
-    oAuthError
+    oAuthError,
+    setOAuthError
   } = useOAuth();
   const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
+
+  // const otherAuthMethods = async email => {
+  //   const authMethods = await getEmailMethods(email);
+  //   return authMethods;
+  // }
+
+  const getEmailMethods = async email => {
+    firebase.auth().fetchSignInMethodsForEmail(email)
+      .then(methods => {
+        if (methods[0] === 'password') {
+          // setOAuthStatus({ loading: true, status: 'RECOVERING' });
+          setMethods(methods);
+        }
+      })
+      .catch(error => {
+        // setOAuthStatus({ loading: false, status: 'FAULT' });
+        setOAuthError(error);
+      });
+  };
 
   useEffect(() => {
     if (!dead) {
       if (oAuthResponse) {
-        // const cacheRes = localStorage.getItem('cacheRes');
-        // const parsedRes = JSON.parse(cacheRes);
-        console.log(oAuthResponse);
-        console.log(oAuthError);
-        console.log('methods: ', methods);
-        // console.log('parsedRes: ', parsedRes);
-        // props.history.push('/chat/rooms/?rm=lastVisited');
-      }
-      if (isAuthLinkSent) {
-        console.log(isAuthLinkSent);
-        // props.history.push('verification');
+        const { code, ...rest } = oAuthResponse;
+        if (code === 'auth/account-exists-with-different-credential') {
+          firebase.auth().fetchSignInMethodsForEmail(rest.email)
+            .then(methods => {
+              console.log(methods);
+            })
+            .catch(error => {
+              // setOAuthStatus({ loading: false, status: 'FAULT' });
+              console.log(error);
+            });
+        } else {
+          console.log(code, rest);
+        }
       }
     }
     return () => {

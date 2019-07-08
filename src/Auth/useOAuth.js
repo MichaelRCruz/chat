@@ -14,19 +14,19 @@ const useOAuth = () => {
   // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
   // const [loading, setLoading] = useState(true);
 
-  const getEmailMethods = async email => {
-    await firebase.auth().fetchSignInMethodsForEmail(email)
-      .then(methods => {
-        if (methods[0] === 'password') {
-          // setOAuthStatus({ loading: true, status: 'RECOVERING' });
-          setMethods(methods);
-        }
-      })
-      .catch(error => {
-        // setOAuthStatus({ loading: false, status: 'FAULT' });
-        setOAuthError(error);
-      });
-  };
+  // const getEmailMethods = email => {
+  //   firebase.auth().fetchSignInMethodsForEmail(email)
+  //     .then(methods => {
+  //       if (methods[0] === 'password') {
+  //         // setOAuthStatus({ loading: true, status: 'RECOVERING' });
+  //         setMethods(methods);
+  //       }
+  //     })
+  //     .catch(error => {
+  //       // setOAuthStatus({ loading: false, status: 'FAULT' });
+  //       setOAuthError(error);
+  //     });
+  // };
 
   const requestOAuth = async () => {
     if (selection) {
@@ -42,7 +42,7 @@ const useOAuth = () => {
             // setOAuthStatus({ loading: true, status: 'CONFLICTED' });
             // const cacheRes = JSON.stringify(error);
             // localStorage.setItem('cacheRes', cacheRes);
-            await getEmailMethods(error.email);
+            // await getEmailMethods(error.email);
             // setOAuthStatus({ loading: true, status: 'READY' });
             setOAuthResponse(error);
           }

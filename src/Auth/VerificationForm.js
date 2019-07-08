@@ -8,7 +8,7 @@ import './VerificationForm.css';
 
 const VerificationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, requestOAuth } = props;
   const formCallback = (payload, clearForm) => {
     // console.log(payload.email);
     setAuthEmail(payload.email);
@@ -22,32 +22,52 @@ const VerificationForm = props => {
   } = useForm(formCallback);
   const { displayName, email, password } = authFormValues;
   const { displayNameError, emailError, passwordError } = authFormErrors;
-  const [isWaiting, setIsWaiting] = useState(false);
+
+  // const storage = sessionStorage.getItem('isDuplicate');
+  // const [isDuplicate, setIsDuplicate] = useState(sessionStorage.getItem('isDuplicate'));
+  const [chooseAuth, setChooseAuth] = useState(true);
+  const [oAuthProvider, setOauthProvider] = useState(true);
+  const [dialog, setDialog] = useState('Please choose a sign in method.');
+  const [newUser, setNewUser] = useState(false);
+  const [waiting, setWaiting] = useState(false);
+  const [shouldMerge, setShouldMerge] = useState(false);
+  const [authMethods, setAuthMethods] = useState(false);
+  const [verifiedInstance, setVerifiedInstance] = useState(false);
+  const [targetInstance, setTargetInstance] = useState(false);
 
   useEffect(() => {
-    if (!dead) {
-      if (oAuthResponse) {
-        const { code, ...rest } = oAuthResponse;
-        if (code === 'auth/account-exists-with-different-credential') {
-          const pendingCred = rest.credential;
-          console.log(pendingCred);
-          firebase.auth().fetchSignInMethodsForEmail(rest.email)
-            .then(methods => {
-              console.log(methods);
-              // setFormSignature(reAuth);
-              return;
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        } else {
-          console.log(code, rest);
-        }
-      } else if (isAuthLinkSent) {
-        setIsWaiting(true);
+    if (!dead && oAuthResponse) {
+      const { code, ...rest } = oAuthResponse;
+      const initProvider = rest.credential.providerId;
+      if (code === 'auth/account-exists-with-different-credential') {
+        const pendingCred = rest.credential;
+        firebase.auth().fetchSignInMethodsForEmail(rest.email)
+          .then(methods => {
+            const oldInstance = getOAuthProvider(methods[0]);
+            const newInstance = getOAuthProvider(initProvider);
+            setVerifiedInstance(oldInstance);
+            setTargetInstance(newInstance);
+            console.log(oldInstance, newInstance);
+            setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
+            setShouldMerge(true);
+            return;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        console.log(code, rest);
       }
     }
-    return () => {};
+    if (!dead && isAuthLinkSent) {
+      setWaiting(true);
+    }
+    if (sessionStorage.getItem('isDuplicate') === "true") {
+      console.log('yeah yiu dd ut');
+    }
+    return () => {
+      // sessionStorage.setItem('isDuplicate', "false");
+    };
   }, [oAuthResponse, isAuthLinkSent]);
 
   // console.log('props', setSelection, authEmail, handleClose);
@@ -112,29 +132,29 @@ const VerificationForm = props => {
     </button>
   );
 
-  const googleButton = (
+  const Google = (
     <img
       className="googleButton"
       src={require('../assets/btn_google_signin_dark_normal_web@2x.png')}
       alt=""
-      onClick={() => setSelection('GOOGLE_SIGN_IN_METHOD')}
+      onClick={() => setSelection(verifiedInstance[0], verifiedInstance[1])}
     />
   );
 
-  const githubButton = (
+  const GitHub = (
     <button
       className="signInWithEmailButton"
       alt=""
-      onClick={() => setSelection('GITHUB_SIGN_IN_METHOD')}>
+      onClick={() => setSelection('github.com')}>
       github
     </button>
   );
 
-  const facebookButton = (
+  const Facebook = (
     <button
       className="signInWithEmailButton"
       alt=""
-      onClick={() => setSelection('FACEBOOK_SIGN_IN_METHOD')}>
+      onClick={() => setSelection('facebook.com')}>
       facebook
     </button>
   );
@@ -145,16 +165,29 @@ const VerificationForm = props => {
     </p>
   );
 
+  const authProviders = (
+    <Fragment>
+      {GitHub}
+      {Facebook}
+      {Google}
+    </Fragment>
+  );
+
+  const authDialog = (
+    <p>{dialog}</p>
+  );
+
   const verificationForm = (
     <Modal show={true} handleClose={handleClose}>
       <form className="verificationFormComponent" onSubmit={handleSubmit}>
         <fieldset className="verificationFieldset">
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
-            { isWaiting ? disclaimerEtc : null }
-            { emailInput }
-            { passwordInput }
-            { emailAuthButton }
+            {authDialog}
+            {targetInstance[2]}
+            {shouldMerge ? null : null}
+            {authProviders}
+            {disclaimerEtc}
           </div>
         </fieldset>
       </form>

@@ -28,8 +28,22 @@ const useOAuth = () => {
   //     });
   // };
 
-  const requestOAuth = async pendingCred => {
+  const getOAuthProvider = providerId => {
+  	switch (providerId) {
+  		case 'google.com':
+  			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider(), 'Google'];
+  		case 'github.com':
+  			return ['signInWithPopup', new firebase.auth.GithubAuthProvider(), 'GitHub'];
+      case 'facebook.com':
+  			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider(), 'Facebook'];
+  		default:
+  		  return 'auth provider selection is not present';
+  	}
+  }
+
+  const requestOAuth = async (pendingCred) => {
     if (selection) {
+      // setInitProvider(authInstance[2]);
       const authInstance = await getOAuthProvider(selection);
       await firebase.auth()[authInstance[0]](authInstance[1])
         .then(res => {
@@ -44,11 +58,7 @@ const useOAuth = () => {
         })
         .catch(async error => {
           if (error.code === 'auth/account-exists-with-different-credential') {
-            // setOAuthStatus({ loading: true, status: 'CONFLICTED' });
-            // const cacheRes = JSON.stringify(error);
-            // localStorage.setItem('cacheRes', cacheRes);
-            // await getEmailMethods(error.email);
-            // setOAuthStatus({ loading: true, status: 'READY' });
+            // sessionStorage.setItem('isDuplicate', "true");
             setOAuthResponse(error);
           }
           // setOAuthStatus({ loading: false, status: 'FAULT' });
@@ -75,6 +85,7 @@ const useOAuth = () => {
   };
 
   useEffect(() => {
+    // sessionStorage.setItem('isDuplicate', "false");
     requestOAuth();
     return () => {
       setSelection(false);
@@ -95,23 +106,12 @@ const useOAuth = () => {
     setIsOAuthCanceled,
     isLoading,
     setIsLoading,
-    requestOAuth
+    requestOAuth,
+    selection,
+    getOAuthProvider
     // oAuthStatus,
     // setOAuthStatus
   };
 };
-
-const getOAuthProvider = providerId => {
-	switch (providerId) {
-		case 'GOOGLE_SIGN_IN_METHOD':
-			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider()];
-		case 'GITHUB_SIGN_IN_METHOD':
-			return ['signInWithPopup', new firebase.auth.GithubAuthProvider()];
-    case 'FACEBOOK_SIGN_IN_METHOD':
-			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider()];
-		default:
-		  return 'auth provider selection is not present';
-	}
-}
 
 export default useOAuth;

@@ -62,9 +62,12 @@ const VerificationForm = props => {
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode('newUser');
+      } else if (isAuthLinkSent) {
+        setDialog('Chill here with us while you check you email, please.');
+        setAuthMode('waiting');
       }
-    }
-    if (!dead && isAuthLinkSent) {
+    } else if (isAuthLinkSent) {
+      setDialog('Chill here with us while you check you email, please.');
       setAuthMode('waiting');
     }
     return () => {
@@ -196,6 +199,9 @@ const VerificationForm = props => {
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             {authDialog}
+            {authMode === 'waiting' ? userDetails : null}
+            {authMode === 'registration' ? emailInput : null}
+            {authMode === 'registration' ? emailAuthButton : null}
             {authMode === 'registration' ? <ul>{muhButtons}</ul> : null}
             {authMode === 'newUser' ? userDetails : null}
             {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance[3]) : null}

@@ -54,7 +54,7 @@ const Auth = props => {
     //   }
     // }
     return () => {
-      setIsAuthLinkSent(false);
+      // setIsAuthLinkSent(false);
       setIsOAuthCanceled(true);
     }
   }, [oAuthResponse, isAuthLinkSent]);

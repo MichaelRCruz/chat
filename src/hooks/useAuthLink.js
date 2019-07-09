@@ -28,7 +28,7 @@ const useAuthLink = () => {
     if (authEmail) sendAuthLink(authEmail);
     return () => {
       setAuthEmail(false);
-      setIsAuthLinkSent(false);
+      // setIsAuthLinkSent(false);
     }
   }, [authEmail]);
 

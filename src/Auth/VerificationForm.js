@@ -34,7 +34,7 @@ const VerificationForm = props => {
   const [authMethods, setAuthMethods] = useState(false);
   const [verifiedInstance, setVerifiedInstance] = useState(false);
   const [targetInstance, setTargetInstance] = useState(false);
-  const [isRegistration, setIsRegistration] = useState(false);
+  const [authMode, setAuthMode] = useState('registration');
   const [isLoading, setIsLoading] = useState(false);
   const [pendingCred, setPendingCred] = useState(false);
 
@@ -53,25 +53,22 @@ const VerificationForm = props => {
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
             setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
-            setShouldMerge(true);
+            setAuthMode('shouldMerge');
             return;
           })
           .catch(error => {
             console.log(error);
           });
       } else if (isNewUser) {
-        setNewUser(true);
         setDialog('Welcome! Create a display name and a password for extra security :)');
+        setAuthMode('newUser');
       }
     }
     if (!dead && isAuthLinkSent) {
-      setWaiting(true);
-    }
-    if (!oAuthResponse && !isAuthLinkSent) {
-      setIsRegistration(true);
+      setAuthMode('waiting');
     }
     return () => {
-      setIsRegistration(false);
+      setAuthMode('registration');
     };
   }, [oAuthResponse, isAuthLinkSent]);
 
@@ -179,9 +176,17 @@ const VerificationForm = props => {
     <button
       className="signInWithEmailButton"
       alt=""
-      onClick={() => unLinkAccount(initProvider)}>
+      onClick={() => unLinkAccount()}>
       unlink account
     </button>
+  );
+
+  const userDetails = (
+    <Fragment>
+      {displayNameInput}
+      {emailInput}
+      {passwordInput}
+    </Fragment>
   );
 
   const verificationForm = (
@@ -191,11 +196,10 @@ const VerificationForm = props => {
           <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             {authDialog}
-            {isRegistration ? <ul>{muhButtons}</ul> : null}
-            {newUser ? passwordInput : null}
-            {newUser ? displayNameInput : null}
-            {shouldMerge ? oAuthButton(verifiedInstance[3]) : null}
-            {shouldMerge ? linkAccountsButton : null}
+            {authMode === 'registration' ? <ul>{muhButtons}</ul> : null}
+            {authMode === 'newUser' ? userDetails : null}
+            {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance[3]) : null}
+            {authMode === 'shouldMerge' ? linkAccountsButton : null}
             {unLinkAccountButton}
             {disclaimerEtc}
           </div>

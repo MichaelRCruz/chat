@@ -6,8 +6,10 @@ const useAuthLink = () => {
   const [authEmail, setAuthEmail] = useState(false);
   const [authLinkError, setAuthLinkError] = useState(null);
   const [isAuthLinkSent, setIsAuthLinkSent] = useState(false);
+  const [authLinkUser, setAuthLinkUser] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [actionCodeSettings, setActionCodeSettings] = useState({
-    url: `http://localhost:3000/auth/registration`,
+    url: `http://localhost:3000/auth/waiting`,
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });
@@ -16,13 +18,33 @@ const useAuthLink = () => {
   const sendAuthLink = async email => {
     return firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
       .then(() => {
-        // localStorage.setItem('potatoEmail', email);
+        localStorage.setItem('potatoEmail', email);
         setIsAuthLinkSent(true);
       })
       .catch(error => {
         setAuthLinkError(error);
       });
   };
+
+  const signInWithLink = async email => {
+    firebase.auth().signInWithEmailLink(email, window.location.href)
+      .then(result => {
+      // Clear email from storage.
+        window.localStorage.removeItem('potatoEmail');
+        console.log(result);
+        setAuthLinkUser(result)
+      // You can access the new user via result.user
+      // Additional user info profile not available via:
+      // result.additionalUserInfo.profile == null
+      // You can check if the user is new or existing:
+      // result.additionalUserInfo.isNewUser
+    })
+    .catch(error => {
+      setAuthLinkError(error);
+      // Some error occurred, you can inspect the code: error.code
+      // Common errors could be invalid email and invalid or expired OTPs.
+    });
+  }
 
   useEffect(() => {
     if (authEmail) sendAuthLink(authEmail);
@@ -40,7 +62,11 @@ const useAuthLink = () => {
     isAuthLinkSent,
     setIsAuthLinkSent,
     isAuthLinkCanceled,
-    setIsAuthLinkCanceled
+    setIsAuthLinkCanceled,
+    signInWithLink,
+    authLinkUser,
+    needsConfirmation,
+    setNeedsConfirmation
   };
 };
 

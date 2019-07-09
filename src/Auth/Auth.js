@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { Route } from 'react-router-dom';
 import RegistrationForm from './RegistrationForm.js';
 import VerificationForm from './VerificationForm.js';
+import Waiting from './Waiting.js';
 import useOAuth from './useOAuth.js';
 import useAuthLink from '../hooks/useAuthLink.js';
 import * as firebase from 'firebase';
@@ -27,7 +28,7 @@ const Auth = props => {
     linkAccounts,
     unLinkAccount
   } = useOAuth();
-  const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail } = useAuthLink();
+  const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail, signInWithLink, authLinkUser, needsConfirmation, setNeedsConfirmation } = useAuthLink();
 
   useEffect(() => {
     // if (!dead) {
@@ -65,6 +66,7 @@ const Auth = props => {
         return (
           <VerificationForm
             handleClose={() => { props.history.push('/') }}
+            redirectToWaiting={() => { props.history.push('/auth/waiting') }}
             setSelection={setSelection}
             setAuthEmail={setAuthEmail}
             oAuthResponse={oAuthResponse}
@@ -75,6 +77,20 @@ const Auth = props => {
             getOAuthProvider={getOAuthProvider}
             linkAccounts={linkAccounts}
             unLinkAccount={unLinkAccount}
+            signInWithLink={signInWithLink}
+            authLinkUser={authLinkUser}
+            needsConfirmation={needsConfirmation}
+          />
+        );
+      }} />
+      <Route path='/auth/waiting' render={muhProps => {
+        return (
+          <Waiting
+            redirectToRegistration={() => { props.history.push('/auth/registration') }}
+            redirectToChat={() => { props.history.push('/chat/rooms/?rm=lastVisited') }}
+            authEmail={authEmail}
+            signInWithLink={signInWithLink}
+            setNeedsConfirmation={setNeedsConfirmation}
           />
         );
       }} />

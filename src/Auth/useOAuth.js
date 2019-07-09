@@ -12,6 +12,7 @@ const useOAuth = () => {
   const [isOAuthCanceled, setIsOAuthCanceled] = useState(false);
   const [isOAuthBusy, setIsOAuthBusy] = useState(false);
   const [linkRes, setLinkRes] = useState(false);
+  const [unlinkSuccess, setUnlinkSuccess] = useState(false);
   // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
   // const [loading, setLoading] = useState(true);
 
@@ -42,11 +43,21 @@ const useOAuth = () => {
   	}
   }
 
+  const unLinkAccount = async () => {
+    const { user, additionalUserInfo } = oAuthResponse;
+    const { providerId } = additionalUserInfo;
+    user.unlink(providerId).then(result => {
+      setUnlinkSuccess({true: true, result});
+    }).catch(function(error) {
+      setUnlinkSuccess({true: false, error});
+    });
+  }
+
   const linkAccounts = async (verifiedInstance, pendingCred) => {
     // console.log(selection, pendingCred);
     // const authInstance = await getOAuthProvider(selection);
     // console.log(authInstance);
-    await firebase.auth().signInWithRedirect(verifiedInstance[1]).then(async result => {
+    await firebase.auth().signInWithPopup(verifiedInstance[1]).then(async result => {
       // Remember that the user may have signed in with an account that has a different email
       // address than the first one. This can happen as Firebase doesn't control the provider's
       // sign in flow and the user is free to login using whichever account he owns.
@@ -124,7 +135,8 @@ const useOAuth = () => {
     requestOAuth,
     selection,
     getOAuthProvider,
-    linkAccounts
+    linkAccounts,
+    unLinkAccount
     // oAuthStatus,
     // setOAuthStatus
   };

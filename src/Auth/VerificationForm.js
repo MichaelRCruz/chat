@@ -8,7 +8,7 @@ import './VerificationForm.css';
 
 const VerificationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount } = props;
   const formCallback = (payload, clearForm) => {
     // console.log(payload.email);
     setAuthEmail(payload.email);
@@ -175,6 +175,15 @@ const VerificationForm = props => {
     </button>
   );
 
+  const unLinkAccountButton = (
+    <button
+      className="signInWithEmailButton"
+      alt=""
+      onClick={() => unLinkAccount(initProvider)}>
+      unlink account
+    </button>
+  );
+
   const verificationForm = (
     <Modal show={true} handleClose={handleClose}>
       <form className="verificationFormComponent" onSubmit={handleSubmit}>
@@ -187,6 +196,7 @@ const VerificationForm = props => {
             {newUser ? displayNameInput : null}
             {shouldMerge ? oAuthButton(verifiedInstance[3]) : null}
             {shouldMerge ? linkAccountsButton : null}
+            {unLinkAccountButton}
             {disclaimerEtc}
           </div>
         </fieldset>

@@ -199,6 +199,22 @@ class SessionProvider extends React.Component {
     // firebase.auth().signOut();
     const { foreignState } = this.props;
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      if (user != null) {
+      const userProfile = {
+        name: user.displayName,
+        email: user.email,
+        photoUrl: user.photoURL,
+        emailVerified: user.emailVerified,
+        uid: user.uid,
+        providers: user.providerData.map(profile => {
+          return {...profile};
+        })
+      }
+      console.log(userProfile)
+    }
+
+
+
     // user.unlink(providerId).then(function() {
     //   // Auth provider unlinked from account
     // }).catch(function(error) {

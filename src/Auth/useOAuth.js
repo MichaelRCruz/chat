@@ -45,8 +45,8 @@ const useOAuth = () => {
 
   const unLinkAccount = async () => {
     const { user, additionalUserInfo } = oAuthResponse;
-    const { providerId } = additionalUserInfo;
-    user.unlink(providerId).then(result => {
+    // const { providerId } = additionalUserInfo;
+    user.unlink('github.com').then(result => {
       setUnlinkSuccess({true: true, result});
     }).catch(function(error) {
       setUnlinkSuccess({true: false, error});

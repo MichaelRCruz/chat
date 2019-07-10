@@ -33,6 +33,7 @@ const useAuthLink = () => {
         window.localStorage.removeItem('potatoEmail');
         console.log(result);
         setAuthLinkUser(result)
+        console.log(result);
       // You can access the new user via result.user
       // Additional user info profile not available via:
       // result.additionalUserInfo.profile == null
@@ -66,7 +67,8 @@ const useAuthLink = () => {
     signInWithLink,
     authLinkUser,
     needsConfirmation,
-    setNeedsConfirmation
+    setNeedsConfirmation,
+    setAuthLinkUser
   };
 };
 

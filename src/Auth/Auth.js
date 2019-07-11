@@ -20,7 +20,7 @@ const Auth = props => {
     setOAuthError,
     requestOAuth,
     selection,
-    getOAuthProvider,
+    authProviders,
     linkAccounts,
     unLinkAccount
   } = useOAuth();
@@ -47,7 +47,7 @@ const Auth = props => {
             dead={dead}
             authEmail={authEmail}
             selection={selection}
-            getOAuthProvider={getOAuthProvider}
+            authProviders={authProviders}
             linkAccounts={linkAccounts}
             unLinkAccount={unLinkAccount}
             signInWithLink={signInWithLink}

@@ -33,11 +33,11 @@ const useOAuth = () => {
   const getOAuthProvider = providerId => {
   	switch (providerId) {
   		case 'google.com':
-  			return ['signInWithRedirect', new firebase.auth.GoogleAuthProvider(), 'Google', 'google.com'];
+  			return {method: 'signInWithRedirect', instance: new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
   		case 'github.com':
-  			return ['signInWithPopup', new firebase.auth.GithubAuthProvider(), 'GitHub', 'github.com'];
+  			return {method: 'signInWithPopup', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
       case 'facebook.com':
-  			return ['signInWithRedirect', new firebase.auth.FacebookAuthProvider(), 'Facebook', 'facebook.com'];
+  			return {method: 'signInWithRedirect', instance: new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com.com'}
   		default:
   		  return 'auth provider selection is not present';
   	}
@@ -57,7 +57,7 @@ const useOAuth = () => {
     // console.log(selection, pendingCred);
     // const authInstance = await getOAuthProvider(selection);
     // console.log(authInstance);
-    await firebase.auth().signInWithPopup(verifiedInstance[1]).then(async result => {
+    await firebase.auth().signInWithPopup(verifiedInstance.instance).then(async result => {
       // Remember that the user may have signed in with an account that has a different email
       // address than the first one. This can happen as Firebase doesn't control the provider's
       // sign in flow and the user is free to login using whichever account he owns.
@@ -75,7 +75,7 @@ const useOAuth = () => {
     if (selection) {
       // setInitProvider(authInstance[2]);
       const authInstance = await getOAuthProvider(selection);
-      await firebase.auth()[authInstance[0]](authInstance[1])
+      await firebase.auth()[authInstance.method](authInstance.instance)
         .then(res => {
           // setOAuthStatus({ loading: true, status: 'READY' });
           setLinkRes(this.res);

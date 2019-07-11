@@ -132,23 +132,6 @@ const RegistrationForm = props => {
     </button>
   );
 
-  // const oAuthButton = inst => {
-  //   return (
-  //     <div>
-  //       <p>{inst}</p>
-  //       <img
-  //         className="signInWithEmailButton"
-  //         alt=""
-  //         onClick={() => setSelection(inst)}
-  //         className="signInWithEmailButton"
-  //         alt=""
-  //         width="50px"
-  //         src={require('../assets/btn_google_light_focus_ios.svg')}>
-  //       </img>
-  //     </div>
-  //   );
-  // }
-
   const oAuthButton = inst => {
     return (
       <div>
@@ -159,8 +142,7 @@ const RegistrationForm = props => {
           onClick={() => setSelection(inst)}
           className="signInWithEmailButton"
           alt=""
-          width="50px"
-          src={require('../assets/f_logo_RGB-Blue_1024.png')}>
+          src={require('../assets/btn_google_light_focus_ios.svg')}>
         </img>
       </div>
     );
@@ -224,7 +206,7 @@ const RegistrationForm = props => {
             {authMode === 'registration' ? emailAuthButton : null}
             {authMode === 'registration' ? <ul>{muhButtons}</ul> : null}
             {authMode === 'newUser' ? userDetails : null}
-            {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance[3]) : null}
+            {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance.providerId) : null}
             {authMode === 'shouldMerge' ? linkAccountsButton : null}
             {disclaimerEtc}
           </div>

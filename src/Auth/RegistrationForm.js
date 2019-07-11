@@ -154,9 +154,9 @@ const RegistrationForm = props => {
     </p>
   );
 
-  const authDialog = (
-    <p>{dialog}</p>
-  );
+  // const authDialog = (
+  //   <p>{dialog}</p>
+  // );
 
   const muhButtons = ['google.com', 'facebook.com', 'github.com'].map(authProvider => {
     return (
@@ -199,17 +199,31 @@ const RegistrationForm = props => {
           <legend className="formLegend">
             <p className="appNameAtAuth">Potato</p>
           </legend>
-          <div className="parentFlex">
-            {authDialog}
-            {authMode === 'waiting' ? userDetails : null}
-            {authMode === 'registration' ? emailInput : null}
-            {authMode === 'registration' ? emailAuthButton : null}
-            {authMode === 'registration' ? <ul>{muhButtons}</ul> : null}
-            {authMode === 'newUser' ? userDetails : null}
-            {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance.providerId) : null}
-            {authMode === 'shouldMerge' ? linkAccountsButton : null}
-            {disclaimerEtc}
-          </div>
+          <main className="parentFlex">
+            <article className="authHeader">
+              <p>{dialog}</p>
+            </article>
+            <section className="authMain">
+              <div className="registration">
+                {authMode === 'registration' ? emailInput : null}
+                {authMode === 'registration' ? emailAuthButton : null}
+                {authMode === 'registration' ? <ul className="authProviders">{muhButtons}</ul> : null}
+                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
+              </div>
+              <div className="newUser">
+                {authMode === 'newUser' ? userDetails : null}
+                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
+              </div>
+              <div className="shouldMerge">
+                {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance.providerId) : null}
+                {authMode === 'shouldMerge' ? linkAccountsButton : null}
+                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
+              </div>
+            </section>
+            <footer>
+              {disclaimerEtc}
+            </footer>
+          </main>
         </fieldset>
       </form>
     </Modal>

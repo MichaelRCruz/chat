@@ -2,7 +2,10 @@
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
 
-/* .verificationFieldset {
+/* .verification
+
+
+ {
   margin: 0;
   padding: 0;
   border-radius: 6px;
@@ -10,6 +13,9 @@
 
 .formFieldset {
   border: none;
+  padding: 0;
+  border: 0;
+  margin: 0;
 }
 
 .authForm {
@@ -30,19 +36,31 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   height: calc(var(--vh, 1vh) * 100 - 168px);
 }
 
-.formGroup {
-  width: 80%;
+.authHeader {
+  height: 20%;
+  width: 100%;
+  background: deepskyblue;
+}
+
+.registration {
+
+}
+
+.authMain {
+  height: 80%;
+  width: 100%;
+  background-color: lightgreen;
 }
 
 .input {
   font-size: 16px;
   display: block;
   margin: auto;
-  /* width: 95%; */
-  /* height: 40px; */
+  width: 100%;
   border: 1px solid #232323;
   padding-left: 8px;
   border-radius: 6px;
@@ -50,9 +68,6 @@
 
 .input:focus {
   outline: 0;
-}
-
-.signInWithEmailButton {
 }
 
 .errorMessage {

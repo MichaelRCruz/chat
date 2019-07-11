@@ -6,8 +6,6 @@ import useOAuth from './useOAuth.js';
 import useAuthLink from '../hooks/useAuthLink.js';
 import * as firebase from 'firebase';
 import './Auth.css';
-// import './RegistrationForm.css';
-// import './SignInWithEmailForm.css';
 
 const Auth = props => {
   const {

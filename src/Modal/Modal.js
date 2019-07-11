@@ -26,16 +26,9 @@ class Modal extends React.Component {
     const modalCssClass = show ? 'modal display-block' : 'modal display-none';
     return (
       <aside className={modalCssClass}>
-        <div className='modalBody'>
-          <header className="modalHeader">
-            <button className="exitButton" onClick={handleClose}>
-              <i className="material-icons clearIcon">clear</i>
-            </button>
-          </header>
-          <main className="modalMain">
-            {children}
-          </main>
-        </div>
+        <main className="modalMain">
+          {children}
+        </main>
       </aside>
     );
   }

@@ -3,14 +3,11 @@ import useForm from './useForm.js';
 import useOAuth from './useOAuth.js';
 import Modal from '../Modal/Modal.js';
 import * as firebase from 'firebase';
-import './SignInWithEmailForm.css';
-import './VerificationForm.css';
 
 const RegistrationForm = props => {
 
   const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation } = props;
   const formCallback = (payload, clearForm) => {
-    // console.log(payload.email);
     setAuthEmail(payload.email);
     clearForm();
   };
@@ -192,9 +189,9 @@ const RegistrationForm = props => {
 
   const registrationForm = (
     <Modal show={true} handleClose={handleClose}>
-      <form className="verificationFormComponent" onSubmit={handleSubmit}>
-        <fieldset className="verificationFieldset">
-          <legend className="verificationLegend"><p className="appNameAtAuth">Potato</p></legend>
+      <form onSubmit={handleSubmit}>
+        <fieldset className="formFieldset">
+          <legend className="formLegend"><p className="appNameAtAuth">Potato</p></legend>
           <div className="parentFlex">
             {authDialog}
             {authMode === 'waiting' ? userDetails : null}

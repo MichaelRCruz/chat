@@ -8,7 +8,13 @@
   border-radius: 6px;
 } */
 
+.formFieldset {
+  border: none;
+}
 
+.authForm {
+  border: 1px solid black;
+}
 
 .appNameAtAuth {
   font-family: 'Pacifico', cursive;
@@ -17,14 +23,14 @@
 
 .formLegend {
   text-align: center;
+  /* border: none; */
 }
 
 .parentFlex {
-  /* height: 100%; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* height: calc(var(--vh, 1vh) * 100 - 28px - 75px - 65px); */
+  height: calc(var(--vh, 1vh) * 100 - 168px);
 }
 
 .formGroup {
@@ -47,14 +53,6 @@
 }
 
 .signInWithEmailButton {
-  display: block;
-  width: 80%;
-  height: 55px;
-  background-color: #506cf0;
-  color: #fff;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  border-radius: 6px;
 }
 
 .errorMessage {
@@ -77,8 +75,16 @@
   animation: spin 2s linear infinite;
 }
 
+.displayNone {
+  display: none;
+}
+
 @media screen and (min-width: 450px) {
   .parentFlex {
     height: 470px;
+  }
+  .formFieldset {
+    border: 1px solid black;
+    border-radius: 10px;
   }
 };

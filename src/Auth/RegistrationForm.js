@@ -132,14 +132,37 @@ const RegistrationForm = props => {
     </button>
   );
 
+  // const oAuthButton = inst => {
+  //   return (
+  //     <div>
+  //       <p>{inst}</p>
+  //       <img
+  //         className="signInWithEmailButton"
+  //         alt=""
+  //         onClick={() => setSelection(inst)}
+  //         className="signInWithEmailButton"
+  //         alt=""
+  //         width="50px"
+  //         src={require('../assets/btn_google_light_focus_ios.svg')}>
+  //       </img>
+  //     </div>
+  //   );
+  // }
+
   const oAuthButton = inst => {
     return (
-      <button
-        className="signInWithEmailButton"
-        alt=""
-        onClick={() => setSelection(inst)}>
+      <div>
         <p>{inst}</p>
-      </button>
+        <img
+          className="signInWithEmailButton"
+          alt=""
+          onClick={() => setSelection(inst)}
+          className="signInWithEmailButton"
+          alt=""
+          width="50px"
+          src={require('../assets/f_logo_RGB-Blue_1024.png')}>
+        </img>
+      </div>
     );
   }
 
@@ -191,7 +214,9 @@ const RegistrationForm = props => {
     <Modal show={true} handleClose={handleClose}>
       <form onSubmit={handleSubmit}>
         <fieldset className="formFieldset">
-          <legend className="formLegend"><p className="appNameAtAuth">Potato</p></legend>
+          <legend className="formLegend">
+            <p className="appNameAtAuth">Potato</p>
+          </legend>
           <div className="parentFlex">
             {authDialog}
             {authMode === 'waiting' ? userDetails : null}
@@ -201,7 +226,6 @@ const RegistrationForm = props => {
             {authMode === 'newUser' ? userDetails : null}
             {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance[3]) : null}
             {authMode === 'shouldMerge' ? linkAccountsButton : null}
-            {unLinkAccountButton}
             {disclaimerEtc}
           </div>
         </fieldset>

@@ -13,31 +13,20 @@ const useOAuth = () => {
   const [isOAuthBusy, setIsOAuthBusy] = useState(false);
   const [linkRes, setLinkRes] = useState(false);
   const [unlinkSuccess, setUnlinkSuccess] = useState(false);
-  // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
-  // const [loading, setLoading] = useState(true);
+  const [authProviderInstances, setAuthproviderinstance] = useState({
+    'google': {method: 'signInWithRedirect', instance: () => new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com', assetPath: '../assets/btn_google_light_focus_ios.svg'},
+    'facebook': {method: 'signInWithPopup', instance: () => new firebase.auth.GitHubAuthProvider(), name: 'GitHub', providerId: 'github.com', assetPath: '../assets/btn_google_light_focus_ios.svg'},
+    'github': {method: 'signInWithRedirect', instance: () => new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com', assetPath: '../assets/btn_google_light_focus_ios.svg'}
+  });
 
-  // const getEmailMethods = email => {
-  //   firebase.auth().fetchSignInMethodsForEmail(email)
-  //     .then(methods => {
-  //       if (methods[0] === 'password') {
-  //         // setOAuthStatus({ loading: true, status: 'RECOVERING' });
-  //         setMethods(methods);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       // setOAuthStatus({ loading: false, status: 'FAULT' });
-  //       setOAuthError(error);
-  //     });
-  // };
-
-  const getOAuthProvider = providerId => {
+  const getOAuthProvider = async providerId => {
   	switch (providerId) {
   		case 'google.com':
-  			return {method: 'signInWithRedirect', instance: new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
+  			return {method: 'signInWithRedirect', instance: await new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
   		case 'github.com':
-  			return {method: 'signInWithPopup', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
+  			return {method: 'signInWithPopup', instance: await new firebase.auth.GitHubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
       case 'facebook.com':
-  			return {method: 'signInWithRedirect', instance: new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com.com'}
+  			return {method: 'signInWithRedirect', instance: await new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com'}
   		default:
   		  return 'auth provider selection is not present';
   	}
@@ -57,7 +46,7 @@ const useOAuth = () => {
     // console.log(selection, pendingCred);
     // const authInstance = await getOAuthProvider(selection);
     // console.log(authInstance);
-    await firebase.auth().signInWithPopup(verifiedInstance.instance).then(async result => {
+    await firebase.auth()[verifiedInstance.method](verifiedInstance.instance).then(async result => {
       // Remember that the user may have signed in with an account that has a different email
       // address than the first one. This can happen as Firebase doesn't control the provider's
       // sign in flow and the user is free to login using whichever account he owns.
@@ -88,7 +77,7 @@ const useOAuth = () => {
             setOAuthResponse(error);
           }
           // setOAuthStatus({ loading: false, status: 'FAULT' });
-          setOAuthError(error);
+          setOAuthError({error, source: 'requestOAuth'});
         });
     } else {
       firebase.auth().getRedirectResult()
@@ -105,7 +94,7 @@ const useOAuth = () => {
         })
         .catch(error => {
           // setOAuthStatus({ loading: false, status: 'FAULT' });
-          setOAuthError(error);
+          setOAuthError({error, source: 'getredirectresukt'});
         });
     }
   };
@@ -136,7 +125,8 @@ const useOAuth = () => {
     selection,
     getOAuthProvider,
     linkAccounts,
-    unLinkAccount
+    unLinkAccount,
+    authProviderInstances
     // oAuthStatus,
     // setOAuthStatus
   };

@@ -146,9 +146,6 @@
     margin: auto;
     margin-top: 150px;
   }
-  .hero {
-    max-width: 313px;
-  }
   .companyImagesContainer {
     flex-direction: row;
     margin-top: 150px;

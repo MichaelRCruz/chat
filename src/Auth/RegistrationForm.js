@@ -123,19 +123,17 @@ const RegistrationForm = props => {
     </button>
   );
 
-  const emailAuthButton = (
-    <button
-      className="signInWithEmailButton"
-      type="submit"
-      disabled={false}>
-      send dynamic link
-    </button>
+  const dynamicAuthButton = (
+      <button
+        className="submitFormButton registrationContainer"
+        type="submit">
+        send dynamic link
+      </button>
   );
 
   const oAuthButton = inst => {
     return (
-      <div>
-        <p>{inst}</p>
+      <div className="authLogo">
         <img
           className="signInWithEmailButton"
           alt=""
@@ -167,12 +165,14 @@ const RegistrationForm = props => {
   });
 
   const linkAccountsButton = (
-    <button
-      className="signInWithEmailButton"
-      alt=""
-      onClick={() => linkAccounts(verifiedInstance, pendingCred)}>
-      link account
-    </button>
+    <div>
+      <button
+        className="signInWithEmailButton"
+        alt=""
+        onClick={() => linkAccounts(verifiedInstance, pendingCred)}>
+        link account
+      </button>
+    </div>
   );
 
   const unLinkAccountButton = (
@@ -199,31 +199,27 @@ const RegistrationForm = props => {
           <legend className="formLegend">
             <p className="appNameAtAuth">Potato</p>
           </legend>
-          <main className="parentFlex">
-            <article className="authHeader">
+          <section className="parentFlex">
+            <section className="authHero">
               <p>{dialog}</p>
-            </article>
-            <section className="authMain">
-              <div className="registration">
+            </section>
+            <section className="dialog">
+              <p>{dialog}</p>
+            </section>
+            <section className="inputsContainer">
                 {authMode === 'registration' ? emailInput : null}
-                {authMode === 'registration' ? emailAuthButton : null}
-                {authMode === 'registration' ? <ul className="authProviders">{muhButtons}</ul> : null}
-                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
-              </div>
-              <div className="newUser">
                 {authMode === 'newUser' ? userDetails : null}
-                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
-              </div>
-              <div className="shouldMerge">
-                {authMode === 'shouldMerge' ? oAuthButton(verifiedInstance.providerId) : null}
-                {authMode === 'shouldMerge' ? linkAccountsButton : null}
-                {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
-              </div>
+                {authMode === 'registration' ? dynamicAuthButton : null}
+            </section>
+            <section className="oauthContainer">
+              {authMode === 'shouldMerge' ? linkAccountsButton : null}
+              {authMode === 'registration' ? <ul className="authProviders">{muhButtons}</ul> : null}
+              {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
             </section>
             <footer>
               {disclaimerEtc}
             </footer>
-          </main>
+          </section>
         </fieldset>
       </form>
     </Modal>

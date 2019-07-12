@@ -36,9 +36,12 @@
   height: calc(var(--vh, 1vh) * 100 - 168px);
 }
 
-.authProviders {
+.oAuthWrapper {
+
+}
+
+.oAuthButtons {
   list-style-type: none;
-  display: flex;
   padding: unset;
 }
 
@@ -51,35 +54,38 @@
   align-items: center;
 }
 
-.dialog {
-  height: 20%;
+.fieldsContainer {
+  height: 35%;
   width: 100%;
   background-color: blue;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
 }
 
-.inputsContainer {
-  height: 30%;
+.buttonsContainer {
+  height: 10%;
   width: 100%;
   background-color: yellow;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.oauthContainer {
-  height: 20%;
-  width: 100%;
-  background-color: hotpink;
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-around;
 }
 
-.inputContainer, .authLogo {
+.oAuthDialog {
+  height: 10%;
+}
+
+.oAuthContainer {
+  height: 15%;
+  width: 100%;
+  background-color: hotpink;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.authLogo {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,7 +106,8 @@
   font-size: 16px;
   display: block;
   margin: auto;
-  /* width: 100%; */
+  width: 70vw;
+  max-width: 300px;
   /* border: 1px solid #232323;
   padding-left: 8px; */
   border-radius: 6px;
@@ -132,6 +139,20 @@
 
 .displayNone {
   display: none;
+}
+
+.oAuthButton {
+  height: 80px;
+}
+
+.submitFormButton {
+  border: 1px solid black;
+  border-radius: 8px;
+  height: 40px;
+  max-width: 300px;
+  width: 80%;
+  background-color: #232323;
+  color: #fff;
 }
 
 @media screen and (min-width: 450px) {

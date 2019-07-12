@@ -34,6 +34,11 @@ const RegistrationForm = props => {
   const [authMode, setAuthMode] = useState('registration');
   const [isLoading, setIsLoading] = useState(false);
   const [pendingCred, setPendingCred] = useState(false);
+  const [providerData, setProviderData] = useState({
+    'google.com': {method: 'signInWithRedirect', name: 'Google', providerId: 'google.com', path: require('../assets/btn_google_light_focus_ios.svg')},
+    'github.com': {method: 'signInWithPopup', name: 'GitHub', providerId: 'github.com', path: require('../assets/GitHub-Mark-64px.png')},
+    'facebook.com': {method: 'signInWithRedirect', name: 'Facebook', providerId: 'facebook.com', path: require('../assets/PNG/f_logo_RGB-Blue_58.png')}
+  });
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
@@ -73,7 +78,7 @@ const RegistrationForm = props => {
   // console.log('props', setSelection, authEmail, handleClose);
 
   const displayNameInput = (
-    <div className="formGroußp verificationFormGroup">
+    <div className="formGroup verificationFormGroup">
       <p className="errorMessage">{displayNameError}</p>
       <input
         className="input displaynameInput"
@@ -123,32 +128,34 @@ const RegistrationForm = props => {
     </button>
   );
 
-  const dynamicAuthButton = (
-      <button
-        className="submitFormButton registrationContainer"
-        type="submit">
-        send dynamic link
-      </button>
-  );
-
-  const oAuthButton = inst => {
+  const SubmitFormButton = props => {
+    const action = 'send dynamic link';
     return (
-      <div className="authLogo">
+      <button
+        className="submitFormButton"
+        type="submit">
+        {action}
+      </button>
+    );
+  };
+
+  const oAuthButton = provider => {
+    return (
+      <li className="authLogo">
         <img
-          className="signInWithEmailButton"
+          className="oAuthButton"
           alt=""
-          onClick={() => setSelection(inst)}
-          className="signInWithEmailButton"
+          onClick={() => setSelection(provider.providerId)}
           alt=""
-          src={require('../assets/btn_google_light_focus_ios.svg')}>
+          src={provider.path}>
         </img>
-      </div>
+      </li>
     );
   }
 
   const disclaimerEtc = (
     <p className="toggleFormLink">
-      We prefer Google. <span>Here's why.</span>
+      Terms of service. <span>We are proud of you :).</span>
     </p>
   );
 
@@ -156,11 +163,13 @@ const RegistrationForm = props => {
   //   <p>{dialog}</p>
   // );
 
-  const muhButtons = ['google.com', 'facebook.com', 'github.com'].map(authProvider => {
+  const oAuthButtons = Object.keys(providerData).map(authProvider => {
     return (
-      <li key={authProvider}>
-        {oAuthButton(authProvider)}
-      </li>
+      <div className="oAuthWrapper">
+        <ul className="oAuthButtons">
+          {oAuthButton(providerData[authProvider])}
+        </ul>
+      </div>
     );
   });
 
@@ -186,9 +195,9 @@ const RegistrationForm = props => {
 
   const userDetails = (
     <Fragment>
-      {displayNameInput}
-      {emailInput}
       {passwordInput}
+      {emailInput}
+      {displayNameInput}
     </Fragment>
   );
 
@@ -203,18 +212,19 @@ const RegistrationForm = props => {
             <section className="authHero">
               <p>{dialog}</p>
             </section>
-            <section className="dialog">
-              <p>{dialog}</p>
+            <section className="fieldsContainer">
+              {authMode === 'registration' ? emailInput : null}
+              {authMode === 'newUser' ? userDetails : null}
             </section>
-            <section className="inputsContainer">
-                {authMode === 'registration' ? emailInput : null}
-                {authMode === 'newUser' ? userDetails : null}
-                {authMode === 'registration' ? dynamicAuthButton : null}
-            </section>
-            <section className="oauthContainer">
-              {authMode === 'shouldMerge' ? linkAccountsButton : null}
-              {authMode === 'registration' ? <ul className="authProviders">{muhButtons}</ul> : null}
+            <section className="buttonsContainer">
               {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
+              {authMode === 'registration' ? <SubmitFormButton /> : null}
+              {authMode === 'shouldMerge' ? linkAccountsButton : null}
+            </section>
+            <section className="oAuthDialog">continue with a <span>federated identity provider</span></section>
+            <section className="oAuthContainer">
+              {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
+              {authMode === 'registration' ? oAuthButtons : null}
             </section>
             <footer>
               {disclaimerEtc}

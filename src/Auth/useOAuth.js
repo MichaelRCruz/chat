@@ -13,6 +13,7 @@ const useOAuth = () => {
   const [isOAuthBusy, setIsOAuthBusy] = useState(false);
   const [linkRes, setLinkRes] = useState(false);
   const [unlinkSuccess, setUnlinkSuccess] = useState(false);
+  const [authToast, setAuthToast] = useState(false);
   // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
   // const [loading, setLoading] = useState(true);
 
@@ -69,6 +70,31 @@ const useOAuth = () => {
         console.log(usercred);
       });
     });
+  }
+
+  const updateUserDetails = async payload => {
+    const user = await firebase.auth().currentUser;
+    const {  displayName, password } = payload;
+    let toast = {};
+    await user.updateProfile({
+      displayName
+    }).then(function(res) {
+      toast['displayName'] = 'displayName updated';
+    }).catch(function(error) {
+      toast['error'] = 'displayName not set';
+    });
+    await user.updatePassword(password).then(function(res) {
+      toast['password'] = 'password updated';
+    }).catch(function(error) {
+      toast['error'] = 'displayName not set';
+    });
+    setAuthToast(toast);
+    // user.updateEmail("user@example.com").then(function() {
+    //   // Update successful.
+    // }).catch(function(error) {
+    //   // An error happened.
+    // });
+    console.log(user, payload);
   }
 
   const requestOAuth = async (pendingCred) => {
@@ -136,7 +162,9 @@ const useOAuth = () => {
     selection,
     getOAuthProvider,
     linkAccounts,
-    unLinkAccount
+    unLinkAccount,
+    updateUserDetails,
+    authToast
     // oAuthStatus,
     // setOAuthStatus
   };

@@ -6,9 +6,11 @@ import * as firebase from 'firebase';
 
 const RegistrationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation } = props;
-  const formCallback = (payload, clearForm) => {
-    setAuthEmail(payload.email);
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast } = props;
+  const formCallback = (payload, clearForm, event) => {
+    if (authMode.register) setAuthEmail(payload.email);
+    if (authMode.newUser) updateUserDetails(payload);
+    // setAuthEmail(payload.email);
     clearForm();
   };
   const {
@@ -31,7 +33,7 @@ const RegistrationForm = props => {
   const [authMethods, setAuthMethods] = useState(false);
   const [verifiedInstance, setVerifiedInstance] = useState(false);
   const [targetInstance, setTargetInstance] = useState(false);
-  const [authMode, setAuthMode] = useState('registration');
+  const [authMode, setAuthMode] = useState({ register: true, action: 'send dynamic link' });
   const [isLoading, setIsLoading] = useState(false);
   const [pendingCred, setPendingCred] = useState(false);
   const [providerData, setProviderData] = useState({
@@ -43,6 +45,7 @@ const RegistrationForm = props => {
   useEffect(() => {
     if (!dead && oAuthResponse) {
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
+      console.log(oAuthResponse);
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {
@@ -55,7 +58,7 @@ const RegistrationForm = props => {
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
             setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
-            setAuthMode('shouldMerge');
+            setAuthMode({merge: true, action: 'link accounts', onClick: linkAccounts(verifiedInstance, pendingCred) });
             return;
           })
           .catch(error => {
@@ -63,7 +66,7 @@ const RegistrationForm = props => {
           });
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode('newUser');
+        setAuthMode({ newUser: true, action: 'create account', onClick: () => {console.log('did the thing')} });
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
       redirectToWaiting();
@@ -71,7 +74,7 @@ const RegistrationForm = props => {
       console.log(needsConfirmation);
     }
     return () => {
-      setAuthMode('registration');
+      setAuthMode({ register: true, action: 'send dynamic link' });
     };
   }, [oAuthResponse, isAuthLinkSent]);
 
@@ -129,11 +132,12 @@ const RegistrationForm = props => {
   );
 
   const SubmitFormButton = props => {
-    const action = 'send dynamic link';
+    const { action, onClick } = props;
     return (
       <button
         className="submitFormButton"
-        type="submit">
+        type="submit"
+        onClick={onClick || null}>
         {action}
       </button>
     );
@@ -196,7 +200,6 @@ const RegistrationForm = props => {
   const userDetails = (
     <Fragment>
       {passwordInput}
-      {emailInput}
       {displayNameInput}
     </Fragment>
   );
@@ -211,20 +214,23 @@ const RegistrationForm = props => {
           <section className="parentFlex">
             <section className="authHero">
               <p>{dialog}</p>
+              <p>{authToast.password}</p>
+              <p>{authToast.displayName}</p>
             </section>
             <section className="fieldsContainer">
-              {authMode === 'registration' ? emailInput : null}
-              {authMode === 'newUser' ? userDetails : null}
+              {authMode.register ? emailInput : null}
+              {authMode.newUser ? userDetails : null}
             </section>
             <section className="buttonsContainer">
-              {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
-              {authMode === 'registration' ? <SubmitFormButton /> : null}
-              {authMode === 'shouldMerge' ? linkAccountsButton : null}
+              {authMode.error ? <p>bummer, something went wrong</p> : null}
+              <SubmitFormButton {...authMode} />
             </section>
-            <section className="oAuthDialog">continue with a <span>federated identity provider</span></section>
+            <section className="oAuthDialog">
+              {authMode.register ? <p>continue with a <span>federated identity provider</span></p> : null}
+            </section>
             <section className="oAuthContainer">
-              {authMode === 'error' ? <p>bummer, something went wrong</p> : null}
-              {authMode === 'registration' ? oAuthButtons : null}
+              {authMode.error ? <p>bummer, something went wrong</p> : null}
+              {authMode.register ? oAuthButtons : null}
             </section>
             <footer>
               {disclaimerEtc}

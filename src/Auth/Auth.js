@@ -24,7 +24,9 @@ const Auth = props => {
     linkAccounts,
     unLinkAccount,
     authProviderInstances,
-    getOAuthProvider
+    getOAuthProvider,
+    updateUserDetails,
+    authToast
   } = useOAuth();
   const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail, signInWithLink, authLinkUser, needsConfirmation, setNeedsConfirmation } = useAuthLink();
 
@@ -57,6 +59,8 @@ const Auth = props => {
             needsConfirmation={needsConfirmation}
             authProviderInstances={authProviderInstances}
             getOAuthProvider={getOAuthProvider}
+            updateUserDetails={updateUserDetails}
+            authToast={authToast}
           />
         );
       }} />

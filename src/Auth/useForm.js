@@ -16,7 +16,7 @@ const useForm = (callback) => {
   const handleSubmit = event => {
     if (event) event.preventDefault();
     setWasFormSubmitted(true);
-    callback(authFormValues, clearForm);
+    callback(authFormValues, clearForm, event);
    };
 
   const handleChange = event => {

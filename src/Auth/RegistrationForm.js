@@ -66,7 +66,7 @@ const RegistrationForm = props => {
           });
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode({ newUser: true, action: 'create account', onClick: () => {console.log('did the thing')} });
+        setAuthMode({ newUser: true, action: 'create account', onClick: () => redirectToChat() });
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
       redirectToWaiting();
@@ -74,7 +74,7 @@ const RegistrationForm = props => {
       const { additionalUserInfo } = authLinkUser;
       if (additionalUserInfo.isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode({ newUser: true, action: 'create account', onClick: () => {console.log('did the thing')} });
+        setAuthMode({ newUser: true, action: 'create account', onClick: () => redirectToChat()});
       } else {
         redirectToChat();
       }
@@ -87,7 +87,7 @@ const RegistrationForm = props => {
   // console.log('props', setSelection, authEmail, handleClose);
 
   const displayNameInput = (
-    <div className="formGroup verificationFormGroup">
+    <div className="formGroup">
       <p className="errorMessage">{displayNameError}</p>
       <input
         className="input displaynameInput"
@@ -101,7 +101,7 @@ const RegistrationForm = props => {
   );
 
   const emailInput = (
-    <div className="formGroup emailFormGroup">
+    <div className="formGroup">
       <p className="errorMessage">{emailError}</p>
       <input
         className="input emailInput"
@@ -115,7 +115,7 @@ const RegistrationForm = props => {
   );
 
   const passwordInput = (
-    <div className="formGroup passwordFormGroup">
+    <div className="formGroup">
       <p className="errorMessage">{passwordError}</p>
       <input
         className="input passwordInput"
@@ -126,15 +126,6 @@ const RegistrationForm = props => {
         onChange={handleChange}
       />
     </div>
-  );
-
-  const verificationButton = (
-    <button
-      className="verificationButton"
-      type="submit"
-      disabled={false}>
-      complete registration
-    </button>
   );
 
   const SubmitFormButton = props => {

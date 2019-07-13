@@ -102,8 +102,8 @@ const useOAuth = () => {
 
   const requestOAuth = async (pendingCred) => {
     if (selection) {
-      // setInitProvider(authInstance[2]);
       const authInstance = await getOAuthProvider(selection);
+      localStorage.setItem('potatoStorage', 'redirecting');
       await firebase.auth()[authInstance.method](authInstance.instance)
         .then(res => {
           // setOAuthStatus({ loading: true, status: 'READY' });
@@ -119,7 +119,7 @@ const useOAuth = () => {
           // setOAuthStatus({ loading: false, status: 'FAULT' });
           setOAuthError({error, source: 'requestOAuth'});
         });
-    } 
+    }
   };
 
   useEffect(() => {

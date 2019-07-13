@@ -22,7 +22,7 @@ const RegistrationForm = props => {
   const { displayName, email, password } = authFormValues;
   const { displayNameError, emailError, passwordError } = authFormErrors;
 
-  // const storage = sessionStorage.getItem('isDuplicate');
+  const potatoStorage = localStorage.getItem('potatoStorage');
   // const [isDuplicate, setIsDuplicate] = useState(sessionStorage.getItem('isDuplicate'));
   const [chooseAuth, setChooseAuth] = useState(true);
   const [oAuthProvider, setOauthProvider] = useState(true);
@@ -43,7 +43,11 @@ const RegistrationForm = props => {
   });
 
   useEffect(() => {
+    // if (isOAuthSent) setIsLoading(true);
+    // if (dead) setIsLoading(false);
+    // if () setLoadig(true);
     if (!dead && oAuthResponse) {
+      window.localStorage.removeItem('potatoStorage');
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
       console.log(oAuthResponse);
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
@@ -217,8 +221,13 @@ const RegistrationForm = props => {
       </form>
     </Modal>
   );
-
-  return registrationForm;
+// console.log(dead && oAuthResponse);
+  return (
+    <Fragment>
+      {potatoStorage ? <div className="loadingAnimation" /> : registrationForm}
+    </Fragment>
+  );
+  // return registrationForm;
 }
 
 export default RegistrationForm;

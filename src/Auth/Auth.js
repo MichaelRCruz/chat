@@ -44,6 +44,7 @@ const Auth = props => {
           <RegistrationForm
             handleClose={() => { props.history.push('/') }}
             redirectToWaiting={() => { props.history.push('/auth/waiting') }}
+            redirectToChat={() => { props.history.push('/chat/rooms/?rm=lastVisited') }}
             setSelection={setSelection}
             setAuthEmail={setAuthEmail}
             oAuthResponse={oAuthResponse}

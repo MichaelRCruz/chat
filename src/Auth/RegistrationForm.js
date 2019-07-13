@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 
 const RegistrationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat } = props;
   const formCallback = (payload, clearForm, event) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) updateUserDetails(payload);
@@ -70,13 +70,19 @@ const RegistrationForm = props => {
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
       redirectToWaiting();
-    } else if (isAuthLinkSent && needsConfirmation) {
-      console.log(needsConfirmation);
+    } else if (authLinkUser) {
+      const { additionalUserInfo } = authLinkUser;
+      if (additionalUserInfo.isNewUser) {
+        setDialog('Welcome! Create a display name and a password for extra security :)');
+        setAuthMode({ newUser: true, action: 'create account', onClick: () => {console.log('did the thing')} });
+      } else {
+        redirectToChat();
+      }
     }
     return () => {
       setAuthMode({ register: true, action: 'send dynamic link' });
     };
-  }, [oAuthResponse, isAuthLinkSent]);
+  }, [oAuthResponse, isAuthLinkSent, authLinkUser]);
 
   // console.log('props', setSelection, authEmail, handleClose);
 

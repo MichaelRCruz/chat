@@ -54,20 +54,23 @@ const useOAuth = () => {
     });
   }
 
-  const linkAccounts = async (verifiedInstance, pendingCred) => {
-    // console.log(selection, pendingCred);
-    // const authInstance = await getOAuthProvider(selection);
-    // console.log(authInstance);
-    await firebase.auth()[verifiedInstance.method](verifiedInstance.instance).then(async result => {
+  const linkAccounts = async (initProvider, pendingCred) => {
+    console.log(initProvider, pendingCred);
+    const { method, instance } = await getOAuthProvider(initProvider);
+    console.log(method, instance);
+    await firebase.auth().signInWithPopup(instance).then(result => {
+      console.log(result);
       // Remember that the user may have signed in with an account that has a different email
       // address than the first one. This can happen as Firebase doesn't control the provider's
       // sign in flow and the user is free to login using whichever account he owns.
       // Step 4b.
       // Link to GitHub credential.
       // As we have access to the pending credential, we can directly call the link method.
-      await result.user.linkAndRetrieveDataWithCredential(pendingCred).then(function(usercred) {
+      result.user.linkAndRetrieveDataWithCredential(pendingCred).then(function(usercred) {
         // GitHub account successfully linked to the existing Firebase user.
         console.log(usercred);
+      }).catch(error => {
+        console.log(error);
       });
     });
   }
@@ -116,29 +119,28 @@ const useOAuth = () => {
           // setOAuthStatus({ loading: false, status: 'FAULT' });
           setOAuthError({error, source: 'requestOAuth'});
         });
-    } else {
-      firebase.auth().getRedirectResult()
-        .then(result => {
-          if (result.credential) {
-            // setOAuthStatus({ loading: true, status: 'SUCCESS' });
-            const { additionalUserInfo } = result;
-            const { isNewUser } = additionalUserInfo;
-            setAdditionalUserInfo(additionalUserInfo);
-            setIsNewUser(isNewUser);
-            if (result) setOAuthResponse(result);
-
-          }
-        })
-        .catch(error => {
-          // setOAuthStatus({ loading: false, status: 'FAULT' });
-          setOAuthError({error, source: 'getredirectresukt'});
-        });
-    }
+    } 
   };
 
   useEffect(() => {
     // sessionStorage.setItem('isDuplicate', "false");
-    requestOAuth();
+    if (selection) requestOAuth();
+    firebase.auth().getRedirectResult()
+      .then(result => {
+        if (result.credential) {
+          // setOAuthStatus({ loading: true, status: 'SUCCESS' });
+          const { additionalUserInfo } = result;
+          const { isNewUser } = additionalUserInfo;
+          setAdditionalUserInfo(additionalUserInfo);
+          setIsNewUser(isNewUser);
+          if (result) setOAuthResponse(result);
+
+        }
+      })
+      .catch(error => {
+        // setOAuthStatus({ loading: false, status: 'FAULT' });
+        setOAuthError({error, source: 'getredirectresukt'});
+      });
     return () => {
       setSelection(false);
     }

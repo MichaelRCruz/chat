@@ -58,7 +58,7 @@ const RegistrationForm = props => {
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
             setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
-            setAuthMode({merge: true, action: 'link accounts', onClick: linkAccounts(verifiedInstance, pendingCred) });
+            setAuthMode({merge: true, action: 'link accounts', onClick: () => linkAccounts(methods[0], pendingCred) });
             return;
           })
           .catch(error => {
@@ -169,33 +169,13 @@ const RegistrationForm = props => {
 
   const oAuthButtons = Object.keys(providerData).map(authProvider => {
     return (
-      <div className="oAuthWrapper">
+      <div key={authProvider} className="oAuthWrapper">
         <ul className="oAuthButtons">
           {oAuthButton(providerData[authProvider])}
         </ul>
       </div>
     );
   });
-
-  const linkAccountsButton = (
-    <div>
-      <button
-        className="signInWithEmailButton"
-        alt=""
-        onClick={() => linkAccounts(verifiedInstance, pendingCred)}>
-        link account
-      </button>
-    </div>
-  );
-
-  const unLinkAccountButton = (
-    <button
-      className="signInWithEmailButton"
-      alt=""
-      onClick={() => unLinkAccount()}>
-      unlink account
-    </button>
-  );
 
   const userDetails = (
     <Fragment>

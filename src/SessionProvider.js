@@ -210,6 +210,7 @@ class SessionProvider extends React.Component {
           return {...profile};
         })
       }
+      console.log(userProfile);
     }
 
 

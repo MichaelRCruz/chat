@@ -71,6 +71,8 @@ const RegistrationForm = props => {
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account', onClick: () => redirectToChat() });
+      } else {
+        redirectToChat();
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
       redirectToWaiting();

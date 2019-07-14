@@ -15,7 +15,7 @@
     "appAssociation": "AUTO",
     "rewrites": [
       {
-        "source": "/signIn/**",
+        "source": "**",
         "dynamicLinks": true
       },
       {

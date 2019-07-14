@@ -154,15 +154,8 @@
   color: #fff;
 }
 
-.oAuthWrapper {
-  display: none;
-}
-
 @media screen and (min-width: 450px) {
   .parentFlex {
     height: 470px;
-  }
-  .oAuthWrapper {
-    display: unset;
   }
 };

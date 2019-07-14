@@ -11,13 +11,9 @@
   position: fixed;
   top: 0;
   background-color: #fff;
-}
-
-.headerContentContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 10px 30px 10px 30px;
 }
 
 .nameLogoContainer {
@@ -52,6 +48,8 @@
 .mainContentContainer {
   width: 85%;
   margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero {
@@ -74,7 +72,8 @@
 }
 
 .getStartedButton {
-  width: inherit;
+  width: 100%;
+  max-width: 400px;
   padding: 18px 20px;
   background-color: #506cf0;
   color: #fff;
@@ -94,10 +93,6 @@
 
 .firebaseLogo {
   width: 300px;
-}
-
-.githubPagesLogo {
-  width: 280px;
 }
 
 .reactLogo {
@@ -139,12 +134,7 @@
 
 @media screen and (min-width: 750px) {
   .getStartedButton {
-    max-width: 258px;
     margin-top: 50px;
-  }
-  .splashMain {
-    margin: auto;
-    margin-top: 150px;
   }
   .companyImagesContainer {
     flex-direction: row;

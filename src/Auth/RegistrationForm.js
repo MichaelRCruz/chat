@@ -86,6 +86,7 @@ const RegistrationForm = props => {
       }
     }
     return () => {
+      window.localStorage.removeItem('potatoStorage');
       setAuthMode({ register: true, action: 'send dynamic link' });
     };
   }, [oAuthResponse, isAuthLinkSent, authLinkUser]);

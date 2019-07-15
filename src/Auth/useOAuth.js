@@ -55,18 +55,24 @@ const useOAuth = () => {
   }
 
   const linkAccounts = async (initProvider, pendingCred) => {
-    console.log(initProvider, pendingCred);
     const { method, instance } = await getOAuthProvider(initProvider);
-    console.log(method, instance);
-    await firebase.auth().signInWithPopup(instance).then(result => {
-      console.log(result);
+    const sessionCred = JSON.stringify(pendingCred);
+    sessionStorage.setItem('pendingCred', sessionCred);
+    const cred = sessionStorage.getItem('pendingCred');
+    const parsedCred = firebase.auth.AuthCredential.fromJSON(cred);
+    // const parsedCred = credJson.fromJSON();
+    // console.log(credJson);
+    // console.log(JSON.parse(cred));
+    // debugger;
+    firebase.auth().signInWithPopup(instance).then(result => {
       // Remember that the user may have signed in with an account that has a different email
       // address than the first one. This can happen as Firebase doesn't control the provider's
       // sign in flow and the user is free to login using whichever account he owns.
       // Step 4b.
       // Link to GitHub credential.
       // As we have access to the pending credential, we can directly call the link method.
-      result.user.linkAndRetrieveDataWithCredential(pendingCred).then(function(usercred) {
+
+      result.user.linkAndRetrieveDataWithCredential(parsedCred).then(function(usercred) {
         // GitHub account successfully linked to the existing Firebase user.
         console.log(usercred);
       }).catch(error => {
@@ -104,21 +110,21 @@ const useOAuth = () => {
     if (selection) {
       const authInstance = await getOAuthProvider(selection);
       localStorage.setItem('potatoStorage', 'redirecting');
-      await firebase.auth()[authInstance.method](authInstance.instance)
-        .then(res => {
-          // setOAuthStatus({ loading: true, status: 'READY' });
-          setLinkRes(this.res);
-          setOAuthResponse(res);
-          setSelection(false);
-        })
-        .catch(async error => {
-          if (error.code === 'auth/account-exists-with-different-credential') {
-            // sessionStorage.setItem('isDuplicate', "true");
-            setOAuthResponse(error);
-          }
-          // setOAuthStatus({ loading: false, status: 'FAULT' });
-          setOAuthError({error, source: 'requestOAuth'});
-        });
+      await firebase.auth().signInWithRedirect(authInstance.instance)
+        // .then(res => {
+        //   // setOAuthStatus({ loading: true, status: 'READY' });
+        //   // setLinkRes(this.res);
+        //   // setOAuthResponse(res);
+        //   // setSelection(false);
+        // })
+        // .catch(async error => {
+        //   // if (error.code === 'auth/account-exists-with-different-credential') {
+        //   //   // sessionStorage.setItem('isDuplicate', "true");
+        //     setOAuthResponse(error);
+        //   // }
+        //   // setOAuthStatus({ loading: false, status: 'FAULT' });
+        //   setOAuthError({error, source: 'requestOAuth'});
+        // });
     }
   };
 
@@ -138,8 +144,15 @@ const useOAuth = () => {
         }
       })
       .catch(error => {
-        // setOAuthStatus({ loading: false, status: 'FAULT' });
-        setOAuthError({error, source: 'getredirectresukt'});
+        if (error.code === 'auth/account-exists-with-different-credential') {
+          // sessionStorage.setItem('isDuplicate', "true");
+          // const pendingCred = error.credential;
+          // const email = error.email;
+          // // const sessionCred = JSON.stringify(error.credential);
+          // sessionStorage.setItem('sessionCred', error.credential);
+          setOAuthResponse(error);
+        }
+        setOAuthError({error, source: 'requestOAuth'});
       });
     return () => {
       setSelection(false);

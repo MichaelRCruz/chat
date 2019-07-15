@@ -53,8 +53,12 @@ const RegistrationForm = props => {
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {
-        const pendingCred = rest.credential;
-        setPendingCred(pendingCred)
+        // const pendingCred = rest.credential;
+        // const pendingCred = error.credential;
+        // const email = error.email;
+        // const sessionCred = JSON.stringify(pendingCred);
+        // sessionStorage.setItem('sessionCred', sessionCred);
+        // setPendingCred(pendingCred)
         firebase.auth().fetchSignInMethodsForEmail(rest.email)
           .then(methods => {
             const oldInstance = getOAuthProvider(methods[0]);
@@ -62,7 +66,7 @@ const RegistrationForm = props => {
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
             setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
-            setAuthMode({merge: true, action: 'link accounts', onClick: () => linkAccounts(methods[0], pendingCred) });
+            setAuthMode({merge: true, action: 'link accounts', onClick: () => linkAccounts(methods[0], rest.credential) });
             return;
           })
           .catch(error => {
@@ -87,6 +91,7 @@ const RegistrationForm = props => {
     }
     return () => {
       window.localStorage.removeItem('potatoStorage');
+      // sessionStorage.clear();
       setAuthMode({ register: true, action: 'send dynamic link' });
     };
   }, [oAuthResponse, isAuthLinkSent, authLinkUser]);

@@ -10,7 +10,6 @@ const RegistrationForm = props => {
   const formCallback = (payload, clearForm, event) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) updateUserDetails(payload);
-    // setAuthEmail(payload.email);
     clearForm();
   };
   const {
@@ -23,7 +22,6 @@ const RegistrationForm = props => {
   const { displayNameError, emailError, passwordError } = authFormErrors;
 
   const potatoStorage = localStorage.getItem('potatoStorage');
-  // const [isDuplicate, setIsDuplicate] = useState(sessionStorage.getItem('isDuplicate'));
   const [chooseAuth, setChooseAuth] = useState(true);
   const [oAuthProvider, setOauthProvider] = useState(true);
   const [dialog, setDialog] = useState('Please choose a sign in method.');
@@ -43,9 +41,6 @@ const RegistrationForm = props => {
   });
 
   useEffect(() => {
-    // if (isOAuthSent) setIsLoading(true);
-    // if (dead) setIsLoading(false);
-    // if () setLoadig(true);
     if (!dead && oAuthResponse) {
       window.localStorage.removeItem('potatoStorage');
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
@@ -53,12 +48,6 @@ const RegistrationForm = props => {
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {
-        // const pendingCred = rest.credential;
-        // const pendingCred = error.credential;
-        // const email = error.email;
-        // const sessionCred = JSON.stringify(pendingCred);
-        // sessionStorage.setItem('sessionCred', sessionCred);
-        // setPendingCred(pendingCred)
         firebase.auth().fetchSignInMethodsForEmail(rest.email)
           .then(methods => {
             const oldInstance = getOAuthProvider(methods[0]);
@@ -96,7 +85,6 @@ const RegistrationForm = props => {
     };
   }, [oAuthResponse, isAuthLinkSent, authLinkUser]);
 
-  // console.log('props', setSelection, authEmail, handleClose);
 
   const displayNameInput = (
     <div className="formGroup">
@@ -229,7 +217,7 @@ const RegistrationForm = props => {
       </form>
     </Modal>
   );
-// console.log(dead && oAuthResponse);
+
   return (
     <Fragment>
       {potatoStorage ? <div className="loadingAnimation" /> : registrationForm}

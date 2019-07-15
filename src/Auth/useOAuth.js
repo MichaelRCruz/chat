@@ -14,29 +14,13 @@ const useOAuth = () => {
   const [linkRes, setLinkRes] = useState(false);
   const [unlinkSuccess, setUnlinkSuccess] = useState(false);
   const [authToast, setAuthToast] = useState(false);
-  // const [oAuthStatus, setOAuthStatus] = useState({ loading: false, status: 'READY' });
-  // const [loading, setLoading] = useState(true);
-
-  // const getEmailMethods = email => {
-  //   firebase.auth().fetchSignInMethodsForEmail(email)
-  //     .then(methods => {
-  //       if (methods[0] === 'password') {
-  //         // setOAuthStatus({ loading: true, status: 'RECOVERING' });
-  //         setMethods(methods);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       // setOAuthStatus({ loading: false, status: 'FAULT' });
-  //       setOAuthError(error);
-  //     });
-  // };
 
   const getOAuthProvider = providerId => {
   	switch (providerId) {
   		case 'google.com':
   			return {method: 'signInWithRedirect', instance: new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
   		case 'github.com':
-  			return {method: 'signInWithPopup', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
+  			return {method: 'signInWithRedirect', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
       case 'facebook.com':
   			return {method: 'signInWithRedirect', instance: new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com'}
   		default:
@@ -58,12 +42,7 @@ const useOAuth = () => {
     const { method, instance } = await getOAuthProvider(initProvider);
     const sessionCred = JSON.stringify(pendingCred);
     sessionStorage.setItem('pendingCred', sessionCred);
-    // const parsedCred = credJson.fromJSON();
-    // console.log(credJson);
-    // console.log(JSON.parse(cred));
-    // debugger;
     firebase.auth().signInWithRedirect(instance);
-
   }
 
   const updateUserDetails = async payload => {
@@ -95,31 +74,15 @@ const useOAuth = () => {
     if (selection) {
       const authInstance = await getOAuthProvider(selection);
       localStorage.setItem('potatoStorage', 'redirecting');
-      await firebase.auth().signInWithRedirect(authInstance.instance)
-        // .then(res => {
-        //   // setOAuthStatus({ loading: true, status: 'READY' });
-        //   // setLinkRes(this.res);
-        //   // setOAuthResponse(res);
-        //   // setSelection(false);
-        // })
-        // .catch(async error => {
-        //   // if (error.code === 'auth/account-exists-with-different-credential') {
-        //   //   // sessionStorage.setItem('isDuplicate', "true");
-        //     setOAuthResponse(error);
-        //   // }
-        //   // setOAuthStatus({ loading: false, status: 'FAULT' });
-        //   setOAuthError({error, source: 'requestOAuth'});
-        // });
+      await firebase.auth().signInWithRedirect(authInstance.instance);
     }
   };
 
   useEffect(() => {
-    // sessionStorage.setItem('isDuplicate', "false");
     if (selection) requestOAuth();
     firebase.auth().getRedirectResult()
       .then(result => {
         if (result.credential) {
-          // setOAuthStatus({ loading: true, status: 'SUCCESS' });
           const { additionalUserInfo } = result;
           const { isNewUser } = additionalUserInfo;
           setAdditionalUserInfo(additionalUserInfo);
@@ -139,11 +102,6 @@ const useOAuth = () => {
       })
       .catch(error => {
         if (error.code === 'auth/account-exists-with-different-credential') {
-          // sessionStorage.setItem('isDuplicate', "true");
-          // const pendingCred = error.credential;
-          // const email = error.email;
-          // // const sessionCred = JSON.stringify(error.credential);
-          // sessionStorage.setItem('sessionCred', error.credential);
           setOAuthResponse(error);
         }
         setOAuthError({error, source: 'requestOAuth'});

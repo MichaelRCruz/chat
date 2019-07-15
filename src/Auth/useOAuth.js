@@ -52,6 +52,7 @@ const useOAuth = () => {
     await user.updateProfile({
       displayName
     }).then(function(res) {
+      console.log(res);
       toast['displayName'] = 'displayName updated';
     }).catch(function(error) {
       toast['error'] = 'displayName not set';

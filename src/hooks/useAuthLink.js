@@ -13,6 +13,7 @@ const useAuthLink = () => {
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });
+  console.log(process.env.REACT_APP_CONTINUE_URL);
   const [isAuthLinkCanceled, setIsAuthLinkCanceled] = useState(false);
 
   const sendAuthLink = async email => {

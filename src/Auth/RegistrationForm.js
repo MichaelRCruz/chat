@@ -9,7 +9,10 @@ const RegistrationForm = props => {
   const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat } = props;
   const formCallback = (payload, clearForm, event) => {
     if (authMode.register) setAuthEmail(payload.email);
-    if (authMode.newUser) updateUserDetails(payload);
+    if (authMode.newUser) {
+      updateUserDetails(payload);
+      redirectToChat();
+    }
     clearForm();
   };
   const {
@@ -36,7 +39,7 @@ const RegistrationForm = props => {
   const [pendingCred, setPendingCred] = useState(false);
   const [providerData, setProviderData] = useState({
     'google.com': {method: 'signInWithRedirect', name: 'Google', providerId: 'google.com', path: require('../assets/btn_google_light_focus_ios.svg')},
-    'github.com': {method: 'signInWithPopup', name: 'GitHub', providerId: 'github.com', path: require('../assets/GitHub-Mark-64px.png')},
+    'github.com': {method: 'signInWithRedirect', name: 'GitHub', providerId: 'github.com', path: require('../assets/GitHub-Mark-64px.png')},
     'facebook.com': {method: 'signInWithRedirect', name: 'Facebook', providerId: 'facebook.com', path: require('../assets/PNG/f_logo_RGB-Blue_58.png')}
   });
 
@@ -63,7 +66,7 @@ const RegistrationForm = props => {
           });
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode({ newUser: true, action: 'create account', onClick: () => redirectToChat() });
+        setAuthMode({ newUser: true, action: 'create account'});
       } else {
         redirectToChat();
       }
@@ -73,7 +76,7 @@ const RegistrationForm = props => {
       const { additionalUserInfo } = authLinkUser;
       if (additionalUserInfo.isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode({ newUser: true, action: 'create account', onClick: () => redirectToChat()});
+        setAuthMode({ newUser: true, action: 'create account', onClick: () => handleSubmit()});
       } else {
         redirectToChat();
       }

@@ -200,17 +200,20 @@ class SessionProvider extends React.Component {
     const { foreignState } = this.props;
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (user != null) {
-      const userProfile = {
-        name: user.displayName,
-        email: user.email,
-        photoUrl: user.photoURL,
-        emailVerified: user.emailVerified,
-        uid: user.uid,
-        providers: user.providerData.map(profile => {
+        const { providerData, ...rest } = user;
+        const { displayName, email, photoURL, emailVerified, uid } = rest;
+        const authProviders = providerData.map(profile => {
           return {...profile};
-        })
-      }
-      console.log(userProfile);
+        });
+        const userProfile = {
+          displayName,
+          email,
+          photoURL,
+          emailVerified,
+          uid,
+          authProviders
+        };
+        console.log(userProfile);
     }
 
 

@@ -58,27 +58,12 @@ const useOAuth = () => {
     const { method, instance } = await getOAuthProvider(initProvider);
     const sessionCred = JSON.stringify(pendingCred);
     sessionStorage.setItem('pendingCred', sessionCred);
-    const cred = sessionStorage.getItem('pendingCred');
-    const parsedCred = firebase.auth.AuthCredential.fromJSON(cred);
     // const parsedCred = credJson.fromJSON();
     // console.log(credJson);
     // console.log(JSON.parse(cred));
     // debugger;
-    firebase.auth().signInWithPopup(instance).then(result => {
-      // Remember that the user may have signed in with an account that has a different email
-      // address than the first one. This can happen as Firebase doesn't control the provider's
-      // sign in flow and the user is free to login using whichever account he owns.
-      // Step 4b.
-      // Link to GitHub credential.
-      // As we have access to the pending credential, we can directly call the link method.
+    firebase.auth().signInWithRedirect(instance);
 
-      result.user.linkAndRetrieveDataWithCredential(parsedCred).then(function(usercred) {
-        // GitHub account successfully linked to the existing Firebase user.
-        console.log(usercred);
-      }).catch(error => {
-        console.log(error);
-      });
-    });
   }
 
   const updateUserDetails = async payload => {
@@ -139,9 +124,18 @@ const useOAuth = () => {
           const { isNewUser } = additionalUserInfo;
           setAdditionalUserInfo(additionalUserInfo);
           setIsNewUser(isNewUser);
-          if (result) setOAuthResponse(result);
+          setOAuthResponse(result);
 
         }
+        const cred = sessionStorage.getItem('pendingCred');
+        const parsedCred = firebase.auth.AuthCredential.fromJSON(cred);
+        sessionStorage.clear();
+        if (parsedCred) result.user.linkAndRetrieveDataWithCredential(parsedCred).then(function(usercred) {
+          // GitHub account successfully linked to the existing Firebase user.
+          console.log(usercred);
+        }).catch(error => {
+          console.log(error);
+        });
       })
       .catch(error => {
         if (error.code === 'auth/account-exists-with-different-credential') {

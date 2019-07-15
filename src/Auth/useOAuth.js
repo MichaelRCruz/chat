@@ -14,6 +14,7 @@ const useOAuth = () => {
   const [linkRes, setLinkRes] = useState(false);
   const [unlinkSuccess, setUnlinkSuccess] = useState(false);
   const [authToast, setAuthToast] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const getOAuthProvider = providerId => {
   	switch (providerId) {
@@ -63,6 +64,9 @@ const useOAuth = () => {
       toast['error'] = 'displayName not set';
     });
     setAuthToast(toast);
+    // if (!toast['error']) {
+    //   setIsAuthenticated(true);
+    // }
     // user.updateEmail("user@example.com").then(function() {
     //   // Update successful.
     // }).catch(function(error) {
@@ -132,7 +136,9 @@ const useOAuth = () => {
     linkAccounts,
     unLinkAccount,
     updateUserDetails,
-    authToast
+    authToast,
+    isAuthenticated,
+    setIsAuthenticated
     // oAuthStatus,
     // setOAuthStatus
   };

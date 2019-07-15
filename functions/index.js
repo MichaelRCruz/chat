@@ -64,7 +64,7 @@ exports.getRooms = functions.https.onRequest((req, res) => {
 
 exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
-    const { uid, displayName } = JSON.parse(req.body);
+    const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const messagesRef = admin.database().ref('/messages');
@@ -72,6 +72,10 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     const userConfig = {
       key: uid,
       displayName,
+      email,
+      photoURL,
+      emailVerified,
+      authProviders,
       lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
       rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
       activity: {

@@ -198,14 +198,14 @@ class SessionProvider extends React.Component {
   componentDidMount() {
     // firebase.auth().signOut();
     const { foreignState } = this.props;
-    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
         const { providerData, ...rest } = user;
         const { displayName, email, photoURL, emailVerified, uid } = rest;
         const authProviders = providerData.map(profile => {
           return {...profile};
         });
-        const userProfile = {
+        const authProfile = {
           displayName,
           email,
           photoURL,
@@ -213,9 +213,14 @@ class SessionProvider extends React.Component {
           uid,
           authProviders
         };
-        console.log(userProfile);
-    }
-
+        const { userConfig } = await new RealTimeApi().getUserConfig(uid);
+        if (userConfig) {
+          this.initializeApp(user, this.props.foreignState);
+        } else {
+          const newUser = await new RealTimeApi().createNewUser(authProfile);
+          console.log(newUser);
+        }
+      }
 
 
     // user.unlink(providerId).then(function() {

@@ -26,6 +26,15 @@ export default class RealTimeApi {
     });
   };
 
+  createNewUser = async authProfile => {
+    const url = `${process.env.REACT_APP_HTTP_URL}/createRoomsAndUserConfig`;
+    const newUser = await this.goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify(authProfile)
+    });
+    return newUser ? newUser : {};
+  }
+
   getRooms = async rooms => {
     const url = `${process.env.REACT_APP_HTTP_URL}/getRooms`;
     const roomIds = rooms ? rooms : [];

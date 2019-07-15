@@ -28,7 +28,9 @@ const Auth = props => {
     updateUserDetails,
     authToast,
     setIsOAuthSent,
-    isOAuthSent
+    isOAuthSent,
+    isAuthenticated,
+    setIsAuthenticated
   } = useOAuth();
   const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail, signInWithLink, authLinkUser, needsConfirmation, setNeedsConfirmation } = useAuthLink();
 
@@ -47,6 +49,7 @@ const Auth = props => {
             handleClose={() => { props.history.push('/') }}
             redirectToWaiting={() => { props.history.push('/auth/waiting') }}
             redirectToChat={() => { props.history.push('/chat/rooms/?rm=lastVisited') }}
+            redirectToAuthChat={() => { props.history.push('/chat/rooms/?rm=init') }}
             setSelection={setSelection}
             setAuthEmail={setAuthEmail}
             oAuthResponse={oAuthResponse}
@@ -64,6 +67,8 @@ const Auth = props => {
             getOAuthProvider={getOAuthProvider}
             updateUserDetails={updateUserDetails}
             authToast={authToast}
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
           />
         );
       }} />

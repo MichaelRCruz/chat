@@ -54,16 +54,16 @@ const useOAuth = () => {
       displayName
     }).then(function(res) {
       console.log(res);
-      toast['displayName'] = 'displayName updated';
+      // toast['displayName'] = 'displayName updated';
     }).catch(function(error) {
-      toast['error'] = 'displayName not set';
+      // toast['error'] = 'displayName not set';
     });
     await user.updatePassword(password).then(function(res) {
-      toast['password'] = 'password updated';
+      // toast['password'] = 'password updated';
     }).catch(function(error) {
-      toast['error'] = 'displayName not set';
+      // toast['error'] = 'displayName not set';
     });
-    setAuthToast(toast);
+    // setAuthToast(toast);
     // if (!toast['error']) {
     //   setIsAuthenticated(true);
     // }

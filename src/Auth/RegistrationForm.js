@@ -76,13 +76,13 @@ const RegistrationForm = props => {
       const { additionalUserInfo } = authLinkUser;
       if (additionalUserInfo.isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
-        setAuthMode({ newUser: true, action: 'create account', onClick: () => handleSubmit()});
+        setAuthMode({ newUser: true, action: 'create account' });
       } else if (isAuthenticated) {
         redirectToChat();
       }
     }
     return () => {
-      window.localStorage.removeItem('potatoStorage');
+      // window.localStorage.removeItem('potatoStorage');
       // sessionStorage.clear();
       setAuthMode({ register: true, action: 'send dynamic link' });
     };
@@ -194,8 +194,6 @@ const RegistrationForm = props => {
           <section className="parentFlex">
             <section className="authHero">
               <p>{dialog}</p>
-              <p>{authToast.password}</p>
-              <p>{authToast.displayName}</p>
             </section>
             <section className="fieldsContainer">
               {authMode.register ? emailInput : null}

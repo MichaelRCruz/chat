@@ -177,6 +177,7 @@ class SessionProvider extends React.Component {
   };
 
   initializeApp = async (user, foreignState) => {
+    // res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] })
     // firebase.auth().signOut();
     // this.handleConnection();
     // debugger;
@@ -215,25 +216,15 @@ class SessionProvider extends React.Component {
         };
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
         if (userConfig) {
-          this.initializeApp(user, this.props.foreignState);
+          userConfig.authProfile = authProfile;
+          this.initializeApp(user, foreignState, userConfig, null);
         } else {
           const newUser = await new RealTimeApi().createNewUser(authProfile);
-          console.log(newUser);
+          this.initializeApp(user, foreignState, null, newUser);
         }
+      } else {
+        firebase.auth().signOut();
       }
-
-
-    // user.unlink(providerId).then(function() {
-    //   // Auth provider unlinked from account
-    // }).catch(function(error) {
-    //   // An error happened
-    // });
-      // console.log('user from context: ', user);
-      // if (!user) {
-      //   firebase.auth().signOut();
-      // } else {
-      //   this.initializeApp(user, foreignState);
-      // }
     });
   };
 

@@ -6,12 +6,12 @@ import * as firebase from 'firebase';
 
 const RegistrationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo } = props;
   const formCallback = (payload, clearForm, event) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) {
       updateUserDetails(payload);
-      redirectToAuthChat();
+      redirectTo('/chat/rooms/?rm=lastVisited');
     }
     clearForm();
   };
@@ -68,7 +68,7 @@ const RegistrationForm = props => {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account'});
       } else {
-        redirectToChat();
+        redirectTo('/chat/rooms/?rm=lastVisited');
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
       redirectToWaiting();
@@ -78,7 +78,7 @@ const RegistrationForm = props => {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account' });
       } else if (isAuthenticated) {
-        redirectToChat();
+        redirectTo('/chat/rooms/?rm=lastVisited');
       }
     }
     return () => {
@@ -177,6 +177,18 @@ const RegistrationForm = props => {
     );
   });
 
+  const loadingAnimation = (
+    <aside className="modalHeader">
+      <button className="exitButton" onClick={() => {
+        window.localStorage.removeItem('potatoStorage');
+        redirectTo('/');
+      }}>
+        <i className="material-icons clearIcon">clear</i>
+      </button>
+      <div className="loadingAnimation" />
+    </aside>
+  );
+
   const userDetails = (
     <Fragment>
       {passwordInput}
@@ -219,12 +231,7 @@ const RegistrationForm = props => {
     </Modal>
   );
 
-  return (
-    <Fragment>
-      {potatoStorage ? <div className="loadingAnimation" /> : registrationForm}
-    </Fragment>
-  );
-  // return registrationForm;
+  return potatoStorage ? loadingAnimation : registrationForm
 }
 
 export default RegistrationForm;

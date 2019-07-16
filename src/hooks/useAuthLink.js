@@ -9,7 +9,7 @@ const useAuthLink = () => {
   const [authLinkUser, setAuthLinkUser] = useState(false);
   const [needsConfirmation, setNeedsConfirmation] = useState(false);
   const [actionCodeSettings, setActionCodeSettings] = useState({
-    url: `${process.env.REACT_APP_CONTINUE_URL}/auth/waiting`,
+    url: `https://coolpotato.net/auth/waiting`,
     handleCodeInApp: true,
     dynamicLinkDomain: 'coolpotato.page.link'
   });

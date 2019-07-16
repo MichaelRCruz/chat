@@ -102,9 +102,9 @@ class SessionProvider extends React.Component {
         }
     });
     this.messagesRef
-    .orderByChild('roomId')
-    .equalTo(key)
-    .limitToLast(1)
+      .orderByChild('roomId')
+      .equalTo(key)
+      .limitToLast(1)
       .on('child_removed', async snapshot  => {
         if (snapshot.val().roomId === key) {
           const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
@@ -200,7 +200,7 @@ class SessionProvider extends React.Component {
     const users = activeRoom.users;
     const { subscribedRooms } = await new RealTimeApi().getRooms(configuration.rooms);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
-    this.setState({ configuration, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
+    this.setState({ userConfig: configuration, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
       this.setListeners(activeRoom.key);
     });
   };
@@ -225,7 +225,7 @@ class SessionProvider extends React.Component {
         };
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
         if (userConfig) {
-          userConfig.authProfile = authProfile;
+          // userConfig.authProfile = authProfile;
           this.initializeApp(user, foreignState, userConfig, null);
         } else {
           const payload = await new RealTimeApi().createNewUser(authProfile);

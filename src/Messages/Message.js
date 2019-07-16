@@ -14,7 +14,7 @@ class Message extends Component {
     // const { msg: baz = 'michaelcruz.io' } = foo;
     // debugger;
     return (
-      <li className="message">
+      <div className="message">
         <div className="imageMessageContainer">
           <img
             className="messageImage"
@@ -38,7 +38,7 @@ class Message extends Component {
           </div>
         </div>
         <Timeago className="timeago" timestamp={ msg.sentAt || 'sometime' } />
-      </li>
+      </div>
     )
   }
 }

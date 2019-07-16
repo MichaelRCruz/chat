@@ -21,6 +21,7 @@ const App = props => {
 
   return (
     <Route render={routeProps => {
+      const { history } = props;
       return (
         <SessionProvider foreignState={foreignState()} firebase={props.firebase}>
           <Route exact path='/' component={Splash} />
@@ -28,7 +29,9 @@ const App = props => {
             return <Auth {...muhProps} />;
           }} />
           <Route exact path='/chat/dashboard' component={Dashboard} />
-          <Route exact path='/chat/userProfile' component={UserProfile} />
+          <Route exact path='/chat/userProfile' {...routeProps} render={profileProps => {
+            return <UserProfile {...profileProps} firebase={props.firebase} />
+          }} />
           <Route exact path='/chat/rooms' component={Chat} />
           <Route component={null} />
         </SessionProvider>

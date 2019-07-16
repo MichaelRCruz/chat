@@ -1,12 +1,34 @@
 .userProfileComponent {
-  width: 90vw;
-  height: 100vh;
-  max-width: 900px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
+
+.nameNav {
+  width: 90%;
+  height: 10%;
+  font-size: 2.5em;
+  color: green;
+}
+
+.buttonNav {
+  width: 90%;
+  height: 5%;
+}
+
+main.userProfileMain {
+  width: 90%;
+  heigth: 85%;
+  /*  */
+}
+
 
 @media only screen and (min-device-width: 812px) {
   .userProfileComponent {
-      width: 60vw;
-      height: 60vh;
+
   }
 }

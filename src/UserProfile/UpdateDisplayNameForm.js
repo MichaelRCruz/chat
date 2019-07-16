@@ -3,6 +3,7 @@ import { debounce } from '../utils.js';
 import Validation from '../validation.js';
 
 class ChangeDisplaynameForm extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {

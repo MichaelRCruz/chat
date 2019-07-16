@@ -75,7 +75,7 @@ class SessionProvider extends React.Component {
     }
   };
 
-  setListeners(key) {
+  setListeners = (key) => {
     const users = Object.keys(this.state.activeRoom.users);
     this.onlineUsersRef
       .orderByChild('lastVisited')
@@ -92,23 +92,26 @@ class SessionProvider extends React.Component {
       .orderByChild('roomId')
       .equalTo(key)
       .limitToLast(1)
-      .on('child_added', snapshot => {
+      .on('child_added', async snapshot => {
         if (snapshot.val().roomId === key) {
-          const messages = this.state.messages;
-          const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
-          this.setState({ messages: newMessages });
+          // const messages = this.state.messages;
+          // const newMessages = { ...messages,  ...{ [snapshot.key]: snapshot.val() }}
+          // const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
+          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          this.setState({ messages });
         }
     });
     this.messagesRef
     .orderByChild('roomId')
     .equalTo(key)
     .limitToLast(1)
-      .on('child_removed', snapshot  => {
+      .on('child_removed', async snapshot  => {
         if (snapshot.val().roomId === key) {
-          const deletedKey = snapshot.key;
-          const { [deletedKey]: something, ...rest } = this.state.messages;
-          const newMessages = Object.assign({}, rest);
-          this.setState({ messages: newMessages });
+          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          // const deletedKey = snapshot.key;
+          // const { [deletedKey]: something, ...rest } = this.state.messages;
+          // const newMessages = Object.assign({}, rest);
+          this.setState({ messages });
         }
     });
   };
@@ -176,22 +179,28 @@ class SessionProvider extends React.Component {
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 
-  initializeApp = async (user, foreignState) => {
+  initializeApp = async (user, foreignState, config, payload) => {
     // res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] })
     // firebase.auth().signOut();
     // this.handleConnection();
     // debugger;
+    console.log(userConfig);
+    console.log(payload);
+    if (user) {
+
+    }
     const { rm, msg, usr } = foreignState;
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
-    const lastVisited = userConfig.lastVisited;
+    const configuration = config ? config : userConfig;
+    const lastVisited = configuration.lastVisited;
     const { response, warning } = this.reconcileActiveRoom(rm);
     const roomId = response ? response.key : lastVisited;
     const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
     const users = activeRoom.users;
-    const { subscribedRooms } = await new RealTimeApi().getRooms(userConfig.rooms);
+    const { subscribedRooms } = await new RealTimeApi().getRooms(configuration.rooms);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
-    this.setState({ userConfig, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
+    this.setState({ configuration, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
       this.setListeners(activeRoom.key);
     });
   };
@@ -219,8 +228,8 @@ class SessionProvider extends React.Component {
           userConfig.authProfile = authProfile;
           this.initializeApp(user, foreignState, userConfig, null);
         } else {
-          const newUser = await new RealTimeApi().createNewUser(authProfile);
-          this.initializeApp(user, foreignState, null, newUser);
+          const payload = await new RealTimeApi().createNewUser(authProfile);
+          this.initializeApp(user, foreignState, payload.userConfig, payload);
         }
       } else {
         firebase.auth().signOut();

@@ -76,22 +76,26 @@ class SessionProvider extends React.Component {
     }
   };
 
-  setListeners = (key, activeRoom) => {
+  setListeners = (key) => {
     const usersRef = firebase.database().ref(`users`);
-    const users = Object.keys(activeRoom.users);
+    // const users = Object.keys(activeRoom.users);
     usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
-      .once('child_added', snap => {
-        const isSubscribed = users.includes(snap.key);
+      // .limitToLast(1)
+      .on('child_added', snap => {
+        // const isSubscribed = users.includes(snap.key);
         // console.log(snap.val().activity.isOnline, snap.val().email);
-        if (isSubscribed) {
-          console.log(snap.val().email, key)
-          console.log(snap.val().activity.isOnline)
-          // users[snap.key] = snap.val();
-        }
+
+          console.table({
+            'email': snap.val().email,
+            'isOnline': snap.val().activity.isOnline,
+            'lastVisited': snap.val().lastVisited,
+          });
+
         // this.setState({ users });
-    });
+      });
+      // console.log(snap.val().activity.isOnline, snap.val().email);
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -104,7 +108,7 @@ class SessionProvider extends React.Component {
           const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
           this.setState({ messages });
         }
-    });
+      });
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -135,11 +139,12 @@ class SessionProvider extends React.Component {
     if (user && !warning && response) {
       let error = null;
       const activeRoom = response;
-      this.setListeners(roomId, activeRoom);
+      // this.setListeners(roomId);
       const { messages } = await new RealTimeApi().getMessages(roomId, 100);
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
       await this.setState({ messages, activeRoom, warning, error }, () => {
+        this.setListeners(roomId);
         ref.off();
       });
     };
@@ -202,7 +207,7 @@ class SessionProvider extends React.Component {
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
       this.handleConnection(user.uid);
-      this.setListeners(activeRoom.key, activeRoom);
+      // this.setListeners(this.state.activeRoom.key);
     });
   };
 

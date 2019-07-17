@@ -83,7 +83,6 @@ export default class RealTimeApi {
       method: 'POST',
       body: JSON.stringify({ uids: uids })
     });
-    console.log(response);
     return response ? response : {};
   };
 

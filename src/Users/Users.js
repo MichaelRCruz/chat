@@ -13,15 +13,15 @@ class Users extends React.Component {
     // console.log(foo.constructor);
     const subscribers = users.map((usr, i) => {
       return (
-        <li className="onlineUser" key={usr.key}>
+        <li className="onlineUser" key={userConfigs[usr].key}>
           <button className="inspectUserButton">
             <div>
               <img
                 className="userMenuImage"
                 alt="user"
-                src={usr.photoURL || defaultUserImage}
+                src={userConfigs[usr].photoURL || defaultUserImage}
                />
-              <p className="menuDisplayName">{ usr.displayName }</p>
+              <p className="menuDisplayName">{ userConfigs[usr].displayName }</p>
             </div>
           </button>
         </li>

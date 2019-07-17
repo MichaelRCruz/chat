@@ -11,8 +11,8 @@ class Users extends React.Component {
     const { userConfigs={}, liveUser={} } = this.context.state;
     console.log(liveUser);
     const users = Object.entries(userConfigs);
-    // console.log(activeUsers);
     const subscribers = users.map((usr, i) => {
+      const { photoURL, displayName, activity } = usr[1];
       return (
         <li className="onlineUser" key={usr[0]}>
           <button className="inspectUserButton">
@@ -20,9 +20,9 @@ class Users extends React.Component {
               <img
                 className="userMenuImage"
                 alt="user"
-                src={usr[1].photoURL || defaultUserImage}
+                src={photoURL || defaultUserImage}
                />
-              <p className="menuDisplayName">{ usr[1].displayName }</p>
+              <p className="menuDisplayName">{displayName}</p>
             </div>
           </button>
         </li>

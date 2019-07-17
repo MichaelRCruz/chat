@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
 import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
+import {throttling} from './utils.js';
 // import { staticMessages, staticUsers, staticRooms } from './staticState.js';
 
 class SessionProvider extends React.Component {
@@ -19,7 +20,7 @@ class SessionProvider extends React.Component {
       isOnline: true,
       lastChanged: firebase.database.ServerValue.TIMESTAMP,
     };
-    firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    if (uid) firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
         return;
       };
@@ -49,6 +50,7 @@ class SessionProvider extends React.Component {
   };
 
   handleFcmToken = (fcmToken, uid, subscription) => {
+    if (!uid) return;
     return fetch(`${process.env.REACT_APP_HTTP_URL}/addTokenToTopic`, {
       method: 'POST',
       body: JSON.stringify({ fcmToken, uid, subscription})
@@ -77,23 +79,29 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (key) => {
-    // const usersRef = firebase.database().ref(`users`);
-    const subscribedUsers = this.state.activeRoom.users;
-    // const users = Object.keys(subscribedUsers);
-    // console.log(subscribedUsers);
-    this.usersRef
+    
+    const passers = {};
+    const actives = {};
+    const users = { passers, actives }
+    const userThrottler = throttling(() => {
+      this.setState({ users });
+    }, 100);
+    const usersRef = firebase.database().ref(`users`);
+    const subscribedUsers = Object.keys(this.state.activeRoom.users);
+    usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
-      // .limitToLast(1)
       .on('child_added', snap => {
-        const isOnline = snap.val().activity.isOnline;
-        let liveUser = {};
-        if (isOnline) {
-          console.log(snap.val().email);
-          liveUser = snap.val()
+        const isSub = subscribedUsers.includes(snap.key);
+        const isActive = snap.val().activity.isOnline;
+        if (isActive && !isSub) {
+          passers[snap.key] = snap.val();
+        } else if (isActive && isSub) {
+          actives[snap.key] = snap.val();
         }
-        this.setState({ liveUser });
+        userThrottler();
       });
+
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -205,8 +213,8 @@ class SessionProvider extends React.Component {
     const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
-      this.handleConnection(user.uid);
-      this.setListeners(this.state.activeRoom.key);
+      if (user) this.handleConnection(user.uid);
+      if (user) this.setListeners(this.state.activeRoom.key);
     });
   };
 

@@ -9,7 +9,8 @@ import SessionContext from './SessionContext.js';
 class SessionProvider extends React.Component {
 
   handleConnection = uid => {
-    const userStatusDatabaseRef = firebase.database().ref(`users/${uid}/activity`);
+    // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
+    const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
     const isOfflineForDatabase = {
       isOnline: false,
       lastChanged: firebase.database.ServerValue.TIMESTAMP,
@@ -23,11 +24,10 @@ class SessionProvider extends React.Component {
         return;
       };
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-        console.log('lekmsd');
-        userStatusDatabaseRef.update(isOnlineForDatabase);
+        userStatusDatabaseRef.set(isOnlineForDatabase);
       });
     });
-  };
+  }
 
   requestNotifPermission = (uid, messaging) => {
     return messaging.requestPermission()
@@ -77,25 +77,28 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (key) => {
-    const usersRef = firebase.database().ref(`users`);
-    // const users = Object.keys(activeRoom.users);
-    usersRef
+    // const usersRef = firebase.database().ref(`users`);
+    const users = Object.keys(this.state.activeRoom.users);
+    const passerbys = {}
+    const activeSubscribers = {}
+    this.usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
       // .limitToLast(1)
       .on('child_added', snap => {
-        // const isSubscribed = users.includes(snap.key);
-        // console.log(snap.val().activity.isOnline, snap.val().email);
-
-          console.table({
-            'email': snap.val().email,
-            'isOnline': snap.val().activity.isOnline,
-            'lastVisited': snap.val().lastVisited,
-          });
-
-        // this.setState({ users });
+        const isSubscribed = users.includes(snap.key);
+        const isOnline = snap.val().activity.isOnline;
+        console.log(snap.val().activity.isOnline, snap.val().email);
+        // if (isSubscribed && isOnline) {
+        //   activeSubscribers[snap.key] = snap.val();
+        //   console.log(snap.val().activity.isOnline, snap.val().email);
+        // }
+        // if (!isSubscribed && isOnline) {
+        //   passerbys[snap.key] = snap.val();
+        //   console.log(snap.val().activity.isOnline, snap.val().email);
+        // }
+        this.setState({ activeSubscribers, passerbys });
       });
-      // console.log(snap.val().activity.isOnline, snap.val().email);
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -174,6 +177,7 @@ class SessionProvider extends React.Component {
     ref.child(msg.key).remove();
   };
 
+  usersRef = firebase.database().ref(`users`);
   onlineUsersRef = firebase.database().ref(`users`);
   messagesRef = firebase.database().ref(`messages`);
   state = {
@@ -207,7 +211,7 @@ class SessionProvider extends React.Component {
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
       this.handleConnection(user.uid);
-      // this.setListeners(this.state.activeRoom.key);
+      this.setListeners(this.state.activeRoom.key);
     });
   };
 

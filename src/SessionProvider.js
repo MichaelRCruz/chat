@@ -87,11 +87,12 @@ class SessionProvider extends React.Component {
       // .limitToLast(1)
       .on('child_added', snap => {
         const isOnline = snap.val().activity.isOnline;
+        let liveUser = {};
         if (isOnline) {
           console.log(snap.val().email);
-          const users = Object.assign({}, {[snap.key]: snap.val()});
-          // this.setState({ userConfigs: users});
+          liveUser = snap.val()
         }
+        this.setState({ liveUser });
       });
     this.messagesRef
       .orderByChild('roomId')
@@ -182,8 +183,7 @@ class SessionProvider extends React.Component {
     messages: {},
     subscribedRooms: [],
     users: {},
-    activeSubscribers: {},
-    passerbys: {},
+    liveUser: {},
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 

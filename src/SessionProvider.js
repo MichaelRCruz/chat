@@ -78,26 +78,20 @@ class SessionProvider extends React.Component {
 
   setListeners = (key) => {
     // const usersRef = firebase.database().ref(`users`);
-    const users = Object.keys(this.state.activeRoom.users);
-    const passerbys = {}
-    const activeSubscribers = {}
+    const subscribedUsers = this.state.activeRoom.users;
+    // const users = Object.keys(subscribedUsers);
+    // console.log(subscribedUsers);
     this.usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
       // .limitToLast(1)
       .on('child_added', snap => {
-        const isSubscribed = users.includes(snap.key);
         const isOnline = snap.val().activity.isOnline;
-        console.log(snap.val().activity.isOnline, snap.val().email);
-        // if (isSubscribed && isOnline) {
-        //   activeSubscribers[snap.key] = snap.val();
-        //   console.log(snap.val().activity.isOnline, snap.val().email);
-        // }
-        // if (!isSubscribed && isOnline) {
-        //   passerbys[snap.key] = snap.val();
-        //   console.log(snap.val().activity.isOnline, snap.val().email);
-        // }
-        this.setState({ activeSubscribers, passerbys });
+        if (isOnline) {
+          console.log(snap.val().email);
+          const users = Object.assign({}, {[snap.key]: snap.val()});
+          // this.setState({ userConfigs: users});
+        }
       });
     this.messagesRef
       .orderByChild('roomId')
@@ -105,9 +99,6 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snapshot => {
         if (snapshot.val().roomId === key) {
-          // const messages = this.state.messages;
-          // const newMessages = { ...messages,  ...{ [snapshot.key]: snapshot.val() }}
-          // const newMessages = Object.assign({}, messages, { [snapshot.key]: snapshot.val() });
           const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
           this.setState({ messages });
         }
@@ -144,9 +135,11 @@ class SessionProvider extends React.Component {
       const activeRoom = response;
       // this.setListeners(roomId);
       const { messages } = await new RealTimeApi().getMessages(roomId, 100);
+      const subscriberIds = Object.keys(activeRoom.users)
+      const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
-      await this.setState({ messages, activeRoom, warning, error }, () => {
+      await this.setState({ messages, activeRoom, subscriberIds, warning, error, userConfigs }, () => {
         this.setListeners(roomId);
         ref.off();
       });
@@ -189,6 +182,8 @@ class SessionProvider extends React.Component {
     messages: {},
     subscribedRooms: [],
     users: {},
+    activeSubscribers: {},
+    passerbys: {},
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 
@@ -206,7 +201,7 @@ class SessionProvider extends React.Component {
     const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
     const { subscribedRooms } = await new RealTimeApi().getRooms(configuration.rooms);
-    const subscriberIds = Object.keys(activeRoom.users)
+    const subscriberIds = Object.keys(activeRoom.users);
     const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {

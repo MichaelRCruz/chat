@@ -8,9 +8,9 @@ class Users extends React.Component {
   static contextType = SessionContext;
 
   render() {
-    const { userConfigs={} } = this.context.state;
+    const { userConfigs={}, activeUsers={} } = this.context.state;
     const users = Object.entries(userConfigs);
-    // console.log(foo.constructor);
+    console.log(activeUsers);
     const subscribers = users.map((usr, i) => {
       return (
         <li className="onlineUser" key={usr[0]}>

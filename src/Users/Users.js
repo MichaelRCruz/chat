@@ -4,21 +4,24 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 import './Users.css';
 
 class Users extends React.Component {
+
   static contextType = SessionContext;
+
   render() {
-    const { users } = this.context.state;
-    const uids = Object.keys(users);
-    const onlineUsers = uids.map((uid, i) => {
+    const { userConfigs={} } = this.context.state;
+    const users = Object.keys(userConfigs);
+    // console.log(foo.constructor);
+    const subscribers = users.map((usr, i) => {
       return (
-        <li className="onlineUser" key={i}>
+        <li className="onlineUser" key={usr.key}>
           <button className="inspectUserButton">
             <div>
               <img
                 className="userMenuImage"
                 alt="user"
-                src={users[uid].photoURL || defaultUserImage}
+                src={usr.photoURL || defaultUserImage}
                />
-              <p className="menuDisplayName">{ users[uid].displayName }</p>
+              <p className="menuDisplayName">{ usr.displayName }</p>
             </div>
           </button>
         </li>
@@ -27,7 +30,7 @@ class Users extends React.Component {
     return (
       <section className="onlineUsersComponent">
         <ul>
-          {onlineUsers}
+          {subscribers}
         </ul>
       </section>
     );

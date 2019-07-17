@@ -47,7 +47,6 @@ const RegistrationForm = props => {
     if (!dead && oAuthResponse) {
       window.localStorage.removeItem('potatoStorage');
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
-      console.log(oAuthResponse);
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
       if (code === 'auth/account-exists-with-different-credential') {

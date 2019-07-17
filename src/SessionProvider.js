@@ -23,6 +23,7 @@ class SessionProvider extends React.Component {
         return;
       };
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
+        console.log('lekmsd');
         userStatusDatabaseRef.update(isOnlineForDatabase);
       });
     });
@@ -75,18 +76,21 @@ class SessionProvider extends React.Component {
     }
   };
 
-  setListeners = (key) => {
-    const users = Object.keys(this.state.activeRoom.users);
-    this.onlineUsersRef
+  setListeners = (key, activeRoom) => {
+    const usersRef = firebase.database().ref(`users`);
+    const users = Object.keys(activeRoom.users);
+    usersRef
       .orderByChild('lastVisited')
-      .equalTo(this.state.activeRoom.key)
-      .limitToLast(1)
-      .on('child_added', snap => {
+      .equalTo(key)
+      .once('child_added', snap => {
         const isSubscribed = users.includes(snap.key);
+        // console.log(snap.val().activity.isOnline, snap.val().email);
         if (isSubscribed) {
-          users[snap.key] = snap.val();
+          console.log(snap.val().email, key)
+          console.log(snap.val().activity.isOnline)
+          // users[snap.key] = snap.val();
         }
-        this.setState({ users });
+        // this.setState({ users });
     });
     this.messagesRef
       .orderByChild('roomId')
@@ -129,9 +133,9 @@ class SessionProvider extends React.Component {
     const user = firebase.auth().currentUser;
     const { response, warning } = await this.reconcileActiveRoom(roomId);
     if (user && !warning && response) {
-      this.setListeners(roomId);
       let error = null;
       const activeRoom = response;
+      this.setListeners(roomId, activeRoom);
       const { messages } = await new RealTimeApi().getMessages(roomId, 100);
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
@@ -184,11 +188,6 @@ class SessionProvider extends React.Component {
     // firebase.auth().signOut();
     // this.handleConnection();
     // debugger;
-    console.log(userConfig);
-    console.log(payload);
-    if (user) {
-
-    }
     const { rm, msg, usr } = foreignState;
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const configuration = config ? config : userConfig;
@@ -197,11 +196,12 @@ class SessionProvider extends React.Component {
     const roomId = response ? response.key : lastVisited;
     const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
-    const users = activeRoom.users;
     const { subscribedRooms } = await new RealTimeApi().getRooms(configuration.rooms);
+    const {userConfigs} = await new RealTimeApi().getUserConfigs(Object.keys(activeRoom.users));
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
-    this.setState({ userConfig: configuration, activeRoom, fcmToken, subscribedRooms, messages, user, users }, () => {
-      this.setListeners(activeRoom.key);
+    this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
+      this.handleConnection(user.uid);
+      this.setListeners(activeRoom.key, activeRoom);
     });
   };
 
@@ -210,6 +210,7 @@ class SessionProvider extends React.Component {
     const { foreignState } = this.props;
     const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
+        this.handleConnection();
         const { providerData, ...rest } = user;
         const { displayName, email, photoURL, emailVerified, uid } = rest;
         const authProviders = providerData.map(profile => {

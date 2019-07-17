@@ -76,5 +76,16 @@ export default class RealTimeApi {
     return response.subscribedRooms[0];
   };
 
+  getUserConfigs = async uids => {
+    const payload = [uids];
+    const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfigs`;
+    const response = await this.goFetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ uids: payload })
+    });
+    console.log(response);
+    return response ? response : {};
+  };
+
 
 }

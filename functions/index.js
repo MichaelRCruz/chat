@@ -267,3 +267,38 @@ exports.verifyDisplayname = functions.https.onRequest((req, res) => {
     res.send(true);
   });
 });
+
+exports.getUserConfigs = functions.https.onRequest((req, res) => {
+  // async function getNotifications(messageKeys) {
+  //   return Promise.all(messageKeys.map(messageKey => {
+  //     const messageRef = admin.database().ref(`messages/${messageKey}`);
+  //     return messageRef.once('value');
+  //   }));
+  // };
+  return cors(req, res, async () => {
+    const { uids } = req.body;
+    console.log(uids, 'init getuserconfigs');
+    async function getUserConfigs(uids) {
+      return await Promise.all(uids.map(async uid => {
+        const userRef = await admin.database().ref(`users/${uid}`);
+        return userRef.once('value');
+      }));
+    };
+    const userConfigs = await getUserConfigs(uids);
+    res.json({ userConfigs });
+  });
+});
+
+// exports.getRooms = functions.https.onRequest((req, res) => {
+//   return cors(req, res, async () => {
+//     const { roomIds } = req.body;
+//     async function getRoomsByKeys(roomIds) {
+//       return Promise.all(roomIds.map(async room => {
+//         const roomRef = await admin.database().ref(`rooms/${room}`);
+//         return roomRef.once('value');
+//       }));
+//     };
+//     const subscribedRooms = await getRoomsByKeys(roomIds);
+//     res.json({ subscribedRooms });
+//   });
+// });

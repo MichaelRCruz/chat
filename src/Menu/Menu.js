@@ -5,11 +5,15 @@ import SessionContext from '../SessionContext.js';
 import './Menu.css';
 
 class Menu extends React.Component {
+
   static contextType = SessionContext;
+
   render() {
+
     const { user } = this.context.state;
+
     return (
-      <section className="menuComponent">
+      <aside className="menuComponent">
         <div className="userAvatarContainer">
           <img
             className="userAvatar"
@@ -21,12 +25,13 @@ class Menu extends React.Component {
         <div className="menuRoomListContainer">
           <h1>rooms</h1>
           <Rooms />
+          <h1>members</h1>
+          <Users />
         </div>
-        <h1>users</h1>
-        <Users />
-      </section>
+      </aside>
     );
   }
+
 }
 
 export default Menu;

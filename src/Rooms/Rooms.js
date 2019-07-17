@@ -4,7 +4,9 @@ import SessionContext from '../SessionContext.js';
 import './Rooms.css';
 
 class Rooms extends React.Component {
+  
   static contextType = SessionContext;
+
   render() {
     const { subscribedRooms } = this.context.state;
     const rooms = subscribedRooms.map((room, i) => {

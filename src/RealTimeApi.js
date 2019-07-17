@@ -81,7 +81,7 @@ export default class RealTimeApi {
     const url = `${process.env.REACT_APP_HTTP_URL}/getUserConfigs`;
     const response = await this.goFetch(url, {
       method: 'POST',
-      body: JSON.stringify({ uids: payload })
+      body: JSON.stringify({ uids: uids })
     });
     console.log(response);
     return response ? response : {};

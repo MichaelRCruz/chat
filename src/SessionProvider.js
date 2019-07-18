@@ -79,25 +79,30 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (key) => {
-    
     const passers = {};
     const actives = {};
-    const users = { passers, actives }
+    const subs = {};
+    const activeUsers = { passers, subs, actives };
     const userThrottler = throttling(() => {
-      this.setState({ users });
+      this.setState({ activeUsers });
     }, 100);
     const usersRef = firebase.database().ref(`users`);
-    const subscribedUsers = Object.keys(this.state.activeRoom.users);
+    // const subscribedUsers = Object.keys(this.state.activeRoom.users);
     usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
-      .on('child_added', snap => {
+      .on('child_changed', snap => {
+        const subscribedUsers = Object.keys(this.state.activeRoom.users);
         const isSub = subscribedUsers.includes(snap.key);
         const isActive = snap.val().activity.isOnline;
         if (isActive && !isSub) {
           passers[snap.key] = snap.val();
         } else if (isActive && isSub) {
           actives[snap.key] = snap.val();
+        } else if (!isActive && !isSub) {
+          subs[snap.key] = snap.val();
+        } else {
+          // this.setState
         }
         userThrottler();
       });
@@ -190,8 +195,8 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
-    users: {},
-    liveUser: {},
+    activeUsers: {},
+    userConfigs: {},
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 

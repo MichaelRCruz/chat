@@ -8,23 +8,30 @@ class Users extends React.Component {
   static contextType = SessionContext;
 
   render() {
-    const { userConfigs={}, liveUser={} } = this.context.state;
-    console.log(liveUser);
-    const users = Object.entries(userConfigs);
-    const subscribers = users.map((usr, i) => {
+    const { userConfigs={}, activeUsers={} } = this.context.state;
+    // console.log(activeUsers.actives);
+    // console.log(userConfigs);
+    // const entries = activeUsers ? activeUsers.actives : {};
+    const muhUsers = Object.entries(userConfigs);
+    const subscribers = muhUsers.map((usr, i) => {
       const { photoURL, displayName, activity } = usr[1];
+      const isOnline = activity.isOnline;
+      console.log(usr[1]);
       return (
         <li className="onlineUser" key={usr[0]}>
-          <button className="inspectUserButton">
-            <div>
-              <img
-                className="userMenuImage"
-                alt="user"
-                src={photoURL || defaultUserImage}
-               />
-              <p className="menuDisplayName">{displayName}</p>
-            </div>
-          </button>
+          <div className={"userContainer"}>
+            <button className="inspectUserButton">
+              <div className="innderButton">
+                <img
+                  className="userMenuImage"
+                  alt="user"
+                  src={photoURL || defaultUserImage}
+                 />
+                <p className="menuDisplayName">{displayName}</p>
+              </div>
+            </button>
+          </div>
+          <div className={isOnline ? "indicator isGreen" : "indicator" }></div>
         </li>
       );
     });

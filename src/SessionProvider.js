@@ -10,8 +10,16 @@ import {throttling} from './utils.js';
 class SessionProvider extends React.Component {
 
   handleConnection = uid => {
-    // https://firebase.google.com/docs/database/web/read-and-write#detach_listeners
+    const userStatusFirestoreRef = firebase.firestore().doc('/status/' + uid);
     const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
+    const isOfflineForFirestore = {
+      state: 'offline',
+      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+    const isOnlineForFirestore = {
+      state: 'online',
+      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
+    };
     const isOfflineForDatabase = {
       isOnline: false,
       lastChanged: firebase.database.ServerValue.TIMESTAMP,
@@ -22,10 +30,12 @@ class SessionProvider extends React.Component {
     };
     if (uid) firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
+        userStatusFirestoreRef.set(isOfflineForFirestore);
         return;
       };
       userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
         userStatusDatabaseRef.set(isOnlineForDatabase);
+        userStatusFirestoreRef.set(isOnlineForFirestore);
       });
     });
   }

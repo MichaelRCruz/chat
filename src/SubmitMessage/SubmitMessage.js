@@ -1,84 +1,85 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SessionContext from '../SessionContext.js';
+import useForm from '../Auth/useForm.js';
 import Validation from '../validation.js';
+import { debounce } from '../utils';
 import './SubmitMessage.css';
 
-class Messages extends Component {
-  state = {
-    messageValue: '',
-    messageError: '',
-    isValidated: false
-  };
-  submitMessage = event => {
+const Messages = () => {
+
+  const submitMessage = (payload, event, clearForm) => {
     event.preventDefault();
+    sessionContext.submitMessage(payload.message);
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
-    this.context.submitMessage(this.state.messageValue);
-    this.setState({ messageValue: '' });
+    clearForm({});
   };
-  handleKeyDown = event => {
+
+  const { handleSubmit, handleChange, ...formState } = useForm(submitMessage);
+  const [isMessageValidated, setIsMessageValidated] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isValidated, setIsValidated] = useState(false);
+  const [messageError, setMessageError] = useState('');
+  const [warning, setWarning] = useState(false);
+  const sessionContext = useContext(SessionContext);
+
+  const { wasFormSubmitted, setWasFormSubmitted, formErrors, formValues } = formState;
+
+  const handleKeyDown = event => {
     if (event.key === 'Enter' && event.shiftKey === false) {
-      event.preventDefault();
-      this.context.submitMessage(this.state.messageValue);
-      this.setState({ messageValue: '' });
+      handleSubmit(event);
     }
-  };
-  formValidated = () => {
-    const { messageValue, messageError } = this.state;
-    const hasErrors = messageError.length ? true : false;
-    const hasValues = messageValue.length ? true : false;
-    this.setState({ isValidated: !hasErrors && hasValues });
-  };
-  handleFieldValue = validationResponse => {
-    this.setState({
-      [validationResponse[0]]: validationResponse[1]
-    }, this.formValidated );
-  };
-  validateMessage = messageValue => {
+  }
+
+  // const debounceMessage = debounce((event) => {
+  //   try {
+  //     this.handleKeyDown(event);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, 100);
+
+  useEffect(() => {
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = 0;
     textarea.style.height = textarea.scrollHeight + "px";
-    this.setState({ messageValue }, () => {
-      this.handleFieldValue(new Validation().message(messageValue));
-    });
-  };
-  static contextType = SessionContext;
-  render() {
-    const { isValidated, messageValue } = this.state;
-    return (
-      <div className="footerContainer">
-        <form
-          className=""
-          onSubmit={e => this.submitMessage(e)}
-          onKeyDown={e => this.handleKeyDown(e)}>
-            <div className="formButtonWrapper">
-              <button
-                className="sendButton"
-                onClick={e => {
-                  e.preventDefault();
-                }}>
-                <i className="notification material-icons">chat</i>
-              </button>
-              <textarea
-                className="textarea"
-                name="message"
-                type="textarea"
-                placeholder='message'
-                value={messageValue}
-                onChange={e => this.validateMessage(e.target.value)}
-              />
-              <button
-                className="sendButton"
-                onClick={e => this.submitMessage(e)}
-                type="submit"
-                disabled={isValidated}>
-                <i className="send material-icons">send</i>
-              </button>
-            </div>
-        </form>
-      </div>
-    );
-  }
+    return () => {
+      console.log(formValues.message);
+    }
+  }, [formErrors, formValues]);
+
+  return (
+    <div className="footerContainer">
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        onKeyDown={(e) => handleKeyDown(e)}>
+          <div className="formButtonWrapper">
+            <button
+              className="sendButton"
+              onClick={e => {
+                e.preventDefault();
+              }}>
+              <i className="notification material-icons">chat</i>
+            </button>
+            <textarea
+              className="textarea"
+              name="message"
+              type="textarea"
+              placeholder='message'
+              value={formValues.message || ''}
+              onChange={handleChange}
+            />
+            <button
+              className="sendButton"
+              type="submit"
+              disabled={isMessageValidated}
+              onClick={(e) => handleSubmit(e)}>
+              <i className="send material-icons">send</i>
+            </button>
+          </div>
+      </form>
+    </div>
+  );
 }
 
 export default Messages;

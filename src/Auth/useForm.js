@@ -4,27 +4,27 @@ import Validation from '../validation.js';
 
 
 const useForm = (callback) => {
-  const [authFormValues, setAuthFormValues] = useState({});
-  const [authFormErrors, setAuthFormErrors] = useState({});
+  const [formValues, setFormValues] = useState({});
+  const [formErrors, setFormErrors] = useState({});
   const [wasFormSubmitted, setWasFormSubmitted] = useState(false);
 
   const clearForm = () => {
-    setAuthFormValues({});
-    setAuthFormErrors({});
+    setFormValues({});
+    setFormErrors({});
   };
 
   const handleSubmit = event => {
     if (event) event.preventDefault();
     setWasFormSubmitted(true);
-    callback(authFormValues, clearForm, event);
+    callback(formValues, event, setFormValues);
    };
 
   const handleChange = event => {
     event.persist();
     const { name, value } = event.target;
     const error = new Validation()[name](value);
-    setAuthFormErrors(authFormErrors => ({ ...authFormErrors, ...error }));
-    setAuthFormValues(authFormValues => ({ ...authFormValues, [name]: value }));
+    setFormErrors(formErrors => ({ ...formErrors, ...error }));
+    setFormValues(formValues => ({ ...formValues, [name]: value }));
   };
 
   // const debounceDisplayname = debounce(async fieldValue => {
@@ -35,7 +35,7 @@ const useForm = (callback) => {
   //   }
   // }, 250);
 
-  return { handleChange, handleSubmit, authFormValues, authFormErrors };
+  return { handleChange, handleSubmit, formValues, formErrors, setFormValues };
 };
 
 export default useForm;

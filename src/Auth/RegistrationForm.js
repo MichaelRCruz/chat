@@ -18,11 +18,12 @@ const RegistrationForm = props => {
   const {
     handleSubmit,
     handleChange,
-    authFormErrors,
-    authFormValues
+    formErrors,
+    formValues,
+    clearForm
   } = useForm(formCallback);
-  const { displayName, email, password } = authFormValues;
-  const { displayNameError, emailError, passwordError } = authFormErrors;
+  const { displayName, email, password } = formValues;
+  const { displayNameError, emailError, passwordError } = formErrors;
 
   const potatoStorage = localStorage.getItem('potatoStorage');
   const [chooseAuth, setChooseAuth] = useState(true);
@@ -45,7 +46,6 @@ const RegistrationForm = props => {
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
-      window.localStorage.removeItem('potatoStorage');
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
@@ -81,7 +81,7 @@ const RegistrationForm = props => {
       }
     }
     return () => {
-      // window.localStorage.removeItem('potatoStorage');
+      // form
       // sessionStorage.clear();
       setAuthMode({ register: true, action: 'send dynamic link' });
     };

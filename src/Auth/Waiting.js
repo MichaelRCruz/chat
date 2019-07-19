@@ -12,7 +12,7 @@ const Waiting = props => {
 
 
   useEffect(() => {
-    const email = window.sessionStorage.getItem('potatoEmail') || false;
+    const email = window.localStorage.getItem('potatoEmail') || false;
     if (!email) {
       console.log(email, cachedEmail);
       setNeedsConfirmation(true);

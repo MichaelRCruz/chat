@@ -7,13 +7,13 @@ import * as firebase from 'firebase';
 const RegistrationForm = props => {
 
   const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo } = props;
-  const formCallback = (payload, clearForm, event) => {
+  const formCallback = (payload, event, clear) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) {
       updateUserDetails(payload);
       redirectTo('/chat/rooms/?rm=lastVisited');
     }
-    clearForm();
+    // clear({});
   };
   const {
     handleSubmit,

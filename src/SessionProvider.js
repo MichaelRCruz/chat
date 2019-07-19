@@ -28,7 +28,7 @@ class SessionProvider extends React.Component {
       isOnline: true,
       lastChanged: firebase.database.ServerValue.TIMESTAMP,
     };
-    if (uid) firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
         userStatusFirestoreRef.set(isOfflineForFirestore);
         return;
@@ -101,7 +101,7 @@ class SessionProvider extends React.Component {
     usersRef
       .orderByChild('lastVisited')
       .equalTo(key)
-      .on('child_changed', snap => {
+      .once('child_changed', snap => {
         const subscribedUsers = Object.keys(this.state.activeRoom.users);
         const isSub = subscribedUsers.includes(snap.key);
         const isActive = snap.val().activity.isOnline;
@@ -111,8 +111,6 @@ class SessionProvider extends React.Component {
           actives[snap.key] = snap.val();
         } else if (!isActive && !isSub) {
           subs[snap.key] = snap.val();
-        } else {
-          // this.setState
         }
         userThrottler();
       });
@@ -288,7 +286,7 @@ class SessionProvider extends React.Component {
       <SessionContext.Provider value={{
         state: this.state,
         submitMessage: content => {
-          this.submitMessage(content);
+          if (content) this.submitMessage(content);
         },
         deleteMessage: key => {
           this.deleteMessage(key);

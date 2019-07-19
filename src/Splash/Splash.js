@@ -1,16 +1,9 @@
 import React from 'react';
+import * as firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import './Splash.css';
 
 class Splash extends React.Component  {
-
-  redirectToSignIn = () => {
-    this.props.history.push('/signIn');
-  }
-
-  componentDidMount() {
-    // window.scrollTo(0, 1);
-  };
 
   render() {
     return (

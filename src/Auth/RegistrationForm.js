@@ -25,7 +25,7 @@ const RegistrationForm = props => {
   const { displayName, email, password } = formValues;
   const { displayNameError, emailError, passwordError } = formErrors;
 
-  const potatoStorage = localStorage.getItem('potatoStorage');
+  const potatoStorage = sessionStorage.getItem('potatoStorage');
   const [chooseAuth, setChooseAuth] = useState(true);
   const [oAuthProvider, setOauthProvider] = useState(true);
   const [dialog, setDialog] = useState('Please choose a sign in method.');
@@ -179,7 +179,7 @@ const RegistrationForm = props => {
   const loadingAnimation = (
     <aside className="modalHeader">
       <button className="exitButton" onClick={() => {
-        window.localStorage.removeItem('potatoStorage');
+        window.sessionStorage.removeItem('potatoStorage');
         redirectTo('/');
       }}>
         <i className="material-icons clearIcon">clear</i>

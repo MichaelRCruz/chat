@@ -108,9 +108,11 @@ export default class Validation {
     } else if (input.startsWith('_``_')) {
       messageError = 'please reformat';
     } else if (!codeBody.length) {
-      messageError = 'no empty code blocks, please';
+      messageError = 'no empty code blocks, my dude';
+    } else if (input === '') {
+      messageError = 'need some content, yo';
     }
-    return ['messageError', messageError];
+    return { messageError };
   }
 
 }

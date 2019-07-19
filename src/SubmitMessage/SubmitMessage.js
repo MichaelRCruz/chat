@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import SessionContext from '../SessionContext.js';
 import useForm from '../Auth/useForm.js';
 import Validation from '../validation.js';
-import { debounce } from '../utils';
 import './SubmitMessage.css';
 
 const Messages = () => {
@@ -10,6 +9,7 @@ const Messages = () => {
   const submitMessage = (payload, event, clearForm) => {
     event.preventDefault();
     sessionContext.submitMessage(payload.message);
+    // clear()
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
     clearForm({});
@@ -27,17 +27,10 @@ const Messages = () => {
 
   const handleKeyDown = event => {
     if (event.key === 'Enter' && event.shiftKey === false) {
+      // event.preventDefault();
       handleSubmit(event);
     }
   }
-
-  // const debounceMessage = debounce((event) => {
-  //   try {
-  //     this.handleKeyDown(event);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, 100);
 
   useEffect(() => {
     const textarea = window.document.querySelector(".textarea");

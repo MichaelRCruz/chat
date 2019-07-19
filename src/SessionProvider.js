@@ -11,66 +11,67 @@ class SessionProvider extends React.Component {
 
 
   handleConnection = (uid) => {
-    const userStatusDatabaseRef = this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
-    let config = this.state.userConfig;
-    let activityInfo = {};
-    firebase.database().ref('.info/connected').on('value', function(snapshot) {
-      if (snapshot.val() === false) {
-        activityInfo = {
-          isOnline: false,
-          lastChanged: firebase.database.ServerValue.TIMESTAMP,
-          config
-        }
-        userStatusDatabaseRef.set(activityInfo);
-        return;
-      };
-      userStatusDatabaseRef.onDisconnect().set(activityInfo).then(function() {
-        activityInfo = {
-          isOnline: true,
-          lastChanged: firebase.database.ServerValue.TIMESTAMP,
-          config
-        }
-        userStatusDatabaseRef.set(activityInfo);
-      });
-    });
-
-    const muhUpdateRef = this.props.firebase.database().ref(`/USERS_ONLINE`);
-    let users = [];
-    const userThrottler = throttling(() => {
-      this.setState({onlineUsers: users.slice(0)});
-    }, 100);
-
-    muhUpdateRef.on('child_added', snap => {
-      const newUser = Object.assign(snap.val(), {key: snap.key});
-      users.push(newUser);
-      userThrottler();
-    });
-
-    // update the UI to show that a user has left (gone offline)
-    muhUpdateRef.on("child_removed", snap => {
-      const deletedUser = snap.val();
-      const deletedUsers = [...this.state.onLineUsers];
-      const index = deletedUsers.indexOf(deletedUser)
-      if (index !== -1) {
-        deletedUsers.splice(index, 1);
-        this.setState({ onLineUsers: deletedUsers });
-      }
-      console.log(deletedUser.key);
-    });
-
-    // update the UI to show that a user's status has changed
-    muhUpdateRef.on("child_changed", snap => {
-      const updatedUser = snap.val();
-      const muhUsers = this.state.onLineUsers ? this.state.onLineUsers : {};
-      const updated = [...muhUsers];
-      const index = updated.indexOf(updatedUser)
-      if (index !== -1) {
-        updated.splice(index, 1);
-        updated.push(updatedUser);
-        this.setState({ onLineUsers: updated });
-      }
-      console.log(updatedUser);
-    });
+    // const userStatusDatabaseRef = this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
+    // let config = this.state.userConfig;
+    // let activityInfo = {};
+    // firebase.database().ref('.info/connected').on('value', function(snapshot) {
+    //   if (snapshot.val() === false) {
+    //     activityInfo = {
+    //       isOnline: false,
+    //       lastChanged: firebase.database.ServerValue.TIMESTAMP,
+    //       config
+    //     }
+    //     userStatusDatabaseRef.set(activityInfo);
+    //     return;
+    //   };
+    //   userStatusDatabaseRef.onDisconnect().set(activityInfo).then(function() {
+    //     activityInfo = {
+    //       isOnline: true,
+    //       lastChanged: firebase.database.ServerValue.TIMESTAMP,
+    //       config
+    //     }
+    //     userStatusDatabaseRef.set(activityInfo);
+    //   });
+    // });
+    //
+    // const muhUpdateRef = this.props.firebase.database().ref(`/USERS_ONLINE`);
+    // let users = [];
+    // const userThrottler = throttling(() => {
+    //   this.setState({onlineUsers: users.slice(0)});
+    // }, 100);
+    //
+    // muhUpdateRef.on('child_added', snap => {
+    //   const newUser = Object.assign(snap.val(), {key: snap.key});
+    //   users.push(newUser);
+    //   userThrottler();
+    // });
+    //
+    // // update the UI to show that a user has left (gone offline)
+    // muhUpdateRef.on("child_removed", snap => {
+    //   const deletedUser = snap.val();
+    //   const usersCopy = this.state.onLineUsers ? this.state.onLineUsers : [];
+    //   const deletedUsers = [...usersCopy];
+    //   const index = deletedUsers.indexOf(deletedUser)
+    //   if (index !== -1) {
+    //     deletedUsers.splice(index, 1);
+    //     this.setState({ deletedUsers });
+    //   }
+    //   console.log(deletedUser.key);
+    // });
+    //
+    // // update the UI to show that a user's status has changed
+    // muhUpdateRef.on("child_changed", snap => {
+    //   const updatedUser = snap.val();
+    //   const muhUsers = this.state.onLineUsers ? this.state.onLineUsers : {};
+    //   const updated = [...muhUsers];
+    //   const index = updated.indexOf(updatedUser)
+    //   if (index !== -1) {
+    //     updated.splice(index, 1);
+    //     updated.push(updatedUser);
+    //     this.setState({ onLineUsers: updated });
+    //   }
+    //   console.log(updatedUser);
+    // });
   }
 
   requestNotifPermission = (uid, messaging) => {

@@ -16,7 +16,6 @@ class Users extends React.Component {
     const subscribers = muhUsers.map((usr, i) => {
       const { photoURL, displayName, activity } = userConfigs[usr[0]];
       const isOnline = activity.isOnline;
-      console.log(usr[1]);
       return (
         <li className="onlineUser" key={usr[0]}>
           <div className={"userContainer"}>

@@ -9,34 +9,44 @@ import {throttling} from './utils.js';
 
 class SessionProvider extends React.Component {
 
-  handleConnection = uid => {
-    const userStatusFirestoreRef = firebase.firestore().doc('/status/' + uid);
-    const userStatusDatabaseRef = this.props.firebase.database().ref(`users/${uid}/activity`);
-    const isOfflineForFirestore = {
-      state: 'offline',
-      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    const isOnlineForFirestore = {
-      state: 'online',
-      last_changed: firebase.firestore.FieldValue.serverTimestamp(),
-    };
-    const isOfflineForDatabase = {
-      isOnline: false,
-      lastChanged: firebase.database.ServerValue.TIMESTAMP,
-    };
-    const isOnlineForDatabase = {
-      isOnline: true,
-      lastChanged: firebase.database.ServerValue.TIMESTAMP,
-    };
+  handleConnection = (uid) => {
+    const userStatusDatabaseRef = this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
+    let config = this.state.userConfig;
+    let activityInfo = {};
     firebase.database().ref('.info/connected').on('value', function(snapshot) {
       if (snapshot.val() === false) {
-        userStatusFirestoreRef.set(isOfflineForFirestore);
+        activityInfo = {
+          isOnline: false,
+          lastChanged: firebase.database.ServerValue.TIMESTAMP,
+          config
+        }
+        userStatusDatabaseRef.set(activityInfo);
         return;
       };
-      userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase).then(function() {
-        userStatusDatabaseRef.set(isOnlineForDatabase);
-        userStatusFirestoreRef.set(isOnlineForFirestore);
+      userStatusDatabaseRef.onDisconnect().set(activityInfo).then(function() {
+        activityInfo = {
+          isOnline: true,
+          lastChanged: firebase.database.ServerValue.TIMESTAMP,
+          config
+        }
+        userStatusDatabaseRef.set(activityInfo);
       });
+    });
+    userStatusDatabaseRef.on('child_added', snap => {
+      const user = snap.val();
+      console.log(user);
+    });
+
+    // update the UI to show that a user has left (gone offline)
+    userStatusDatabaseRef.on("child_removed", function(snap) {
+      const user = snap.val();
+      console.log(user);
+    });
+
+    // update the UI to show that a user's status has changed
+    userStatusDatabaseRef.on("child_changed", function(snap) {
+      const user = snap.val();
+      console.log(user);
     });
   }
 

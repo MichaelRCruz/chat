@@ -9,6 +9,7 @@ import {throttling} from './utils.js';
 
 class SessionProvider extends React.Component {
 
+
   handleConnection = (uid) => {
     const userStatusDatabaseRef = this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
     let config = this.state.userConfig;
@@ -32,21 +33,43 @@ class SessionProvider extends React.Component {
         userStatusDatabaseRef.set(activityInfo);
       });
     });
-    userStatusDatabaseRef.on('child_added', snap => {
-      const user = snap.val();
-      console.log(user);
+
+    const muhUpdateRef = this.props.firebase.database().ref(`/USERS_ONLINE`);
+    let users = [];
+    const userThrottler = throttling(() => {
+      this.setState({onlineUsers: users.slice(0)});
+    }, 100);
+
+    muhUpdateRef.on('child_added', snap => {
+      const newUser = Object.assign(snap.val(), {key: snap.key});
+      users.push(newUser);
+      userThrottler();
     });
 
     // update the UI to show that a user has left (gone offline)
-    userStatusDatabaseRef.on("child_removed", function(snap) {
-      const user = snap.val();
-      console.log(user);
+    muhUpdateRef.on("child_removed", snap => {
+      const deletedUser = snap.val();
+      const deletedUsers = [...this.state.onLineUsers];
+      const index = deletedUsers.indexOf(deletedUser)
+      if (index !== -1) {
+        deletedUsers.splice(index, 1);
+        this.setState({ onLineUsers: deletedUsers });
+      }
+      console.log(deletedUser.key);
     });
 
     // update the UI to show that a user's status has changed
-    userStatusDatabaseRef.on("child_changed", function(snap) {
-      const user = snap.val();
-      console.log(user);
+    muhUpdateRef.on("child_changed", snap => {
+      const updatedUser = snap.val();
+      const muhUsers = this.state.onLineUsers ? this.state.onLineUsers : {};
+      const updated = [...muhUsers];
+      const index = updated.indexOf(updatedUser)
+      if (index !== -1) {
+        updated.splice(index, 1);
+        updated.push(updatedUser);
+        this.setState({ onLineUsers: updated });
+      }
+      console.log(updatedUser);
     });
   }
 

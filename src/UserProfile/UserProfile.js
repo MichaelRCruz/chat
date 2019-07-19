@@ -11,7 +11,6 @@ const UserProfile = props => {
 
   const oAuth = useOAuth(false);
   const muhContext = useContext(SessionContext);
-  console.log(muhContext);
 
   const loadingAnimation = (
     <aside className="modalHeader">

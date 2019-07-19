@@ -14,12 +14,12 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 firebase.initializeApp(config);
-const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
-  if (!user) {
-    window.sessionStorage.removeItem('potatoStorage');
-    firebase.auth().signOut();
-  }
-});
+// const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
+//   if (!user) {
+//     window.sessionStorage.removeItem('potatoStorage');
+//     firebase.auth().signOut();
+//   }
+// });
 // firebase.database.enableLogging(function(message) {
 //   console.group("[FIREBASE]", message);
 // });

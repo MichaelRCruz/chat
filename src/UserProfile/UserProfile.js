@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect } from 'react';
 import Modal from '../Modal/Modal.js';
 import useOAuth from '../Auth/useOAuth.js';
 import SessionContext from '../SessionContext.js';
@@ -7,21 +7,27 @@ import './UserProfile.css';
 // https://developer.chrome.com/extensions/signedInDevices
 const UserProfile = props => {
 
-  const { history, firebase } = props;
+  const { history, isSignedOut } = props;
 
-  const oAuth = useOAuth(false);
-  const muhContext = useContext(SessionContext);
+  // const oAuth = useOAuth(false);
+  // const muhContext = useContext(SessionContext);
 
-  const loadingAnimation = (
-    <aside className="modalHeader">
-      <button className="exitButton" onClick={() => {
-        history.goBack();
-      }}>
-        <i className="material-icons clearIcon">clear</i>
-      </button>
-      <div className="loadingAnimation" />
-    </aside>
-  );
+  // const loadingAnimation = (
+  //   <aside className="modalHeader">
+  //     <button className="exitButton" onClick={() => {
+  //       history.goBack();
+  //     }}>
+  //       <i className="material-icons clearIcon">clear</i>
+  //     </button>
+  //     <div className="loadingAnimation" />
+  //   </aside>
+  // );
+
+  // useEffect(() => {
+  //   if (isSignedOut) {
+  //     history.push('/');
+  //   }
+  // }, [isSignedOut]);
 
   return (
     <Modal show={true}>
@@ -37,11 +43,7 @@ const UserProfile = props => {
           </button>
         </nav>
         <main className="userProfileMain">
-          <button onClick={() => {
-            localStorage.removeItem('potatoStorage');
-            firebase.auth().signOut();
-            history.push('/');
-          }}>
+          <button onClick={() => props.handleSignOut()}>
             click here to sign out
           </button>
         </main>

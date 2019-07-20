@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 
 const RegistrationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo, isSignedOut } = props;
   const formCallback = (payload, event, clear) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) {
@@ -25,7 +25,7 @@ const RegistrationForm = props => {
   const { displayName, email, password } = formValues;
   const { displayNameError, emailError, passwordError } = formErrors;
 
-  const potatoStorage = sessionStorage.getItem('potatoStorage');
+  const potatoStorage = localStorage.getItem('potatoStorage');
   const [chooseAuth, setChooseAuth] = useState(true);
   const [oAuthProvider, setOauthProvider] = useState(true);
   const [dialog, setDialog] = useState('Please choose a sign in method.');
@@ -60,6 +60,7 @@ const RegistrationForm = props => {
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
+      console.log(isSignedOut);
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
@@ -80,7 +81,7 @@ const RegistrationForm = props => {
       } else if (isNewUser) {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account'});
-      } else {
+      } else if (!isSignedOut) {
         redirectTo('/chat/rooms/?rm=lastVisited');
       }
     } else if (isAuthLinkSent && !needsConfirmation) {

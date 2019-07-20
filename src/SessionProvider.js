@@ -10,29 +10,28 @@ import {throttling} from './utils.js';
 class SessionProvider extends React.Component {
 
 
-  handleConnection = (uid) => {
-    // const userStatusDatabaseRef = this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
-    // let config = this.state.userConfig;
-    // let activityInfo = {};
-    // firebase.database().ref('.info/connected').on('value', function(snapshot) {
-    //   if (snapshot.val() === false) {
-    //     activityInfo = {
-    //       isOnline: false,
-    //       lastChanged: firebase.database.ServerValue.TIMESTAMP,
-    //       config
-    //     }
-    //     userStatusDatabaseRef.set(activityInfo);
-    //     return;
-    //   };
-    //   userStatusDatabaseRef.onDisconnect().set(activityInfo).then(function() {
-    //     activityInfo = {
-    //       isOnline: true,
-    //       lastChanged: firebase.database.ServerValue.TIMESTAMP,
-    //       config
-    //     }
-    //     userStatusDatabaseRef.set(activityInfo);
-    //   });
-    // });
+  handleConnection = (uid, userConfig) => {
+    firebase.database().ref('.info/connected').on('value', async snap => {
+      // const Uid = uid ? uid : firebase.auth().currentUser.uid;
+      const userStatusDatabaseRef = await this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
+      // const config = await this.state.userConfig;
+      if (snap.val() === false) {
+        const activityInfo = {
+          isOnline: false,
+          lastChanged: firebase.database.ServerValue.TIMESTAMP,
+          userConfig
+        }
+        userStatusDatabaseRef.onDisconnect().remove();
+        // return;
+      } else {
+        const activityInfo = {
+          isOnline: true,
+          lastChanged: firebase.database.ServerValue.TIMESTAMP,
+          userConfig
+        }
+        if (uid) userStatusDatabaseRef.set(activityInfo);
+      }
+    });
     //
     // const muhUpdateRef = this.props.firebase.database().ref(`/USERS_ONLINE`);
     // let users = [];
@@ -123,31 +122,31 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (key) => {
-    const passers = {};
-    const actives = {};
-    const subs = {};
-    const activeUsers = { passers, subs, actives };
-    const userThrottler = throttling(() => {
-      this.setState({ activeUsers });
-    }, 100);
-    const usersRef = firebase.database().ref(`users`);
-    // const subscribedUsers = Object.keys(this.state.activeRoom.users);
-    usersRef
-      .orderByChild('lastVisited')
-      .equalTo(key)
-      .once('child_changed', snap => {
-        const subscribedUsers = Object.keys(this.state.activeRoom.users);
-        const isSub = subscribedUsers.includes(snap.key);
-        const isActive = snap.val().activity.isOnline;
-        if (isActive && !isSub) {
-          passers[snap.key] = snap.val();
-        } else if (isActive && isSub) {
-          actives[snap.key] = snap.val();
-        } else if (!isActive && !isSub) {
-          subs[snap.key] = snap.val();
-        }
-        userThrottler();
-      });
+    // const passers = {};
+    // const actives = {};
+    // const subs = {};
+    // const activeUsers = { passers, subs, actives };
+    // const userThrottler = throttling(() => {
+    //   this.setState({ activeUsers });
+    // }, 100);
+    // const usersRef = firebase.database().ref(`users`);
+    // // const subscribedUsers = Object.keys(this.state.activeRoom.users);
+    // usersRef
+    //   .orderByChild('lastVisited')
+    //   .equalTo(key)
+    //   .once('child_changed', snap => {
+    //     const subscribedUsers = Object.keys(this.state.activeRoom.users);
+    //     const isSub = subscribedUsers.includes(snap.key);
+    //     const isActive = snap.val().activity.isOnline;
+    //     if (isActive && !isSub) {
+    //       passers[snap.key] = snap.val();
+    //     } else if (isActive && isSub) {
+    //       actives[snap.key] = snap.val();
+    //     } else if (!isActive && !isSub) {
+    //       subs[snap.key] = snap.val();
+    //     }
+    //     userThrottler();
+    //   });
 
     this.messagesRef
       .orderByChild('roomId')
@@ -237,7 +236,6 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
-    activeUsers: {},
     userConfigs: {},
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
@@ -245,7 +243,6 @@ class SessionProvider extends React.Component {
   initializeApp = async (user, foreignState, config, payload) => {
     // res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] })
     // firebase.auth().signOut();
-    // this.handleConnection();
     // debugger;
     const { rm, msg, usr } = foreignState;
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
@@ -260,7 +257,6 @@ class SessionProvider extends React.Component {
     const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
-      if (user) this.handleConnection(user.uid);
       if (user) this.setListeners(this.state.activeRoom.key);
     });
   };
@@ -270,23 +266,14 @@ class SessionProvider extends React.Component {
     const { foreignState } = this.props;
     const unsubscribe = firebase.auth().onAuthStateChanged(async user => {
       if (user != null) {
-        this.handleConnection();
         const { providerData, ...rest } = user;
         const { displayName, email, photoURL, emailVerified, uid } = rest;
-        const authProviders = providerData.map(profile => {
-          return {...profile};
-        });
         const authProfile = {
-          displayName,
-          email,
-          photoURL,
-          emailVerified,
-          uid,
-          authProviders
+          displayName, email, photoURL, emailVerified, uid, providerData
         };
+        this.handleConnection(uid, authProfile);
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
         if (userConfig) {
-          // userConfig.authProfile = authProfile;
           this.initializeApp(user, foreignState, userConfig, null);
         } else {
           const payload = await new RealTimeApi().createNewUser(authProfile);

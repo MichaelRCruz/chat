@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 class ErrorBoundary extends Component {
-	state = { error: null, errorInfo: null };
+  state = { error: null, errorInfo: null };
 
   static getDerivedStateFromError(error) {
     // Catch errors in any components below and re-render with error message

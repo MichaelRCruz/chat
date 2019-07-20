@@ -17,16 +17,16 @@ const useOAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const getOAuthProvider = providerId => {
-  	switch (providerId) {
-  		case 'google.com':
-  			return {method: 'signInWithRedirect', instance: new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
-  		case 'github.com':
-  			return {method: 'signInWithRedirect', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
+    switch (providerId) {
+      case 'google.com':
+        return {method: 'signInWithRedirect', instance: new firebase.auth.GoogleAuthProvider(), name: 'Google', providerId: 'google.com'};
+      case 'github.com':
+        return {method: 'signInWithRedirect', instance: new firebase.auth.GithubAuthProvider(), name: 'GitHub', providerId: 'github.com'};
       case 'facebook.com':
-  			return {method: 'signInWithRedirect', instance: new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com'}
-  		default:
-  		  return 'auth provider selection is not present';
-  	}
+        return {method: 'signInWithRedirect', instance: new firebase.auth.FacebookAuthProvider(), name: 'Facebook', providerId: 'facebook.com'}
+      default:
+        return 'auth provider selection is not present';
+    }
   }
 
   const unLinkAccount = async () => {

@@ -23,6 +23,7 @@ yarn-error.log*
 firebase-debug.log
 database-debug.log
 *.log
+*.cache
 
 /src/serviceAccountKey.json
 /functions/serviceAccountKey.json

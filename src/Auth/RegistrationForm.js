@@ -39,9 +39,23 @@ const RegistrationForm = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [pendingCred, setPendingCred] = useState(false);
   const [providerData, setProviderData] = useState({
-    'google.com': {method: 'signInWithRedirect', name: 'Google', providerId: 'google.com', path: require('../assets/btn_google_light_focus_ios.svg')},
-    'github.com': {method: 'signInWithRedirect', name: 'GitHub', providerId: 'github.com', path: require('../assets/GitHub-Mark-64px.png')},
-    'facebook.com': {method: 'signInWithRedirect', name: 'Facebook', providerId: 'facebook.com', path: require('../assets/PNG/f_logo_RGB-Blue_58.png')}
+    'google.com': {
+      method: 'signInWithRedirect',
+      name: 'Google',
+      providerId: 'google.com',
+      path: require('../assets/btn_google_light_focus_ios.svg')},
+    'github.com': {
+      method: 'signInWithRedirect',
+      name: 'GitHub',
+      providerId: 'github.com',
+      path: require('../assets/GitHub-Mark-64px.png')
+    },
+    'facebook.com': {
+      method: 'signInWithRedirect',
+      name: 'Facebook',
+      providerId: 'facebook.com',
+      path: require('../assets/PNG/f_logo_RGB-Blue_58.png')
+    }
   });
 
   useEffect(() => {
@@ -56,7 +70,7 @@ const RegistrationForm = props => {
             const newInstance = getOAuthProvider(initProvider);
             setVerifiedInstance(oldInstance);
             setTargetInstance(newInstance);
-            setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} servives for ${rest.email}?`);
+            setDialog(`Looks like you already have an account, cool! Would you like to sign in with ${methods[0]} or enable ${initProvider} services for ${rest.email}?`);
             setAuthMode({merge: true, action: 'link accounts', onClick: () => linkAccounts(methods[0], rest.credential) });
             return;
           })

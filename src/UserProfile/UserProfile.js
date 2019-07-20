@@ -38,6 +38,7 @@ const UserProfile = props => {
         </nav>
         <main className="userProfileMain">
           <button onClick={() => {
+            localStorage.removeItem('potatoStorage');
             firebase.auth().signOut();
             history.push('/');
           }}>

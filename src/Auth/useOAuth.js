@@ -78,7 +78,7 @@ const useOAuth = () => {
   const requestOAuth = async (pendingCred) => {
     if (selection) {
       const authInstance = await getOAuthProvider(selection);
-      sessionStorage.setItem('potatoStorage', 'redirecting');
+      localStorage.setItem('potatoStorage', 'redirecting');
       await firebase.auth().signInWithRedirect(authInstance.instance);
     }
   };

@@ -9,27 +9,30 @@ import {throttling} from './utils.js';
 
 class SessionProvider extends React.Component {
 
-
   handleConnection = (uid, userConfig) => {
     firebase.database().ref('.info/connected').on('value', async snap => {
       // const Uid = uid ? uid : firebase.auth().currentUser.uid;
       const userStatusDatabaseRef = await this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
+      const activityRef = await this.props.firebase.database().ref(`/users/${uid}/activity`);
       // const config = await this.state.userConfig;
       if (snap.val() === false) {
-        const activityInfo = {
-          isOnline: false,
-          lastChanged: firebase.database.ServerValue.TIMESTAMP,
-          userConfig
-        }
+        // const activityInfo = {
+        //   isOnline: false,
+        //   lastChanged: firebase.database.ServerValue.TIMESTAMP,
+        //   ...userConfig
+        // }
+        activityRef.onDisconnect().remove();
         userStatusDatabaseRef.onDisconnect().remove();
         // return;
       } else {
+        const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const activityInfo = {
           isOnline: true,
-          lastChanged: firebase.database.ServerValue.TIMESTAMP,
-          userConfig
-        }
-        if (uid) userStatusDatabaseRef.set(activityInfo);
+          lastChanged: unixStamp
+        };
+        const onlineUser = { ...activityInfo, ...userConfig };
+        if (uid) activityRef.set(activityInfo);
+        if (uid) userStatusDatabaseRef.set(onlineUser);
       }
     });
     //
@@ -121,32 +124,34 @@ class SessionProvider extends React.Component {
     }
   };
 
-  setListeners = (key) => {
-    // const passers = {};
-    // const actives = {};
-    // const subs = {};
-    // const activeUsers = { passers, subs, actives };
-    // const userThrottler = throttling(() => {
-    //   this.setState({ activeUsers });
-    // }, 100);
-    // const usersRef = firebase.database().ref(`users`);
-    // // const subscribedUsers = Object.keys(this.state.activeRoom.users);
-    // usersRef
-    //   .orderByChild('lastVisited')
-    //   .equalTo(key)
-    //   .once('child_changed', snap => {
-    //     const subscribedUsers = Object.keys(this.state.activeRoom.users);
-    //     const isSub = subscribedUsers.includes(snap.key);
-    //     const isActive = snap.val().activity.isOnline;
-    //     if (isActive && !isSub) {
-    //       passers[snap.key] = snap.val();
-    //     } else if (isActive && isSub) {
-    //       actives[snap.key] = snap.val();
-    //     } else if (!isActive && !isSub) {
-    //       subs[snap.key] = snap.val();
-    //     }
-    //     userThrottler();
-    //   });
+  setListeners = (uid, key) => {
+    console.log(uid);
+    const activeSubscribers = [];
+    const userThrottler = throttling(() => {
+      console.log(activeSubscribers);
+      this.setState({ activeSubscribers });
+    }, 100);
+    const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
+    // const subscribedUsers = Object.keys(this.state.activeRoom.users);
+    activeUsersRef
+      .orderByChild('lastChanged')
+      .limitToLast(33)
+      .once('value', snapshot => {
+        snapshot.forEach(user => {
+          activeSubscribers.push(user.val());
+        });
+        // const subscribedUsers = Object.keys(this.state.activeRoom.users);
+        // const isSub = subscribedUsers.includes(snap.key);
+        // const isActive = snap.val().activity.isOnline;
+        // if (isActive && !isSub) {
+        //   passers[snap.key] = snap.val();
+        // } else if (isActive && isSub) {
+        //   actives[snap.key] = snap.val();
+        // } else if (!isActive && !isSub) {
+        //   subs[snap.key] = snap.val();
+        // }
+        userThrottler();
+      });
 
     this.messagesRef
       .orderByChild('roomId')
@@ -195,7 +200,7 @@ class SessionProvider extends React.Component {
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
       await this.setState({ messages, activeRoom, subscriberIds, warning, error, userConfigs }, () => {
-        this.setListeners(roomId);
+        this.setListeners(user.uid, roomId);
         ref.off();
       });
     };
@@ -257,7 +262,7 @@ class SessionProvider extends React.Component {
     const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
-      if (user) this.setListeners(this.state.activeRoom.key);
+      if (user) this.setListeners(user.uid, this.state.activeRoom.key);
     });
   };
 
@@ -268,14 +273,15 @@ class SessionProvider extends React.Component {
       if (user != null) {
         const { providerData, ...rest } = user;
         const { displayName, email, photoURL, emailVerified, uid } = rest;
-          const authProviders = providerData.map(profile => {
+        const authProviders = providerData.map(profile => {
           return {...profile};
         });
+        const { userConfig } = await new RealTimeApi().getUserConfig(uid);
+        // const lastVisited = userConfig ? userConfig.lastVisited : {};
         const authProfile = {
           displayName, email, photoURL, emailVerified, uid, authProviders
         };
         this.handleConnection(uid, authProfile);
-        const { userConfig } = await new RealTimeApi().getUserConfig(uid);
         if (userConfig) {
           this.initializeApp(user, foreignState, userConfig, null);
         } else {

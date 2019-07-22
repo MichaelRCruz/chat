@@ -119,14 +119,14 @@ class SessionProvider extends React.Component {
 
   setListeners = (uid, key) => {
 
-    const activeSubs = [];
+    let activeSubs = [];
     let connectedSubs = [];
     let disconnectedSubs = [];
 
     const userThrottler = throttling(() => {
       this.setState({ activeSubs, connectedSubs, disconnectedSubs }, () => {
-        connectedSubs = [];
-        disconnectedSubs = [];
+        // connectedSubs = [];
+        // disconnectedSubs = [];
       });
     }, 100);
 
@@ -136,14 +136,22 @@ class SessionProvider extends React.Component {
       .orderByChild('lastChanged')
       .once('value', snap => {
         snap.forEach(user => {
+          activeSubs = [];
           activeSubs.push(user.val());
         });
         userThrottler();
       });
 
     activeUsersRef
+      .on('child_changed', snap => {
+        console.log(snap.val());
+        // userThrottler();
+      });
+
+    activeUsersRef
       .limitToLast(1)
       .on('child_added', snap => {
+        connectedSubs = [];
         const user = snap.val();
         connectedSubs.push(user);
         userThrottler();
@@ -152,6 +160,7 @@ class SessionProvider extends React.Component {
     activeUsersRef
       .limitToLast(1)
       .on('child_removed', snap => {
+        disconnectedSubs = [];
         const user = snap.val();
         disconnectedSubs.push(user);
         userThrottler();

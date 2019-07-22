@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Modal from '../Modal/Modal.js';
 import useOAuth from '../Auth/useOAuth.js';
 import SessionContext from '../SessionContext.js';
@@ -10,7 +10,8 @@ const UserProfile = props => {
   const { history, isSignedOut } = props;
 
   // const oAuth = useOAuth(false);
-  // const muhContext = useContext(SessionContext);
+  const sessionContext = useContext(SessionContext);
+  const { user } = sessionContext.state;
 
   // const loadingAnimation = (
   //   <aside className="modalHeader">
@@ -43,7 +44,7 @@ const UserProfile = props => {
           </button>
         </nav>
         <main className="userProfileMain">
-          <button onClick={() => props.handleSignOut()}>
+          <button onClick={() => props.handleSignOut(user.uid)}>
             click here to sign out
           </button>
         </main>

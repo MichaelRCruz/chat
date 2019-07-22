@@ -118,47 +118,46 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (uid, key) => {
-    console.log(uid);
-    const activeSubscribers = [];
+
+    const activeSubs = [];
+    let connectedSubs = [];
+    let disconnectedSubs = [];
+
     const userThrottler = throttling(() => {
-      console.log(activeSubscribers);
-      this.setState({ activeSubscribers });
+      this.setState({ activeSubs, connectedSubs, disconnectedSubs }, () => {
+        connectedSubs = [];
+        disconnectedSubs = [];
+      });
     }, 100);
+
     const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
-    // const subscribedUsers = Object.keys(this.state.activeRoom.users);
+
     activeUsersRef
       .orderByChild('lastChanged')
-      .limitToLast(33)
       .once('value', snapshot => {
         snapshot.forEach(user => {
-          activeSubscribers.push(user.val());
+          activeSubs.push(user.val());
         });
         userThrottler();
       });
 
-    this.messagesRef
-      .orderByChild('roomId')
-      .equalTo(key)
+    activeUsersRef
+      .orderByChild('lastChanged')
       .limitToLast(1)
-      .on('child_added', async snapshot => {
-        if (snapshot.val().roomId === key) {
-          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
-          this.setState({ messages });
-        }
+      .on('child_added', snap => {
+        const user = snap.val();
+        connectedSubs.push(user);
+        userThrottler();
       });
-    this.messagesRef
-      .orderByChild('roomId')
-      .equalTo(key)
+
+    activeUsersRef
+      .orderByChild('lastChanged')
       .limitToLast(1)
-      .on('child_removed', async snapshot  => {
-        if (snapshot.val().roomId === key) {
-          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
-          // const deletedKey = snapshot.key;
-          // const { [deletedKey]: something, ...rest } = this.state.messages;
-          // const newMessages = Object.assign({}, rest);
-          this.setState({ messages });
-        }
-    });
+      .on('child_removed', snap => {
+        const user = snap.val();
+        disconnectedSubs.push(user);
+        userThrottler();
+      });
   };
 
   reconcileActiveRoom = async roomId => {

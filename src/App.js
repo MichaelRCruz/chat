@@ -34,7 +34,11 @@ const App = props => {
     });
   });
 
-  const handleSignOut = () => {
+  const handleSignOut = async uid => {
+    const userStatusDatabaseRef = await props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
+    const activityRef = await props.firebase.database().ref(`/users/${uid}/activity`);
+    await activityRef.remove();
+    await userStatusDatabaseRef.remove();
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
     setIsSignedOut(true);

@@ -11,6 +11,7 @@ const App = props => {
 
   // const [isSignedOut, setIsSignedOut] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
+  const [isSignedOut, setIsSignedOut] = useState(false);
 
   const foreignState = () => {
     const foreignState = {};
@@ -36,6 +37,7 @@ const App = props => {
   const handleSignOut = () => {
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
+    setIsSignedOut(true);
     setIsAuth(false);
   }
 
@@ -48,7 +50,7 @@ const App = props => {
             return <Splash isAuth={isAuth} {...duhProps} />;
           }} />
           <Route strict path='/auth/' {...routeProps} render={muhProps => {
-            return <Auth isAuth={isAuth} {...muhProps} />;
+            return <Auth isSignedOut={isSignedOut} {...muhProps} />;
           }} />
           <SessionProvider foreignState={foreignState()} firebase={props.firebase}>
             <Route exact path='/chat/dashboard' component={Dashboard} />
@@ -59,7 +61,9 @@ const App = props => {
                 return <UserProfile {...profileProps} firebase={props.firebase} handleSignOut={handleSignOut} />
               }
             }} />
-            <Route exact path='/chat/rooms' component={Chat} />
+            <Route exact path='/chat/rooms' render={luhProps => {
+              return <Chat isAuth={isAuth} {...luhProps} />
+            }} />
             <Route component={null} />
           </SessionProvider>
         </React.Fragment>

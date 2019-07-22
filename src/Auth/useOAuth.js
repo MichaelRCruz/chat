@@ -93,7 +93,6 @@ const useOAuth = () => {
           setAdditionalUserInfo(additionalUserInfo);
           setIsNewUser(isNewUser);
           setOAuthResponse(result);
-
         }
         const cred = window.sessionStorage.getItem('pendingCred');
         const parsedCred = firebase.auth.AuthCredential.fromJSON(cred);
@@ -113,6 +112,7 @@ const useOAuth = () => {
       });
     return () => {
       setSelection(false);
+      // setIsOAuthCanceled(true);
     }
   }, [selection]);
 

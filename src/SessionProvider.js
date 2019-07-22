@@ -268,7 +268,7 @@ class SessionProvider extends React.Component {
       if (user != null) {
         const { providerData, ...rest } = user;
         const { displayName, email, photoURL, emailVerified, uid } = rest;
-        const authProviders = providerData.map(profile => {
+          const authProviders = providerData.map(profile => {
           return {...profile};
         });
         const authProfile = {

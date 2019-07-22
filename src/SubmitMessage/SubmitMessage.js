@@ -37,7 +37,7 @@ const Messages = () => {
     textarea.style.height = 0;
     textarea.style.height = textarea.scrollHeight + "px";
     return () => {
-      console.log(formValues.message);
+      // console.log(formValues.message);
     }
   }, [formErrors, formValues]);
 

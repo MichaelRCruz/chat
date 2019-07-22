@@ -1,11 +1,15 @@
 import React from 'react';
 import * as firebase from 'firebase';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import './Splash.css';
 
 class Splash extends React.Component  {
 
   render() {
+    // console.log(this.props);
+    if (this.props.isAuth) {
+      return <Redirect to={'/chat/rooms/?rm=lastVisited'} />
+    }
     return (
       <div className="splashComponent">
         <header className="splashHeader">

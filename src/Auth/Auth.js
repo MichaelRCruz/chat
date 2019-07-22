@@ -34,14 +34,14 @@ const Auth = props => {
   } = useOAuth();
   const { authEmail, isAuthLinkSent, setIsAuthLinkSent, setAuthEmail, signInWithLink, authLinkUser, needsConfirmation, setNeedsConfirmation } = useAuthLink();
 
-  const { isSignedOut } = props;
+  const { isAuth } = props;
 
   useEffect(() => {
     return () => {
       setIsAuthLinkSent(false);
       setIsOAuthCanceled(true);
     }
-  }, [oAuthResponse, isAuthLinkSent]);
+  }, [oAuthResponse, isAuthLinkSent, isAuth]);
 
 	return (
 		<Fragment>
@@ -72,7 +72,7 @@ const Auth = props => {
             authToast={authToast}
             isAuthenticated={isAuthenticated}
             setIsAuthenticated={setIsAuthenticated}
-            isSignedOut={isSignedOut}
+            isAuth={isAuth}
           />
         );
       }} />

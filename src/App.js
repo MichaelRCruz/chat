@@ -9,7 +9,8 @@ import SessionProvider from './SessionProvider.js';
 
 const App = props => {
 
-  const [isSignedOut, setIsSignedOut] = useState(false);
+  // const [isSignedOut, setIsSignedOut] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   const foreignState = () => {
     const foreignState = {};
@@ -22,41 +23,46 @@ const App = props => {
   }
 
   useEffect(() => {
-    // const user = props.firebase.auth().currentUser;
-    // if (user) {
-    //   setIsSignedOut(false);
-    // } else if (!user) {
-      // setIsSignedOut(true);
-    // }
+    props.firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        setIsAuth(true);
+      } else if (!user) {
+        // localStorage.removeItem('potatoStorage');
+        setIsAuth(false);
+      }
+    });
   });
 
   const handleSignOut = () => {
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
-    setIsSignedOut(true);
-    // setIsSignedOut(true);
+    setIsAuth(false);
   }
 
   return (
     <Route render={routeProps => {
       const { history } = props;
       return (
-        <SessionProvider foreignState={foreignState()} firebase={props.firebase}>
-          <Route exact path='/' component={Splash} />
+        <React.Fragment>
+          <Route exact path='/' {...routeProps} render={duhProps => {
+            return <Splash isAuth={isAuth} {...duhProps} />;
+          }} />
           <Route strict path='/auth/' {...routeProps} render={muhProps => {
-            return <Auth isSignedOut={isSignedOut} {...muhProps} />;
+            return <Auth isAuth={isAuth} {...muhProps} />;
           }} />
-          <Route exact path='/chat/dashboard' component={Dashboard} />
-          <Route exact path='/chat/userProfile' {...routeProps} render={profileProps => {
-            if (isSignedOut) {
-              return <Redirect to={'/'} />
-            } else {
-              return <UserProfile {...profileProps} firebase={props.firebase} handleSignOut={handleSignOut} isSignedOut={isSignedOut} />
-            }
-          }} />
-          <Route exact path='/chat/rooms' component={Chat} />
-          <Route component={null} />
-        </SessionProvider>
+          <SessionProvider foreignState={foreignState()} firebase={props.firebase}>
+            <Route exact path='/chat/dashboard' component={Dashboard} />
+            <Route exact path='/chat/userProfile' {...routeProps} render={profileProps => {
+              if (!isAuth) {
+                return <Redirect to={'/'} />
+              } else {
+                return <UserProfile {...profileProps} firebase={props.firebase} handleSignOut={handleSignOut} />
+              }
+            }} />
+            <Route exact path='/chat/rooms' component={Chat} />
+            <Route component={null} />
+          </SessionProvider>
+        </React.Fragment>
       );
     }} />
   );

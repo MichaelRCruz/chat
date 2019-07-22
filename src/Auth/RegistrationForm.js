@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 
 const RegistrationForm = props => {
 
-  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo, isSignedOut } = props;
+  const { setSelection, authEmail, handleClose, oAuthResponse, dead, setAuthEmail, isAuthLinkSent, initProvider, getOAuthProvider, linkAccounts, unLinkAccount, redirectToWaiting, needsConfirmation, updateUserDetails, authToast, authLinkUser, redirectToChat, isAuthenticated, setIsAuthenticated, redirectToAuthChat, redirectTo, isSignedOut, isAuth } = props;
   const formCallback = (payload, event, clear) => {
     if (authMode.register) setAuthEmail(payload.email);
     if (authMode.newUser) {
@@ -60,7 +60,6 @@ const RegistrationForm = props => {
 
   useEffect(() => {
     if (!dead && oAuthResponse) {
-      console.log(isSignedOut);
       const { code, additionalUserInfo, ...rest } = oAuthResponse;
       const isNewUser = additionalUserInfo ? additionalUserInfo.isNewUser : false;
       const initProvider = rest.credential.providerId;
@@ -79,9 +78,11 @@ const RegistrationForm = props => {
             console.log(error);
           });
       } else if (isNewUser) {
+        localStorage.removeItem('potatoStorage');
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account'});
-      } else if (!isSignedOut) {
+      } else {
+        localStorage.removeItem('potatoStorage');
         redirectTo('/chat/rooms/?rm=lastVisited');
       }
     } else if (isAuthLinkSent && !needsConfirmation) {
@@ -92,6 +93,7 @@ const RegistrationForm = props => {
         setDialog('Welcome! Create a display name and a password for extra security :)');
         setAuthMode({ newUser: true, action: 'create account' });
       } else if (isAuthenticated) {
+        localStorage.removeItem('potatoStorage');
         redirectTo('/chat/rooms/?rm=lastVisited');
       }
     }

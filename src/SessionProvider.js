@@ -11,16 +11,9 @@ class SessionProvider extends React.Component {
 
   handleConnection = (uid, userConfig) => {
     firebase.database().ref('.info/connected').on('value', async snap => {
-      // const Uid = uid ? uid : firebase.auth().currentUser.uid;
       const userStatusDatabaseRef = await this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await this.props.firebase.database().ref(`/users/${uid}/activity`);
-      // const config = await this.state.userConfig;
       if (snap.val() === false) {
-        // const activityInfo = {
-        //   isOnline: false,
-        //   lastChanged: firebase.database.ServerValue.TIMESTAMP,
-        //   ...userConfig
-        // }
         activityRef.onDisconnect().remove();
         userStatusDatabaseRef.onDisconnect().remove();
         // return;
@@ -140,16 +133,6 @@ class SessionProvider extends React.Component {
         snapshot.forEach(user => {
           activeSubscribers.push(user.val());
         });
-        // const subscribedUsers = Object.keys(this.state.activeRoom.users);
-        // const isSub = subscribedUsers.includes(snap.key);
-        // const isActive = snap.val().activity.isOnline;
-        // if (isActive && !isSub) {
-        //   passers[snap.key] = snap.val();
-        // } else if (isActive && isSub) {
-        //   actives[snap.key] = snap.val();
-        // } else if (!isActive && !isSub) {
-        //   subs[snap.key] = snap.val();
-        // }
         userThrottler();
       });
 
@@ -277,7 +260,6 @@ class SessionProvider extends React.Component {
           return {...profile};
         });
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
-        // const lastVisited = userConfig ? userConfig.lastVisited : {};
         const authProfile = {
           displayName, email, photoURL, emailVerified, uid, authProviders
         };

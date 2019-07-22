@@ -142,7 +142,6 @@ class SessionProvider extends React.Component {
       });
 
     activeUsersRef
-      .orderByChild('lastChanged')
       .limitToLast(1)
       .on('child_added', snap => {
         const user = snap.val();
@@ -151,7 +150,6 @@ class SessionProvider extends React.Component {
       });
 
     activeUsersRef
-      .orderByChild('lastChanged')
       .limitToLast(1)
       .on('child_removed', snap => {
         const user = snap.val();

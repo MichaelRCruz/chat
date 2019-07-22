@@ -134,9 +134,9 @@ class SessionProvider extends React.Component {
 
     activeUsersRef
       .orderByChild('lastChanged')
-      .once('value', snapshot => {
-        snapshot.forEach(user => {
-          activeSubs.push(user.val());
+      .once('value', snap => {
+        snap.forEach(user => {
+          if (user.lastVisited === key) activeSubs.push(user.val());
         });
         userThrottler();
       });

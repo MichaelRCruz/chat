@@ -200,6 +200,7 @@ const RegistrationForm = props => {
         redirectTo('/');
       }}>
         <i className="material-icons clearIcon">clear</i>
+        <p>for dev puposes only, proceed at your own risk </p>
       </button>
       <div className="loadingAnimation" />
     </aside>

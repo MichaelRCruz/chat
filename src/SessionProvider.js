@@ -122,47 +122,54 @@ class SessionProvider extends React.Component {
     let activeSubs = [];
     let connectedSubs = [];
     let disconnectedSubs = [];
+    let traffic = [];
 
     const userThrottler = throttling(() => {
-      this.setState({ activeSubs, connectedSubs, disconnectedSubs }, () => {
-        activeSubs = [];
+      // const newTrafficRef = trafficRef.push();
+      // await newTrafficRef.set(traffic[traffic.length - 1]);
+      this.setState({ activeSubs, connectedSubs, disconnectedSubs, traffic: traffic.slice(0) }, () => {
         connectedSubs = [];
         disconnectedSubs = [];
       });
     }, 100);
 
     const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
+    const trafficRef = firebase.database().ref(`/TRAFFIC`);
+    // const trafficRef = await firebase.database().ref(`/TRAFFIC`);
+    // const trafficRef = firebase.database().ref(`/TRAFFIC`);
 
     activeUsersRef
       .orderByChild('lastChanged')
       .once('value', snap => {
         snap.forEach(user => {
-          activeSubs = [];
+          // activeSubs = [];
           activeSubs.push(user.val());
         });
         userThrottler();
       });
 
-    activeUsersRef
-      .on('child_changed', snap => {
-        console.log(snap.val());
-        // userThrottler();
+    trafficRef
+      .on('child_added', snap => {
+        traffic.push(snap.val());
+        userThrottler();
       });
 
     activeUsersRef
       .limitToLast(1)
-      .on('child_added', snap => {
-        // connectedSubs = [];
+      .on('child_added', async snap => {
         const user = snap.val();
+        const newTrafficRef = trafficRef.push();
+        await newTrafficRef.set(user);
         connectedSubs.push(user);
         userThrottler();
       });
 
     activeUsersRef
       .limitToLast(1)
-      .on('child_removed', snap => {
-        // disconnectedSubs = [];
+      .on('child_removed', async snap => {
         const user = snap.val();
+        const newTrafficRef = trafficRef.push();
+        await newTrafficRef.set(user);
         disconnectedSubs.push(user);
         userThrottler();
       });

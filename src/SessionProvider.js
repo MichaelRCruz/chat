@@ -11,13 +11,19 @@ class SessionProvider extends React.Component {
 
   handleConnection = (uid, userConfig) => {
     firebase.database().ref('.info/connected').on('value', async snap => {
+      const trafficRef = await this.props.firebase.database().ref(`/TRAFFIC`);
       const userStatusDatabaseRef = await this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await this.props.firebase.database().ref(`/users/${uid}/activity`);
+      // const newTrafficRef = await trafficRef.push();
       if (snap.val() === false) {
-        activityRef.onDisconnect().remove();
-        userStatusDatabaseRef.onDisconnect().remove();
+        const newTrafficRef = await trafficRef.push();
+        const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
+        await userStatusDatabaseRef.onDisconnect().remove();
+        await activityRef.onDisconnect().remove();
+        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'OFFLINE' });
         // return;
       } else {
+        const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const activityInfo = {
           isOnline: true,
@@ -26,6 +32,7 @@ class SessionProvider extends React.Component {
         const onlineUser = { ...activityInfo, ...userConfig };
         if (uid) activityRef.set(activityInfo);
         if (uid) userStatusDatabaseRef.set(onlineUser);
+        if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'ONLINE' });
       }
     });
     //
@@ -130,6 +137,7 @@ class SessionProvider extends React.Component {
       this.setState({ activeSubs, connectedSubs, disconnectedSubs, traffic: traffic.slice(0) }, () => {
         connectedSubs = [];
         disconnectedSubs = [];
+        activeSubs = [];
       });
     }, 100);
 
@@ -138,19 +146,32 @@ class SessionProvider extends React.Component {
     // const trafficRef = await firebase.database().ref(`/TRAFFIC`);
     // const trafficRef = firebase.database().ref(`/TRAFFIC`);
 
+    trafficRef
+      .on('child_added', snap => {
+        const user = snap.val();
+        // const userId = snap.val().uid;
+        // console.log(uid);
+        traffic.push(snap.val());
+        // traffic.push(snap.val());
+        userThrottler();
+      });
+
+    // trafficRef
+    //   .on('child_removed', snap => {
+    //     const user = snap.val();
+    //     const userId = snap.val().uid;
+    //     console.log(uid);
+    //     if (userId !== uid) traffic.push(snap.val())
+    //     // traffic.push(snap.val());
+    //     userThrottler();
+    //   });
+
     activeUsersRef
       .orderByChild('lastChanged')
       .once('value', snap => {
         snap.forEach(user => {
-          // activeSubs = [];
           activeSubs.push(user.val());
         });
-        userThrottler();
-      });
-
-    trafficRef
-      .on('child_added', snap => {
-        traffic.push(snap.val());
         userThrottler();
       });
 
@@ -158,8 +179,9 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snap => {
         const user = snap.val();
-        const newTrafficRef = trafficRef.push();
-        await newTrafficRef.set(user);
+        user['action'] = 'ONLINE';
+        // const newTrafficRef = trafficRef.push();
+        // await newTrafficRef.set(user);
         connectedSubs.push(user);
         userThrottler();
       });
@@ -168,8 +190,9 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_removed', async snap => {
         const user = snap.val();
-        const newTrafficRef = trafficRef.push();
-        await newTrafficRef.set(user);
+        user['action'] = 'OFFLINE';
+        // const newTrafficRef = trafficRef.push();
+        // await newTrafficRef.set(user);
         disconnectedSubs.push(user);
         userThrottler();
       });
@@ -198,7 +221,7 @@ class SessionProvider extends React.Component {
           this.setState({ messages });
         }
       });
-      
+
   };
 
   reconcileActiveRoom = async roomId => {

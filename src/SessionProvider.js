@@ -153,6 +153,7 @@ class SessionProvider extends React.Component {
         // console.log(uid);
         traffic.push(snap.val());
         // traffic.push(snap.val());
+        console.log(snap.val());
         userThrottler();
       });
 
@@ -179,7 +180,7 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snap => {
         const user = snap.val();
-        user['action'] = 'ONLINE';
+        // user['action'] = 'ONLINE';
         // const newTrafficRef = trafficRef.push();
         // await newTrafficRef.set(user);
         connectedSubs.push(user);
@@ -190,7 +191,7 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_removed', async snap => {
         const user = snap.val();
-        user['action'] = 'OFFLINE';
+        // user['action'] = 'OFFLINE';
         // const newTrafficRef = trafficRef.push();
         // await newTrafficRef.set(user);
         disconnectedSubs.push(user);
@@ -288,6 +289,7 @@ class SessionProvider extends React.Component {
     messages: {},
     subscribedRooms: [],
     userConfigs: {},
+    traffic: [],
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Rooms from '../Rooms/Rooms';
 import Users from '../Users/Users';
+import Traffic from '../Users/Traffic';
 import SessionContext from '../SessionContext.js';
 import './Menu.css';
 
@@ -10,7 +11,7 @@ class Menu extends React.Component {
 
   render() {
 
-    const { user } = this.context.state;
+    const { user, traffic, activeSubs } = this.context.state;
 
     return (
       <aside className="menuComponent">
@@ -26,7 +27,9 @@ class Menu extends React.Component {
           <h1>rooms</h1>
           <Rooms />
           <h1>members</h1>
-          <Users />
+          <Users sctiveSubs={activeSubs} />
+          <h1>traffic</h1>
+          <Traffic traffic={traffic} />
         </div>
       </aside>
     );

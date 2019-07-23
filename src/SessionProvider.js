@@ -11,19 +11,8 @@ class SessionProvider extends React.Component {
 
   handleConnection = async (uid, userConfig) => {
     const db = firebase.database();
-    const trafficRef = await db.ref(`/TRAFFIC`);
-    await trafficRef.orderByChild('lastChanged').limitToFirst(1).once("value")
-      .then(snap => {
-        snap.forEach(async childSnap => {
-          const trafficRef = await db.ref(`/TRAFFIC/${childSnap.key}`);
-          await trafficRef.onDisconnect().remove();
-          // revisit this
-          trafficRef.remove();
-          return true;
-      });
-    });
     await db.ref('.info/connected').on('value', async snap => {
-      // const db = firebase.database();
+      const db = firebase.database();
       const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await db.ref(`/users/${uid}/activity`);
       if (snap.val() === false) {

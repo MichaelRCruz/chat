@@ -34,11 +34,15 @@ const App = props => {
     });
   });
 
-  const handleSignOut = async uid => {
-    const userStatusDatabaseRef = await props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
-    const activityRef = await props.firebase.database().ref(`/users/${uid}/activity`);
+  const handleSignOut = async userConfig => {
+    const unixStamp = await props.firebase.database.ServerValue.TIMESTAMP;
+    const userStatusDatabaseRef = await props.firebase.database().ref(`/USERS_ONLINE/${userConfig.key}`);
+    const activityRef = await props.firebase.database().ref(`/users/${userConfig.key}/activity`);
+    const trafficRef = await props.firebase.database().ref(`/TRAFFIC`);
+    const newTrafficRef = await trafficRef.push();
     await activityRef.remove();
     await userStatusDatabaseRef.remove();
+    await newTrafficRef.set({ ...userConfig, unixStamp, action: 'OFFLINE' });
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
     setIsSignedOut(true);

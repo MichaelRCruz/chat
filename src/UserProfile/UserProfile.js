@@ -11,7 +11,7 @@ const UserProfile = props => {
 
   // const oAuth = useOAuth(false);
   const sessionContext = useContext(SessionContext);
-  const { user } = sessionContext.state;
+  const { userConfig } = sessionContext.state;
 
   // const loadingAnimation = (
   //   <aside className="modalHeader">
@@ -44,7 +44,7 @@ const UserProfile = props => {
           </button>
         </nav>
         <main className="userProfileMain">
-          <button onClick={() => props.handleSignOut(user.uid)}>
+          <button onClick={() => props.handleSignOut(userConfig)}>
             click here to sign out
           </button>
         </main>

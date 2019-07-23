@@ -5,10 +5,10 @@ import './Users.css';
 
 const Users = props => {
 
-  const { activeSubs } = props;
-  const subs = activeSubs ? activeSubs : [];
+  const { activeUsers } = props;
+  const users = activeUsers ? activeUsers : [];
 
-  const subscribers = subs.map((user, i) => {
+  const subscribers = users.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     console.log(uid);
     return (

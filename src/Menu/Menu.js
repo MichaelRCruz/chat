@@ -11,7 +11,7 @@ class Menu extends React.Component {
 
   render() {
 
-    const { user, traffic, activeSubs } = this.context.state;
+    const { user, traffic, activeUsers } = this.context.state;
 
     return (
       <aside className="menuComponent">
@@ -27,7 +27,7 @@ class Menu extends React.Component {
           <h1>rooms</h1>
           <Rooms />
           <h1>members</h1>
-          <Users activeSubs={activeSubs} />
+          <Users activeUsers={activeUsers} />
           <h1>traffic</h1>
           <Traffic traffic={traffic} />
         </div>

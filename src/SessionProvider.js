@@ -10,8 +10,8 @@ import {throttling} from './utils.js';
 class SessionProvider extends React.Component {
 
   handleConnection = async (uid, userConfig) => {
-    const db = firebase.database();
-    await db.ref('.info/connected').on('value', async snap => {
+    // const db = firebase.database();
+    firebase.database().ref('.info/connected').on('value', async snap => {
       const db = firebase.database();
       const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await db.ref(`/users/${uid}/activity`);
@@ -128,32 +128,21 @@ class SessionProvider extends React.Component {
 
   setListeners = (uid, key) => {
 
-    let activeSubs = [];
-    let connectedSubs = [];
-    let disconnectedSubs = [];
+    let activeUsers = [];
     let traffic = [];
-    let removedUsers = [];
     let removed = [];
 
     const userThrottler = throttling(async () => {
-      // if (removed.length) this.setState({ traffic: traffic.filter(person => {
-      //   return person.
-      // })}, () => {
-      //   removed = [];
-      // });
-      // const deletedUserStamp = removed[0] ? removed[0].unixStamp : null;
       const target = this.state.traffic[0];
       const timeStamp = target ? target.unixStamp : null;
       traffic = traffic.filter(user => {
         return user.unixStamp !== timeStamp;
       });
+      activeUsers = activeUsers.filter(user => {
+        return user.uid === uid;
+      });
       // traffic = traffic.slice(0);
-      await this.setState({
-        activeSubs, connectedSubs, disconnectedSubs, traffic
-      }, () => {
-        connectedSubs = [];
-        disconnectedSubs = [];
-        activeSubs = [];
+      this.setState({ activeUsers, traffic }, () => {
         removed = [];
       });
     }, 100);
@@ -178,27 +167,20 @@ class SessionProvider extends React.Component {
       });
 
     activeUsersRef
-      .orderByChild('lastChanged')
-      .once('value', snap => {
-        snap.forEach(user => {
-          activeSubs.push(user.val());
-        });
-        userThrottler();
-      });
-
-    activeUsersRef
-      .limitToLast(1)
-      .on('child_added', async snap => {
+      .orderByChild('uid')
+      .equalTo(uid)
+      .on('child_added', snap => {
         const user = snap.val();
-        connectedSubs.push(user);
+        activeUsers.push(user);
         userThrottler();
       });
 
     activeUsersRef
+      .orderByChild('lastChanged')
       .limitToLast(1)
       .on('child_removed', async snap => {
         const user = snap.val();
-        disconnectedSubs.push(user);
+        activeUsers.push(user);
         userThrottler();
       });
 
@@ -292,6 +274,7 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
+    activeUsers: [],
     userConfigs: {},
     traffic: [],
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null

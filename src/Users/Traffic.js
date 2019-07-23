@@ -9,11 +9,10 @@ const Traffic = props => {
 
   const { traffic } = props;
   const _traffic = traffic ? traffic : [];
-  const actions = _traffic.map((action, i) => {
-    const { photoURL, displayName, activity, key } = action;
-    console.log(photoURL, displayName, activity, key);
+  const actions = _traffic.map((user, i) => {
+    const { photoURL, displayName, action, key } = user;
     return (
-      <li className="onlineUser" key={key}>
+      <li className="onlineUser" key={i}>
         <div className={"userContainer"}>
           <img
             className="userMenuImage"
@@ -21,8 +20,8 @@ const Traffic = props => {
             src={ photoURL || defaultUserImage}
            />
           <div className="menuDisplayName">{displayName}</div>
-          <p className="menuDisplayName">{activity}</p>
         </div>
+        <p>{action}</p>
       </li>
     );
   });

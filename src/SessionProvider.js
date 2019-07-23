@@ -9,13 +9,25 @@ import {throttling} from './utils.js';
 
 class SessionProvider extends React.Component {
 
-  handleConnection = (uid, userConfig) => {
-    firebase.database().ref('.info/connected').on('value', async snap => {
-      const trafficRef = await this.props.firebase.database().ref(`/TRAFFIC`);
-      const userStatusDatabaseRef = await this.props.firebase.database().ref(`/USERS_ONLINE/${uid}`);
-      const activityRef = await this.props.firebase.database().ref(`/users/${uid}/activity`);
-      // const newTrafficRef = await trafficRef.push();
+  handleConnection = async (uid, userConfig) => {
+    const db = firebase.database();
+    const trafficRef = await db.ref(`/TRAFFIC`);
+    await trafficRef.orderByChild('lastChanged').limitToFirst(1).once("value")
+      .then(snap => {
+        snap.forEach(async childSnap => {
+          const trafficRef = await db.ref(`/TRAFFIC/${childSnap.key}`);
+          await trafficRef.onDisconnect().remove();
+          // revisit this
+          trafficRef.remove();
+          return true;
+      });
+    });
+    await db.ref('.info/connected').on('value', async snap => {
+      // const db = firebase.database();
+      const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
+      const activityRef = await db.ref(`/users/${uid}/activity`);
       if (snap.val() === false) {
+        const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         await userStatusDatabaseRef.onDisconnect().remove();
@@ -23,6 +35,7 @@ class SessionProvider extends React.Component {
         await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'OFFLINE' });
         // return;
       } else {
+        const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const activityInfo = {
@@ -36,7 +49,7 @@ class SessionProvider extends React.Component {
       }
     });
     //
-    // const muhUpdateRef = this.props.firebase.database().ref(`/USERS_ONLINE`);
+    // const muhUpdateRef = db.ref(`/USERS_ONLINE`);
     // let users = [];
     // const userThrottler = throttling(() => {
     //   this.setState({onlineUsers: users.slice(0)});
@@ -130,42 +143,50 @@ class SessionProvider extends React.Component {
     let connectedSubs = [];
     let disconnectedSubs = [];
     let traffic = [];
+    let removedUsers = [];
+    let removed = [];
 
-    const userThrottler = throttling(() => {
-      // const newTrafficRef = trafficRef.push();
-      // await newTrafficRef.set(traffic[traffic.length - 1]);
-      this.setState({ activeSubs, connectedSubs, disconnectedSubs, traffic: traffic.slice(0) }, () => {
+    const userThrottler = throttling(async () => {
+      // if (removed.length) this.setState({ traffic: traffic.filter(person => {
+      //   return person.
+      // })}, () => {
+      //   removed = [];
+      // });
+      // const deletedUserStamp = removed[0] ? removed[0].unixStamp : null;
+      const target = this.state.traffic[0];
+      const timeStamp = target ? target.unixStamp : null;
+      traffic = traffic.filter(user => {
+        return user.unixStamp !== timeStamp;
+      });
+      // traffic = traffic.slice(0);
+      await this.setState({
+        activeSubs, connectedSubs, disconnectedSubs, traffic
+      }, () => {
         connectedSubs = [];
         disconnectedSubs = [];
         activeSubs = [];
+        removed = [];
       });
     }, 100);
 
     const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
     const trafficRef = firebase.database().ref(`/TRAFFIC`);
-    // const trafficRef = await firebase.database().ref(`/TRAFFIC`);
-    // const trafficRef = firebase.database().ref(`/TRAFFIC`);
 
     trafficRef
+      .limitToLast(5)
       .on('child_added', snap => {
         const user = snap.val();
-        // const userId = snap.val().uid;
-        // console.log(uid);
-        traffic.push(snap.val());
-        // traffic.push(snap.val());
-        console.log(snap.val());
+        traffic.push(user);
         userThrottler();
       });
 
-    // trafficRef
-    //   .on('child_removed', snap => {
-    //     const user = snap.val();
-    //     const userId = snap.val().uid;
-    //     console.log(uid);
-    //     if (userId !== uid) traffic.push(snap.val())
-    //     // traffic.push(snap.val());
-    //     userThrottler();
-    //   });
+    trafficRef
+      .limitToLast(1)
+      .on('child_removed', snap => {
+        const user = snap.val();
+        removed.push(user);
+        userThrottler();
+      });
 
     activeUsersRef
       .orderByChild('lastChanged')
@@ -180,9 +201,6 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snap => {
         const user = snap.val();
-        // user['action'] = 'ONLINE';
-        // const newTrafficRef = trafficRef.push();
-        // await newTrafficRef.set(user);
         connectedSubs.push(user);
         userThrottler();
       });
@@ -191,9 +209,6 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_removed', async snap => {
         const user = snap.val();
-        // user['action'] = 'OFFLINE';
-        // const newTrafficRef = trafficRef.push();
-        // await newTrafficRef.set(user);
         disconnectedSubs.push(user);
         userThrottler();
       });

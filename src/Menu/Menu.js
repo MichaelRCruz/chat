@@ -27,7 +27,7 @@ class Menu extends React.Component {
           <h1>rooms</h1>
           <Rooms />
           <h1>members</h1>
-          <Users sctiveSubs={activeSubs} />
+          <Users activeSubs={activeSubs} />
           <h1>traffic</h1>
           <Traffic traffic={traffic} />
         </div>

@@ -3,41 +3,33 @@ import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import './Users.css';
 
-class Users extends React.Component {
+const Users = props => {
 
-  static contextType = SessionContext;
+  const { activeSubs } = props;
+  const subs = activeSubs ? activeSubs : [];
 
-  render() {
-    // const { userConfigs={}, activeUsers={} } = this.context.state;
-    // console.log(activeUsers.actives);
-    // console.log(userConfigs);
-    // const entries = activeUsers ? activeUsers.actives : {};
-    // const muhUsers = Object.entries(userConfigs);
-    // const subscribers = muhUsers.map((usr, i) => {
-    //   const { photoURL, displayName, activity } = userConfigs[usr[0]];
-    //   const isOnline = activity.isOnline;
-    //   return (
-    //     <li className="onlineUser" key={usr[0]}>
-    //       <div className={"userContainer"}>
-    //         <button className="inspectUserButton">
-    //           <div className="innderButton">
-    //             <img
-    //               className="userMenuImage"
-    //               alt="user"
-    //               src={photorlL || defaultUserImage}
-    //              />
-    //             <p className="menuDisplayName">{displayName}</p>
-    //           </div>
-    //         </button>
-    //       </div>
-    //       <div className={isOnline ? "indicator isGreen" : "indicator" }></div>
-    //     </li>
-    //   );
-    // });
+  const subscribers = subs.map((user, i) => {
+    const { photoURL, displayName, action, uid } = user;
+    console.log(uid);
     return (
-      null
+      <li className="onlineUser" key={uid}>
+        <div className={"userContainer"}>
+          <img
+            className="userMenuImage"
+            alt="user"
+            src={ photoURL || defaultUserImage}
+           />
+          <div className="menuDisplayName">{displayName}</div>
+        </div>
+        <p>{action}</p>
+      </li>
     );
-  };
+  });
+
+  return (
+    <ul>{subscribers}</ul>
+  );
+
 }
 
 export default Users;

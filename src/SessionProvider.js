@@ -28,7 +28,7 @@ class SessionProvider extends React.Component {
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const activityInfo = {
-          isOnline: true,
+          action: 'ONLINE',
           lastChanged: unixStamp
         };
         const onlineUser = { ...activityInfo, ...userConfig };
@@ -167,8 +167,7 @@ class SessionProvider extends React.Component {
       });
 
     activeUsersRef
-      .orderByChild('uid')
-      .equalTo(uid)
+      .orderByChild('lastChanged')
       .on('child_added', snap => {
         const user = snap.val();
         activeUsers.push(user);
@@ -176,7 +175,6 @@ class SessionProvider extends React.Component {
       });
 
     activeUsersRef
-      .orderByChild('lastChanged')
       .limitToLast(1)
       .on('child_removed', async snap => {
         const user = snap.val();
@@ -312,8 +310,10 @@ class SessionProvider extends React.Component {
           return {...profile};
         });
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
+        const room = userConfig ? userConfig.lastVisited : null;
+        const lastVisited = room ? room : '-Ld7mZCDqAEcMSGxJt-x';
         const authProfile = {
-          displayName, email, photoURL, emailVerified, uid, authProviders
+          displayName, email, photoURL, emailVerified, uid, lastVisited, authProviders
         };
         this.handleConnection(uid, authProfile);
         if (userConfig) {
@@ -337,7 +337,6 @@ class SessionProvider extends React.Component {
     }
     return null;
   };
-
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.foreignState.rm !== prevState.prevRoomId) {

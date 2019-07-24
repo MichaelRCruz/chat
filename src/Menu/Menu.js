@@ -9,6 +9,8 @@ class Menu extends React.Component {
 
   static contextType = SessionContext;
 
+  
+
   render() {
 
     const { user, traffic, activeSubs } = this.context.state;

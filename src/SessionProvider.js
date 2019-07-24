@@ -20,7 +20,6 @@ class SessionProvider extends React.Component {
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         await userStatusDatabaseRef.remove();
-        await activityRef.remove();
         await newTrafficRef.set({ ...userConfig, unixStamp, action: 'OFFLINE' });
         // return;
       } else {
@@ -135,7 +134,8 @@ class SessionProvider extends React.Component {
     const subscribers = Object.keys(users);
     let activeUsers = [];
     let traffic = [];
-    let onliners = {};
+    let onliners = Object.assign({}, users);
+    let subscribersList = {};
 
     const userThrottler = throttling(async () => {
       const target = this.state.traffic[0];
@@ -148,10 +148,13 @@ class SessionProvider extends React.Component {
       });
 
       activeUsers.forEach((user, index) => {
-        const isSelf = user.uid === uid;
-        const exists = subscribers.includes(user.uid);
-        if (!isSelf && exists) onliners[user.uid] = user;
+        // const isSelf = user.uid === uid;
+        // const exists = subscribers.includes(user.uid);
+        // if (!isSelf && exists) onliners[user.uid] = user;
+        onliners[user.uid] = user;
       });
+
+      // const activeSubs = Object.assign({}, subscribersList, );
 
       this.setState({ activeSubs: Object.values(onliners), traffic }, () => {
         activeUsers = [];
@@ -178,21 +181,39 @@ class SessionProvider extends React.Component {
         userThrottler();
       });
 
+    // if (uid) activeUsersRef
+    //   .orderByChild('lastVisited')
+    //   .equalTo(key)
+    //   .once('value', snap => {
+    //     const users = this.state.activeRoom.users;
+    //     onliners = Object.assign({}, users);
+    //     snap.forEach(user => {
+    //       const key = user.key;
+    //       const activeUser = user.val();
+    //       onliners[key] = activeUser;
+    //       userThrottler();
+    //     });
+    //   });
+
+
     if (uid) activeUsersRef
-      .orderByChild('lastVisited')
-      .equalTo(key)
       .on('child_added', snap => {
         const user = snap.val();
+        console.log(user.subs);
+        const subs = user.subs;
+        user.action = 'sup';
+        // if (subs.includes(snap.key)) activeUsers.push(user);
         activeUsers.push(user);
         userThrottler();
       });
 
     if (uid) activeUsersRef
-      .orderByChild('lastVisited')
-      .equalTo(key)
       .on('child_removed', async snap => {
         const user = snap.val();
-        user.action = 'OFFLINE';
+        console.log(user.subs);
+        const subs = user.subs;
+        user.action = 'brb';
+        // if (subs.includes(snap.key)) activeUsers.push(user);
         activeUsers.push(user);
         userThrottler();
       });
@@ -326,9 +347,11 @@ class SessionProvider extends React.Component {
         });
         const { userConfig } = await new RealTimeApi().getUserConfig(uid);
         const room = userConfig ? userConfig.lastVisited : null;
+        const rooms = userConfig ? userConfig.rooms : null;
         const lastVisited = room ? room : '-Ld7mZCDqAEcMSGxJt-x';
+        const subs = rooms ? rooms : ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`];
         const authProfile = {
-          displayName, email, photoURL, emailVerified, uid, lastVisited, authProviders
+          displayName, email, photoURL, emailVerified, uid, lastVisited, subs, authProviders
         };
         this.handleConnection(uid, authProfile);
         if (userConfig) {

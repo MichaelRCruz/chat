@@ -81,6 +81,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
+    const og1Ref = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
     const userConfig = {
@@ -91,7 +92,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       emailVerified,
       authProviders,
       lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
-      rooms: [`uid-${uid}`, '-Ld7mZCDqAEcMSGxJt-x'],
+      rooms: ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`],
       activity: {
         isOnline: true,
         lastChanged: Math.floor(Date.now() / 1000),
@@ -122,6 +123,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     await userRef.child(uid).update(userConfig);
     await messagesRef.child(messageKey).update(message);
     await roomRef.child(`uid-${uid}`).update(room);
+    await og1Ref.child(uid).update(userConfig);
     res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });
   });
 });

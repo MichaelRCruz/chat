@@ -147,13 +147,13 @@ class SessionProvider extends React.Component {
         return !isStamp;
       });
 
-      activeUsers = activeUsers.filter((user, index) => {
-        const isSub = subscribers.includes(uid);
+      activeUsers.forEach((user, index) => {
         const isSelf = user.uid === uid;
-        return isSub && !isSelf;
+        const exists = subscribers.includes(user.uid);
+        if (!isSelf && exists) onliners[user.uid] = user;
       });
 
-      this.setState({ activeSubs: activeUsers, onliners, traffic }, () => {
+      this.setState({ activeSubs: Object.values(onliners), traffic }, () => {
         activeUsers = [];
       });
 
@@ -192,6 +192,7 @@ class SessionProvider extends React.Component {
       .equalTo(key)
       .on('child_removed', async snap => {
         const user = snap.val();
+        user.action = 'OFFLINE';
         activeUsers.push(user);
         userThrottler();
       });

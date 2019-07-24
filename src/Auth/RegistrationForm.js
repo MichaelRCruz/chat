@@ -196,7 +196,8 @@ const RegistrationForm = props => {
   const loadingAnimation = (
     <aside className="modalHeader">
       <button className="exitButton" onClick={() => {
-        window.sessionStorage.removeItem('potatoStorage');
+        localStorage.removeItem('potatoStorage');
+        firebase.auth().signOut();
         redirectTo('/');
       }}>
         <i className="material-icons clearIcon">clear</i>

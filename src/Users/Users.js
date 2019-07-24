@@ -5,12 +5,11 @@ import './Users.css';
 
 const Users = props => {
 
-  const { activeUsers } = props;
-  const users = activeUsers ? activeUsers : [];
+  const { activeSubs } = props;
+  const subs = activeSubs ? activeSubs : [];
 
-  const subscribers = users.map((user, i) => {
+  const subscribers = subs.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
-    console.log(uid);
     return (
       <li className="onlineUser" key={uid}>
         <div className={"userContainer"}>

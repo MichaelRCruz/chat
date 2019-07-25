@@ -24,7 +24,7 @@ const Traffic = props => {
         return b.lastChamged - a.lastChanged;
       });
       const slicedActions = await sortedActions.slice(Math.max(sortedActions.length - 5, 0))
-      await setActions(slicedActions);
+      await setActions(slicedActions.reverse());
     }, 100);
 
     const addedRef = firebase.database().ref(`/TRAFFIC`);

@@ -129,40 +129,17 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (uid, key) => {
-
-    const users = this.state.activeRoom.users;
-    const subscribers = Object.keys(users);
-    let activeUsers = [];
     let traffic = [];
-    let onliners = Object.assign({}, users);
-    let subscribersList = {};
-
     const userThrottler = throttling(async () => {
       const target = this.state.traffic[0];
-
       const timeStamp = target ? target.unixStamp : null;
-
       traffic = traffic.filter(user => {
         const isStamp = user.unixStamp === timeStamp;
         return !isStamp;
       });
-
-      activeUsers.forEach((user, index) => {
-        // const isSelf = user.uid === uid;
-        // const exists = subscribers.includes(user.uid);
-        // if (!isSelf && exists) onliners[user.uid] = user;
-        onliners[user.uid] = user;
-      });
-
-      // const activeSubs = Object.assign({}, subscribersList, );
-
-      this.setState({ activeSubs: Object.values(onliners), traffic }, () => {
-        activeUsers = [];
-      });
-
+      this.setState({ traffic });
     }, 100);
 
-    const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
     const trafficRef = firebase.database().ref(`/TRAFFIC`);
 
     if (uid) trafficRef
@@ -196,27 +173,27 @@ class SessionProvider extends React.Component {
     //   });
 
 
-    if (uid) activeUsersRef
-      .on('child_added', snap => {
-        const user = snap.val();
-        console.log(user.subs);
-        const subs = user.subs;
-        user.action = 'sup';
-        // if (subs.includes(snap.key)) activeUsers.push(user);
-        activeUsers.push(user);
-        userThrottler();
-      });
-
-    if (uid) activeUsersRef
-      .on('child_removed', async snap => {
-        const user = snap.val();
-        console.log(user.subs);
-        const subs = user.subs;
-        user.action = 'brb';
-        // if (subs.includes(snap.key)) activeUsers.push(user);
-        activeUsers.push(user);
-        userThrottler();
-      });
+    // if (uid) activeUsersRef
+    //   .on('child_added', snap => {
+    //     const user = snap.val();
+    //     console.log(user.subs);
+    //     const subs = user.subs;
+    //     user.action = 'sup';
+    //     // if (subs.includes(snap.key)) activeUsers.push(user);
+    //     activeUsers.push(user);
+    //     userThrottler();
+    //   });
+    //
+    // if (uid) activeUsersRef
+    //   .on('child_removed', async snap => {
+    //     const user = snap.val();
+    //     console.log(user.subs);
+    //     const subs = user.subs;
+    //     user.action = 'brb';
+    //     // if (subs.includes(snap.key)) activeUsers.push(user);
+    //     activeUsers.push(user);
+    //     userThrottler();
+    //   });
 
     this.messagesRef
       .orderByChild('roomId')

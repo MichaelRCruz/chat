@@ -19,12 +19,12 @@ const Traffic = props => {
       //   const isStamp = user.lastChanged === timeStamp;
       //   return !isStamp;
       // });
-      const userActions = [ ...actions, ...traffic ]
-      const sortedActions = userActions.sort((a, b) => {
-        return a.unixStamp - b.unixStamp;
+      // const userActions = [ ...actions, ...traffic ]
+      const sortedActions = await traffic.sort((a, b) => {
+        return b.lastChamged - a.lastChanged;
       });
-      const slicedActions = sortedActions.slice(traffic.length - 5);
-      setActions(slicedActions);
+      const slicedActions = await sortedActions.slice(Math.max(sortedActions.length - 5, 0))
+      await setActions(slicedActions);
     }, 100);
 
     const addedRef = firebase.database().ref(`/TRAFFIC`);

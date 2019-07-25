@@ -8,7 +8,7 @@ import './Users.css';
 const Users = () => {
 
   const { state } = useContext(SessionContext);
-  const { activeRoom, user } = state;
+  const { activeRoom } = state;
   const [subscribers, setSubscribers] = useState([]);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Users = () => {
 
     const userThrottler = throttling(() => {
       buffer.forEach((user, index) => {
-        onliners[user.uid] = user;
+        if (subscribers.includes(user.uid)) onliners[user.uid] = user;
       });
       setSubscribers(Object.values(onliners));
     }, 100);
@@ -46,7 +46,7 @@ const Users = () => {
       addUserRef.off();
       removeUserRef.off();
     }
-  }, [activeRoom, user]);
+  }, [activeRoom]);
 
   const subs = subscribers.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;

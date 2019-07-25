@@ -129,34 +129,34 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (uid, key) => {
-    let traffic = [];
-    const userThrottler = throttling(async () => {
-      const target = this.state.traffic[0];
-      const timeStamp = target ? target.unixStamp : null;
-      traffic = traffic.filter(user => {
-        const isStamp = user.unixStamp === timeStamp;
-        return !isStamp;
-      });
-      this.setState({ traffic });
-    }, 100);
-
-    const trafficRef = firebase.database().ref(`/TRAFFIC`);
-
-    if (uid) trafficRef
-      .limitToLast(5)
-      .on('child_added', snap => {
-        const user = snap.val();
-        traffic.push(user);
-        userThrottler();
-      });
-
-    if (uid) trafficRef
-      .limitToLast(1)
-      .on('child_removed', snap => {
-        const user = snap.val();
-        // removed.push(user);
-        userThrottler();
-      });
+    // let traffic = [];
+    // const userThrottler = throttling(async () => {
+    //   const target = this.state.traffic[0];
+    //   const timeStamp = target ? target.unixStamp : null;
+    //   traffic = traffic.filter(user => {
+    //     const isStamp = user.unixStamp === timeStamp;
+    //     return !isStamp;
+    //   });
+    //   this.setState({ traffic });
+    // }, 100);
+    //
+    // const trafficRef = firebase.database().ref(`/TRAFFIC`);
+    //
+    // if (uid) trafficRef
+    //   .limitToLast(5)
+    //   .on('child_added', snap => {
+    //     const user = snap.val();
+    //     traffic.push(user);
+    //     userThrottler();
+    //   });
+    //
+    // if (uid) trafficRef
+    //   .limitToLast(1)
+    //   .on('child_removed', snap => {
+    //     const user = snap.val();
+    //     // removed.push(user);
+    //     userThrottler();
+    //   });
 
     // if (uid) activeUsersRef
     //   .orderByChild('lastVisited')

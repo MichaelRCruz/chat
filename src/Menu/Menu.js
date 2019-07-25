@@ -13,7 +13,7 @@ class Menu extends React.Component {
 
   render() {
 
-    const { user, traffic, activeRoom } = this.context.state;
+    const { user } = this.context.state;
 
     return (
       <aside className="menuComponent">
@@ -29,9 +29,9 @@ class Menu extends React.Component {
           <h1>rooms</h1>
           <Rooms />
           <h1>members</h1>
-          <Users activeRoom={activeRoom} />
+          <Users />
           <h1>traffic</h1>
-          <Traffic traffic={traffic} />
+          <Traffic />
         </div>
       </aside>
     );

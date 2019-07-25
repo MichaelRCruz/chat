@@ -10,47 +10,59 @@ class Users extends React.Component {
   state = {
     subs: []
   }
+  const { users } = this.context.state.activeRoom;
 
+  static contextType = SessionContext;
   componentDidMount() {
-    const users = this.props.activeRoom.users;
+    // const { users } = this.context.state.activeRoom;
+    console.log(users);
     const muhSubs = users ? users : {};
     const subscribers = Object.keys(muhSubs);
-    let activeUsers = [];
+    let buffer = [];
     let onliners = Object.assign({}, users);
 
-    const userThrottler = throttling(async () => {
-      activeUsers.forEach((user, index) => {
+    const userThrottler = throttling(() => {
+      buffer.forEach((user, index) => {
         onliners[user.uid] = user;
       });
       this.setState({ subs: Object.values(onliners) }, () => {
-        activeUsers = [];
+        buffer = [];
       });
     }, 100);
 
-    const activeUsersRef = firebase.database().ref(`/USERS_ONLINE`);
-    activeUsersRef
+    const addedRef = firebase.database().ref(`/USERS_ONLINE`);
+    addedRef
       .on('child_added', snap => {
         const user = snap.val();
-        console.log(user.subs);
-        const subs = user.subs;
         user.action = 'sup';
-        activeUsers.push(user);
+        buffer.push(user);
         userThrottler();
       });
 
-    activeUsersRef
+    const removedRef = firebase.database().ref(`/USERS_ONLINE`);
+    removedRef
       .on('child_removed', async snap => {
         const user = snap.val();
-        console.log(user.subs);
-        const subs = user.subs;
         user.action = 'brb';
-        activeUsers.push(user);
+        buffer.push(user);
         userThrottler();
       });
+
+    // const activeUsersRef = firebase.database().ref(`/users`);
+    // usersRef
+    //   .once('value', snap => {
+    //     let subbies = [];
+    //     snap.forEach(user => {
+    //       const key = user.key;
+    //       const sub = user.val();
+    //
+    //       userThrottler();
+    //     });
+    //   });
   }
 
+  // const { activeRoom } = this.context.state;
   render() {
-    // const { activeSubs } = this.props;
     const { subs } = this.state;
     const _subs = subs ? subs : [];
 

@@ -11,14 +11,14 @@ const Menu = () => {
 
   const sessionContext = useContext(SessionContext);
   const { state } = sessionContext;
-  const { user, activeRoom } = state;
+  const { user } = state;
 
   useEffect(() => {
     return () => {
       // setIsAuthLinkSent(false);
       // setIsOAuthCanceled(true);
     }
-  }, [user, activeRoom]);
+  }, [user]);
 
   return (
     <aside className="menuComponent">
@@ -34,7 +34,7 @@ const Menu = () => {
         <h1>rooms</h1>
         <Rooms />
         <h1>members</h1>
-        <Users activeRoom={activeRoom} />
+        <Users />
         <h1>traffic</h1>
         <Traffic />
       </div>

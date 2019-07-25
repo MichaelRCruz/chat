@@ -1,33 +1,28 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import {throttling} from '../utils.js';
 import './Users.css';
 
-class Users extends React.Component {
+const Users = () => {
 
-  state = {
-    subs: []
-  }
-  const { users } = this.context.state.activeRoom;
+  const { state } = useContext(SessionContext);
+  const { activeRoom, user } = state;
+  const [subscribers, setSubscribers] = useState([]);
 
-  static contextType = SessionContext;
-  componentDidMount() {
-    // const { users } = this.context.state.activeRoom;
-    console.log(users);
+  useEffect(() => {
+    const users = activeRoom.users;
+    const onliners = Object.assign({}, users);
     const muhSubs = users ? users : {};
     const subscribers = Object.keys(muhSubs);
     let buffer = [];
-    let onliners = Object.assign({}, users);
 
     const userThrottler = throttling(() => {
       buffer.forEach((user, index) => {
         onliners[user.uid] = user;
       });
-      this.setState({ subs: Object.values(onliners) }, () => {
-        buffer = [];
-      });
+      setSubscribers(Object.values(onliners));
     }, 100);
 
     const addedRef = firebase.database().ref(`/USERS_ONLINE`);
@@ -47,47 +42,32 @@ class Users extends React.Component {
         buffer.push(user);
         userThrottler();
       });
+    return () => {
+      addedRef.off();
+      removedRef.off();
+    }
+  }, [activeRoom, user]);
 
-    // const activeUsersRef = firebase.database().ref(`/users`);
-    // usersRef
-    //   .once('value', snap => {
-    //     let subbies = [];
-    //     snap.forEach(user => {
-    //       const key = user.key;
-    //       const sub = user.val();
-    //
-    //       userThrottler();
-    //     });
-    //   });
-  }
-
-  // const { activeRoom } = this.context.state;
-  render() {
-    const { subs } = this.state;
-    const _subs = subs ? subs : [];
-
-    const subscribers = _subs.map((user, i) => {
-      const { photoURL, displayName, action, uid } = user;
-      return (
-        <li className="onlineUser" key={uid}>
-          <div className={"userContainer"}>
-            <img
-              className="userMenuImage"
-              alt="user"
-              src={ photoURL || defaultUserImage}
-             />
-            <div className="menuDisplayName">{displayName}</div>
-          </div>
-          <p>{action}</p>
-        </li>
-      );
-    });
-
+  const subs = subscribers.map((user, i) => {
+    const { photoURL, displayName, action, uid } = user;
     return (
-      <ul>{subscribers}</ul>
+      <li className="onlineUser" key={uid}>
+        <div className={"userContainer"}>
+          <img
+            className="userMenuImage"
+            alt="user"
+            src={ photoURL || defaultUserImage}
+           />
+          <div className="menuDisplayName">{displayName}</div>
+        </div>
+        <p>{action}</p>
+      </li>
     );
-  }
+  });
 
+  return (
+    <ul>{subs}</ul>
+  );
 }
 
 export default Users;

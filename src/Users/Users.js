@@ -25,8 +25,8 @@ const Users = () => {
       setSubscribers(Object.values(onliners));
     }, 100);
 
-    const addedRef = firebase.database().ref(`/USERS_ONLINE`);
-    addedRef
+    const addUserRef = firebase.database().ref(`/USERS_ONLINE`);
+    addUserRef
       .on('child_added', snap => {
         const user = snap.val();
         user.action = 'sup';
@@ -34,8 +34,8 @@ const Users = () => {
         userThrottler();
       });
 
-    const removedRef = firebase.database().ref(`/USERS_ONLINE`);
-    removedRef
+    const removeUserRef = firebase.database().ref(`/USERS_ONLINE`);
+    removeUserRef
       .on('child_removed', async snap => {
         const user = snap.val();
         user.action = 'brb';
@@ -43,8 +43,8 @@ const Users = () => {
         userThrottler();
       });
     return () => {
-      addedRef.off();
-      removedRef.off();
+      addUserRef.off();
+      removeUserRef.off();
     }
   }, [activeRoom, user]);
 

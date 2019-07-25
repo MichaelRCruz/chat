@@ -10,9 +10,6 @@ import {throttling} from './utils.js';
 class SessionProvider extends React.Component {
 
   handleConnection = async (uid, userConfig) => {
-    // const trafficRef = await db.ref(`/TRAFFIC`);
-    // const addTrafficRef = await trafficRef.push();
-    // const db = firebase.database();
     firebase.database().ref('.info/connected').on('value', async snap => {
       const db = firebase.database();
       const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
@@ -23,7 +20,6 @@ class SessionProvider extends React.Component {
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         await userStatusDatabaseRef.remove();
         await newTrafficRef.set({ ...userConfig, unixStamp, action: 'OFFLINE' });
-        // return;
       } else {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
@@ -41,45 +37,6 @@ class SessionProvider extends React.Component {
         await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'OFFLINE' });
       }
     });
-    //
-    // const muhUpdateRef = db.ref(`/USERS_ONLINE`);
-    // let users = [];
-    // const userThrottler = throttling(() => {
-    //   this.setState({onlineUsers: users.slice(0)});
-    // }, 100);
-    //
-    // muhUpdateRef.on('child_added', snap => {
-    //   const newUser = Object.assign(snap.val(), {key: snap.key});
-    //   users.push(newUser);
-    //   userThrottler();
-    // });
-    //
-    // // update the UI to show that a user has left (gone offline)
-    // muhUpdateRef.on("child_removed", snap => {
-    //   const deletedUser = snap.val();
-    //   const usersCopy = this.state.onLineUsers ? this.state.onLineUsers : [];
-    //   const deletedUsers = [...usersCopy];
-    //   const index = deletedUsers.indexOf(deletedUser)
-    //   if (index !== -1) {
-    //     deletedUsers.splice(index, 1);
-    //     this.setState({ deletedUsers });
-    //   }
-    //   console.log(deletedUser.key);
-    // });
-    //
-    // // update the UI to show that a user's status has changed
-    // muhUpdateRef.on("child_changed", snap => {
-    //   const updatedUser = snap.val();
-    //   const muhUsers = this.state.onLineUsers ? this.state.onLineUsers : {};
-    //   const updated = [...muhUsers];
-    //   const index = updated.indexOf(updatedUser)
-    //   if (index !== -1) {
-    //     updated.splice(index, 1);
-    //     updated.push(updatedUser);
-    //     this.setState({ onLineUsers: updated });
-    //   }
-    //   console.log(updatedUser);
-    // });
   }
 
   requestNotifPermission = (uid, messaging) => {
@@ -131,72 +88,6 @@ class SessionProvider extends React.Component {
   };
 
   setListeners = (uid, key) => {
-    // let traffic = [];
-    // const userThrottler = throttling(async () => {
-    //   const target = this.state.traffic[0];
-    //   const timeStamp = target ? target.unixStamp : null;
-    //   traffic = traffic.filter(user => {
-    //     const isStamp = user.unixStamp === timeStamp;
-    //     return !isStamp;
-    //   });
-    //   this.setState({ traffic });
-    // }, 100);
-    //
-    // const trafficRef = firebase.database().ref(`/TRAFFIC`);
-    //
-    // if (uid) trafficRef
-    //   .limitToLast(5)
-    //   .on('child_added', snap => {
-    //     const user = snap.val();
-    //     traffic.push(user);
-    //     userThrottler();
-    //   });
-    //
-    // if (uid) trafficRef
-    //   .limitToLast(1)
-    //   .on('child_removed', snap => {
-    //     const user = snap.val();
-    //     // removed.push(user);
-    //     userThrottler();
-    //   });
-
-    // if (uid) activeUsersRef
-    //   .orderByChild('lastVisited')
-    //   .equalTo(key)
-    //   .once('value', snap => {
-    //     const users = this.state.activeRoom.users;
-    //     onliners = Object.assign({}, users);
-    //     snap.forEach(user => {
-    //       const key = user.key;
-    //       const activeUser = user.val();
-    //       onliners[key] = activeUser;
-    //       userThrottler();
-    //     });
-    //   });
-
-
-    // if (uid) activeUsersRef
-    //   .on('child_added', snap => {
-    //     const user = snap.val();
-    //     console.log(user.subs);
-    //     const subs = user.subs;
-    //     user.action = 'sup';
-    //     // if (subs.includes(snap.key)) activeUsers.push(user);
-    //     activeUsers.push(user);
-    //     userThrottler();
-    //   });
-    //
-    // if (uid) activeUsersRef
-    //   .on('child_removed', async snap => {
-    //     const user = snap.val();
-    //     console.log(user.subs);
-    //     const subs = user.subs;
-    //     user.action = 'brb';
-    //     // if (subs.includes(snap.key)) activeUsers.push(user);
-    //     activeUsers.push(user);
-    //     userThrottler();
-    //   });
-
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -215,13 +106,9 @@ class SessionProvider extends React.Component {
       .on('child_removed', async snapshot  => {
         if (snapshot.val().roomId === key) {
           const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
-          // const deletedKey = snapshot.key;
-          // const { [deletedKey]: something, ...rest } = this.state.messages;
-          // const newMessages = Object.assign({}, rest);
           this.setState({ messages });
         }
       });
-
   };
 
   reconcileActiveRoom = async roomId => {

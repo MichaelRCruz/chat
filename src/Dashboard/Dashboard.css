@@ -84,6 +84,17 @@
   font-size: 1.5em;
 }
 
+.widgetLoader {
+  margin: calc(50vh - 100px) auto;
+  border: 8px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 8px solid #3498db;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 1s linear infinite; /* Safari */
+  animation: spin 1s linear infinite;
+}
+
 @media screen and (min-width: 600px) {
   .dashboardComponent {
     height: 100%;

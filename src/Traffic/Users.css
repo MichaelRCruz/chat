@@ -31,7 +31,22 @@
 	font-size: 17px;
 }
 
-.inspectUserButton {
+.displayName {
+  font-family: 'Roboto', sans-serif;
+	margin-left: 10px;
+	font-size: 17px;
+}
+
+.onlineStatus {
+  color: green;
+}
+
+.indicator {
+  width: 20px;
+  height: 20px;
+}
+
+/* .inspectUserButton {
 	cursor: pointer;
 	outline: none;
   border-radius: 3px;
@@ -58,22 +73,6 @@
 	justify-content: flex-start;
 	align-items: center;
 }
-
-.displayName {
-  font-family: 'Roboto', sans-serif;
-	margin-left: 10px;
-	font-size: 17px;
-}
-
-.onlineStatus {
-  color: green;
-}
-
-.indicator {
-  width: 20px;
-  height: 20px;
-}
-
 .isGreen {
   background-color: green;
-}
+} */

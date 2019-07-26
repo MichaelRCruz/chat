@@ -48,8 +48,8 @@ const Dashboard = props => {
         </nav>
         <main>
           {mode === 'USERS' ? <div className="dashContainer"><Users /></div> : null}
-          {mode === 'ROOMS' ? <Rooms /> : null}
-          {mode === 'TRAFFIC' ? <Traffic /> : null}
+          {mode === 'ROOMS' ? <div className="dashContainer"><Rooms /></div> : null}
+          {mode === 'TRAFFIC' ? <div className="dashContainer"><Traffic /></div> : null}
         </main>
         <nav className="dashboardNav">
           <button className="navToUsers"

@@ -57,7 +57,7 @@ const Traffic = props => {
     );
   });
   return !actions.length
-    ? <div className="loadingAnimation"></div>
+    ? <div className="widgetLoader"></div>
     : (
       <section className="usersComponent">
         <ul>{actionsList}</ul>

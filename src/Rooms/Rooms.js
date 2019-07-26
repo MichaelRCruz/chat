@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import SessionContext from '../SessionContext.js';
-// import './Rooms.css';
+import './Rooms.css';
 
 class Rooms extends React.Component {
 
@@ -25,9 +25,9 @@ class Rooms extends React.Component {
       );
     });
     return !subscribedRooms.length
-      ? <div className="loadingAnimation"></div>
+      ? <div className="widgetLoader"></div>
       : (
-        <section className="roomsComponent">
+        <section className="usersComponent">
           <ul>
             {rooms}
           </ul>

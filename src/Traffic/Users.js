@@ -70,7 +70,7 @@ const Users = () => {
   });
 
   return !subscribers.length
-    ? <div className="loadingAnimation"></div>
+    ? <div className="widgetLoader"></div>
     : (
       <section className="usersComponent">
         <p>subscribers of {activeRoom.name}</p>

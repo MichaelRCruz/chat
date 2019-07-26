@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .roomsComponent {
 	width: 100%;
@@ -61,4 +61,4 @@
 		font-size: 15px;
 		font-weight: bold;
 	}
-}; */
+};

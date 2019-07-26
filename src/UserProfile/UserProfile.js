@@ -7,7 +7,7 @@ import './UserProfile.css';
 // https://developer.chrome.com/extensions/signedInDevices
 const UserProfile = props => {
 
-  const { history, isSignedOut } = props;
+  const { history } = props;
 
   // const oAuth = useOAuth(false);
   const sessionContext = useContext(SessionContext);

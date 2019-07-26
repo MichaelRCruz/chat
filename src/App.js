@@ -88,7 +88,6 @@ const App = props => {
                 return <Chat {...chatProps} isAuth={isAuth} />;
               }}
             />
-            <Route component={null} />
           </SessionProvider>
         </React.Fragment>
       );

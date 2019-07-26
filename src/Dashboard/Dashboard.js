@@ -1,42 +1,59 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Rooms from '../Rooms/Rooms.js';
 import Users from '../Traffic/Users.js';
 import Traffic from '../Traffic/Traffic.js';
 import Modal from '../Modal/Modal.js';
-import SessionContext from '../SessionContext.js';
-// import './Dashboard.css';
+// import SessionContext from '../SessionContext.js';
+import './Dashboard.css';
 
 const Dashboard = props => {
 
-  const { history, isSignedOut } = props;
+  // const sessionContext = useContext(SessionContext);
+  // const { userConfig } = sessionContext.state;
 
-  // const oAuth = useOAuth(false);
-  const sessionContext = useContext(SessionContext);
-  const { userConfig } = sessionContext.state;
+  const { history } = props;
+  const potatoDashStore = localStorage.getItem('potatoDashStore');
+  const [mode, setMode] = useState(potatoDashStore ? potatoDashStore : 'USERS');
+
+  const handleNav = mode => {
+    switch(mode) {
+  		case 'BACK':
+        return history.goBack();
+  		case 'USERS':
+        localStorage.setItem('potatoDashStore', 'USERS');
+        return setMode(mode);
+      case 'ROOMS':
+        localStorage.setItem('potatoDashStore', 'ROOMS');
+        return setMode(mode);
+  		default:
+        localStorage.setItem('potatoDashStore', 'USERS');
+        return setMode('USERS');
+  	}
+  }
 
   return (
     <Modal show={true}>
       <section className="dashboardComponent">
-        <nav className="nameNav">
+        <header>
           <h1>dashboard</h1>
-        </nav>
-        <nav className="buttonNav">
-          <button className="exitButton" onClick={() => {
-            history.goBack();
-          }}>
-            <i className="material-icons clearIcon">arrow_back</i>
+        </header>
+        <nav>
+          <button className="exitButton"
+            onClick={() => handleNav('BACK')}>
+            <i className="material-icons">arrow_back</i>
+          </button>
+          <button className="navToUsers"
+            onClick={() => handleNav('USERS')}>
+            <i className="material-icons">people</i>
+          </button>
+          <button className="navToRooms"
+            onClick={() => handleNav('ROOMS')}>
+            <i className="material-icons">room</i>
           </button>
         </nav>
-        <main className="userProfileMain">
-          <h1>rooms</h1>
-          <Rooms />
-          <h1>members</h1>
-          <Users />
-          <h1>traffic</h1>
-          <Traffic />
-          <button onClick={() => props.handleSignOut(userConfig)}>
-            click here to sign out
-          </button>
+        <main>
+          {mode === 'USERS' ? <Users /> : null}
+          {mode === 'ROOMS' ? <Rooms /> : null}
         </main>
       </section>
     </Modal>

@@ -27,7 +27,7 @@
   flex-direction: column;
   align-items: center;
   height: 90vh;
-  /* height: calc(var(--vh, 1vh) * 100 - 168px); */
+  height: calc(var(--vh, 1vh) * 100 - 168px);
 }
 
 .oAuthButtons {

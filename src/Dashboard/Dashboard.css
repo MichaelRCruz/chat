@@ -6,34 +6,86 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  /* height: calc(var(--vh, 1vh) * 100 - 168px); */
+  /* height: calc(var(--vh, 1vh) * 100 - 125px); */
   font-family: 'Roboto', sans-serif;
 }
 
+.dashboardComponent > * {
+  width: 100%;
+  display: flex;
+}
+
 .dashboardComponent > header {
+  height: 5%;
   background-color: hotpink;
+  font-size: 1.35em;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .dashboardComponent > nav {
+  height: 5%;
   background-color: lightblue;
 }
 
 .dashboardComponent > main {
+  height: 83%;
   background-color: yellow;
+  justify-content: center;
 }
 
-.exitButton, .navToUsers, .navToRooms {
+.dashboardNav {
+  height: 7% !important;
+  display: flex;
+  justify-content: space-around;
+}
+
+.exitButton {
+  margin-left: 15px;
+}
+
+.dashContainer {
+  width: 80%;
+}
+
+.navToUsers, .navToChannels, .navToTraffic {
   background-color: inherit;
   border: none;
-  /* display: flex; */
-  /* flex-direction: row; */
-  /* justify-content: center; */
-  /* align-items: center; */
+  cursor: pointer;
+  width: 100%;
+  margin: 0 5px;
+}
+
+.exitButton:focus {
+  outline: none;
+}
+
+.navToUsers:focus {
+  outline: none;
+}
+
+.navToChannels:focus {
+  outline: none;
+}
+
+.navToTraffic:focus {
+  outline: none;
+}
+
+.navToUsers > div, .navToChannels > div, .navToTraffic > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.navToUsers > div > p, .navToChannels > div > p, .navToTraffic > div {
+  font-size: 1.5em;
 }
 
 @media screen and (min-width: 600px) {
   .dashboardComponent {
-    /* height: 670px; */
-    /* width: 600px; */
+    height: 100%;
   }
 };

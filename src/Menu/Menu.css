@@ -35,3 +35,8 @@
 .menuRoomListContainer {
   /* margin-bottom: 40px; */
 }
+
+.userImage {
+  height: 25px;
+  width: 25px;
+}

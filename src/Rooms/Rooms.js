@@ -24,13 +24,15 @@ class Rooms extends React.Component {
         </li>
       );
     });
-    return (
-      <section className="roomsComponent">
-        <ul>
-          {rooms}
-        </ul>
-      </section>
-    );
+    return !subscribedRooms.length
+      ? <div className="loadingAnimation"></div>
+      : (
+        <section className="roomsComponent">
+          <ul>
+            {rooms}
+          </ul>
+        </section>
+      );
   }
 };
 

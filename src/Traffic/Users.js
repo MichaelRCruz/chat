@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { Fragment, useState, useContext, useEffect } from 'react';
 import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
@@ -51,23 +51,32 @@ const Users = () => {
   const subs = subscribers.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     return (
-      <li className="onlineUser" key={uid}>
+      <li key={uid}>
         <div className="userContainer">
           <img
-            className="userMenuImage"
+            className="userImage"
             alt="user"
-            src={ photoURL || defaultUserImage}
+            src={ photoURL || defaultUserImage }
            />
-          <div className="menuDisplayName">{displayName}</div>
+          <div className="displayName">
+            <p>{displayName}</p>
+          </div>
+          <div className="userAction">
+            <p>{action || 'offline'}</p>
+          </div>
         </div>
-        <p>{action}</p>
       </li>
     );
   });
 
-  return (
-    <ul>{subs}</ul>
-  );
+  return !subscribers.length
+    ? <div className="loadingAnimation"></div>
+    : (
+      <section className="usersComponent">
+        <p>subscribers of {activeRoom.name}</p>
+        <ul>{subs}</ul>
+      </section>
+    );
 }
 
 export default Users;

@@ -39,22 +39,30 @@ const Traffic = props => {
   const actionsList = actions.map((user, i) => {
     const { photoURL, displayName, action, key } = user;
     return (
-      <li className="onlineUser" key={i}>
-        <div className={"userContainer"}>
+      <li key={key}>
+        <div className="userContainer">
           <img
-            className="userMenuImage"
+            className="userImage"
             alt="user"
             src={ photoURL || defaultUserImage}
            />
-          <div className="menuDisplayName">{displayName}</div>
+          <div className="displayName">
+            <p>{displayName}</p>
+          </div>
+          <div className="userAction">
+            <p>{action || 'offline'}</p>
+          </div>
         </div>
-        <p>{action}</p>
       </li>
     );
   });
-  return (
-    <ul>{actionsList}</ul>
-  );
+  return !actions.length
+    ? <div className="loadingAnimation"></div>
+    : (
+      <section className="usersComponent">
+        <ul>{actionsList}</ul>
+      </section>
+    );
 }
 
 export default Traffic;

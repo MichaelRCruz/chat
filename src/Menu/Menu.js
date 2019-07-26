@@ -1,35 +1,24 @@
 import React, { useContext, useEffect } from 'react';
-import Rooms from '../Rooms/Rooms';
-import Users from '../Users/Users';
-import Traffic from '../Users/Traffic';
+import Rooms from '../Rooms/Rooms.js';
+import Users from '../Traffic/Users.js';
+import Traffic from '../Traffic/Traffic.js';
 import SessionContext from '../SessionContext.js';
 import './Menu.css';
 
 const Menu = () => {
-
-  // static contextType = SessionContext;
-
   const sessionContext = useContext(SessionContext);
   const { state } = sessionContext;
   const { user } = state;
 
-  useEffect(() => {
-    return () => {
-      // setIsAuthLinkSent(false);
-      // setIsOAuthCanceled(true);
-    }
-  }, [user]);
-
   return (
     <aside className="menuComponent">
-      <div className="userAvatarContainer">
-        <img
-          className="userAvatar"
-          alt="user"
+      <section className="userAvatarContainer">
+        <img className="userAvatar"
+          alt="avatar"
           src={user ? user.photoURL : ''}
          />
         <p className="menuDisplayName">{ user.displayName }</p>
-      </div>
+      </section>
       <div className="menuRoomListContainer">
         <h1>rooms</h1>
         <Rooms />
@@ -40,7 +29,6 @@ const Menu = () => {
       </div>
     </aside>
   );
-
-}
+};
 
 export default Menu;

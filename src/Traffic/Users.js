@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
-import {throttling} from '../utils.js';
+import { throttling } from '../utils.js';
 import './Users.css';
 
 const Users = () => {
@@ -52,7 +52,7 @@ const Users = () => {
     const { photoURL, displayName, action, uid } = user;
     return (
       <li className="onlineUser" key={uid}>
-        <div className={"userContainer"}>
+        <div className="userContainer">
           <img
             className="userMenuImage"
             alt="user"

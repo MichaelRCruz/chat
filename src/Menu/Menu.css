@@ -1,3 +1,5 @@
+/* @import url('https://fonts.googleapis.com/css?family=Roboto'); */
+
 .menuComponent {
   position: fixed;
   bottom: 0;
@@ -11,6 +13,8 @@
   z-index: 4;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
 }
 
 .userAvatarContainer {
@@ -19,6 +23,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 40px;
+  /* font-family: 'Roboto', sans-serif; */
 }
 
 .userAvatar {
@@ -28,5 +33,5 @@
 }
 
 .menuRoomListContainer {
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }

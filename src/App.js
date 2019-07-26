@@ -9,7 +9,6 @@ import SessionProvider from './SessionProvider.js';
 
 const App = props => {
 
-  // const [isSignedOut, setIsSignedOut] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
   const [isSignedOut, setIsSignedOut] = useState(false);
 

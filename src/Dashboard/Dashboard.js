@@ -1,23 +1,23 @@
 import React from 'react';
-import Rooms from '../Rooms/Rooms';
+import Rooms from '../Rooms/Rooms.js';
+import Users from '../Traffic/Users.js';
+import Traffic from '../Traffic/Traffic.js';
 import './Dashboard.css';
 
-class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const Dashboard = () => {
 
-    }
-  };
-
-  render() {
-    // const {firebase, subscribedRooms, setActiveRoom} = this.props;
-    return (
-      <section className="dashboardComponent">
+  return (
+    <section className="dashboardComponent">
+      <div className="menuRoomListContainer">
+        <h1>rooms</h1>
         <Rooms />
-      </section>
-    );
-  }
+        <h1>members</h1>
+        <Users />
+        <h1>traffic</h1>
+        <Traffic />
+      </div>
+    </section>
+  );
 }
 
 export default Dashboard;

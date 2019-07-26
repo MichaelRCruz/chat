@@ -216,8 +216,8 @@ const RegistrationForm = props => {
 
   const registrationForm = (
     <Modal show={true} handleClose={handleClose}>
-      <form onSubmit={handleSubmit}>
-        <fieldset className="formFieldset">
+      <form className="registrationForm" onSubmit={handleSubmit}>
+        <fieldset className="registrationFieldset">
           <legend className="formLegend">
             <p className="appNameAtAuth">Potato</p>
           </legend>

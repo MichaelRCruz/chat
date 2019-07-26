@@ -1,39 +1,33 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Pacifico');
 
+.registrationForm {
+  width: 100vw;
+  font-family: 'Roboto', sans-serif;
+  /* font-size: 1em; */
+}
 
-/* .verification
+.registrationFieldset {
+  border: 0px;
+  /* padding: 0 100px; */
+}
 
-
- {
-  margin: 0;
-  padding: 0;
-  border-radius: 6px;
-} */
-
-/* .formFieldset {
-  border: none;
-  padding: 0;
-  border: 0;
-  margin: 0;
-} */
+.formLegend {
+  text-align: center;
+  /* border: 0px; */
+}
 
 .appNameAtAuth {
   font-family: 'Pacifico', cursive;
   font-size: 30px;
 }
 
-.formLegend {
-  text-align: center;
-  /* border: none; */
-}
-
 .parentFlex {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100 - 168px);
+  height: 90vh;
+  /* height: calc(var(--vh, 1vh) * 100 - 168px); */
 }
 
 .oAuthButtons {
@@ -41,45 +35,49 @@
   padding: unset;
 }
 
-.authHero {
-  height: 30%;
+.formGroup {
   width: 100%;
-  /* background-color: lightgreen; */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.fieldsContainer {
-  height: 30%;
+.errorMessage {
   width: 100%;
-  /* background-color: blue; */
+}
+
+.parentFlex > section {
+  width: 80%;
   display: flex;
-  flex-direction: column-reverse;
   align-items: center;
-  /* padding: 20px 20px; */
+}
+
+.authHero {
+  justify-content: center;
+  height: 20%;
+}
+
+.fieldsContainer {
+  height: 35%;
+  flex-direction: column-reverse;
 }
 
 .buttonsContainer {
   height: 10%;
-  width: 100%;
-  /* background-color: yellow; */
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
 }
 
 .oAuthDialog {
-  height: 10%;
+  height: 15%;
+  justify-content: center;
+  text-align: center;
 }
 
 .oAuthContainer {
   height: 20%;
-  width: 100%;
-  /* background-color: hotpink; */
+  width: 100% !important;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between !important;
 }
 
 .authLogo {
@@ -102,12 +100,11 @@
 .input {
   font-size: 16px;
   display: block;
-  margin: auto;
-  width: 70vw;
-  max-width: 295px;
+  margin: 0;
+  width: 100%;
   height: 25px;
-  /* border: 1px solid #232323;
-  padding-left: 8px; */
+  border: 1px solid #232323;
+  padding: 0;
   border-radius: 4px;
   margin-bottom: 25px;
 }
@@ -148,14 +145,24 @@
   border: 1px solid black;
   border-radius: 8px;
   height: 40px;
-  max-width: 300px;
-  width: 80%;
+  width: 100%;
   background-color: #232323;
   color: #fff;
+  font-size: 1em;
 }
 
 @media screen and (min-width: 450px) {
+  .registrationFieldset > section {
+    margin: auto;
+    width: 400px;
+  }
   .parentFlex {
     height: 470px;
+  }
+  .registrationFieldset {
+    margin: auto;
+    max-width: 500px;
+    border: 1px solid black;
+    border-radius: 10px;
   }
 };

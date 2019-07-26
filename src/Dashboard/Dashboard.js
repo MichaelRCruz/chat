@@ -13,17 +13,17 @@ const Dashboard = props => {
 
   const { history } = props;
   const potatoDashStore = localStorage.getItem('potatoDashStore');
-  const [mode, setMode] = useState(potatoDashStore ? potatoDashStore : 'USERS');
+  const [mode, setMode] = useState(potatoDashStore);
 
   const handleNav = mode => {
     switch(mode) {
-  		case 'BACK':
+  		case null:
         return history.goBack();
   		case 'USERS':
-        localStorage.setItem('potatoDashStore', 'USERS');
+        localStorage.setItem('potatoDashStore', mode);
         return setMode(mode);
       case 'ROOMS':
-        localStorage.setItem('potatoDashStore', 'ROOMS');
+        localStorage.setItem('potatoDashStore', mode);
         return setMode(mode);
   		default:
         localStorage.setItem('potatoDashStore', 'USERS');
@@ -39,9 +39,15 @@ const Dashboard = props => {
         </header>
         <nav>
           <button className="exitButton"
-            onClick={() => handleNav('BACK')}>
+            onClick={() => handleNav(null)}>
             <i className="material-icons">arrow_back</i>
           </button>
+        </nav>
+        <main>
+          {mode === 'USERS' ? <Users /> : null}
+          {mode === 'ROOMS' ? <Rooms /> : null}
+        </main>
+        <nav>
           <button className="navToUsers"
             onClick={() => handleNav('USERS')}>
             <i className="material-icons">people</i>
@@ -51,10 +57,6 @@ const Dashboard = props => {
             <i className="material-icons">room</i>
           </button>
         </nav>
-        <main>
-          {mode === 'USERS' ? <Users /> : null}
-          {mode === 'ROOMS' ? <Rooms /> : null}
-        </main>
       </section>
     </Modal>
   );

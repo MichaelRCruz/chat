@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import SessionContext from '../SessionContext.js';
-import './Rooms.css';
+// import './Rooms.css';
 
 class Rooms extends React.Component {
-  
+
   static contextType = SessionContext;
 
   render() {

@@ -50,27 +50,44 @@ const App = props => {
 
   return (
     <Route render={routeProps => {
-      const { history } = props;
+      // const { history } = props;
       return (
         <React.Fragment>
-          <Route exact path='/' {...routeProps} render={duhProps => {
-            return <Splash isAuth={isAuth} {...duhProps} />;
-          }} />
-          <Route strict path='/auth/' {...routeProps} render={muhProps => {
-            return <Auth isSignedOut={isSignedOut} {...muhProps} />;
-          }} />
-          <SessionProvider foreignState={foreignState()} firebase={props.firebase}>
-            <Route exact path='/chat/dashboard' component={Dashboard} />
-            <Route exact path='/chat/userProfile' {...routeProps} render={profileProps => {
-              if (!isAuth) {
-                return <Redirect to={'/'} />
-              } else {
-                return <UserProfile {...profileProps} firebase={props.firebase} handleSignOut={handleSignOut} />
-              }
-            }} />
-            <Route exact path='/chat/rooms' render={luhProps => {
-              return <Chat isAuth={isAuth} {...luhProps} />
-            }} />
+          <Route {...routeProps} exact path='/'
+            render={splashProps => {
+              return <Splash {...splashProps} isAuth={isAuth} />;
+            }}
+          />
+          <Route {...routeProps} strict path='/auth/'
+            render={authProps => {
+              return <Auth {...authProps} isSignedOut={isSignedOut} />;
+            }}
+          />
+          <SessionProvider firebase={props.firebase} foreignState={foreignState()}>
+            <Route {...routeProps} exact path='/chat/dashboard'
+              render={dashboardProps => {
+                return <Dashboard {...dashboardProps} />;
+              }}
+            />
+            <Route {...routeProps} exact path='/chat/userProfile'
+              render={profileProps => {
+                if (!isAuth) {
+                  return <Redirect to={'/'} />;
+                } else {
+                  return (
+                    <UserProfile {...profileProps}
+                      firebase={props.firebase}
+                      handleSignOut={handleSignOut}
+                    />
+                  );
+                }
+              }}
+            />
+            <Route {...routeProps} exact path='/chat/rooms'
+              render={chatProps => {
+                return <Chat {...chatProps} isAuth={isAuth} />;
+              }}
+            />
             <Route component={null} />
           </SessionProvider>
         </React.Fragment>

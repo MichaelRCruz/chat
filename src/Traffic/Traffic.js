@@ -37,9 +37,9 @@ const Traffic = props => {
   }, []);
 
   const actionsList = actions.map((user, i) => {
-    const { photoURL, displayName, action, key } = user;
+    const { photoURL, displayName, action, uid } = user;
     return (
-      <li key={key}>
+      <li key={i}>
         <div className="userContainer">
           <img
             className="userImage"

@@ -51,7 +51,7 @@ const Users = () => {
   const subs = subscribers.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     return (
-      <li key={uid}>
+      <li key={i}>
         <div className="userContainer">
           <img
             className="userImage"

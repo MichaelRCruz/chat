@@ -77,6 +77,14 @@ body {
   animation: spin 1s linear infinite;
 }
 
+.displayMenu {
+  display: unset;
+}
+
+.displayPierre {
+  display: none;
+}
+
 @media only screen and (min-device-width: 812px) {
   .appComponent {
     display: grid;
@@ -86,7 +94,6 @@ body {
       "sidebar main"
       "sidebar footer";
   }
-
   .sidebar {
     display: unset;
     position: absolute;
@@ -94,18 +101,24 @@ body {
     grid-area: sidebar;
     background-color: #E1E2E1;
   }
-
   .header {
     grid-area: header;
     z-index: 4;
   }
-
   .main {
     grid-area: main;
   }
-
   .footer {
     grid-area: footer;
     z-index: 4;
+  }
+  .menuIcon {
+    display: none;
+  }
+  .displayMenu {
+    display: none;
+  }
+  .displayPierre {
+    display: unset;
   }
 }

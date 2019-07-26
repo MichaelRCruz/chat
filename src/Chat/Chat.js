@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './Chat.css';
 import Messages from '../Messages/Messages.js';
 import Menu from '../Menu/Menu.js';
@@ -11,9 +11,15 @@ class Chat extends React.Component {
       <div className="appComponent">
         <header className="header">
           <div className="menuIconContainer">
-            <Link to={`/chat/dashboard`}>
-              <i className="material-icons menuIcon" onClick={null}>sort</i>
-            </Link>
+            <NavLink className="displayMenu" to={`/chat/dashboard`}>
+              <i className="material-icons menuIcon">sort</i>
+            </NavLink>
+            <NavLink className="displayPierre" to={`/chat/rooms/?rm=lastVisited`}>
+              <img className="userImage"
+                alt="user"
+                src="https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg"
+               />
+            </NavLink>
           </div>
           <div className="appNameContainer">
             <Link to="/chat/rooms">

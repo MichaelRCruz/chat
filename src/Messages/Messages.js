@@ -34,13 +34,13 @@ class Messages extends Component {
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
       return (
         <ErrorBoundary key={i}>
-        <li>
-          <Message
-            msg={msg}
-            user={user}
-            deleteMessage={this.deleteMessage.bind(this)}
-          />
-        </li>
+          <li>
+            <Message
+              msg={msg}
+              user={user}
+              deleteMessage={this.deleteMessage.bind(this)}
+            />
+          </li>
         </ErrorBoundary>
       );
     });

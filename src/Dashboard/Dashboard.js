@@ -35,23 +35,22 @@ const Dashboard = props => {
   }
 
   return (
-    <Modal show={true}>
       <section className="dashboardComponent">
         <header>
           <p>{location.pathname}</p>
         </header>
-        <nav>
+        <section className="exit">
           <button className="exitButton"
             onClick={() => handleNav(null)}>
             <i className="material-icons">arrow_back_ios</i>
           </button>
-        </nav>
+        </section>
         <main>
-          {mode === 'USERS' ? <div className="dashContainer"><Users /></div> : null}
-          {mode === 'ROOMS' ? <div className="dashContainer"><Rooms /></div> : null}
-          {mode === 'TRAFFIC' ? <div className="dashContainer"><Traffic /></div> : null}
+          {mode === 'USERS' ? <Users /> : null}
+          {mode === 'ROOMS' ? <Rooms /> : null}
+          {mode === 'TRAFFIC' ? <Traffic /> : null}
         </main>
-        <nav className="dashboardNav">
+        <footer className="dashboardNav">
           <button className="navToUsers"
             onClick={() => handleNav('USERS')}>
             <div>
@@ -73,9 +72,8 @@ const Dashboard = props => {
               <p>traffic</p>
             </div>
           </button>
-        </nav>
+        </footer>
       </section>
-    </Modal>
   );
 }
 

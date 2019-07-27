@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
+import ErrorBoundary from '../ErrorBoundary.js';
 import { throttling } from '../utils.js';
 import './Users.css';
 
@@ -40,28 +41,42 @@ const Traffic = props => {
     const { photoURL, displayName, action, uid } = user;
     return (
       <li key={i}>
-        <div className="userContainer">
-          <img
-            className="userImage"
-            alt="user"
-            src={ photoURL || defaultUserImage}
-           />
-          <div className="displayName">
-            <p>{displayName}</p>
+        <ErrorBoundary>
+          <div className="trafficUserContainer">
+            <img
+              className="userImage"
+              alt="user"
+              src={ photoURL || defaultUserImage}
+             />
+            <div className="displayName">
+              <p>{displayName}</p>
+            </div>
+            <div className="userAction">
+              <p>{action || 'offline'}</p>
+            </div>
           </div>
-          <div className="userAction">
-            <p>{action || 'offline'}</p>
-          </div>
-        </div>
+        </ErrorBoundary>
       </li>
     );
   });
   return !actions.length
     ? <div className="widgetLoader"></div>
     : (
-      <section className="usersComponent">
-        <ul>{actionsList}</ul>
-      </section>
+      <div className="trafficComponent">
+        <ul className="trafficList">
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+          {actionsList}
+        </ul>
+      </div>
     );
 }
 

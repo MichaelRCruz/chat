@@ -77,10 +77,6 @@ body {
   animation: spin 1s linear infinite;
 }
 
-.displayMenu {
-  display: unset;
-}
-
 .displayPierre {
   display: none;
 }
@@ -117,8 +113,5 @@ body {
   }
   .displayMenu {
     display: none;
-  }
-  .displayPierre {
-    display: unset;
   }
 }

@@ -1,52 +1,51 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .dashboardComponent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* position: relative; */
   width: 100%;
   height: 100%;
-  /* height: calc(var(--vh, 1vh) * 100 - 125px); */
+  /* height: calc(var(--vh, 1vh) * 100 - 10vh); */
   font-family: 'Roboto', sans-serif;
-}
-
-.dashboardComponent > * {
-  width: 100%;
-  display: flex;
+  /* overflow: hidden; */
 }
 
 .dashboardComponent > header {
-  height: 5%;
+  position: fixed;
+  top: 0vh;
+  height: 5vh;
+  width: 100%;
   background-color: hotpink;
   font-size: 1.35em;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  z-index: 999;
 }
 
-.dashboardComponent > nav {
-  height: 5%;
+.dashboardComponent > .exit {
+  position: fixed;
+  top: 5vh;
+  height: 5vh;
+  width: 100%;
   background-color: lightblue;
+  z-index: 999;
 }
 
 .dashboardComponent > main {
-  height: 83%;
-  background-color: yellow;
-  justify-content: center;
+  /* width: 80%; */
+
+  /* overflow: scroll;
+  -webkit-overflow-scrolling: touch; */
+  margin: auto;
+  /* padding: auto; */
+  width: 80%;
 }
 
 .dashboardNav {
-  height: 7% !important;
+  position: fixed;
+  bottom: 0vh;
+  height: 5vh;
+  width: 100%;
+  background-color: #fff;
   display: flex;
   justify-content: space-around;
-}
-
-.exitButton {
-  margin-left: 15px;
-}
-
-.dashContainer {
-  width: 80%;
 }
 
 .navToUsers, .navToChannels, .navToTraffic {
@@ -82,17 +81,6 @@
 
 .navToUsers > div > p, .navToChannels > div > p, .navToTraffic > div {
   font-size: 1.5em;
-}
-
-.widgetLoader {
-  margin: calc(50vh - 100px) auto;
-  border: 8px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 8px solid #3498db;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 1s linear infinite; /* Safari */
-  animation: spin 1s linear infinite;
 }
 
 @media screen and (min-width: 600px) {

@@ -17,7 +17,7 @@ const Menu = () => {
           alt="avatar"
           src={user ? user.photoURL : ''}
          />
-        <p className="menuDisplayName">{ user.displayName }</p>
+        <p className="menuDisplayName">{user.displayName}</p>
       </section>
       <div className="menuRoomListContainer">
         <h1>rooms</h1>

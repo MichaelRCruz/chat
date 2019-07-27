@@ -1,23 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-/* .trafficList {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.5em;
-	list-style-type: none;
-	padding-left: 0;
-} */
-
 .trafficComponent {
   position: absolute;
   z-index: 0;
   background-color: #fff;
-  /* height: 100vh; */
-  /* position: absolute; */
-  /* z-index: 0; */
-  /* font-family: 'Roboto', sans-serif;
-  font-size: 1.5em;
-	list-style-type: none;
-	padding-left: 0; */
 }
 
 .trafficList {

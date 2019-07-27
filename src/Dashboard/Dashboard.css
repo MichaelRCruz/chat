@@ -1,12 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .dashboardComponent {
-  /* position: relative; */
   width: 100%;
   height: 100%;
-  /* height: calc(var(--vh, 1vh) * 100 - 10vh); */
   font-family: 'Roboto', sans-serif;
-  /* overflow: hidden; */
 }
 
 .dashboardComponent > header {
@@ -29,12 +26,7 @@
 }
 
 .dashboardComponent > main {
-  /* width: 80%; */
-
-  /* overflow: scroll;
-  -webkit-overflow-scrolling: touch; */
   margin: auto;
-  /* padding: auto; */
   width: 80%;
 }
 

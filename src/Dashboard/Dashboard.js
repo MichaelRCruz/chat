@@ -3,7 +3,6 @@ import Rooms from '../Rooms/Rooms.js';
 import Users from '../Traffic/Users.js';
 import Traffic from '../Traffic/Traffic.js';
 import Modal from '../Modal/Modal.js';
-// import SessionContext from '../SessionContext.js';
 import './Dashboard.css';
 
 const Dashboard = props => {

@@ -4,7 +4,7 @@ import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import ErrorBoundary from '../ErrorBoundary.js';
 import { throttling } from '../utils.js';
-import './Users.css';
+// import './Users.css';
 
 const Traffic = props => {
 
@@ -13,6 +13,7 @@ const Traffic = props => {
   const [actions, setActions] = useState([]);
 
   useEffect(() => {
+
     let traffic = [];
     const trafficThrottler = throttling(async () => {
       const sortedActions = await traffic.sort((a, b) => {
@@ -35,23 +36,24 @@ const Traffic = props => {
       addedRef.off();
       setActions([]);
     }
+
   }, []);
 
   const actionsList = actions.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     return (
-      <li key={i}>
+      <li className="trafficListItem" key={i}>
         <ErrorBoundary>
-          <div className="trafficUserContainer">
+          <div className="trafficListContent">
             <img
-              className="userImage"
+              className="trafficImage"
               alt="user"
               src={ photoURL || defaultUserImage}
              />
-            <div className="displayName">
+            <div className="trafficDisplayName">
               <p>{displayName}</p>
             </div>
-            <div className="userAction">
+            <div className="trafficUserAction">
               <p>{action || 'offline'}</p>
             </div>
           </div>
@@ -62,21 +64,9 @@ const Traffic = props => {
   return !actions.length
     ? <div className="widgetLoader"></div>
     : (
-      <div className="trafficComponent">
-        <ul className="trafficList">
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-          {actionsList}
-        </ul>
-      </div>
+      <ul className="trafficList">
+        {actionsList}
+      </ul>
     );
 }
 

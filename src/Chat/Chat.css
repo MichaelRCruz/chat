@@ -110,7 +110,7 @@ body {
   .menuIcon {
     display: none;
   }
-  .displayMenu {
-    display: none;
+  .displayPierre {
+    display: unset;
   }
 }

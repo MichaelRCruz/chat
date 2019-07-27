@@ -2,12 +2,14 @@
 
 .dashboardComponent {
   width: 100%;
-  height: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
 .dashboardComponent > header {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0vh;
   height: 5vh;
   width: 100%;
@@ -18,7 +20,9 @@
 
 .dashboardComponent > .exit {
   position: fixed;
-  top: 5vh;
+  display: flex;
+  align-items: center;
+  top: 4.5vh;
   height: 5vh;
   width: 100%;
   background-color: lightblue;
@@ -26,14 +30,33 @@
 }
 
 .dashboardComponent > main {
-  margin: auto;
-  width: 80%;
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+  width: 100%;
 }
 
-.dashboardNav {
+.dashboardContent > .trafficList {
+  background-color: blue;
+  padding: 0;
+  list-style-type: none;
+  width: 83%;
+  margin: auto;
+}
+
+.dashboardContent > .trafficList > li > div > .trafficImage {
+  border-radius: 50%;
+  height: 60px;
+}
+
+.dashboardContent > .trafficList > li > div {
+  font-size: 1.5em;
+}
+
+.dashboardComponent > footer {
   position: fixed;
   bottom: 0vh;
-  height: 5vh;
+  height: 10vh;
   width: 100%;
   background-color: #fff;
   display: flex;
@@ -45,7 +68,11 @@
   border: none;
   cursor: pointer;
   width: 100%;
-  margin: 0 5px;
+  margin: 0 8px;
+}
+
+.exitButton {
+  margin-left: 20px;
 }
 
 .exitButton:focus {
@@ -62,6 +89,32 @@
 
 .navToTraffic:focus {
   outline: none;
+}
+
+.trafficListContent {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboardContent > .trafficImage {
+  height: 35px;
+  width: 35px;
+}
+
+
+.displayName, .userAction {
+  font-family: 'Roboto', sans-serif;
+	margin-left: 10px;
+	font-size: 17px;
+}
+
+.displayName {
+  font-family: 'Roboto', sans-serif;
+	margin-left: 10px;
+	font-size: 17px;
 }
 
 .navToUsers > div, .navToChannels > div, .navToTraffic > div {

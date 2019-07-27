@@ -3,7 +3,7 @@ import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import { throttling } from '../utils.js';
-import './Users.css';
+// import './Users.css';
 
 const Users = () => {
 

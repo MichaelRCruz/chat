@@ -36,7 +36,7 @@ const Dashboard = props => {
   return (
     <section className="dashboardComponent">
       <header>
-        <p>{location.pathname}</p>
+        <h4>{location.pathname}</h4>
       </header>
       <section className="exit">
         <button className="exitButton"

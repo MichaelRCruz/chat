@@ -9,21 +9,20 @@
   background-color: #fff;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   /* align-items: center; */
   z-index: 4;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+  /* overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; */
   font-family: 'Roboto', sans-serif;
   font-size: 1em;
 }
 
-.menuRoomListContainer > .trafficList > .trafficListItem {
-  /* background-color: lightblue; */
-  margin-bottom: 20px;
+.menuComponent > section {
+  margin: 0px 10px 0px 20px;
 }
 
 .userAvatarContainer {
-  background-color: lightblue;
   width: 100%;
   display: flex;
   align-items: center;
@@ -42,14 +41,14 @@
   width: 25px;
 }
 
-.menuRoomListContainer > .trafficList {
+.menuComponent > section > .trafficList {
   padding: 0;
   list-style-type: none;
   width: 83%;
   margin: auto;
 }
 
-.menuRoomListContainer > .trafficList > li > div > .trafficImage {
+.menuComponent > section > .trafficList > li > div > .trafficImage {
   /* border-radius: 5px; */
   /* height: 25px; */
   /* width: 25px; */

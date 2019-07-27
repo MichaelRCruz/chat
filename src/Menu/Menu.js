@@ -12,21 +12,25 @@ const Menu = () => {
 
   return (
     <aside className="menuComponent">
-      <header className="userAvatarContainer">
+      <section className="userAvatarContainer">
         <img className="userAvatar"
           alt="avatar"
           src={user ? user.photoURL : ''}
          />
         <p className="menuDisplayName">{user.displayName}</p>
-      </header>
-      <main className="menuRoomListContainer">
+      </section>
+      <section>
         <h1>rooms</h1>
         <Rooms />
+      </section>
+      <section>
         <h1>members</h1>
         <Users />
+      </section>
+      <section>
         <h1>traffic</h1>
         <Traffic />
-      </main>
+      </section>
     </aside>
   );
 };

@@ -73,7 +73,6 @@ const Users = () => {
     ? <div className="widgetLoader"></div>
     : (
       <section className="usersComponent">
-        <p>subscribers of {activeRoom.name}</p>
         <ul>{subs}</ul>
       </section>
     );

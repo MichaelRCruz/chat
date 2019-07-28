@@ -4,13 +4,11 @@
   position: fixed;
   bottom: 0;
   height: calc(100vh - 40px);
+  /* min-height: calc(100vh - 40px); */
+  /* min-height: 365px; */
   width: 250px;
   border-right: 1px solid black;
   background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  /* align-items: center; */
   z-index: 4;
   /* overflow-y: scroll;
   -webkit-overflow-scrolling: touch; */
@@ -19,15 +17,35 @@
 }
 
 .menuComponent > section {
-  margin: 0px 10px 0px 20px;
+  border: 1px solid black;
+  margin: 0px 10px 30px 10px;
 }
 
-.userAvatarContainer {
-  width: 100%;
+.menuComponent > section > h1 {
+  font-size: 1.15em;
+  margin-bottom: 10px;
+}
+
+.userAvatarCard {
+  height: 150px;
   display: flex;
   align-items: center;
-  margin-bottom: 40px;
-  /* font-family: 'Roboto', sans-serif; */
+  margin: 30px 0 40px 0;
+}
+
+.roomsCard {
+  height: calc(100vh - 42% - 340px);
+}
+
+.subscribersCard {
+  height: calc(100vh - 42% - 340px);
+}
+
+.trafficCard {
+  position: absolute;
+  bottom: 0;
+  width: 228px;
+  height: 173px;
 }
 
 .userAvatar {
@@ -41,18 +59,40 @@
   width: 25px;
 }
 
+.menuComponent > section > .trafficList::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
 .menuComponent > section > .trafficList {
   padding: 0;
   list-style-type: none;
-  width: 83%;
-  margin: auto;
+  width: 100%;
+  height: calc(100% - 31px);
+  margin: unset;
+  overflow: scroll;
+}
+
+.menuComponent > section > .usersList {
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
+  height: calc(100% - 31px);
+  margin: unset;
+  overflow: scroll;
+}
+
+.menuComponent > section > .trafficList > li {
+  margin: 0 0 10px 0;
 }
 
 .menuComponent > section > .trafficList > li > div > .trafficImage {
-  /* border-radius: 5px; */
-  /* height: 25px; */
-  /* width: 25px; */
   display: none;
+}
+
+.menuComponent > section > .trafficList > li > div > .timeago {
+  margin-right: 0;
+  font-size: 0.5em;
 }
 
 .widgetLoader {

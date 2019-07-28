@@ -72,7 +72,15 @@ const Users = () => {
   return !subscribers.length
     ? <div className="widgetLoader"></div>
     : (
-      <section className="usersComponent">
+      <section className="usersList">
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
+        <ul>{subs}</ul>
         <ul>{subs}</ul>
       </section>
     );

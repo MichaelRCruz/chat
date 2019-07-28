@@ -20,7 +20,7 @@ const Traffic = props => {
       const sortedActions = await traffic.sort((a, b) => {
         return b.lastChamged - a.lastChanged;
       });
-      const slicedActions = await sortedActions.slice(Math.max(sortedActions.length - 5, 0))
+      const slicedActions = await sortedActions.slice(Math.max(sortedActions.length - 25, 0));
       await setActions(slicedActions.reverse());
     }, 100);
 

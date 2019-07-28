@@ -24,7 +24,7 @@ const Menu = () => {
         <Rooms />
       </section>
       <section className="subscribersCard">
-        <h1>members</h1>
+        <h1>subscribers</h1>
         <Users />
       </section>
       <section className="trafficCard">

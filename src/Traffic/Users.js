@@ -2,8 +2,9 @@ import React, { Fragment, useState, useContext, useEffect } from 'react';
 import * as firebase from 'firebase';
 import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
+import ErrorBoundary from '../ErrorBoundary.js';
 import { throttling } from '../utils.js';
-// import './Users.css';
+// import '../Menu/Menu.css';
 
 const Users = () => {
 
@@ -51,20 +52,22 @@ const Users = () => {
   const subs = subscribers.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     return (
-      <li key={i}>
-        <div className="userContainer">
-          <img
-            className="userImage"
-            alt="user"
-            src={ photoURL || defaultUserImage }
-           />
-          <div className="displayName">
-            <p>{displayName}</p>
+      <li className="userListItem" key={uid}>
+        <ErrorBoundary>
+          <div className="userListContent">
+            <img
+              className="userImage"
+              alt="user"
+              src={ photoURL || defaultUserImage}
+             />
+            <div className="userDisplayName">
+              <p>{displayName}</p>
+            </div>
+            <div className="userUserAction">
+              <p>{action || 'offline'}</p>
+            </div>
           </div>
-          <div className="userAction">
-            <p>{action || 'offline'}</p>
-          </div>
-        </div>
+        </ErrorBoundary>
       </li>
     );
   });
@@ -72,17 +75,7 @@ const Users = () => {
   return !subscribers.length
     ? <div className="widgetLoader"></div>
     : (
-      <section className="usersList">
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-        <ul>{subs}</ul>
-      </section>
+      <ul className="usersList">{subs}</ul>
     );
 }
 

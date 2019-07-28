@@ -5,7 +5,7 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 import ErrorBoundary from '../ErrorBoundary.js';
 import Timeago from './../timeago/timeago.js';
 import { throttling } from '../utils.js';
-// import './Users.css';
+// import '../Menu/Menu.css';
 
 const Traffic = props => {
 
@@ -51,13 +51,13 @@ const Traffic = props => {
               alt="user"
               src={ photoURL || defaultUserImage}
              />
-            <div className="trafficDisplayName">
-              <p>{displayName}</p>
-            </div>
-            <div className="trafficUserAction">
+             <Timeago className="timeago" timestamp={ unixStamp || 'sometime' } />
+             <div className="trafficDisplayName">
+               <p>{displayName}</p>
+             </div>
+             <div className="trafficUserAction">
               <p>{action || 'offline'}</p>
-            </div>
-            <Timeago className="timeago" timestamp={ unixStamp || 'sometime' } />
+             </div>
           </div>
         </ErrorBoundary>
       </li>

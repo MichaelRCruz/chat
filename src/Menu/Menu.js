@@ -20,7 +20,6 @@ const Menu = () => {
         <p className="menuDisplayName">{user.displayName}</p>
       </section>
       <section className="roomsCard">
-        <h1>rooms</h1>
         <Rooms />
       </section>
       <section className="subscribersCard">

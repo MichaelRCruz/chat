@@ -30,11 +30,12 @@
 }
 
 .roomsCard {
-  height: calc(100vh - 42% - 340px);
+  height: calc(100vh - 38% - 385px);
+  /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
 }
 
 .subscribersCard {
-  height: calc(100vh - 42% - 340px);
+  height: calc(100vh - 38% - 385px);
 }
 
 .trafficCard {
@@ -61,8 +62,8 @@
 }
 
 .menuComponent > section > .usersList::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+  width: 0px;
+  background: transparent;
 }
 
 .menuComponent > section > .trafficList {
@@ -109,4 +110,28 @@
   height: 60px;
   -webkit-animation: spin 1s linear infinite; /* Safari */
   animation: spin 1s linear infinite;
+}
+
+.roomSelect {
+  display: block;
+	font-size: 1.3em;
+	line-height: 1.3;
+	padding: .25em;
+	width: 100%;
+	margin: 0;
+	border: 1px solid black;
+	/* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #fff;
+}
+.roomSelect::-ms-expand {
+	display: none;
+}
+.roomSelect:hover {
+	border-color: #232323;
+}
+.roomSelect:focus {
+	outline: none;
 }

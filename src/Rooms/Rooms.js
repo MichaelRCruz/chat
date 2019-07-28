@@ -7,31 +7,34 @@ class Rooms extends React.Component {
 
   static contextType = SessionContext;
 
+  handleChange = e => {
+    console.log(e.target.value);
+  }
+
   render() {
-    const { subscribedRooms } = this.context.state;
+    const { subscribedRooms, activeRoom } = this.context.state;
     const rooms = subscribedRooms.map((room, i) => {
       const { key, name } = room;
+      const isCursor = key === activeRoom.key;
+      console.log(key);
       return (
-        <li className="subscribedRoom" key={key}>
-          <Link
-            to={`/chat/rooms?rm=${key}`}
-            className="roomNameButton">
-            <div>
-              <i className="material-icons people">people</i>
-              <p className="roomName">{ name }</p>
-            </div>
-          </Link>
-        </li>
+        <option key={i} value={key} defaultValue={isCursor}>{name}</option>
       );
     });
     return !subscribedRooms.length
       ? <div className="widgetLoader"></div>
       : (
-        <section className="usersComponent">
-          <ul>
-            {rooms}
-          </ul>
-        </section>
+        <form onSubmit={this.handleSubmit}>
+          <fieldset className="roomsFieldset">
+            <legend className="roomsLegend">
+              <p className="roomsLegendTitle">active room</p>
+            </legend>
+            <select type="submit" className="roomSelect"
+              onChange={e => this.handleChange(e)}>
+              {rooms}
+            </select>
+          </fieldset>
+        </form>
       );
   }
 };

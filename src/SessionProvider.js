@@ -87,7 +87,7 @@ class SessionProvider extends React.Component {
     }
   };
 
-  setListeners = (uid, key) => {
+  setListeners = key => {
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -113,6 +113,7 @@ class SessionProvider extends React.Component {
 
   reconcileActiveRoom = async roomId => {
     const response = await new RealTimeApi().getActiveRoom(roomId);
+    console.log(response);
     if (response !== null) {
       return { response, warning: false };
     } else {
@@ -120,7 +121,7 @@ class SessionProvider extends React.Component {
     }
   }
 
-  updateActiveRoom = async (roomId) => {
+  updateActiveRoom = async roomId => {
     const user = firebase.auth().currentUser;
     const { response, warning } = await this.reconcileActiveRoom(roomId);
     if (user && !warning && response) {
@@ -133,7 +134,7 @@ class SessionProvider extends React.Component {
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
       await this.setState({ messages, activeRoom, subscriberIds, warning, error, userConfigs }, () => {
-        this.setListeners(user.uid, roomId);
+        this.setListeners(roomId);
         ref.off();
       });
     };
@@ -188,7 +189,7 @@ class SessionProvider extends React.Component {
     const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
     const configuration = config ? config : userConfig;
     const lastVisited = configuration.lastVisited;
-    const { response, warning } = this.reconcileActiveRoom(rm);
+    const { response, warning } = await this.reconcileActiveRoom(rm);
     const roomId = response ? response.key : lastVisited;
     const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
@@ -197,7 +198,7 @@ class SessionProvider extends React.Component {
     const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
     const { messages } = await new RealTimeApi().getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
-      if (user) this.setListeners(user.uid, this.state.activeRoom.key);
+      if (user) this.setListeners(this.state.activeRoom.key);
     });
   };
 

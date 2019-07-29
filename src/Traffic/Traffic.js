@@ -18,9 +18,9 @@ const Traffic = props => {
     let traffic = [];
     const trafficThrottler = throttling(async () => {
       const sortedActions = await traffic.sort((a, b) => {
-        return b.lastChamged - a.lastChanged;
+        return a.lastChamged - b.lastChanged;
       });
-      const slicedActions = await sortedActions.slice(Math.max(sortedActions.length - 25, 0));
+      const slicedActions = await sortedActions.slice(Math.max(0));
       await setActions(slicedActions.reverse());
     }, 100);
 
@@ -28,17 +28,15 @@ const Traffic = props => {
     addedRef
       .on('child_added', snap => {
         const user = snap.val();
-        if (user.action === 'ONLINE') user.action = 'sup';
-        if (user.action === 'OFFLINE') user.action = 'brb';
         traffic.push(user);
         trafficThrottler();
       });
     return () => {
-      addedRef.off();
+      // addedRef.off();
       setActions([]);
     }
 
-  }, []);
+  }, [activeRoom]);
 
   const actionsList = actions.map((user, i) => {
     const { photoURL, displayName, action, uid, unixStamp } = user;
@@ -56,7 +54,7 @@ const Traffic = props => {
                <p>{displayName}</p>
              </div>
              <div className="trafficUserAction">
-              <p>{action || 'offline'}</p>
+              <p>{action || 'dud'}</p>
              </div>
           </div>
         </ErrorBoundary>

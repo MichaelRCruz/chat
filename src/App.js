@@ -41,7 +41,7 @@ const App = props => {
     const newTrafficRef = await trafficRef.push();
     await activityRef.remove();
     await userStatusDatabaseRef.remove();
-    await newTrafficRef.set({ ...userConfig, unixStamp, action: 'OFFLINE' });
+    await newTrafficRef.set({ ...userConfig, unixStamp, action: 'brb' });
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
     setIsSignedOut(true);

@@ -18,23 +18,24 @@ class SessionProvider extends React.Component {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
-        await userStatusDatabaseRef.remove();
-        await newTrafficRef.set({ ...userConfig, unixStamp, action: 'OFFLINE' });
+        await userStatusDatabaseRef.onDisconnect().remove();
+        // await newTrafficRef.set({ ...userConfig, unixStamp, action: 'brb' });
+        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       } else {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const activityInfo = {
-          action: 'ONLINE',
+          action: 'sup',
           lastChanged: unixStamp
         };
         const onlineUser = { ...activityInfo, ...userConfig };
         if (uid) activityRef.set(activityInfo);
         if (uid) userStatusDatabaseRef.set(onlineUser);
-        if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'ONLINE' });
+        if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'sup' });
         await userStatusDatabaseRef.onDisconnect().remove();
         await activityRef.onDisconnect().remove();
-        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'OFFLINE' });
+        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       }
     });
   }

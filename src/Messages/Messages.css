@@ -45,8 +45,10 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .messageList {
-  padding-left: 0;
+  padding: 0;
   margin-bottom: 80px;
+  list-style-type: none;
+  border: 1px solid black;
 }
 
 .messageList:first-child {
@@ -56,6 +58,15 @@ p, h1, h2, h3, h4, h5, h6 {
 .imageMessageContainer {
   display: flex;
   overflow-x: auto;
+}
+
+.message .timeago {
+  font-size: 10px;
+  margin-right: 10px;
+  margin-top: 2px;
+  font-style: italic;
+  flex-shrink: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
 @media only screen and (min-device-width: 868px) {

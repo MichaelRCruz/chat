@@ -11,7 +11,7 @@ const Menu = () => {
   const { user } = state;
 
   return (
-    <aside className="menuComponent">
+    <main className="menuComponent">
       <section className="userAvatarCard">
         <img className="userAvatar"
           alt="avatar"
@@ -22,15 +22,13 @@ const Menu = () => {
       <section className="roomsCard">
         <Rooms />
       </section>
-      <section className="subscribersCard">
-        <h1>subscribers</h1>
+      <section className="usersCard">
         <Users />
       </section>
       <section className="trafficCard">
-        <h1>traffic</h1>
         <Traffic />
       </section>
-    </aside>
+    </main>
   );
 };
 

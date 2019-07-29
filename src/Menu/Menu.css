@@ -4,8 +4,9 @@
   position: fixed;
   bottom: 0;
   height: calc(100vh - 40px);
-  width: 250px;
-  border-right: 1px solid black;
+  min-width: 250px;
+  max-width: 250px;
+  border-right: 1px solid red;
   background-color: #fff;
   z-index: 4;
   font-family: 'Roboto', sans-serif;
@@ -14,12 +15,8 @@
 
 .menuComponent > section {
   border: 1px solid black;
-  margin: 0px 10px 30px 10px;
-}
-
-.menuComponent > section > h1 {
-  font-size: 1.15em;
-  margin-bottom: 10px;
+  margin: 0 8px;
+  padding: 0;
 }
 
 .userAvatarCard {
@@ -27,7 +24,6 @@
   top: 0%;
   width: 228px;
   height: 14%;
-  /* margin: 30px 0 40px 0; */
 }
 
 .roomsCard {
@@ -38,7 +34,7 @@
   /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
 }
 
-.subscribersCard {
+.usersCard {
   position: absolute;
   top: 40%;
   width: 228px;
@@ -65,9 +61,10 @@
   width: 25px;
 }
 
-.menuComponent > section > .trafficList::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
+.menuComponent .trafficList::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+  /* margin: 5px; */
 }
 
 .menuComponent > section > .usersList::-webkit-scrollbar {
@@ -75,39 +72,76 @@
   background: transparent;
 }
 
-.menuComponent > section > .trafficList {
-  padding: 0;
+.menuComponent .trafficList {
+  position: absolute;
+  padding-left: 0;
   list-style-type: none;
-  width: 100%;
+  /* width: -webkit-fill-available; */
   height: calc(100% - 31px);
   margin: unset;
+  margin-top: 10px;
   overflow: scroll;
 }
+
+/* .menuComponent li .trafficListItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+} */
 
 .menuComponent > section > .usersList {
   padding: 0;
   list-style-type: none;
-  width: 100%;
   height: calc(100% - 31px);
-  margin: unset;
   overflow: scroll;
 }
 
-.menuComponent > section > .trafficList > li {
-  margin: 0 0 10px 0;
-}
-
-.menuComponent > section > .trafficList > li > div > .trafficImage {
+.menuComponent fieldset .trafficImage {
   display: none;
 }
 
-.menuComponent > section > .usersList > li {
-  margin: 0 0 10px 0;
+.menuComponent fieldset .timeago {
+  font-size: 10px;
+  margin-right: 10px;
+  margin-top: 2px;
+  font-style: italic;
+  flex-shrink: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
-.menuComponent > section > .trafficList > li > div > .timeago {
+.menuComponent .trafficListItem {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.menuComponent .trafficListItem > .trafficDisplayName {
+  width: 100px;
+  text-align: left;
+}
+
+.menuComponent .trafficListItem > .trafficAction {
+  width: 50px;
+  text-align: left;
+}
+
+.menuComponent .trafficListItem > .timeago {
+  width: 80px;
+  text-align: right;
+}
+
+.menuComponent fieldset .trafficImage {
   margin-right: 0;
   font-size: 0.5em;
+}
+
+.menuComponent fieldset {
+  margin: 0 !important;
+  padding: 0 auto;
+  border: 1px solid black;
+  border-radius: 5px;
+  height: -webkit-fill-available;
 }
 
 .widgetLoader {

@@ -23,26 +23,35 @@
 }
 
 .userAvatarCard {
-  height: 150px;
-  display: flex;
-  align-items: center;
-  margin: 30px 0 40px 0;
+  position: absolute;
+  top: 0%;
+  width: 228px;
+  height: 14%;
+  /* margin: 30px 0 40px 0; */
 }
 
 .roomsCard {
-  height: calc(100vh - 38% - 385px);
+  position: absolute;
+  top: 17%;
+  width: 228px;
+  height: 20%;
   /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
 }
 
 .subscribersCard {
-  height: calc(100vh - 38% - 385px);
+  position: absolute;
+  top: 40%;
+  width: 228px;
+  height: 26%;
+  min-height: 40px;
 }
 
 .trafficCard {
   position: absolute;
-  bottom: 0;
+  top: 68.5%;
   width: 228px;
-  height: 173px;
+  height: 28%;
+  min-height: 40px;
 }
 
 .userAvatar {

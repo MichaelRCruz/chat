@@ -105,8 +105,9 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       creator: uid,
       dscription: `${displayName}'s first room. Welcome!`,
       name: `home`,
-      key: `uid-${uid}`
-      // users: { [uid]: displayName }
+      key: `uid-${uid}`,
+      users: { [uid]: displayName },
+      admins: { [uid]: displayName }
     };
     const message = {
       content: 'Welcome to your new app!',
@@ -121,11 +122,11 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       roomId: `uid-${uid}`,
       sentAt: Math.floor(Date.now() / 1000),
     };
-    await usersRef.child(uid).update(userConfig).off();
-    await messagesRef.child(messageKey).update(message).off();
-    await roomsRef.child(`uid-${uid}`).update(room).off();
-    await og1UsersRef.child(uid).update(userConfig).off();
-    await og1AdminsRef.child(uid).update(userConfig).off();
+    await usersRef.child(uid).update(userConfig);
+    await messagesRef.child(messageKey).update(message);
+    await roomsRef.child(`uid-${uid}`).update(room);
+    await og1UsersRef.child(uid).update(userConfig);
+    await og1AdminsRef.child(uid).update(userConfig);
     res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });
   });
 });

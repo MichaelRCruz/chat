@@ -18,16 +18,18 @@ const Traffic = props => {
     let traffic = [];
     const trafficThrottler = throttling(async () => {
       const sortedActions = await traffic.sort((a, b) => {
-        return a.lastChamged - b.lastChanged;
+        return a.uxixStamp - b.unixStamp;
       });
-      const slicedActions = await sortedActions.slice(Math.max(0));
-      await setActions(slicedActions.reverse());
+      // const slicedActions = await sortedActions.slice(Math.max(0));
+      await setActions(sortedActions.reverse());
     }, 100);
 
     const addedRef = firebase.database().ref(`/TRAFFIC`);
     addedRef
-      .on('child_added', snap => {
-        const user = snap.val();
+      .on('child_added', async snap => {
+        // const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
+        const user = await snap.val();
+        // user.unixStamp = Date.now();
         traffic.push(user);
         trafficThrottler();
       });

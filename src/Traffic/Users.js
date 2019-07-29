@@ -28,9 +28,10 @@ const Users = () => {
 
     const addUserRef = firebase.database().ref(`/USERS_ONLINE`);
     addUserRef
-      .on('child_added', snap => {
-        const user = snap.val();
-        user.action = 'sup';
+      .on('child_added', async snap => {
+        const user = await snap.val();
+        // user.action = 'sup';
+        // user.unixStamp = await Date.now();
         buffer.push(user);
         userThrottler();
       });
@@ -38,8 +39,11 @@ const Users = () => {
     const removeUserRef = firebase.database().ref(`/USERS_ONLINE`);
     removeUserRef
       .on('child_removed', async snap => {
-        const user = snap.val();
+        // const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
+        const user = await snap.val();
         user.action = 'brb';
+        user.unixStamp = await Date.now();
+        // user.unixStamp = unixStamp;
         buffer.push(user);
         userThrottler();
       });
@@ -64,7 +68,7 @@ const Users = () => {
               <p>{displayName}</p>
             </div>
             <div className="userUserAction">
-              <p>{action || 'offline'}</p>
+              <p>{action || 'dud'}</p>
             </div>
           </div>
         </ErrorBoundary>

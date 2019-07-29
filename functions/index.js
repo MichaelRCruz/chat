@@ -82,9 +82,10 @@ exports.getRooms = functions.https.onRequest((req, res) => {
 exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
-    const userRef = admin.database().ref('/users');
-    const roomRef = admin.database().ref('/rooms');
-    const og1Ref = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
+    const usersRef = admin.database().ref('/users');
+    const roomsRef = admin.database().ref('/rooms');
+    const og1UsersRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
+    const og1AdminsRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/admins');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
     const userConfig = {
@@ -120,12 +121,11 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       roomId: `uid-${uid}`,
       sentAt: Math.floor(Date.now() / 1000),
     };
-    await userRef.child(uid).update(userConfig);
-    await messagesRef.child(messageKey).update(message);
-    await roomRef.child(`uid-${uid}`).update(room);
-    await roomRef.child(`uid-${uid}/users`).update(userConfig);
-    await roomRef.child(`uid-${uid}/moderators`).update(userConfig);
-    await og1Ref.child(uid).update(userConfig);
+    await usersRef.child(uid).update(userConfig).off();
+    await messagesRef.child(messageKey).update(message).off();
+    await roomsRef.child(`uid-${uid}`).update(room).off();
+    await og1UsersRef.child(uid).update(userConfig).off();
+    await og1AdminsRef.child(uid).update(userConfig).off();
     res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });
   });
 });

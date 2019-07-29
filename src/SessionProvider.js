@@ -113,7 +113,6 @@ class SessionProvider extends React.Component {
 
   reconcileActiveRoom = async roomId => {
     const response = await new RealTimeApi().getActiveRoom(roomId);
-    console.log(response);
     if (response !== null) {
       return { response, warning: false };
     } else {

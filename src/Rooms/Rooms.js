@@ -8,7 +8,7 @@ class Rooms extends React.Component {
   static contextType = SessionContext;
 
   handleChange = e => {
-    console.log(e.target.value);
+    this.props.history.push(`/chat/rooms/?rm=${e.target.value}`);
   }
 
   render() {
@@ -18,23 +18,21 @@ class Rooms extends React.Component {
       const isCursor = key === activeRoom.key;
       console.log(key);
       return (
-        <option key={i} value={key} defaultValue={isCursor}>{name}</option>
+        <option key={name} value={key} selected={isCursor}>{name}</option>
       );
     });
     return !subscribedRooms.length
       ? <div className="widgetLoader"></div>
       : (
-        <form onSubmit={this.handleSubmit}>
-          <fieldset className="roomsFieldset">
-            <legend className="roomsLegend">
-              <p className="roomsLegendTitle">active room</p>
-            </legend>
-            <select type="submit" className="roomSelect"
-              onChange={e => this.handleChange(e)}>
-              {rooms}
-            </select>
-          </fieldset>
-        </form>
+        <section>
+          <legend className="roomsLegend">
+            <p className="roomsLegendTitle">active room</p>
+          </legend>
+          <select className="roomSelect" value={activeRoom.key}
+            onChange={e => this.handleChange(e)}>
+            {rooms}
+          </select>
+        </section>
       );
   }
 };

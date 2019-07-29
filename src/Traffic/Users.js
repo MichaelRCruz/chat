@@ -52,7 +52,7 @@ const Users = () => {
   const subs = subscribers.map((user, i) => {
     const { photoURL, displayName, action, uid } = user;
     return (
-      <li className="userListItem" key={uid}>
+      <li className="userListItem" key={uid || i}>
         <ErrorBoundary>
           <div className="userListContent">
             <img

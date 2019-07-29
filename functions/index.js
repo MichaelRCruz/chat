@@ -96,19 +96,16 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       authProviders,
       lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
       rooms: ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`],
-      activity: {
-        isOnline: true,
-        lastChanged: Math.floor(Date.now() / 1000),
-      }
+      action: 'sup',
+      activity: { isOnline: true, unixStamp: Math.floor(Date.now() / 1000) }
     };
     const room = {
       active: false,
       creator: uid,
       dscription: `${displayName}'s first room. Welcome!`,
-      moderators: [uid],
-      name: `${displayName}'s room`,
-      key: `uid-${uid}`,
-      users: { [uid]: displayName }
+      name: `home`,
+      key: `uid-${uid}`
+      // users: { [uid]: displayName }
     };
     const message = {
       content: 'Welcome to your new app!',
@@ -126,6 +123,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     await userRef.child(uid).update(userConfig);
     await messagesRef.child(messageKey).update(message);
     await roomRef.child(`uid-${uid}`).update(room);
+    await roomRef.child(`uid-${uid}/users`).update(userConfig);
+    await roomRef.child(`uid-${uid}/moderators`).update(userConfig);
     await og1Ref.child(uid).update(userConfig);
     res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });
   });

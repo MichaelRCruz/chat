@@ -66,7 +66,7 @@ const Traffic = props => {
     : (
       <fieldset className="roomsFieldset">
         <legend className="roomsLegend">
-          <p className="roomsLegendTitle">active room</p>
+          <p className="roomsLegendTitle">traffic</p>
         </legend>
         <ul className="trafficList">
           {actionsList}

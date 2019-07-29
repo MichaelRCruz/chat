@@ -83,7 +83,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
     const usersRef = admin.database().ref('/users');
-    const roomsRef = admin.database().ref('/rooms');
+    const roomRef = admin.database().ref('/rooms');
+    const subsRef = admin.database().ref(`/rooms`);
     const og1UsersRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
     const og1AdminsRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/admins');
     const messagesRef = admin.database().ref('/messages');
@@ -124,7 +125,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     };
     await usersRef.child(uid).update(userConfig);
     await messagesRef.child(messageKey).update(message);
-    await roomsRef.child(`uid-${uid}`).update(room);
+    await roomRef.child(`uid-${uid}`).update(room);
+    await subsRef.child(`uid-${uid}/users/${uid}`).update(userConfig);
     await og1UsersRef.child(uid).update(userConfig);
     await og1AdminsRef.child(uid).update(userConfig);
     res.json({ userConfig, activeRoom: room, subscribedRooms: [room, `uid-${uid}`] });

@@ -4,6 +4,7 @@ import SessionContext from '../SessionContext.js';
 import defaultUserImage from './../assets/images/peaceful_potato.png';
 import ErrorBoundary from '../ErrorBoundary.js';
 import { throttling } from '../utils.js';
+import Timeago from './../timeago/timeago.js';
 // import '../Menu/Menu.css';
 
 const Users = () => {
@@ -30,8 +31,6 @@ const Users = () => {
     addUserRef
       .on('child_added', async snap => {
         const user = await snap.val();
-        // user.action = 'sup';
-        // user.unixStamp = await Date.now();
         buffer.push(user);
         userThrottler();
       });
@@ -39,11 +38,9 @@ const Users = () => {
     const removeUserRef = firebase.database().ref(`/USERS_ONLINE`);
     removeUserRef
       .on('child_removed', async snap => {
-        // const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const user = await snap.val();
         user.action = 'brb';
         user.unixStamp = await Date.now();
-        // user.unixStamp = unixStamp;
         buffer.push(user);
         userThrottler();
       });
@@ -54,23 +51,21 @@ const Users = () => {
   }, [activeRoom]);
 
   const subs = subscribers.map((user, i) => {
-    const { photoURL, displayName, action, uid } = user;
+    const { photoURL, displayName, action, uid, unixStamp } = user;
     return (
-      <li className="userListItem" key={uid || i}>
+      <li className="userListItem" key={i}>
         <ErrorBoundary>
-          <div className="userListContent">
-            <img
-              className="userImage"
-              alt="user"
-              src={ photoURL || defaultUserImage}
-             />
-            <div className="userDisplayName">
-              <p>{displayName}</p>
-            </div>
-            <div className="userUserAction">
+          <img
+            className="userImage"
+            alt="user"
+            src={ photoURL || defaultUserImage}
+           />
+           <div className="userDisplayName">
+             <p>{displayName}</p>
+           </div>
+           <div className="userUserAction">
               <p>{action || 'dud'}</p>
-            </div>
-          </div>
+           </div>
         </ErrorBoundary>
       </li>
     );
@@ -79,7 +74,14 @@ const Users = () => {
   return !subscribers.length
     ? <div className="widgetLoader"></div>
     : (
-      <ul className="usersList">{subs}</ul>
+      <fieldset className="usersFieldset">
+        <legend className="usersLegend">
+          <p className="usersLegendTitle">active room</p>
+        </legend>
+        <ul className="usersList">
+          {subs}
+        </ul>
+      </fieldset>
     );
 }
 

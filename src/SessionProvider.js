@@ -25,10 +25,7 @@ class SessionProvider extends React.Component {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
-        const activityInfo = {
-          action: 'sup',
-          lastChanged: unixStamp
-        };
+        const activityInfo = { action: 'sup', unixStamp };
         const onlineUser = { ...activityInfo, ...userConfig };
         if (uid) activityRef.set(activityInfo);
         if (uid) userStatusDatabaseRef.set(onlineUser);

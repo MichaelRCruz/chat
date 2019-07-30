@@ -34,13 +34,13 @@ const Menu = () => {
   });
 
   const legendContent = (
-    <React.Fragment>
+    <div className="legendContent">
       <img className="userAvatar"
         alt="avatar"
         src={userConfig ? userConfig.photoURL : ''}
        />
        <ul className="authImagesList">{providers}</ul>
-     </React.Fragment>
+     </div>
   );
 
   return (

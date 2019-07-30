@@ -65,14 +65,18 @@
 
 .authImagesList, .legendContent {
   list-style-type: none;
-  padding: 0;
   margin: 0;
-  width: auto;
+  /* width: auto; */
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  padding: unset;
 }
 
 .authImage {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
+  margin: 0 0 4px 5px;
 }
 
 .trafficList::-webkit-scrollbar {
@@ -102,8 +106,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 60px;
-  /* padding-right: 0 3px; */
 }
 
 .menuComponent .trafficList {

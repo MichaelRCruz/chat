@@ -9,11 +9,16 @@ p, h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.messages-component {
-  position: absolute;
-  z-index: 0;
-  background-color: #fff;
-  height: 100%;
+.messageList {
+  /* margin-right: 20px; */
+}
+
+.message {
+  width: 100vw;
+}
+
+.submitTextarea {
+  width: 100vw;
 }
 
 .message {
@@ -23,6 +28,7 @@ p, h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto', sans-serif;
   z-index: 3;
   width: 100vw;
+  margin-left: 5px;
 }
 
 .messageImage {
@@ -30,7 +36,7 @@ p, h1, h2, h3, h4, h5, h6 {
   height: 40px;
   margin-right: 5px;
   border-radius: 15%;
-  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .content {
@@ -46,35 +52,48 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .messageList {
-  padding: 0;
-  margin-bottom: 80px;
+  padding: unset;
+  /* margin-bottom: 50px; */
   list-style-type: none;
-  padding-left: 6px;
+  /* padding-right: 6px; */
 }
 
 .messageList:first-child {
-  margin-top: calc(100vh - 128px);
+  margin-top: calc(100vh);
+}
+
+.messageList:last-child {
+  margin-bottom: 90px;
 }
 
 .imageMessageContainer {
   display: flex;
-  overflow-x: auto;
+  /* overflow-x: auto; */
 }
 
 .message .timeago {
-  font-size: 10px;
-  margin-right: 10px;
-  margin-top: 2px;
+  font-size: 9px;
+  /* margin-right: 10px; */
+  /* margin-top: 2px; */
   font-style: italic;
   flex-shrink: 0;
-  font-family: 'Roboto', sans-serif;
+}
+
+.submitTextarea {
+  position: fixed;
+  bottom: 30px;
+  background-color: #fff;
 }
 
 @media only screen and (min-device-width: 868px) {
   .firstChild {
-    margin-top: calc(100vh - 100px);
+    /* margin-top: calc(100vh - 100px); */
   }
-  .message {
-    width: calc(100vw - 250px);
+  .message, .submitTextarea {
+    width: calc(100vw - 270px);
+  }
+  .submitTextarea {
+    bottom: 40px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
   }
 }

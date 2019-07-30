@@ -38,9 +38,6 @@ class Chat extends React.Component {
         <main className="main">
           <Messages />
         </main>
-        <footer className="footer">
-          <SubmitMessage />
-        </footer>
       </div>
     );
   }

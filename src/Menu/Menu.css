@@ -103,6 +103,7 @@
 
 .menuComponent fieldset.roomsFieldset {
   height: calc(100% - 16px);
+  /* box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22); */
 }
 
 .menuComponent fieldset .trafficImage {
@@ -179,6 +180,7 @@
   border-radius: 5px;
   height: 94%;
   width: auto;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
 }
 
 .widgetLoader {

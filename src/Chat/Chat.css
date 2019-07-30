@@ -16,17 +16,12 @@ body {
   z-index: 999;
 }
 
-.menuIconContainer, .appNameContainer, .headerIconContainer {
-  display: flex;
-  width: 33.3%;
-}
-
 .menuIconContainer {
-  flex-direction: row;
+  /* flex-direction: row; */
 }
 
 .appNameContainer {
-  justify-content: center;
+  /* justify-content: center; */
 }
 
 .appNameContainer > a {
@@ -58,13 +53,6 @@ body {
   display: none;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0vh;
-  width: 100%;
-  background-color: #fff;
-}
-
 .widgetLoader {
   margin: calc(50vh - 100px) auto;
   border: 8px solid #f3f3f3;
@@ -86,26 +74,23 @@ body {
     grid-template-columns: 250px auto;
     grid-template-areas:
       "header header"
-      "sidebar main"
-      "sidebar footer";
+      "sidebar main";
   }
   .sidebar {
     display: unset;
-    position: absolute;
-    z-index: 999;
+  }
+  .menuComponent {
+    /* position: absolute; */
+    /* z-index: 999; */
     grid-area: sidebar;
-    background-color: #E1E2E1;
+    /* background-color: #E1E2E1; */
   }
   .header {
     grid-area: header;
-    z-index: 4;
+    /* z-index: 4; */
   }
   .main {
     grid-area: main;
-  }
-  .footer {
-    grid-area: footer;
-    z-index: 4;
   }
   .menuIcon {
     display: none;

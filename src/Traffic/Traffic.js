@@ -64,15 +64,15 @@ const Traffic = props => {
   return !actions.length
     ? <div className="widgetLoader"></div>
     : (
-        <fieldset className="trafficFieldset">
-          <legend className="roomsLegend">
-            <p className="roomsLegendTitle">traffic</p>
-          </legend>
-          <ul className="trafficList">
-            {actionsList}
-          </ul>
-        </fieldset>
-      );
+      <fieldset className="trafficFieldset">
+        <legend className="roomsLegend">
+          <p className="roomsLegendTitle">traffic</p>
+        </legend>
+        <ul className="trafficList">
+          {actionsList}
+        </ul>
+      </fieldset>
+    );
 }
 
 export default Traffic;

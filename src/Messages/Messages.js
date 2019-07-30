@@ -3,6 +3,7 @@ import Message from './Message.js';
 import ErrorBoundary from '../ErrorBoundary.js';
 // import Timeago from './../timeago/timeago.js';
 import SessionContext from '../SessionContext.js';
+import SubmitMessage from '../SubmitMessage/SubmitMessage.js';
 // import { staticMessages } from '../staticState.js';
 import './Messages.css';
 
@@ -48,8 +49,13 @@ class Messages extends Component {
       <div className="messagesComponent">
         <ul className="messageList">
           {messagesPayload}
+          <li ref={(thisDiv) => this.bottomOfMessages = thisDiv}></li>
+          <li>
+            <div className="submitTextarea">
+              <SubmitMessage />
+            </div>
+          </li>
         </ul>
-        <div ref={(thisDiv) => this.bottomOfMessages = thisDiv}></div>
       </div>
     );
   };

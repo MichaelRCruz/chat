@@ -14,30 +14,30 @@
 }
 
 .menuComponent > section {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   margin: 0 8px;
   padding: 0;
 }
 
-.userAvatarCard {
+.avatarCard {
   position: absolute;
-  top: 0%;
+  top: 1%;
   width: 228px;
-  height: 14%;
+  height: 11%;
 }
 
 .roomsCard {
   position: absolute;
-  top: calc(17% - 15px);
+  top: calc(18% - 20px);
   width: 228px;
   height: 16%;
-  min-height: 40px;
+  /* min-height: 40px; */
   /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
 }
 
 .usersCard {
   position: absolute;
-  top: calc(35% - 15px);
+  top: calc(35% - 20px);
   width: 228px;
   height: 30%;
   min-height: 40px;
@@ -52,8 +52,8 @@
 }
 
 .userAvatar {
-  height: 29px;
-  width: 29px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
 }
 
@@ -62,12 +62,12 @@
   width: 25px;
 }
 
-.menuComponent .trafficList::-webkit-scrollbar {
+.trafficList::-webkit-scrollbar {
   width: 0px;
   background: transparent;
 }
 
-.menuComponent > section > .usersList::-webkit-scrollbar {
+.usersList::-webkit-scrollbar {
   width: 0px;
   background: transparent;
 }
@@ -80,12 +80,23 @@
   overflow: scroll;
 }
 
+.menuComponent legend.avatarLegend {
+  /* height: 8%; */
+  /* text-align: center; */
+  margin: 0;
+  /* overflow: scroll; */
+}
+
 .menuComponent .trafficList {
   padding-left: 0;
   list-style-type: none;
-  height: calc(100% - 10px);
+  height: calc(100% - 12px);
   margin: unset;
   overflow: scroll;
+}
+
+.menuComponent fieldset.roomsFieldset {
+  height: calc(100% - 16px);
 }
 
 .menuComponent fieldset .trafficImage {
@@ -115,8 +126,10 @@
 }
 
 .menuComponent .trafficListItem > .trafficDisplayName {
-  width: 110px;
+  width: 100px;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menuComponent .trafficListItem > .trafficAction {
@@ -126,6 +139,25 @@
 
 .menuComponent .trafficListItem > .timeago {
   width: 67px;
+  text-align: right;
+}
+
+.menuComponent img.userImage {
+  height: 25px;
+  width: 25px;
+  text-align: left;
+  margin-right: 10px;
+}
+
+.menuComponent div.userDisplayName {
+  width: 141px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuComponent div.userAction {
+  width: auto;
   text-align: right;
 }
 
@@ -140,7 +172,7 @@
   border: 1px solid black;
   border-radius: 5px;
   height: 94%;
-  width: 200px;
+  width: auto;
 }
 
 .widgetLoader {

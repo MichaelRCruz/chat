@@ -51,7 +51,7 @@ const Traffic = props => {
             src={ photoURL || defaultUserImage}
            />
            <div className="trafficDisplayName">
-             <p>{displayName}</p>
+             {displayName}
            </div>
            <div className="trafficUserAction">
             <p>{action || 'dud'}</p>
@@ -64,7 +64,7 @@ const Traffic = props => {
   return !actions.length
     ? <div className="widgetLoader"></div>
     : (
-      <fieldset className="roomsFieldset">
+      <fieldset className="trafficFieldset">
         <legend className="roomsLegend">
           <p className="roomsLegendTitle">traffic</p>
         </legend>

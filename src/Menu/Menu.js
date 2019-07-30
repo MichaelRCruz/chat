@@ -9,15 +9,22 @@ const Menu = () => {
   const sessionContext = useContext(SessionContext);
   const { state } = sessionContext;
   const { user } = state;
+  console.log(user);
 
   return (
     <main className="menuComponent">
-      <section className="userAvatarCard">
-        <img className="userAvatar"
-          alt="avatar"
-          src={user ? user.photoURL : ''}
-         />
-        <p className="menuDisplayName">{user.displayName}</p>
+      <section className="avatarCard">
+        <fieldset className="avatarFieldset">
+
+          <legend className="avatarLegend">
+            <img className="userAvatar"
+              alt="avatar"
+              src={user ? user.photoURL : ''}
+             />
+          </legend>
+
+          <p className="avatarDisplayName">{user.displayName}</p>
+        </fieldset>
       </section>
       <section className="roomsCard">
         <Rooms />

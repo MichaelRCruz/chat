@@ -61,7 +61,7 @@ const Users = () => {
             src={ photoURL || defaultUserImage}
            />
            <div className="userDisplayName">
-             <p>{displayName}</p>
+             {displayName}
            </div>
            <div className="userUserAction">
               <p>{action || 'dud'}</p>

@@ -23,17 +23,15 @@ class Rooms extends React.Component {
     return !subscribedRooms.length
       ? <div className="widgetLoader"></div>
       : (
-        <form>
-          <fieldset className="roomsFieldset">
-            <legend className="roomsLegend">
-              <p className="roomsLegendTitle">active room</p>
-            </legend>
-            <select className="roomSelect" value={activeRoom.key}
-              onChange={e => this.handleChange(e)}>
-              {rooms}
-            </select>
-          </fieldset>
-        </form>
+        <fieldset className="roomsFieldset">
+          <legend className="roomsLegend">
+            <p className="roomsLegendTitle">active room</p>
+          </legend>
+          <select className="roomSelect" value={activeRoom.key}
+            onChange={e => this.handleChange(e)}>
+            {rooms}
+          </select>
+        </fieldset>
       );
   }
 };

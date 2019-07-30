@@ -11,14 +11,21 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .messageList {
   /* margin-right: 20px; */
+  padding-left: 0;
 }
 
 .message {
-  width: 100vw;
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.messageComponent li {
+  /* width: 100%; */
 }
 
 .submitTextarea {
-  width: 100vw;
+  /* width: 100%; */
 }
 
 .message {
@@ -81,8 +88,9 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .submitTextarea {
   position: fixed;
-  bottom: 30px;
+  bottom: 20px;
   background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
 }
 
 @media only screen and (min-device-width: 868px) {
@@ -90,10 +98,6 @@ p, h1, h2, h3, h4, h5, h6 {
     /* margin-top: calc(100vh - 100px); */
   }
   .message, .submitTextarea {
-    width: calc(100vw - 270px);
-  }
-  .submitTextarea {
-    bottom: 40px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
+    width: calc(100vw - 260px);
   }
 }

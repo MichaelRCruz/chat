@@ -59,13 +59,13 @@ const Users = () => {
             className="userImage"
             alt="user"
             src={ photoURL || defaultUserImage}
-           />
-           <div className="userDisplayName">
-             {displayName}
-           </div>
-           <div className="userUserAction">
-              <p>{action || 'dud'}</p>
-           </div>
+          />
+          <div className="userDisplayName">
+            {displayName}
+          </div>
+          <div className="userUserAction">
+            <p>{action || 'dud'}</p>
+          </div>
         </ErrorBoundary>
       </li>
     );

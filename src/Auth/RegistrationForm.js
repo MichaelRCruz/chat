@@ -15,13 +15,7 @@ const RegistrationForm = props => {
     }
     // clear({});
   };
-  const {
-    handleSubmit,
-    handleChange,
-    formErrors,
-    formValues,
-    clearForm
-  } = useForm(formCallback);
+  const { handleSubmit, handleChange, formErrors, formValues, clearForm } = useForm(formCallback);
   const { displayName, email, password } = formValues;
   const { displayNameError, emailError, passwordError } = formErrors;
 

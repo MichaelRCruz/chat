@@ -49,14 +49,14 @@ const Traffic = props => {
             className="trafficImage"
             alt="user"
             src={ photoURL || defaultUserImage}
-           />
-           <div className="trafficDisplayName">
-             {displayName}
-           </div>
-           <div className="trafficUserAction">
+          />
+          <div className="trafficDisplayName">
+           {displayName}
+          </div>
+          <div className="trafficUserAction">
             <p>{action || 'dud'}</p>
-           </div>
-           <Timeago className="timeago" timestamp={ unixStamp || 'sometime' } />
+          </div>
+          <Timeago className="timeago" timestamp={ unixStamp || 'sometime' } />
         </ErrorBoundary>
       </li>
     );
@@ -64,15 +64,15 @@ const Traffic = props => {
   return !actions.length
     ? <div className="widgetLoader"></div>
     : (
-      <fieldset className="trafficFieldset">
-        <legend className="roomsLegend">
-          <p className="roomsLegendTitle">traffic</p>
-        </legend>
-        <ul className="trafficList">
-          {actionsList}
-        </ul>
-      </fieldset>
-    );
+        <fieldset className="trafficFieldset">
+          <legend className="roomsLegend">
+            <p className="roomsLegendTitle">traffic</p>
+          </legend>
+          <ul className="trafficList">
+            {actionsList}
+          </ul>
+        </fieldset>
+      );
 }
 
 export default Traffic;

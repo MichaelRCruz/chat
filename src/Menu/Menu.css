@@ -6,7 +6,6 @@
   height: calc(100vh - 40px);
   min-width: 250px;
   max-width: 250px;
-  border-right: 1px solid red;
   background-color: #fff;
   z-index: 4;
   font-family: 'Roboto', sans-serif;
@@ -45,7 +44,7 @@
 
 .trafficCard {
   position: absolute;
-  top: calc(67% - 15px);
+  bottom: 38px;
   width: 228px;
   height: 30%;
   min-height: 40px;
@@ -79,16 +78,6 @@
   margin: 0 0 4px 5px;
 }
 
-.trafficList::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-
-.usersList::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
-
 .menuComponent .usersList {
   padding-left: 0;
   list-style-type: none;
@@ -98,10 +87,6 @@
 }
 
 .menuComponent legend.avatarLegend {
-  /* height: 8%; */
-  /* text-align: center; */
-  /* margin: 0; */
-  /* overflow: scroll; */
   display: flex;
   flex-direction: row;
   align-items: center;

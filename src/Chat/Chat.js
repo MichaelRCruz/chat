@@ -11,15 +11,15 @@ class Chat extends React.Component {
       <div className="appComponent">
         <header className="header">
           <div className="menuIconContainer">
-            <NavLink className="displayMenu" to={`/chat/dashboard`}>
+            <Link className="displayMenu" to={`/chat/dashboard`}>
               <i className="material-icons menuIcon">sort</i>
-            </NavLink>
-            <NavLink className="displayPierre" to={`/chat/rooms/?rm=lastVisited`}>
+            </Link>
+            <Link className="displayPierre" to={`/chat/rooms/?rm=lastVisited`}>
               <img className="userImage"
                 alt="user"
                 src="https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg"
                />
-            </NavLink>
+            </Link>
           </div>
           <div className="appNameContainer">
             <Link to="/chat/rooms">

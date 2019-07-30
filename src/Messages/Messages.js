@@ -45,7 +45,7 @@ class Messages extends Component {
       );
     });
     return (
-      <div className="messages-component">
+      <div className="messagesComponent">
         <ul className="messageList">
           {messagesPayload}
         </ul>

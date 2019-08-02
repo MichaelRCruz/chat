@@ -1,5 +1,7 @@
 after reading please note that it's the result of momentary inspiration and may not work out later
 
+# Factor-of-Five something using Flag Notation or whatever you want to call it for now
+
 ###### _preface_
 
 > This project started as an exploration into Firebase and React's Context and Hooks API. They all ended up being pretty cool. 😎
@@ -97,7 +99,6 @@ Now what you see above is a pretty straightforward way to represent some sort of
 `a`, `x`, `z` all symbolize time in a linear fashion form `a` to `z` likewise for `x` and `o` but as intermediate states with x being within any incremental gauge that can only factor up and factor down by 10.
 
 
-
-The next readme will detail how to apply this to an example auth strategy
+The next readme will explore how to apply this thinking to a fully nested application includng details on authentication startegy lifecycles.
 
 TODO: stuff

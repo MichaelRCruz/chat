@@ -5,7 +5,7 @@
   bottom: 0;
   height: calc(100vh - 40px);
   min-width: 250px;
-  /* max-width: 250px; */
+  max-width: 250px;
   background-color: #fff;
   z-index: 4;
   font-family: 'Roboto', sans-serif;
@@ -117,7 +117,6 @@
 }
 
 .menuComponent .userListItem {
-  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -125,7 +124,6 @@
 }
 
 .menuComponent .trafficListItem {
-  margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -215,11 +213,4 @@
 }
 .roomSelect:focus {
 	outline: none;
-}
-
-@media only screen and (min-device-width: 812px) {
-
-  /* .menuComponent {
-    width: 100vw;
-  } */
 }

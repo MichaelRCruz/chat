@@ -7,7 +7,7 @@ body {
 .header {
   position: fixed;
   top: 0vh;
-  height: auto;
+  height: 35px;
   width: 100%;
   background-color: black;
   display: flex;

@@ -38,9 +38,9 @@ const Menu = () => {
       <img className="userAvatar"
         alt="avatar"
         src={userConfig ? userConfig.photoURL : ''}
-       />
-       <ul className="authImagesList">{providers}</ul>
-     </div>
+      />
+      <ul className="authImagesList">{providers}</ul>
+    </div>
   );
 
   return (

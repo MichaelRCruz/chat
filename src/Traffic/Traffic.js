@@ -15,12 +15,12 @@ const Traffic = props => {
 
   useEffect(() => {
 
-    let traffic = [];
+    let buffer = [];
     const trafficThrottler = throttling(async () => {
-      const sortedActions = await traffic.sort((a, b) => {
+      const sortedActions = await buffer.sort((a, b) => {
         return a.uxixStamp - b.unixStamp;
       });
-      // const slicedActions = await sortedActions.slice(Math.max(0));
+      const slicedActions = await sortedActions.slice(Math.max(0));
       await setActions(sortedActions.reverse());
     }, 100);
 
@@ -30,7 +30,7 @@ const Traffic = props => {
         // const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         const user = await snap.val();
         // user.unixStamp = Date.now();
-        traffic.push(user);
+        buffer.push(user);
         trafficThrottler();
       });
     return () => {

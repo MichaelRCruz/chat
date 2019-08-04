@@ -23,7 +23,7 @@ class Chat extends React.Component {
           </div>
           <div className="appNameContainer">
             <Link to="/chat/rooms">
-              <p className="headerAppName">Potato</p>
+              <p className="headerAppName">Potato<span className="titleBeta"> beta</span></p>
             </Link>
           </div>
           <div className="headerIconContainer">

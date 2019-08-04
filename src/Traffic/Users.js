@@ -18,32 +18,31 @@ const Users = () => {
     const onliners = Object.assign({}, users);
     const muhSubs = users ? users : {};
     const subscribers = Object.keys(muhSubs);
-    let buffer = [];
 
+    let buffer = [];
     const userThrottler = throttling(() => {
       buffer.forEach((user, index) => {
         if (subscribers.includes(user.uid)) onliners[user.uid] = user;
       });
       setSubscribers(Object.values(onliners));
     }, 100);
-
     const addUserRef = firebase.database().ref(`/USERS_ONLINE`);
-    addUserRef
-      .on('child_added', async snap => {
-        const user = await snap.val();
-        buffer.push(user);
-        userThrottler();
-      });
+    addUserRef.on('child_added', async snap => {
+      const user = await snap.val();
+      user.action = 'sup';
+      user.unixStamp = await Date.now();
+      buffer.push(user);
+      userThrottler();
+    });
 
     const removeUserRef = firebase.database().ref(`/USERS_ONLINE`);
-    removeUserRef
-      .on('child_removed', async snap => {
-        const user = await snap.val();
-        user.action = 'brb';
-        user.unixStamp = await Date.now();
-        buffer.push(user);
-        userThrottler();
-      });
+    removeUserRef.on('child_removed', async snap => {
+      const user = await snap.val();
+      user.action = 'brb';
+      user.unixStamp = await Date.now();
+      buffer.push(user);
+      userThrottler();
+    });
     return () => {
       addUserRef.off();
       removeUserRef.off();

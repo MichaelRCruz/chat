@@ -15,7 +15,7 @@ const App = props => {
   const foreignState = () => {
     const foreignState = {};
     const urlParams = new URLSearchParams(window.location.search);
-    var entries = urlParams.entries();
+    const entries = urlParams.entries();
     for (const pair of entries) {
       foreignState[pair[0]] = pair[1];
     }
@@ -27,17 +27,17 @@ const App = props => {
       if (user) {
         setIsAuth(true);
       } else if (!user) {
-        // localStorage.removeItem('potatoStorage');
         setIsAuth(false);
       }
     });
   });
 
   const handleSignOut = async userConfig => {
+    const db = props.firebase.database();
     const unixStamp = await props.firebase.database.ServerValue.TIMESTAMP;
-    const userStatusDatabaseRef = await props.firebase.database().ref(`/USERS_ONLINE/${userConfig.key}`);
-    const activityRef = await props.firebase.database().ref(`/users/${userConfig.key}/activity`);
-    const trafficRef = await props.firebase.database().ref(`/TRAFFIC`);
+    const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${userConfig.key}`);
+    const activityRef = await db.ref(`/users/${userConfig.key}/activity`);
+    const trafficRef = await db.ref(`/TRAFFIC`);
     const newTrafficRef = await trafficRef.push();
     await activityRef.remove();
     await userStatusDatabaseRef.remove();

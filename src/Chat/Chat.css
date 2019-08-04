@@ -68,6 +68,17 @@ body {
   display: none;
 }
 
+header .userImage {
+  border: 1px solid black;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.titleBeta {
+  font-family: monospace;
+  font-size: 11px;
+}
+
 @media only screen and (min-device-width: 812px) {
   .appComponent {
     display: grid;

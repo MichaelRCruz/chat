@@ -2,7 +2,7 @@
 
 /* temporary selectors until proper markdown validation is acheived */
 p, h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  /* margin: 0; */
 }
 
 .visibilityHidden {
@@ -12,23 +12,14 @@ p, h1, h2, h3, h4, h5, h6 {
 .messageList {
   /* margin-right: 20px; */
   /* padding-left: 0; */
+  /* width: 100%; */
 }
 
 .messageListItem {
   width: 100%;
-}
-
-.message {
-  flex-grow: 0;
-  flex-shrink: 0;
-}
-
-.messageComponent li {
-  /* width: 100vw; */
-}
-
-.submitTextarea {
-  /* width: 100%; */
+  /* padding: 0 2.5%; */
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .message {
@@ -37,8 +28,10 @@ p, h1, h2, h3, h4, h5, h6 {
   margin-bottom: 10px;
   font-family: 'Roboto', sans-serif;
   z-index: 3;
-  /* width: 100vw; */
-  margin-left: 5px;
+  width: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow-y: scroll;
 }
 
 .messageImage {
@@ -94,7 +87,6 @@ p, h1, h2, h3, h4, h5, h6 {
   bottom: 20px;
   background-color: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
-  width: 100vw;
 }
 
 @media only screen and (min-device-width: 868px) {

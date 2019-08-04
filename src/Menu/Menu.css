@@ -86,6 +86,14 @@
   overflow: scroll;
 }
 
+.menuComponent .trafficList {
+  /* padding-left: 0;
+  list-style-type: none;
+  height: calc(100% - 10px);
+  margin: unset;
+  overflow: scroll; */
+}
+
 .menuComponent legend.avatarLegend {
   display: flex;
   flex-direction: row;

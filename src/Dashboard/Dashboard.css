@@ -23,7 +23,7 @@
   align-items: center;
   top: 4.5vh;
   height: 5vh;
-  width: 100%;
+  width: 100vw;
   z-index: 999;
 }
 

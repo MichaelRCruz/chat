@@ -9,15 +9,7 @@ p, h1, h2, h3, h4, h5, h6 {
   visibility: hidden;
 }
 
-.messageList {
-  /* margin-right: 20px; */
-  /* padding-left: 0; */
-  /* width: 100%; */
-}
-
 .messageListItem {
-  width: 100%;
-  /* padding: 0 2.5%; */
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -31,6 +23,7 @@ p, h1, h2, h3, h4, h5, h6 {
   flex-grow: 0;
   flex-shrink: 0;
   overflow-y: scroll;
+  margin: 0;
 }
 
 .messageImage {
@@ -41,9 +34,9 @@ p, h1, h2, h3, h4, h5, h6 {
   flex-grow: 0;
 }
 
-.content {
-  margin: 0;
-  padding: 0;
+.content > p {
+  margin: 0 0 15px 0;
+  padding: unset;
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
@@ -70,7 +63,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .imageMessageContainer {
   display: flex;
-  /* overflow-x: auto; */
+  overflow-x: auto;
 }
 
 .message .timeago {
@@ -86,6 +79,7 @@ p, h1, h2, h3, h4, h5, h6 {
   bottom: 20px;
   background-color: #fff;
   box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
+  width: calc(97%);
 }
 
 @media only screen and (min-device-width: 868px) {
@@ -93,6 +87,9 @@ p, h1, h2, h3, h4, h5, h6 {
     /* margin-top: calc(100vh - 100px); */
   }
   .message, .submitTextarea {
+    width: calc(100vw - 260px);
+  }
+  .messageListItem {
     width: calc(100vw - 260px);
   }
 }

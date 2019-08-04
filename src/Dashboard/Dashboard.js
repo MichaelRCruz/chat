@@ -12,7 +12,7 @@ const Dashboard = props => {
 
   const { history, location } = props;
   const potatoDashStore = localStorage.getItem('potatoDashStore');
-  const [mode, setMode] = useState(potatoDashStore || 'USERS');
+  const [mode, setMode] = useState(potatoDashStore || 'ROOMS');
 
   const handleNav = mode => {
     switch(mode) {

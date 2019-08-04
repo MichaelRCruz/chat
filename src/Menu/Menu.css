@@ -44,7 +44,7 @@
 
 .trafficCard {
   position: absolute;
-  bottom: 38px;
+  bottom: 22px;
   width: 228px;
   height: 30%;
   min-height: 40px;
@@ -86,14 +86,6 @@
   overflow: scroll;
 }
 
-.menuComponent .trafficList {
-  /* padding-left: 0;
-  list-style-type: none;
-  height: calc(100% - 10px);
-  margin: unset;
-  overflow: scroll; */
-}
-
 .menuComponent legend.avatarLegend {
   display: flex;
   flex-direction: row;
@@ -109,9 +101,13 @@
   overflow: scroll;
 }
 
+.menuComponent fieldset {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.22);
+}
+
 .menuComponent fieldset.roomsFieldset {
   height: calc(100% - 16px);
-  /* box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22); */
+  /* box-shadow: 0 3px 6px rgba(0,0,0,0.22); */
 }
 
 .menuComponent fieldset .trafficImage {

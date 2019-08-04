@@ -34,29 +34,25 @@ class Messages extends Component {
     const messagesValues = Object.values(messages);
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
       return (
-        <ErrorBoundary key={i}>
-          <li>
+        <li className="messageListItem">
+          <ErrorBoundary key={i}>
             <Message
               msg={msg}
               user={user}
               deleteMessage={this.deleteMessage.bind(this)}
             />
-          </li>
-        </ErrorBoundary>
+          </ErrorBoundary>
+        </li>
       );
     });
     return (
-      <div className="messagesComponent">
-        <ul className="messageList">
-          {messagesPayload}
-          <li ref={(thisDiv) => this.bottomOfMessages = thisDiv}></li>
-          <li>
-            <div className="submitTextarea">
-              <SubmitMessage />
-            </div>
-          </li>
-        </ul>
-      </div>
+      <ul className="messageList">
+        {messagesPayload}
+        <li ref={(thisDiv) => this.bottomOfMessages = thisDiv}></li>
+        <li className="messageListItem submitTextarea">
+          <SubmitMessage />
+        </li>
+      </ul>
     );
   };
 };

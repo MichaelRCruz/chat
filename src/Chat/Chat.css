@@ -79,6 +79,10 @@ header .userImage {
   font-size: 11px;
 }
 
+.main {
+  /* width: 100vw; */
+}
+
 @media only screen and (min-device-width: 812px) {
   .appComponent {
     display: grid;
@@ -101,6 +105,7 @@ header .userImage {
     /* z-index: 4; */
   }
   .main {
+    /* width: 100vw; */
     grid-area: main;
   }
   .menuIcon {

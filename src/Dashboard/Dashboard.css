@@ -23,7 +23,7 @@
   align-items: center;
   top: 4.5vh;
   height: 5vh;
-  width: 100vw;
+  /* width: 100; */
   z-index: 999;
 }
 
@@ -36,7 +36,6 @@
 .trafficList, .usersList {
   padding: 0;
   list-style-type: none;
-  width: 83%;
 }
 
 .dashboardContent .trafficImage {

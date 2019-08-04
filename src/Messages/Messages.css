@@ -32,6 +32,7 @@ p, h1, h2, h3, h4, h5, h6 {
   margin-right: 5px;
   border-radius: 15%;
   flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .content > p {
@@ -48,9 +49,7 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .messageList {
   padding: unset;
-  /* margin-bottom: 50px; */
   list-style-type: none;
-  /* padding-right: 6px; */
 }
 
 .messageList:first-child {
@@ -68,8 +67,6 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .message .timeago {
   font-size: 9px;
-  /* margin-right: 10px; */
-  /* margin-top: 2px; */
   font-style: italic;
   flex-shrink: 0;
 }
@@ -78,7 +75,6 @@ p, h1, h2, h3, h4, h5, h6 {
   position: fixed;
   bottom: 20px;
   background-color: #fff;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.22);
   width: 95%;
   margin: unset;
   margin-left: 6px;

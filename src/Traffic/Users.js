@@ -5,7 +5,6 @@ import defaultUserImage from './../assets/images/peaceful_potato.png';
 import ErrorBoundary from '../ErrorBoundary.js';
 import { throttling } from '../utils.js';
 import Timeago from './../timeago/timeago.js';
-// import '../Menu/Menu.css';
 
 const Users = () => {
 
@@ -75,7 +74,7 @@ const Users = () => {
     : (
       <fieldset className="usersFieldset">
         <legend className="usersLegend">
-          <p className="usersLegendTitle">active room</p>
+          <p className="usersLegendTitle">subs</p>
         </legend>
         <ul className="usersList">
           {subs}

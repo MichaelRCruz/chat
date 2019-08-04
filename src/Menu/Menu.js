@@ -34,17 +34,17 @@ const Menu = () => {
   });
 
   const legendContent = (
-    <div className="legendContent">
+    <React.Fragment className="legendContent">
       <img className="userAvatar"
         alt="avatar"
         src={userConfig ? userConfig.photoURL : ''}
       />
       <ul className="authImagesList">{providers}</ul>
-    </div>
+    </React.Fragment>
   );
 
   return (
-    <main className="menuComponent">
+    <div className="menuComponent">
       <section className="avatarCard">
         <fieldset className="avatarFieldset">
           <legend className="avatarLegend">
@@ -62,7 +62,7 @@ const Menu = () => {
       <section className="trafficCard">
         <Traffic />
       </section>
-    </main>
+    </div>
   );
 };
 

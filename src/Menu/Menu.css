@@ -1,89 +1,13 @@
-/* @import url('https://fonts.googleapis.com/css?family=Roboto'); */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .menuComponent {
   position: fixed;
   bottom: 0;
   height: calc(100vh - 40px);
-  min-width: 250px;
-  max-width: 250px;
   background-color: #fff;
-  z-index: 4;
-  font-family: 'Roboto', sans-serif;
   font-size: 1em;
-}
-
-.menuComponent > section {
-  /* border: 1px solid black; */
-  margin: 0 8px;
-  padding: 0;
-}
-
-.avatarCard {
-  position: absolute;
-  top: 1%;
-  width: 228px;
-  height: 11%;
-}
-
-.roomsCard {
-  position: absolute;
-  top: calc(18% - 20px);
-  width: 228px;
-  height: 16%;
-  /* min-height: 40px; */
-  /* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
-}
-
-.usersCard {
-  position: absolute;
-  top: calc(35% - 20px);
-  width: 228px;
-  height: 30%;
-  min-height: 40px;
-}
-
-.trafficCard {
-  position: absolute;
-  bottom: 22px;
-  width: 228px;
-  height: 30%;
-  min-height: 40px;
-}
-
-.userAvatar {
-  height: 30px;
-  width: 30px;
-  border-radius: 8%;
-  border: 1px solid black;
-}
-
-.userImage {
-  height: 25px;
-  width: 25px;
-}
-
-.authImagesList, .legendContent {
-  list-style-type: none;
-  margin: 0;
-  /* width: auto; */
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  padding: unset;
-}
-
-.authImage {
-  width: 17px;
-  height: 17px;
-  margin: 0 0 4px 5px;
-}
-
-.menuComponent .usersList {
-  padding-left: 0;
-  list-style-type: none;
-  height: calc(100% - 10px);
-  margin: unset;
-  overflow: scroll;
+  font-family: 'Roboto', sans-serif;
+  margin-left: 8px;
 }
 
 .menuComponent legend.avatarLegend {
@@ -93,62 +17,65 @@
   justify-content: space-between;
 }
 
-.menuComponent .trafficList {
-  padding-left: 0;
+.menuComponent ul.usersList {
+  height: 87%;
+  overflow-y: scroll;
+  margin: 0;
+}
+
+.menuComponent ul.authImagesList {
   list-style-type: none;
-  height: calc(100% - 12px);
-  margin: unset;
-  overflow: scroll;
+  margin: 0;
+  padding: 0;
+}
+
+.userAvatar {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+  margin-right: 5px;
+}
+
+.userImage {
+  height: 25px;
+  width: 25px;
+}
+
+.authImage {
+  width: 17px;
+  height: 17px;
+  border: 0;
+  border-radius: 50%;
 }
 
 .menuComponent fieldset {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.22);
+  border-radius: 5px;
+  width: 210px;
+  position: absolute;
+  margin: 0;
+  border: 1px solid gray;
+  /* box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); */
+}
+
+.menuComponent fieldset.avatarFieldset {
+  top: 0;
+  height: 100px;
 }
 
 .menuComponent fieldset.roomsFieldset {
-  height: calc(100% - 16px);
-  /* box-shadow: 0 3px 6px rgba(0,0,0,0.22); */
+  top: 125px;
+  height: calc(38% - 125px);
 }
 
-.menuComponent fieldset .trafficImage {
-  display: none;
-}
-
-.menuComponent fieldset .timeago {
-  font-size: 10px;
-  font-style: italic;
-  font-family: 'Roboto', sans-serif;
+.menuComponent fieldset.usersFieldset {
+  bottom: 20px;
+  height: 55%;
 }
 
 .menuComponent .userListItem {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
-}
-
-.menuComponent .trafficListItem {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.menuComponent .trafficListItem > .trafficDisplayName {
-  width: 100px;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.menuComponent .trafficListItem > .trafficAction {
-  width: 80px;
-  text-align: left;
-}
-
-.menuComponent .trafficListItem > .timeago {
-  width: 67px;
-  text-align: right;
 }
 
 .menuComponent img.userImage {
@@ -170,20 +97,6 @@
   text-align: right;
 }
 
-.menuComponent fieldset .trafficImage {
-  margin-right: 0;
-  font-size: 0.5em;
-}
-
-.menuComponent fieldset {
-  margin: 0 !important;
-  /* padding: 0 auto; */
-  border: 1px solid black;
-  border-radius: 5px;
-  height: 94%;
-  width: auto;
-}
-
 .widgetLoader {
   margin: calc(50vh - 100px) auto;
   border: 8px solid #f3f3f3;
@@ -196,18 +109,12 @@
 }
 
 .roomSelect {
-  display: block;
 	font-size: 1.3em;
-	line-height: 1.3;
-	padding: .25em;
+	padding: .20em;
 	width: 100%;
-	margin: 0;
-	border: 1px solid black;
-	/* box-shadow: 0 1px 0 1px rgba(0,0,0,.04); */
 	-moz-appearance: none;
 	-webkit-appearance: none;
 	appearance: none;
-	background-color: #fff;
 }
 .roomSelect::-ms-expand {
 	display: none;
@@ -218,3 +125,40 @@
 .roomSelect:focus {
 	outline: none;
 }
+
+.trafficCard {
+  display: none;
+}
+
+/* .menuComponent fieldset .trafficImage {
+  display: none;
+} */
+
+/* .menuComponent .trafficListItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+} */
+
+/* .menuComponent .trafficListItem > .trafficDisplayName {
+  width: 100px;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuComponent .trafficListItem > .trafficAction {
+  width: 80px;
+  text-align: left;
+}
+
+.menuComponent .trafficListItem > .timeago {
+  width: 67px;
+  text-align: right;
+} */
+
+/* .menuComponent fieldset .trafficImage {
+  margin-right: 0;
+  font-size: 0.5em;
+} */

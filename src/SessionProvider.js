@@ -15,12 +15,12 @@ class SessionProvider extends React.Component {
       const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await db.ref(`/users/${uid}/activity`);
       if (snap.val() === false) {
-        const trafficRef = await db.ref(`/TRAFFIC`);
-        const newTrafficRef = await trafficRef.push();
+        // const trafficRef = await db.ref(`/TRAFFIC`);
+        // const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         await userStatusDatabaseRef.onDisconnect().remove();
         // await newTrafficRef.set({ ...userConfig, unixStamp, action: 'brb' });
-        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
+        // await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       } else {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
@@ -29,10 +29,10 @@ class SessionProvider extends React.Component {
         const onlineUser = { ...activityInfo, ...userConfig };
         if (uid) activityRef.set(activityInfo);
         if (uid) userStatusDatabaseRef.set(onlineUser);
-        if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'sup' });
+        // if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'sup' });
         await userStatusDatabaseRef.onDisconnect().remove();
         await activityRef.onDisconnect().remove();
-        await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
+        // await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       }
     });
   }
@@ -60,7 +60,7 @@ class SessionProvider extends React.Component {
     if (!uid) return;
     return fetch(`${process.env.REACT_APP_HTTP_URL}/addTokenToTopic`, {
       method: 'POST',
-      body: JSON.stringify({ fcmToken, uid, subscription})
+      body: JSON.stringify({ fcmToken, uid, subscription })
     })
     .then(response => {
       return response;
@@ -92,7 +92,8 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snapshot => {
         if (snapshot.val().roomId === key) {
-          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const res = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const { messages } = res;
           this.setState({ messages });
         }
       });
@@ -103,7 +104,8 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_removed', async snapshot  => {
         if (snapshot.val().roomId === key) {
-          const { messages } = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const res = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const { messages } = res;
           this.setState({ messages });
         }
       });
@@ -130,7 +132,9 @@ class SessionProvider extends React.Component {
       const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
-      await this.setState({ messages, activeRoom, subscriberIds, warning, error, userConfigs }, () => {
+      await this.setState({
+        messages, activeRoom, subscriberIds, warning, error, userConfigs
+      }, () => {
         this.setListeners(roomId);
         ref.off();
       });

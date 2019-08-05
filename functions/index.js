@@ -10,23 +10,6 @@ const adminConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 adminConfig.credential = admin.credential.cert(serviceAccount);
 admin.initializeApp();
 
-// Listens for new messages added to /messages/:pushId/original and creates an
-// uppercase version of the message to /messages/:pushId/uppercase
-// exports.maintainTraffic = functions.database.ref(`/TRAFFIC`)
-//   .onCreate(async (snap, context) => {
-//     let unixStamp;
-//     const trafficRef = await admin.database().ref(`/TRAFFIC`);
-//     await trafficRef
-//       .orderByChild('unixStamp')
-//       .limitToFirst(1)
-//       .on('child_added', async snapshot => {
-//         snapshot.forEach(async snap => {
-//           unixStamp = await snap.val().unixStamp;
-//         });
-//       });
-//   return trafficRef.child(`/unixStamp/${unixStamp}`).remove();
-// });
-
 exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   async function getRooms(roomIds) {
     return Promise.all(roomIds.map(async room => {
@@ -35,7 +18,6 @@ exports.getRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     }));
   };
   return cors(req, res, () => {
-    // res.set('Access-Control-Allow-Origin', '*');
     const { uid, displayName } = JSON.parse(req.body);
     const userRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
@@ -85,10 +67,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     const usersRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const subsRef = admin.database().ref(`/rooms`);
-    const og1UsersRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
-    // const og1UsersRef = admin.database().ref('/rooms/uid-cT5MblctirWyHpimu2ISIEMtwTz1/users');
-    const og1AdminsRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/admins');
-    // const og1AdminsRef = admin.database().ref('/rooms/uid-cT5MblctirWyHpimu2ISIEMtwTz1/admins');
+    const og1UsersRef = admin.database().ref('/rooms/uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2/users');
+    const og1AdminsRef = admin.database().ref('/rooms/uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2/admins');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
     const userConfig = {
@@ -98,8 +78,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       photoURL,
       emailVerified,
       authProviders,
-      lastVisited: '-Ld7mZCDqAEcMSGxJt-x',
-      rooms: ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`],
+      lastVisited: `uid-${uid}`,
+      rooms: ['uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2', `uid-${uid}`],
       action: 'sup',
       activity: { isOnline: true, unixStamp: Math.floor(Date.now() / 1000) }
     };
@@ -135,7 +115,6 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
 exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   const messageRef = admin.database().ref('/messages');
   const {head_commit} = req.body;
@@ -154,7 +133,6 @@ exports.gitHubPushWebHook = functions.https.onRequest((req, res) => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/addTokenToTopic
 exports.addTokenToTopic = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     const {uid, fcmToken, subscription} = JSON.parse(req.body);
@@ -175,7 +153,6 @@ exports.addTokenToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToTopic
 exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     const {uid, message} = JSON.parse(req.body);
@@ -195,7 +172,6 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
-// https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser
 exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     const {displayNames, message} = JSON.parse(req.body);
@@ -241,12 +217,6 @@ exports.sendMessageToUser = functions.https.onRequest((req, res) => {
 });
 
 exports.getMessages = functions.https.onRequest((req, res) => {
-  // async function getNotifications(messageKeys) {
-  //   return Promise.all(messageKeys.map(messageKey => {
-  //     const messageRef = admin.database().ref(`messages/${messageKey}`);
-  //     return messageRef.once('value');
-  //   }));
-  // };
   return cors(req, res, async () => {
     const { roomId, messageCount } = JSON.parse(req.body);
     console.log(roomId, messageCount, 'asnclksmdlkc');
@@ -273,8 +243,6 @@ exports.handleSignOut = functions.https.onRequest((req, res) => {
   });
 });
 
-
-// https://us-central1-chat-asdf.cloudfunctions.net/verifyDisplayname
 exports.verifyDisplayname = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -292,12 +260,6 @@ exports.verifyDisplayname = functions.https.onRequest((req, res) => {
 });
 
 exports.getUserConfigs = functions.https.onRequest((req, res) => {
-  // async function getNotifications(messageKeys) {
-  //   return Promise.all(messageKeys.map(messageKey => {
-  //     const messageRef = admin.database().ref(`messages/${messageKey}`);
-  //     return messageRef.once('value');
-  //   }));
-  // };
   return cors(req, res, async () => {
     const { uids } = req.body;
     console.log(uids, 'init getuserconfigs');
@@ -311,17 +273,3 @@ exports.getUserConfigs = functions.https.onRequest((req, res) => {
     res.json({ userConfigs });
   });
 });
-
-// exports.getRooms = functions.https.onRequest((req, res) => {
-//   return cors(req, res, async () => {
-//     const { roomIds } = req.body;
-//     async function getRoomsByKeys(roomIds) {
-//       return Promise.all(roomIds.map(async room => {
-//         const roomRef = await admin.database().ref(`rooms/${room}`);
-//         return roomRef.once('value');
-//       }));
-//     };
-//     const subscribedRooms = await getRoomsByKeys(roomIds);
-//     res.json({ subscribedRooms });
-//   });
-// });

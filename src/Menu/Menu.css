@@ -37,6 +37,10 @@
   margin-right: 5px;
 }
 
+.authImagesList {
+  display: flex;
+}
+
 .userImage {
   height: 25px;
   width: 25px;

@@ -5,6 +5,8 @@ import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
 import {throttling} from './utils.js';
 
+const api = new RealTimeApi();
+
 class SessionProvider extends React.Component {
 
   handleConnection = async (uid, userConfig) => {
@@ -84,7 +86,7 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_added', async snapshot => {
         if (snapshot.val().roomId === key) {
-          const res = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const res = await api.getMessages(snapshot.val().roomId, 100);
           const { messages } = res;
           this.setState({ messages });
         }
@@ -96,7 +98,7 @@ class SessionProvider extends React.Component {
       .limitToLast(1)
       .on('child_removed', async snapshot  => {
         if (snapshot.val().roomId === key) {
-          const res = await new RealTimeApi().getMessages(snapshot.val().roomId, 100);
+          const res = await api.getMessages(snapshot.val().roomId, 100);
           const { messages } = res;
           this.setState({ messages });
         }
@@ -104,7 +106,7 @@ class SessionProvider extends React.Component {
   };
 
   reconcileActiveRoom = async roomId => {
-    const response = await new RealTimeApi().getActiveRoom(roomId);
+    const response = await api.getActiveRoom(roomId);
     if (response !== null) {
       return { response, warning: false };
     } else {
@@ -118,9 +120,9 @@ class SessionProvider extends React.Component {
     if (user && !warning && response) {
       let error = null;
       const activeRoom = response;
-      const { messages } = await new RealTimeApi().getMessages(roomId, 100);
+      const { messages } = await api.getMessages(roomId, 100);
       const subscriberIds = Object.keys(activeRoom.users)
-      const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
+      const { userConfigs } = await api.getUserConfigs(subscriberIds);
       const ref = await firebase.database().ref(`users/${user.uid}/lastVisited`);
       await ref.set(roomId, dbError => error = dbError );
       await this.setState({
@@ -176,17 +178,17 @@ class SessionProvider extends React.Component {
     // firebase.auth().signOut();
     // debugger;
     const { rm, msg, usr } = foreignState;
-    const { userConfig } = await new RealTimeApi().getUserConfig(user.uid);
+    const { userConfig } = await api.getUserConfig(user.uid);
     const configuration = config ? config : userConfig;
     const lastVisited = configuration.lastVisited;
     const { response, warning } = await this.reconcileActiveRoom(rm);
     const roomId = response ? response.key : lastVisited;
-    const activeRoom = response ? response : await new RealTimeApi().getActiveRoom(roomId);
+    const activeRoom = response ? response : await api.getActiveRoom(roomId);
     const fcmToken = await this.initNotifications(user.uid);
-    const { subscribedRooms } = await new RealTimeApi().getRooms(configuration.rooms);
+    const { subscribedRooms } = await api.getRooms(configuration.rooms);
     const subscriberIds = Object.keys(activeRoom.users);
-    const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
-    const { messages } = await new RealTimeApi().getMessages(roomId, 100);
+    const { userConfigs } = await api.getUserConfigs(subscriberIds);
+    const { messages } = await api.getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
       if (user) this.setListeners(this.state.activeRoom.key);
     });
@@ -202,7 +204,7 @@ class SessionProvider extends React.Component {
         const authProviders = providerData.map(profile => {
           return {...profile};
         });
-        const { userConfig } = await new RealTimeApi().getUserConfig(uid);
+        const { userConfig } = await api.getUserConfig(uid);
         const room = userConfig ? userConfig.lastVisited : null;
         const rooms = userConfig ? userConfig.rooms : null;
         const lastVisited = room ? room : '-Ld7mZCDqAEcMSGxJt-x';
@@ -214,7 +216,7 @@ class SessionProvider extends React.Component {
         if (userConfig) {
           this.initializeApp(user, foreignState, userConfig, null);
         } else {
-          const payload = await new RealTimeApi().createNewUser(authProfile);
+          const payload = await api.createNewUser(authProfile);
           this.initializeApp(user, foreignState, payload.userConfig, payload);
         }
       } else {

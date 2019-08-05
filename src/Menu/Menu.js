@@ -21,7 +21,6 @@ const Menu = () => {
   console.log(userConfig);
 
   const providers = authProviders.map((provider, i) => {
-    console.log(provider.providerId);
     return (
       <li key={provider.providerId}>
         <img

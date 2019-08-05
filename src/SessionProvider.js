@@ -1,11 +1,9 @@
 import React from 'react';
-// import { goFetch, debouncer, throttling } from './utils.js';
 import * as firebase from 'firebase';
 import { withRouter } from 'react-router-dom';
 import RealTimeApi from './RealTimeApi.js';
 import SessionContext from './SessionContext.js';
 import {throttling} from './utils.js';
-// import { staticMessages, staticUsers, staticRooms } from './staticState.js';
 
 class SessionProvider extends React.Component {
 
@@ -15,12 +13,8 @@ class SessionProvider extends React.Component {
       const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${uid}`);
       const activityRef = await db.ref(`/users/${uid}/activity`);
       if (snap.val() === false) {
-        // const trafficRef = await db.ref(`/TRAFFIC`);
-        // const newTrafficRef = await trafficRef.push();
         const unixStamp = await firebase.database.ServerValue.TIMESTAMP;
         await userStatusDatabaseRef.onDisconnect().remove();
-        // await newTrafficRef.set({ ...userConfig, unixStamp, action: 'brb' });
-        // await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       } else {
         const trafficRef = await db.ref(`/TRAFFIC`);
         const newTrafficRef = await trafficRef.push();
@@ -29,10 +23,8 @@ class SessionProvider extends React.Component {
         const onlineUser = { ...activityInfo, ...userConfig };
         if (uid) activityRef.set(activityInfo);
         if (uid) userStatusDatabaseRef.set(onlineUser);
-        // if (uid) newTrafficRef.set({ ...userConfig, unixStamp, action: 'sup' });
         await userStatusDatabaseRef.onDisconnect().remove();
         await activityRef.onDisconnect().remove();
-        // await newTrafficRef.onDisconnect().set({ ...userConfig, unixStamp, action: 'brb' });
       }
     });
   }
@@ -126,7 +118,6 @@ class SessionProvider extends React.Component {
     if (user && !warning && response) {
       let error = null;
       const activeRoom = response;
-      // this.setListeners(roomId);
       const { messages } = await new RealTimeApi().getMessages(roomId, 100);
       const subscriberIds = Object.keys(activeRoom.users)
       const { userConfigs } = await new RealTimeApi().getUserConfigs(subscriberIds);
@@ -176,9 +167,7 @@ class SessionProvider extends React.Component {
     userConfig: {},
     messages: {},
     subscribedRooms: [],
-    activeUsers: [],
     userConfigs: {},
-    traffic: [],
     prevRoomId: this.props.foreignState.rm ? this.props.foreignState.rm : null
   };
 

@@ -87,7 +87,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       active: false,
       creator: uid,
       dscription: `${displayName}'s first room. Welcome!`,
-      name: `home`,
+      name: `mykey's channel`,
       key: `uid-${uid}`,
       users: { [uid]: displayName },
       admins: { [uid]: displayName }
@@ -98,7 +98,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
         displayName: 'mykey',
         email: 'potato@michaelcruz.io',
         photoURL: 'https://lh3.googleusercontent.com/-42Rxl6komNU/AAAAAAAAAAI/AAAAAAAAAJ0/n2btuWyx90o/photo.jpg',
-        uid: 'cT5MblctirWyHpimu2ISIEMtwTz1'
+        uid: 'wWV3cvFFK5g4Ok0MlYQXynnI9xZ2'
       },
       key: messageKey,
       read: false,

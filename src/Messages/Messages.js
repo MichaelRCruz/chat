@@ -31,11 +31,12 @@ class Messages extends Component {
   static contextType = SessionContext;
   render() {
     const { messages, user } = this.context.state;
+    const { uid, displayName } = user;
     const messagesValues = Object.values(messages);
     const messagesPayload = messagesValues.map((msg, i, msgs) => {
       return (
-        <li className="messageListItem">
-          <ErrorBoundary key={i}>
+        <li key={i} className="messageListItem">
+          <ErrorBoundary>
             <Message
               msg={msg}
               user={user}
@@ -50,7 +51,7 @@ class Messages extends Component {
         {messagesPayload}
         <li ref={(thisDiv) => this.bottomOfMessages = thisDiv}></li>
         <li className="messageListItem submitTextarea">
-          <SubmitMessage />
+          <SubmitMessage uid={uid} displayName={displayName} />
         </li>
       </ul>
     );

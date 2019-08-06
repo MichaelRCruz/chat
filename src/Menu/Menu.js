@@ -32,7 +32,7 @@ const Menu = () => {
   });
 
   const legendContent = (
-    <React.Fragment className="legendContent">
+    <React.Fragment>
       <img className="userAvatar"
         alt="avatar"
         src={userConfig ? userConfig.photoURL : ''}

@@ -174,45 +174,22 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
 
 exports.sendMessageToUser = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const {displayNames, message} = JSON.parse(req.body);
-    const usersRef = admin.database().ref('users');
-    const userTargetsRef = admin.database().ref(`messages/${message.key}/mentions`);
-    let targetedUser = false;
-    usersRef.once("value", snap => {
-      let multiCastTokens = [];
-      let mentions = {};
-      snap.forEach(user => {
-        const isIncluded = displayNames.includes(user.val().displayName);
-        if (isIncluded) mentions[user.key] = false;
-        const hasFcmTokens = user.val().fcmTokens;
-        if (isIncluded && hasFcmTokens) {
-          targetedUser = true;
-          const fcmTokens = Object.keys(user.val().fcmTokens);
-          multiCastTokens = multiCastTokens.concat(fcmTokens);
-        }
+    const {usersKeys, message, sender} = JSON.parse(req.body);
+    // const usersRef = admin.database().ref('users');
+    const payload = {
+      notification: {
+        title: `new mention from ${sender.displayName}`,
+        body: message
+      },
+      data: { message: JSON.stringify({sender, message}) }
+    };
+    admin.messaging().sendToDevice(usersKeys, payload)
+      .then((response) => {
+        res.send(response);
+      })
+      .catch((error) => {
+        res.send(error);
       });
-      if (targetedUser) {
-        userTargetsRef.set(mentions);
-        const payload = {
-          notification: {
-            title: `new mention from ${message.creator.displayName}`,
-            body: message.content
-          },
-          data: {
-            message: JSON.stringify(message)
-          }
-        };
-        admin.messaging().sendToDevice(multiCastTokens, payload)
-        .then((response) => {
-          res.send(response);
-        })
-        .catch((error) => {
-          res.send(error);
-        });
-      } else {
-        res.send('message failed to send');
-      }
-    });
   });
 });
 

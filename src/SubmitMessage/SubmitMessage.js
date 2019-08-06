@@ -4,11 +4,12 @@ import useForm from '../Auth/useForm.js';
 import Validation from '../validation.js';
 import './SubmitMessage.css';
 
-const Messages = () => {
+const Messages = props => {
 
   const submitMessage = (payload, event, clearForm) => {
     event.preventDefault();
     sessionContext.submitMessage(payload.message);
+    detectUserAndSendMessage(payload.message);
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
     clearForm({});
@@ -17,76 +18,54 @@ const Messages = () => {
   const { handleSubmit, handleChange, ...formState } = useForm(submitMessage);
   const [isMessageValidated, setIsMessageValidated] = useState(false);
   const [message, setMessage] = useState('');
+  const [sender, setSender] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
   const [messageError, setMessageError] = useState('');
   const [warning, setWarning] = useState(false);
+  const [tokens, setTokens] = useState([]);
   const sessionContext = useContext(SessionContext);
+  const { activeRoom } = sessionContext.state;
 
-  const { wasFormSubmitted, setWasFormSubmitted, formErrors, formValues } = formState;
+  const { setWasFormSubmitted, formErrors, formValues } = formState;
 
   const handleKeyDown = event => {
     if (event.key === 'Enter' && event.shiftKey === false) {
       handleSubmit(event);
     }
-  }
+  };
+
+  const detectUserAndSendMessage = message => {
+    const words = message.split(' ');
+    const usersKeys = Object.keys(activeRoom.users);
+    if (usersKeys.length) {
+      return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
+        method: 'POST',
+        body: JSON.stringify({ usersKeys, message, sender })
+      }).then(response => {
+        return response;
+      }).catch(error => {
+        return error;
+      });
+    }
+  };
 
   useEffect(() => {
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = 0;
     textarea.style.height = textarea.scrollHeight + "px";
+
+    const _sender = {...props};
+    setSender(_sender);
+
+    let muhTokens = [];
+    if (activeRoom) for (const user in activeRoom.users) {
+      muhTokens.push(user.fcmToken);
+      setTokens(muhTokens);
+    }
     return () => {
       // console.log(formValues.message);
     }
-  }, [formErrors, formValues]);
-
-  // const submitMessage = (message) => {
-  //   if (!this.props.activeRoom) {
-  //     return;
-  //   } else {
-  //     this.messagesRef.push({
-  //       content: message,
-  //       sentAt: Date.now(),
-  //       roomId: this.props.activeRoom.key,
-  //       creator: this.props.user ? {
-  //         uid: this.props.user.uid,
-  //         email: this.props.user.email,
-  //         displayName: this.props.user.displayName,
-  //         photoURL: this.props.user.photoURL
-  //       } : {
-  //         email: null,
-  //         displayName: 'Peaceful Potato',
-  //         photoURL: null
-  //       }
-  //     }).then(res => {
-  //       this.props.dispatch(reset('message'));
-  //       this.detectUserAndSendMessage(message);
-  //       const textarea = window.document.querySelector("textarea");
-  //       textarea.style.height = '1.5em';
-  //     });
-  //   }
-  // }
-
-  // const detectUserAndSendMessage = message => {
-  //   const words = message.split(' ');
-  //   const roomSubscribers = Object.values(this.props.activeRoom.users);
-  //   const usersToMessage = [];
-  //   words.forEach(word => {
-  //     const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
-  //     if (word.startsWith('@') && roomSubscribers.includes(user)) {
-  //       usersToMessage.push(user);
-  //     }
-  //   });
-  //   if (usersToMessage.length) {
-  //     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
-  //       method: 'POST',
-  //       body: JSON.stringify({ displayNames: usersToMessage, message })
-  //     }).then(response => {
-  //       return response;
-  //     }).catch(error => {
-  //       return error;
-  //     });
-  //   }
-  // }
+  }, [formErrors, formValues, activeRoom]);
 
   return (
     <div className="footerContainer">

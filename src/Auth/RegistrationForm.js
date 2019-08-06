@@ -169,7 +169,7 @@ const RegistrationForm = props => {
 
   const disclaimerEtc = (
     <p className="toggleFormLink">
-      Terms of service. <span>We are proud of you :).</span>
+      insert Terms of service. <span>:).</span>
     </p>
   );
 

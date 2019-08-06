@@ -33,21 +33,21 @@ class SessionProvider extends React.Component {
 
   requestNotifPermission = (uid, messaging) => {
     return messaging.requestPermission()
-    .then(() => {
-      const fcmToken = messaging.getToken();
-      return fcmToken;
-    })
-    .then(token => {
-      console.log(token);
-      return this.handleFcmToken(token, uid, true)
-      .then(fcmToken => {
-        return token;
+      .then(() => {
+        const fcmToken = messaging.getToken();
+        return fcmToken;
+      })
+      .then(token => {
+        console.log(token);
+        return this.handleFcmToken(token, uid, true)
+        .then(fcmToken => {
+          return token;
+        });
+      })
+      .catch(error => {
+        console.log('error occured from requestNotifPermission()', error);
+        return error;
       });
-    })
-    .catch(error => {
-      console.log('error occured from requestNotifPermission()', error);
-      return error;
-    });
   };
 
   handleFcmToken = (fcmToken, uid, subscription) => {
@@ -91,7 +91,6 @@ class SessionProvider extends React.Component {
           this.setState({ messages });
         }
       });
-
     this.messagesRef
       .orderByChild('roomId')
       .equalTo(key)
@@ -191,6 +190,7 @@ class SessionProvider extends React.Component {
     const { messages } = await api.getMessages(roomId, 100);
     this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
       if (user) this.setListeners(this.state.activeRoom.key);
+      if (user) this.initNotifications(user);
     });
   };
 

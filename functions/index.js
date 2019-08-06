@@ -64,6 +64,7 @@ exports.getRooms = functions.https.onRequest((req, res) => {
 exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
+    displayName = displayName.replace(' ', '_');
     const usersRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const subsRef = admin.database().ref(`/rooms`);
@@ -174,7 +175,7 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
 
 exports.sendMessageToUsers = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    const {usersKeys, message, sender} = JSON.parse(req.body);
+    const {usersTokens, message, sender} = JSON.parse(req.body);
     // const usersRef = admin.database().ref('users');
     const payload = {
       notification: {
@@ -183,7 +184,7 @@ exports.sendMessageToUsers = functions.https.onRequest((req, res) => {
       },
       data: { message: JSON.stringify({sender, message}) }
     };
-    admin.messaging().sendToDevice(usersKeys, payload)
+    admin.messaging().sendToDevice(usersTokens, payload)
       .then((response) => {
         res.send(response);
       })

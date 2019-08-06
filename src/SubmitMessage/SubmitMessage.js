@@ -2,14 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import SessionContext from '../SessionContext.js';
 import useForm from '../Auth/useForm.js';
 import Validation from '../validation.js';
+import { removeSpecials } from '../utils.js';
 import './SubmitMessage.css';
 
 const Messages = props => {
 
   const submitMessage = (payload, event, clearForm) => {
     event.preventDefault();
-    sessionContext.submitMessage(payload.message);
-    detectUserAndSendMessage(payload.message);
+    detectUsers(payload.message);
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
     clearForm({});
@@ -22,7 +22,7 @@ const Messages = props => {
   const [isValidated, setIsValidated] = useState(false);
   const [messageError, setMessageError] = useState('');
   const [warning, setWarning] = useState(false);
-  const [tokens, setTokens] = useState([]);
+  const [usersMap, setUsersMap] = useState(false);
   const sessionContext = useContext(SessionContext);
   const { activeRoom } = sessionContext.state;
 
@@ -34,34 +34,32 @@ const Messages = props => {
     }
   };
 
-  const detectUserAndSendMessage = message => {
-    const words = message.split(' ');
-    const usersKeys = Object.keys(activeRoom.users);
-    if (usersKeys.length) {
-      return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
-        method: 'POST',
-        body: JSON.stringify({ usersKeys, message, sender })
-      }).then(response => {
-        return response;
-      }).catch(error => {
-        return error;
-      });
-    }
+  const detectUsers = async message => {
+    const usersMap = new Map(Object.entries(activeRoom.users));
+    let words = await message.split(' ');
+    let wordSet = await new Set();
+    words = await words.filter(word => {
+      word = removeSpecials(word);
+      word = word.replace(/@/g,'');
+      wordSet.add(word);
+      return word;
+    });
+    const usersBuffer = {};
+    await usersMap.forEach((value, key, map) => {
+      if (wordSet.has(value.displayName)) {
+        usersBuffer[key] = value;
+      }
+    });
+    console.log(usersBuffer);
+    await sessionContext.submitMessage(message);
   };
 
   useEffect(() => {
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = 0;
     textarea.style.height = textarea.scrollHeight + "px";
-
     const _sender = {...props};
     setSender(_sender);
-
-    let muhTokens = [];
-    if (activeRoom) for (const user in activeRoom.users) {
-      muhTokens.push(user.fcmToken);
-      setTokens(muhTokens);
-    }
     return () => {
       // console.log(formValues.message);
     }

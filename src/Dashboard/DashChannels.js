@@ -17,7 +17,7 @@ class DashChannels extends React.Component {
       const { key, name } = room;
       const isCursor = key === activeRoom.key;
       return (
-        <li>
+        <li key={key}>
           <Link className="roomNameButton" to={`/chat/rooms?rm=${key}`}>
             <div>
               <i className="material-icons people">people</i>

@@ -70,3 +70,14 @@ export function goFetch(uri, inputOptions) {
 		return err;
 	});
 };
+
+export function removeSpecials(str) {
+  const lower = str.toLowerCase();
+  const upper = str.toUpperCase();
+  let res = "";
+  for (let i = 0; i < lower.length; ++i) {
+    if (lower[i] != upper[i] || lower[i] === ' ' || lower[i] === '_' || lower[i].trim() === '.')
+		res += str[i];
+  }
+  return res;
+}

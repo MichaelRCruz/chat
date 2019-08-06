@@ -18,7 +18,6 @@ const Menu = () => {
   const { userConfig, userConfigs } = state;
   const { authProviders=[] } = userConfig;
   const providerImages = { 'google.com': googleImage, 'facebook.com': facebookImage, 'github.com': githubImage, 'password': passwordImage };
-  console.log(userConfig);
 
   const providers = authProviders.map((provider, i) => {
     return (

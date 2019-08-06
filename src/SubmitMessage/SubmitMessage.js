@@ -9,7 +9,6 @@ const Messages = () => {
   const submitMessage = (payload, event, clearForm) => {
     event.preventDefault();
     sessionContext.submitMessage(payload.message);
-    // clear()
     const textarea = window.document.querySelector(".textarea");
     textarea.style.height = '1.5em';
     clearForm({});
@@ -27,7 +26,6 @@ const Messages = () => {
 
   const handleKeyDown = event => {
     if (event.key === 'Enter' && event.shiftKey === false) {
-      // event.preventDefault();
       handleSubmit(event);
     }
   }
@@ -40,6 +38,55 @@ const Messages = () => {
       // console.log(formValues.message);
     }
   }, [formErrors, formValues]);
+
+  // const submitMessage = (message) => {
+  //   if (!this.props.activeRoom) {
+  //     return;
+  //   } else {
+  //     this.messagesRef.push({
+  //       content: message,
+  //       sentAt: Date.now(),
+  //       roomId: this.props.activeRoom.key,
+  //       creator: this.props.user ? {
+  //         uid: this.props.user.uid,
+  //         email: this.props.user.email,
+  //         displayName: this.props.user.displayName,
+  //         photoURL: this.props.user.photoURL
+  //       } : {
+  //         email: null,
+  //         displayName: 'Peaceful Potato',
+  //         photoURL: null
+  //       }
+  //     }).then(res => {
+  //       this.props.dispatch(reset('message'));
+  //       this.detectUserAndSendMessage(message);
+  //       const textarea = window.document.querySelector("textarea");
+  //       textarea.style.height = '1.5em';
+  //     });
+  //   }
+  // }
+
+  // const detectUserAndSendMessage = message => {
+  //   const words = message.split(' ');
+  //   const roomSubscribers = Object.values(this.props.activeRoom.users);
+  //   const usersToMessage = [];
+  //   words.forEach(word => {
+  //     const user = word.replace(/[`~!@#$%^&*()|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+  //     if (word.startsWith('@') && roomSubscribers.includes(user)) {
+  //       usersToMessage.push(user);
+  //     }
+  //   });
+  //   if (usersToMessage.length) {
+  //     return fetch(`https://us-central1-chat-asdf.cloudfunctions.net/sendMessageToUser`, {
+  //       method: 'POST',
+  //       body: JSON.stringify({ displayNames: usersToMessage, message })
+  //     }).then(response => {
+  //       return response;
+  //     }).catch(error => {
+  //       return error;
+  //     });
+  //   }
+  // }
 
   return (
     <div className="footerContainer">

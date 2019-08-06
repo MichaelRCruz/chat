@@ -37,11 +37,8 @@ const App = props => {
     const unixStamp = await props.firebase.database.ServerValue.TIMESTAMP;
     const userStatusDatabaseRef = await db.ref(`/USERS_ONLINE/${userConfig.key}`);
     const activityRef = await db.ref(`/users/${userConfig.key}/activity`);
-    const trafficRef = await db.ref(`/TRAFFIC`);
-    const newTrafficRef = await trafficRef.push();
     await activityRef.remove();
     await userStatusDatabaseRef.remove();
-    await newTrafficRef.set({ ...userConfig, unixStamp, action: 'brb' });
     localStorage.removeItem('potatoStorage');
     props.firebase.auth().signOut();
     setIsSignedOut(true);
@@ -50,7 +47,6 @@ const App = props => {
 
   return (
     <Route render={routeProps => {
-      // const { history } = props;
       return (
         <React.Fragment>
           <Route {...routeProps} exact path='/'

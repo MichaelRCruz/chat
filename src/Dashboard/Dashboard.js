@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import Rooms from '../Rooms/Rooms.js';
+import DashChannels from './DashChannels.js';
 import Users from '../Traffic/Users.js';
 import Traffic from '../Traffic/Traffic.js';
 import Modal from '../Modal/Modal.js';
@@ -12,7 +12,7 @@ const Dashboard = props => {
 
   const { history, location } = props;
   const potatoDashStore = localStorage.getItem('potatoDashStore');
-  const [mode, setMode] = useState(potatoDashStore || 'ROOMS');
+  const [mode, setMode] = useState(potatoDashStore || 'CHANNELS');
 
   const handleNav = mode => {
     switch(mode) {
@@ -21,15 +21,15 @@ const Dashboard = props => {
   		case 'USERS':
         localStorage.setItem('potatoDashStore', mode);
         return setMode(mode);
-      case 'ROOMS':
+      case 'CHANNELS':
         localStorage.setItem('potatoDashStore', mode);
         return setMode(mode);
       case 'TRAFFIC':
         localStorage.setItem('potatoDashStore', mode);
         return setMode(mode);
   		default:
-        localStorage.setItem('potatoDashStore', 'USERS');
-        return setMode('USERS');
+        localStorage.setItem('potatoDashStore', 'CHANNELS');
+        return setMode('CHANNELS');
   	}
   }
 
@@ -46,7 +46,7 @@ const Dashboard = props => {
       </section>
       <main className="dashboardContent">
         {mode === 'USERS' ? <Users /> : null}
-        {mode === 'ROOMS' ? <Rooms /> : null}
+        {mode === 'CHANNELS' ? <DashChannels /> : null}
         {mode === 'TRAFFIC' ? <Traffic /> : null}
       </main>
       <footer className="dashboardNav">
@@ -58,7 +58,7 @@ const Dashboard = props => {
           </div>
         </button>
         <button className="navToChannels"
-          onClick={() => handleNav('ROOMS')}>
+          onClick={() => handleNav('CHANNELS')}>
           <div>
             <i className="material-icons">room</i>
             <p>channels</p>

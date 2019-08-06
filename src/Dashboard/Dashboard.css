@@ -28,8 +28,8 @@
 }
 
 .dashboardComponent main {
-  display: flex;
-  justify-content: center;
+  margin-top: 80px;
+  margin-left: 20px;
   z-index: 0;
 }
 
@@ -65,7 +65,7 @@
   margin: 0 8px;
 }
 
-.navToUsers, .navToTraffic {
+.navToUsers, .navToChannels, .navToTraffic {
   display: none;
 }
 
@@ -117,6 +117,12 @@
 
 .navToUsers div, .navToChannels > div, .navToTraffic > div {
   font-size: 1.5em;
+}
+
+.dashChannelsList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
 
 @media screen and (min-width: 600px) {

@@ -172,7 +172,7 @@ exports.sendMessageToTopic = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.sendMessageToUser = functions.https.onRequest((req, res) => {
+exports.sendMessageToUsers = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     const {usersKeys, message, sender} = JSON.parse(req.body);
     // const usersRef = admin.database().ref('users');
@@ -205,7 +205,7 @@ exports.getMessages = functions.https.onRequest((req, res) => {
       .once("value", async snap => {
         const messages = snap.val();
         res.send({ messages });
-      }
+      };
     );
   });
 });

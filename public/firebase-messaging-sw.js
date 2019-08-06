@@ -25,4 +25,5 @@ messaging.setBackgroundMessageHandler(function(payload) {
 self.addEventListener('notificationclick', function(event) {
   // do what you want
   // ...
+  console.log('clksd');
 });

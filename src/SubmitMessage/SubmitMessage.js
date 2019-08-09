@@ -50,7 +50,6 @@ const Messages = props => {
         usersBuffer[key] = value;
       }
     });
-    console.log(usersBuffer);
     await sessionContext.submitMessage(message);
   };
 

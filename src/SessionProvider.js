@@ -188,7 +188,10 @@ class SessionProvider extends React.Component {
     const subscriberIds = Object.keys(activeRoom.users);
     const { userConfigs } = await api.getUserConfigs(subscriberIds);
     const { messages } = await api.getMessages(roomId, 100);
-    this.setState({ userConfig: configuration, activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user }, () => {
+    this.setState({
+      userConfig: configuration,
+      activeRoom, userConfigs, fcmToken, subscribedRooms, messages, user
+    }, () => {
       if (user) this.setListeners(this.state.activeRoom.key);
       if (user) this.initNotifications(user);
     });

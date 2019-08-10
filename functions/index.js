@@ -68,8 +68,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     const usersRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const subsRef = admin.database().ref(`/rooms`);
-    const og1UsersRef = admin.database().ref('/rooms/uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2/users');
-    const og1AdminsRef = admin.database().ref('/rooms/uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2/admins');
+    const og1UsersRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
+    const og1AdminsRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/admins');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
     const userConfig = {
@@ -79,8 +79,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       photoURL,
       emailVerified,
       authProviders,
-      lastVisited: `uid-${uid}`,
-      rooms: ['uid-wWV3cvFFK5g4Ok0MlYQXynnI9xZ2', `uid-${uid}`],
+      lastVisited: `-Ld7mZCDqAEcMSGxJt-x`,
+      rooms: ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`],
       action: 'sup',
       activity: { isOnline: true, unixStamp: Math.floor(Date.now() / 1000) }
     };
@@ -94,7 +94,7 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       admins: { [uid]: displayName }
     };
     const message = {
-      content: 'Welcome to your new app!',
+      content: 'Welcome to Potato!',
       creator: {
         displayName: 'mykey',
         email: 'potato@michaelcruz.io',

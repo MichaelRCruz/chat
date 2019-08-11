@@ -64,7 +64,6 @@ exports.getRooms = functions.https.onRequest((req, res) => {
 exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
   return cors(req, res, async () => {
     const { displayName, email, photoURL, emailVerified, uid, authProviders } = req.body;
-    displayName = displayName.replace(' ', '_');
     const usersRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const subsRef = admin.database().ref(`/rooms`);

@@ -68,8 +68,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
     const usersRef = admin.database().ref('/users');
     const roomRef = admin.database().ref('/rooms');
     const subsRef = admin.database().ref(`/rooms`);
-    const og1UsersRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/users');
-    const og1AdminsRef = admin.database().ref('/rooms/-Ld7mZCDqAEcMSGxJt-x/admins');
+    const og1UsersRef = admin.database().ref('/rooms/uid-TuNTX61qwtfc5hY9Em8fYfyScIN2/users');
+    const og1AdminsRef = admin.database().ref('/rooms/uid-TuNTX61qwtfc5hY9Em8fYfyScIN2/admins');
     const messagesRef = admin.database().ref('/messages');
     const messageKey = messagesRef.push().key;
     const userConfig = {
@@ -79,8 +79,8 @@ exports.createRoomsAndUserConfig = functions.https.onRequest((req, res) => {
       photoURL,
       emailVerified,
       authProviders,
-      lastVisited: `-Ld7mZCDqAEcMSGxJt-x`,
-      rooms: ['-Ld7mZCDqAEcMSGxJt-x', `uid-${uid}`],
+      lastVisited: `uid-TuNTX61qwtfc5hY9Em8fYfyScIN2`,
+      rooms: ['uid-TuNTX61qwtfc5hY9Em8fYfyScIN2', `uid-${uid}`],
       action: 'sup',
       activity: { isOnline: true, unixStamp: Math.floor(Date.now() / 1000) }
     };
@@ -206,8 +206,7 @@ exports.getMessages = functions.https.onRequest((req, res) => {
       .once("value", async snap => {
         const messages = snap.val();
         res.send({ messages });
-      };
-    );
+      });
   });
 });
 

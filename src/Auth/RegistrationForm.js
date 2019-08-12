@@ -106,7 +106,7 @@ const RegistrationForm = props => {
         className="input displaynameInput"
         type="text"
         name="displayName"
-        placeholder="e.g., mykey_42"
+        placeholder="username"
         value={displayName || ''}
         onChange={handleChange}
       />

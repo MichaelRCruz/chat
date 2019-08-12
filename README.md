@@ -1,91 +1,72 @@
-*under construction
+Install the Firebase CLI if you haven’t already by running `npm install -g firebase-tools`. Sign up for a Firebase account and create a new project. Run `firebase login` and login with your previous created Firebase account.
 
-# potato (beta)
+Then run the `firebase init` command from your project’s root. You need to choose the Hosting: Configure and deploy Firebase Hosting sites and choose the Firebase project you created in the previous step. You will need to agree with `database.rules.json` being created, choose `build` as the public directory, and also agree to Configure as a single-page app by replying with `y`.
 
-> "Be excellent to each other." ~ Bill S. Preston, Esq.
+```console
+=== Project Setup
 
-## concept
+    First, let's associate this project directory with a Firebase project.
+    You can create multiple project aliases by running firebase use --add,
+    but for now we'll just set up a default project.
 
-A simple chat app for a small group that can cherry-pick APIs and services and the ability to manage them in a way to serve the group's goal or purpose. Think of a fully interactive and customizable news feed, but also a communication channel in one.
+    ? What Firebase project do you want to associate as default? Example app (example-app-fd690)
 
-> dev priorities (sorted; !exhaustive)
-* data security and identity protection, (user permissions, tos, etc.)
-* regulations & ethics
-* client solution (basic understanding of user space and environment)
-* industry best practices (declaritive, top-down data flow, idempotent operations)
+    === Database Setup
 
-## 2: state - context & auth
+    Firebase Realtime Database Rules allow you to define how your data should be
+    structured and when your data can be read from and written to.
 
-Consider a stripped down representation of two functions that live inside Potato's top-level context. Potato values a fully isolated authentication process which creates a redeemable session available when revisiting the site.
+    ? What file should be used for Database Rules? database.rules.json
+    ✔  Database Rules for example-app-fd690 have been downloaded to database.rules.json.
+    Future modifications to database.rules.json will update Database Rules when you run
+    firebase deploy.
 
-`onAuthStateChanged()` is a special listener inside the app's highest level context provider. It's tasked for handling all changes to the listener's callback, `user` - the auth state object which responds to a set of well-defined and comprehensive auth state changes, e.g., user chooses to identify with Google or identify with GitHub.
+    === Hosting Setup
 
-> *further development required, but should not have any effect on the following conclusions and observations
-https://firebase.google.com/docs/auth/web/auth-state-persistence#modifying_the_auth_state_persistence
+    Your public directory is the folder (relative to your project directory) that
+    will contain Hosting assets to uploaded with firebase deploy. If you
+    have a build process for your assets, use your build's output directory.
 
-```javascript
-// src/SessionProvider.js
-componentDidMount() {
-  . . .
-  const unsubscribe = firebase.auth()
-    .onAuthStateChanged(async user => {
-      if (user != null) {
-        const { providerData, ...rest } = user;
-        . . .
-        if (userConfig) {
-          // initialize with existing user
-          this.initializeApp();
-        } else {
-          // initialize with newly-created config fetched from cloud
-          const payload = await api.createNewUser();
-          this.initializeApp();
-        }
-      } else {
-        firebase.auth().signOut();
-      }
-    });
-};
+    ? What do you want to use as your public directory? build
+    ? Configure as a single-page app (rewrite all urls to /index.html)? Yes
+    ✔  Wrote build/index.html
+
+    i  Writing configuration info to firebase.json...
+    i  Writing project information to .firebaserc...
+
+    ✔  Firebase initialization complete!
 ```
 
+IMPORTANT: you need to set proper HTTP caching headers for service-worker.js file in firebase.json file or you will not be able to see changes after first deployment (issue #2440). It should be added inside "hosting" key like next:
+
 ```javascript
-// src/SessionProvider.js
-initializeApp = async () => {
-  . . .
-  // sequence of "blocked" async reduction towards initial state
-  // considering memoization?
-  this.setState({}, () => {
-    // you're going to see these conditions throughout the app.
-    // please practice building idempontent operations
-    if (user) this.setListeners();
-    if (user) this.initNotifications();
-  });
-};
+{
+  "hosting": {
+    ...
+    "headers": [
+      {"source": "/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}
+    ]
+    ...
+  }
+}
 ```
-In theory this approach limits to one redraw on initialization, and _only_ reacts to a healthy auth `state` object (by healthy I mean is well-formed or is null) which destructures down to the respective "global-like" context fields: `userConfig`,
-`userConfigs`, `activeRoom`, `fcmToken`, `subscribedRooms`, `messages`, `user`.
 
-> `fcmToken` and `user` will likely be cut in favor of a more secure approach. In fact, a revisit to _all_ levels of state is required to sniff out any adjacent sources of truth that have been overlooked.
+```console
+Now, after you create a production build with `npm run build`, you can deploy it by running `firebase deploy`.
 
-There is some complexity that can be removed here, but the context's state redundancies that _will_ remain are minimal and the convenience has been worth it so far. The largest benefit is the help that it provides in avoiding "prop drilling" which ultimately limits the number of redraws throughout the DOM and further described in other sections. Makes for a cool cpu :)
+ === Deploying to 'example-app-fd690'...
 
-## 2: state - application state consumption & efficiency strategies
+    i  deploying database, hosting
+    ✔  database: rules ready to deploy.
+    i  hosting: preparing build directory for upload...
+    Uploading: [==============================          ] 75%✔  hosting: build folder uploaded successfully
+    ✔  hosting: 8 files uploaded successfully
+    i  starting release process (may take several minutes)...
 
-The most frequently consumed resource is a message which are created via the standard .map() technique in any functional or class component.
+    ✔  Deploy complete!
 
->This is _potentially_ the most brittle part of the application, but also where Potato gets it's strength where it will [juice it or loose it](https://github.com/grapefrukt/juicy-breakout).
+    Project Console: https://console.firebase.google.com/project/example-app-fd690/overview
+    Hosting URL: https://example-app-fd690.firebaseapp.com
+```
 
-So far, limited precautions have been made to handle three distinct concepts regarding state: state, null, error. The list of these three "situations", for lack of a better word, are exhaustive and every component (and function if possible) must meet that criteria.
-
-## 0: null
-
-> Immediately I'd like to point out that the naming convention of Potato's context was poorly chosen by yours truly. Realistically speaking, I couldn't have chosen a worse name for the main context which brings me to my first observational claim.
-**Potato's authentication state should remain completely out of any other state's lifecycle exclusively due to the fact that it is not "spawned" from that lifecycle process and only dude to that fact.**
-If not, then somewhere in the n + 1 future your collection of enclosed lifecycle events (read "react app") will begin behaving in ways that are difficult to understand.
-
-This was very alien to me at first, but then I noticed that this makes more room for juice. If we can allow the insertion of any list of JSX elements immediately when the component renders, then that gives you way more flexibility in keeping the user occupied as the client beautifully displays some loading animation or "prerendered?" state for example. I've tested these ideas using faker.js for easy data.
-
-Have vision.
-Have code.
-
-##### todo
-> notes on service worker
+For more information see Firebase Hosting.

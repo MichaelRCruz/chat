@@ -37,19 +37,7 @@ const RegistrationForm = props => {
       method: 'signInWithRedirect',
       name: 'Google',
       providerId: 'google.com',
-      path: require('../assets/btn_google_light_focus_ios.svg')},
-    'github.com': {
-      method: 'signInWithRedirect',
-      name: 'GitHub',
-      providerId: 'github.com',
-      path: require('../assets/GitHub-Mark-64px.png')
-    },
-    'facebook.com': {
-      method: 'signInWithRedirect',
-      name: 'Facebook',
-      providerId: 'facebook.com',
-      path: require('../assets/PNG/f_logo_RGB-Blue_58.png')
-    }
+      path: require('../assets/btn_google_light_focus_ios.svg')}
   });
 
   useEffect(() => {
@@ -169,7 +157,15 @@ const RegistrationForm = props => {
 
   const disclaimerEtc = (
     <p className="toggleFormLink">
-      insert Terms of service. <span>:).</span>
+      Hey,
+      <br />
+      <br />
+      If you need all information that you've shared through this domain removed and/or transfered to you, please email info@michaelcruz.io with your request<span> :).</span>
+      <br />
+      <br />
+      Love,
+      <br />
+      Michael
     </p>
   );
 
@@ -216,17 +212,6 @@ const RegistrationForm = props => {
             <p className="appNameAtAuth">Potato</p>
           </legend>
           <section className="parentFlex">
-            <section className="authHero">
-              <p>{dialog}</p>
-            </section>
-            <section className="fieldsContainer">
-              {authMode.register ? emailInput : null}
-              {authMode.newUser ? userDetails : null}
-            </section>
-            <section className="buttonsContainer">
-              {authMode.error ? <p>bummer, something went wrong</p> : null}
-              <SubmitFormButton {...authMode} />
-            </section>
             <section className="oAuthDialog">
               {authMode.register ? <p>continue with a <span>federated identity provider</span></p> : null}
             </section>
